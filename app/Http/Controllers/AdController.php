@@ -8,10 +8,10 @@ use Auth,Alert;
 
 class AdController extends Controller
 {
-    public function index()
+    public function index($status = 'pending')
     {
-        $data = Ad::paginate(10);
-        $counter = Ad::count();
+        $data = Ad::where('status',$status)->paginate(10);
+        $counter = Ad::where('status',$status)->count();
         return view('dashboard.ads.index',compact('data','counter'));
     }
 

@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             SocialMediaSeeder::class,
             PrivaciesTermsSeeder::class,
             CountrySeeder::class,
-            CitySeeder::class
+            CitySeeder::class,
+            AreaSeeder::class
         ]);
     }
 }

@@ -40,6 +40,12 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+.bx-broadcast{
+    border-radius: 0.267rem;
+    background-image: linear-gradient( to right, #bc6428, #ffd77a, #945825 ) !important;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 .nav-item.hover.open{
     border-radius: 0.267rem;
     background-image: linear-gradient( to right, #bc6428, #ffd77a, #945825 ) !important;
@@ -440,6 +446,55 @@ input[type="radio"] .styled:checked + label::after {
     background: #fff;
 }
 
+.menu-toggle::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    display: block;
+    width: 0.45em;
+    height: 0.45em;
+    border: 1.5px solid;
+    border-bottom: 0;
+    border-left: 0;
+    transform: translateY(-50%) rotate(45deg);
+    margin-left: 84%;
+}
+.menu-vertical .menu-item .menu-toggle::after {
+    right: 0.938rem;
+}
+.menu:not(.menu-no-animation) .menu-toggle::after {
+    transition-duration: 0.3s;
+    transition-property: transform;
+}
+.menu-vertical .menu-item .menu-toggle {
+    padding-right: calc(0.938rem + 1.35em);
+}
+.menu-vertical .menu-item .menu-link {
+    font-size: 0.9375rem;
+}
+.menu-vertical .menu-item .menu-link, .menu-vertical .menu-block {
+    padding: 0.625rem 0.938rem;
+}
+.menu:not(.menu-no-animation) .menu-link {
+    transition-duration: 0.3s;
+    transition-property: color, background-color;
+}
+.bg-menu-theme .menu-link, .bg-menu-theme .menu-horizontal-prev, .bg-menu-theme .menu-horizontal-next {
+    color: #677788;
+}
+.menu-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 0 1 auto;
+    margin: 0;
+}
+
+.deleteIcon {
+  color:#ffff;
+}
+
+
 
 </style>
 <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
@@ -484,8 +539,10 @@ input[type="radio"] .styled:checked + label::after {
         </ul>
     </div>
     @php
+    $checkStatus = array_key_exists("status", request()->route()->parameters);
     $route = Route::current();
     $name = $route->getName();
+    $para = $checkStatus ? request()->route()->parameters['status'] : null;
     @endphp
     <div class="shadow-bottom"></div>
     <div class="main-menu-content marginFromLogo">
@@ -495,50 +552,284 @@ input[type="radio"] .styled:checked + label::after {
             </li>
             <li class=" navigation-header text-truncate"><span data-i18n="Apps">Sections</span>
             </li>
-            @canany(['Edit Admin','Create Admin','See Admin','Delete Admin'])
-            <li class="{{ ($name == 'dashboard.admins.index'|| $name == 'dashboard.admins.create'|| $name == 'dashboard.admins.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.admins.index') }}"><i class="bx bx-user"></i><span class="menu-title text-truncate" data-i18n="admins">Admins</span></a>
+            @canany(['Edit Admin','Create Admin','See Admin','Delete Admin','Edit Role','Create Role','See Role','Delete Role'])
+            {{-- <li class="{{ ($name == 'dashboard.admins.index'|| $name == 'dashboard.admins.create'|| $name == 'dashboard.admins.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.admins.index') }}"><i class="bx bx-user"></i><span class="menu-title text-truncate" data-i18n="admins">Admins</span></a>
+            </li> --}}
+
+
+            <li class="menu-item  {{ ($name == 'dashboard.admins.index'|| $name == 'dashboard.admins.create'|| $name == 'dashboard.admins.edit') ? 'open active':''  }} ">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-group"></i>
+                <div data-i18n="Invoice">System Users</div>
+                {{-- <i style="font-size: 12px;" class="menu-icon tf-icons bx bx-down-arrow ml-4 float-right"></i> --}}
+              </a>
+              <ul class="menu-sub">
+                @canany(['Edit Admin','Create Admin','See Admin','Delete Admin'])
+
+                <li class="menu-item
+                {{ ($name == 'dashboard.admins.index'|| $name == 'dashboard.admins.create'|| $name == 'dashboard.admins.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.admins.index') }}" class="menu-link">
+                    <div data-i18n="List">Admins</div>
+                  </a>
+                </li>
+                @endcanany
+               
+                @canany(['Edit Role','Create Role','See Role','Delete Role'])
+                <li class="menu-item
+                {{ ($name == 'dashboard.roles.index'|| $name == 'dashboard.roles.create'|| $name == 'dashboard.roles.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.roles.index') }}" class="menu-link">
+                    <div data-i18n="List">Roles</div>
+                  </a>
+                </li>
+                @endcanany
+            
+              </ul>
             </li>
+
+
+
+
             @endcanany
-            @canany(['Edit Influncer','Create Influncer','See Influncer','Delete Influncer'])
+
+            @canany(['Edit Influncer','Create Influncer','See Influncer','Delete Influncer','Edit Customer','Create Customer','See Customer','Delete Customer'])
+            {{-- <li class="{{ ($name == 'dashboard.admins.index'|| $name == 'dashboard.admins.create'|| $name == 'dashboard.admins.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.admins.index') }}"><i class="bx bx-user"></i><span class="menu-title text-truncate" data-i18n="admins">Admins</span></a>
+            </li> --}}
+
+
+            <li class="menu-item  {{ ($name == 'dashboard.influncers.index'|| $name == 'dashboard.influncers.create'|| $name == 'dashboard.influncers.edit'||$name == 'dashboard.customers.index'||$name == 'dashboard.customers.edit'||$name == 'dashboard.customers.create') ? 'open active':''  }} ">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-user-pin"></i>
+                <div data-i18n="Invoice">App Users</div>
+                {{-- <i style="font-size: 12px;" class="menu-icon tf-icons bx bx-down-arrow ml-5 float-right"></i> --}}
+              </a>
+              <ul class="menu-sub">
+               
+                @canany(['Edit Influncer','Create Influncer','See Influncer','Delete Influncer'])
+                <li class="menu-item
+                {{ ($name == 'dashboard.influncers.index'|| $name == 'dashboard.influncers.create'|| $name == 'dashboard.influncers.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.influncers.index') }}" class="menu-link">
+                    <div data-i18n="List">Influncers</div>
+                  </a>
+                </li>
+                @endcanany
+                @canany(['Edit Customer','Create Customer','See Customer','Delete Customer'])
+                <li class="menu-item
+                {{ ($name == 'dashboard.customers.index'|| $name == 'dashboard.customers.create'|| $name == 'dashboard.customers.edit'|| $name == 'dashboard.customers.showAds')  ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.customers.index') }}" class="menu-link">
+                    <div data-i18n="List">Customers</div>
+                  </a>
+                </li>
+                @endcanany
+            
+              </ul>
+            </li>
+
+
+
+
+            @endcanany
+            {{-- @canany(['Edit Influncer','Create Influncer','See Influncer','Delete Influncer'])
             <li class="{{ ($name == 'dashboard.influncers.index'|| $name == 'dashboard.influncers.create'|| $name == 'dashboard.influncers.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.influncers.index') }}"><i class="bx bx-user-pin"></i><span class="menu-title text-truncate" data-i18n="influncers">Influncers</span></a>
             </li>
-            @endcanany
-            @canany(['Edit Customer','Create Customer','See Customer','Delete Customer'])
+            @endcanany --}}
+            {{-- @canany(['Edit Customer','Create Customer','See Customer','Delete Customer'])
             <li class="{{ ($name == 'dashboard.customers.index'|| $name == 'dashboard.customers.create'|| $name == 'dashboard.customers.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.customers.index') }}"><i class="bx bx-user-circle"></i><span class="menu-title text-truncate" data-i18n="influncers">Customers</span></a>
             </li>
-            @endcanany
-            @canany(['Edit Role','Create Role','See Role','Delete Role'])
+            @endcanany --}}
+            {{-- @canany(['Edit Role','Create Role','See Role','Delete Role'])
             <li class="{{ ($name == 'dashboard.roles.index'|| $name == 'dashboard.roles.create'|| $name == 'dashboard.roles.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.roles.index') }}"><i class="bx bx-lock"></i><span class="menu-title text-truncate" data-i18n="roles">Roles</span></a>
             </li>
-            @endcanany
+            @endcanany --}}
             @canany(['Edit Notification','Create Notification','See Notification','Delete Notification'])
             <li class="{{ ($name == 'dashboard.notifications.index'|| $name == 'dashboard.notifications.create'|| $name == 'dashboard.notifications.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.notifications.index') }}"><i class="bx bx-bell"></i><span class="menu-title text-truncate" data-i18n="notifications">Notifications</span></a>
             </li>
             @endcanany
             @canany(['Edit Ads','Create Ads','See Ads','Delete Ads'])
-            <li class="{{ ($name == 'dashboard.ads.index'|| $name == 'dashboard.ads.create'|| $name == 'dashboard.ads.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.ads.index') }}"><i class="bx bx-money"></i><span class="menu-title text-truncate" data-i18n="ads">Ads</span></a>
+           
+            <li class="menu-item  {{ ($name == 'dashboard.ads.index'|| $name == 'dashboard.ads.create'|| $name == 'dashboard.ads.edit') ? 'open active':''  }} ">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-money"></i>
+                <div data-i18n="Invoice">Ads</div>
+                {{-- <i style="font-size: 12px;" class="menu-icon tf-icons bx bx-down-arrow ml-4 float-right"></i> --}}
+              </a>
+              <ul class="menu-sub">
+                {{-- <li class="nav-item"><a ><span class="menu-title text-truncate" data-i18n="ads">Ads</span></a>
+                </li> --}}
+                <li class="menu-item
+                {{ (($name == 'dashboard.ads.index'&&$para == 'pending')|| ($name == 'dashboard.ads.create'&&$para == 'pending')||($name == 'dashboard.ads.edit')&&$para == 'pending') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.ads.index','pending') }}" class="menu-link">
+                    <div data-i18n="List">Pending</div>
+                  </a>
+                </li>
+                <li class="menu-item 
+                {{ (($name == 'dashboard.ads.index'&&$para == 'waiting_for_payment')|| ($name == 'dashboard.ads.create'&&$para == 'waiting_for_payment')||($name == 'dashboard.ads.edit')&&$para == 'waiting_for_payment') ? 'active':''  }}">
+                  <a href="{{ route('dashboard.ads.index','waiting_for_payment') }}" class="menu-link">
+                    <div data-i18n="List">Waiting For Payment</div>
+                  </a>
+                </li>
+                <li class="menu-item
+                {{ (($name == 'dashboard.ads.index'&&$para == 'prepay')|| ($name == 'dashboard.ads.create'&&$para == 'prepay')||($name == 'dashboard.ads.edit')&&$para == 'prepay') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.ads.index','prepay') }}" class="menu-link">
+                    <div data-i18n="List">Pre Pay</div>
+                  </a>
+                </li>
+                <li class="menu-item
+                {{ (($name == 'dashboard.ads.index'&&$para == 'fullpayment')|| ($name == 'dashboard.ads.create'&&$para == 'fullpayment')||($name == 'dashboard.ads.edit')&&$para == 'fullpayment') ? 'active':''  }}
+
+                ">
+                  <a href="{{ route('dashboard.ads.index','fullpayment') }}" class="menu-link">
+                    <div data-i18n="List">Full Payment</div>
+                  </a>
+                </li>
+                <li class="menu-item
+                {{ (($name == 'dashboard.ads.index'&&$para == 'progress')|| ($name == 'dashboard.ads.create'&&$para == 'progress')||($name == 'dashboard.ads.edit')&&$para == 'progress') ? 'active':''  }}
+
+                ">
+                  <a href="{{ route('dashboard.ads.index','progress') }}" class="menu-link">
+                    <div data-i18n="List">Progress</div>
+                  </a>
+                </li>
+                <li class="menu-item
+                {{ (($name == 'dashboard.ads.index'&&$para == 'influncer_complete')|| ($name == 'dashboard.ads.create'&&$para == 'influncer_complete')||($name == 'dashboard.ads.edit')&&$para == 'influncer_complete') ? 'active':''  }}
+
+                ">
+                  <a href="{{ route('dashboard.ads.index','influncer_complete') }}" class="menu-link">
+                    <div data-i18n="List">Influncer Complete</div>
+                  </a>
+                </li>
+                <li class="menu-item
+                {{ (($name == 'dashboard.ads.index'&&$para == 'complete')|| ($name == 'dashboard.ads.create'&&$para == 'complete')||($name == 'dashboard.ads.edit')&&$para == 'complete') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.ads.index','complete') }}" class="menu-link">
+                    <div data-i18n="List">Complete</div>
+                  </a>
+                </li>
+                {{-- <li class="menu-item">
+                  <a href="app-invoice-preview.html" class="menu-link">
+                    <div data-i18n="Preview">Preview</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="app-invoice-edit.html" class="menu-link">
+                    <div data-i18n="Edit">Edit</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="app-invoice-add.html" class="menu-link">
+                    <div data-i18n="Add">Add</div>
+                  </a>
+                </li> --}}
+              </ul>
             </li>
             @endcanany
-            @canany(['Edit Category','Create Category','See Category','Delete Category'])
-            <li class="{{ ($name == 'dashboard.categories.index'|| $name == 'dashboard.categories.create'|| $name == 'dashboard.categories.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.categories.index') }}"><i class="bx bx-category"></i><span class="menu-title text-truncate" data-i18n="categories">Categories</span></a>
+         
+            @canany(['Edit Category','Create Category','See Category','Delete Category','Edit Influencer Category','Create Influencer Category','See Influencer Category','Delete Influencer Category'])
+
+            <li class="menu-item  {{ ($name == 'dashboard.categories.index'|| $name == 'dashboard.categories.create'|| $name == 'dashboard.categories.edit'||$name == 'dashboard.influencerCategories.index'||$name == 'dashboard.influencerCategories.edit'||$name == 'dashboard.influencerCategories.create') ? 'open active':''  }} ">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-category"></i>
+                <div data-i18n="Invoice">Categories</div>
+                {{-- <i style="font-size: 12px;" class="menu-icon tf-icons bx bx-down-arrow ml-4 float-right"></i> --}}
+              </a>
+              <ul class="menu-sub">
+               
+                @canany(['Edit Influencer Category','Create Influencer Category','See Influencer Category','Delete Influencer Category'])
+                <li class="menu-item
+                {{ ($name == 'dashboard.influencerCategories.index'|| $name == 'dashboard.influencerCategories.create'|| $name == 'dashboard.influencerCategories.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.influencerCategories.index') }}" class="menu-link">
+                    <div data-i18n="List">Infulncer</div>
+                  </a>
+                </li>
+                @endcanany
+                @canany(['Edit Category','Create Category','See Category','Delete Category'])
+                <li class="menu-item
+                {{ ($name == 'dashboard.categories.index'|| $name == 'dashboard.categories.create'|| $name == 'dashboard.categories.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.categories.index') }}" class="menu-link">
+                    <div data-i18n="List">Product</div>
+                  </a>
+                </li>
+                @endcanany
+            
+              </ul>
             </li>
+
             @endcanany
-            @canany(['Edit Influencer Category','Create Influencer Category','See Influencer Category','Delete Influencer Category'])
-            <li class="{{ ($name == 'dashboard.influencerCategories.index'|| $name == 'dashboard.influencerCategories.create'|| $name == 'dashboard.influencerCategories.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.influencerCategories.index') }}"><i class="bx bx-category-alt"></i><span class="menu-title text-truncate" data-i18n="categories">Influencer Categories</span></a>
-            </li>
-            @endcanany
+           
+            
             @canany(['Edit SocialMedia','Create SocialMedia','See SocialMedia','Delete SocialMedia'])
-            <li class="{{ ($name == 'dashboard.socialMedia.index'|| $name == 'dashboard.socialMedia.create'|| $name == 'dashboard.socialMedia.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.socialMedia.index') }}"><i class="bx bx-share-alt"></i><span class="menu-title text-truncate" data-i18n="categories">Social Media</span></a>
+
+            <li class="menu-item  {{ ($name == 'dashboard.socialMedia.index'|| $name == 'dashboard.socialMedia.create'|| $name == 'dashboard.socialMedia.edit'||$name == 'dashboard.faqs.index'||$name == 'dashboard.faqs.edit'||$name == 'dashboard.faqs.create'||$name == 'dashboard.editContactUs.index'||$name == 'dashboard.editContactUs.edit'||$name == 'dashboard.editContactUs.create') ? 'open active':''  }} ">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-slider"></i>
+                <div data-i18n="Invoice">Settings</div>
+                {{-- <i style="font-size: 12px;" class="menu-icon tf-icons bx bx-down-arrow ml-4 float-right"></i> --}}
+              </a>
+              <ul class="menu-sub">
+               
+                @canany(['Edit Influencer Category','Create Influencer Category','See Influencer Category','Delete Influencer Category'])
+                <li class="menu-item
+                {{ ($name == 'dashboard.faqs.index'|| $name == 'dashboard.faqs.create'|| $name == 'dashboard.faqs.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.faqs.index') }}" class="menu-link">
+                    <div data-i18n="List">Faqs</div>
+                  </a>
+                </li>
+                @endcanany
+                @canany(['Contact Us'])
+                <li class="menu-item
+                {{ ($name == 'dashboard.contactUs.index'|| $name == 'dashboard.contactUs.create'|| $name == 'dashboard.contactUs.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.contactUs.index') }}" class="menu-link">
+                    <div data-i18n="List">Settings</div>
+                  </a>
+                </li>
+                @endcanany
+
+                @canany(['Edit SocialMedias','Create SocialMedia','See SocialMedia'])
+                <li class="menu-item
+                {{ ($name == 'dashboard.socialMedia.index'|| $name == 'dashboard.socialMedia.create'|| $name == 'dashboard.socialMedia.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.socialMedia.index') }}" class="menu-link">
+                    <div data-i18n="List">Social Media</div>
+                  </a>
+                </li>
+                @endcanany
+
+                @canany(['Edit Contact Us'])
+                <li class="menu-item
+                {{ ($name == 'dashboard.contactUs.index'|| $name == 'dashboard.contactUs.create'|| $name == 'dashboard.contactUs.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.contactUs.edit') }}" class="menu-link">
+                    <div data-i18n="List">Settings</div>
+                  </a>
+                </li>
+                @endcanany
+            
+              </ul>
             </li>
+
+
+
+            {{-- <li class="{{ ($name == 'dashboard.socialMedia.index'|| $name == 'dashboard.socialMedia.create'|| $name == 'dashboard.socialMedia.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.socialMedia.index') }}"><i class="bx bx-share-alt"></i><span class="menu-title text-truncate" data-i18n="categories">Social Media</span></a>
+            </li> --}}
+
             @endcanany
-            @canany(['Edit Faq','Create Faq','See Faq','Delete Faq'])
+            {{-- @canany(['Edit Faq','Create Faq','See Faq','Delete Faq'])
             <li class="{{ ($name == 'dashboard.faqs.index'|| $name == 'dashboard.faqs.create'|| $name == 'dashboard.faqs.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.faqs.index') }}"><i class="bx bx-question-mark"></i><span class="menu-title text-truncate" data-i18n="categories">Faq</span></a>
             </li>
             @endcanany
             @can('Edit Contact Us')
             <li class="{{ ($name == 'dashboard.contactUs.index'|| $name == 'dashboard.contactUs.create'|| $name == 'dashboard.contactUs.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.contactUs.edit') }}"><i class="bx bx-slider"></i><span class="menu-title text-truncate" data-i18n="editContactUs">Settings</span></a>
             </li>
-            @endcan           
+            @endcan            --}}
             @can('See Logs')
             <li class="{{ ($name == 'dashboard.logs.index'|| $name == 'dashboard.logs.create'|| $name == 'dashboard.logs.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.logs.index') }}"><i class="bx bx-code-block"></i><span class="menu-title text-truncate" data-i18n="logs">Logs</span></a>
             </li>

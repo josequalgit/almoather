@@ -25,6 +25,28 @@
             </div>
         </div>
         <div class="content-body mt-5">
+            @can('See Influncer')
+            <div class="col">
+                <div class="card widget-followers">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <div>
+                            <h4 class="card-title">Influncers</h4>
+                            <small class="text-muted">this is the amount of influncers added every month</small>
+                        </div>
+                        <div class="d-flex align-items-center widget-followers-heading-right">
+                            <h5 class="mr-2 font-weight-normal mb-0">{{ $counter }}</h5>
+                            {{-- <div class="d-flex flex-column align-items-center">
+                                <i class='bx bx-caret-up text-success font-medium-1'></i>
+                                <small class="text-muted">+31%</small>
+                            </div> --}}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="follower-primary-chart"></div>
+                    </div>
+                </div>
+            </div>
+            @endcan
             <!-- Basic tabs start -->
             <section id="basic-datatable">
                 <div class="row">
@@ -60,7 +82,7 @@
                                                         <td style="text-transform: uppercase;">{{ $item->status }}</td>
                                                         <td>
                                                            @can('Edit Influncer')
-                                                            <a href="{{ route('dashboard.influncers.edit',$item->id) }}">
+                                                            <a class="btn btn-secondary" href="{{ route('dashboard.influncers.edit',$item->id) }}">
                                                                 <i class="bx bx-show"></i>
                                                             </a>                                                               
                                                            @endcan
@@ -132,6 +154,43 @@
             }
         });
     }
+
+    var options = {
+          series: [{
+            name: "Influncers",
+            data: {{json_encode($influncersData)}}
+        }],
+          chart: {
+          height: 350,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        title: {
+          text: 'Registration data ',
+          align: 'left'
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.5
+          },
+        },
+        xaxis: {
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep','Oct','Nov','Des'],
+        },
+        
+        };
+
+        var chart = new ApexCharts(document.querySelector("#follower-primary-chart"), options);
+        chart.render();
 </script>
 
 @endsection

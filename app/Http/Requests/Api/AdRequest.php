@@ -35,7 +35,11 @@ class AdRequest extends FormRequest
             'status'=>'required',
             'country_id'=>'required',
             'city_id'=>'required',
-            'area_id'=>'required'
+            'area_id'=>'required',
+            'image'=>'mimes:jpg,bmp,png',
+            'video'=>'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4',
+            'documnet'=>'mimetypes:video/avi,video/mpeg,video/quicktime'
+
         ];
     }
 

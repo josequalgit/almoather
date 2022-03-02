@@ -57,6 +57,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::post('customer/store','store')->name('store')->middleware('permission:Create Customer');
             Route::get('customer/delete/{id}','delete')->name('delete')->middleware('permission:Delete Customer');
             Route::post('customer/updateStatus/{id}','updateStatus')->name('updateStatus')->middleware('permission:Edit Customer');
+            Route::get('customer/show ads/{id}','show_ads')->name('showAds')->middleware('permission:See Customer Ads');
 
         });
         
@@ -101,7 +102,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
         });
 
         Route::middleware('role_or_permission:superAdmin|Edit Ads|See Ads')->name('ads.')->controller(AdController::class)->group(function(){
-            Route::get('/ads','index')->name('index')->middleware('permission:See Ads');
+            Route::get('/ads/{status?}','index')->name('index')->middleware('permission:See Ads');
             Route::get('/ads/edit/{id}','edit')->name('edit')->middleware('permission:Edit Ads');
             Route::post('/ads/update/{id}','update')->name('update')->middleware('permission:Edit Ads');
         });

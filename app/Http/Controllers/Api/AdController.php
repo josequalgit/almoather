@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\Ad;
 use App\Http\Requests\Api\AdRequest;
 use Auth;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\AddInfluencer;
+use App\Models\User;
+use Validator;
 
 class AdController extends Controller
 {
@@ -14,10 +18,10 @@ class AdController extends Controller
 
     public function store(AdRequest $request)
     {
-        
         #CHECK REQUEST 
         if(!$request->hasFile('documnet')&&!$request->auth_number)
         {
+           
             return response()->json([
                 'msg'=>'please upload a document or add the authentication number',
                 'status'=>403
@@ -35,13 +39,25 @@ class AdController extends Controller
         }
         if($request->hasFile('image'))
         {
+            $request->validate([
+                'image'=>'mimes:jpg,bmp,png'
+            ]);
+
             $data->addMedia($request->file('image'))
             ->toMediaCollection('adImage');
         }
+        $users = [User::find(1)];
+        $info =[
+            'msg'=>'Customer "'.Auth::guard('api')->user()->customers->first_name.'" added new ad'
+        ];
+        Notification::send($users, new AddInfluencer($info));
 
         return response()->json([
             'msg'=>'ad was created',
             'status'=>201
         ],201);
     }
+
+
+   
 }

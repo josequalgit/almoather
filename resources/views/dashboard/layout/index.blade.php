@@ -14,6 +14,7 @@
     <link rel="apple-touch-icon" href="{{ asset('main2/images/ico/apple-icon-120.png') }}">
     <link rel="icon" type="image/x-icon" href="{{ asset('main2/images/logo/logo.png') }}" />
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,600%7CIBM+Plex+Sans:300,400,500,600,700" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
 
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('main2/vendors/css/vendors.min.css') }}">
@@ -27,6 +28,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('main2/css/themes/dark-layout.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('main2/css/themes/semi-dark-layout.css') }}">
     <!-- END: Theme CSS-->
+
 
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('main2/css/core/menu/menu-types/vertical-menu.css') }}">
@@ -261,13 +263,17 @@
     <!-- BEGIN: Page JS-->
     <script src="{{ asset('main2/js/scripts/navs/navs.js') }}"></script>
     <!-- END: Page JS-->
-    
+    <script src="{{asset('main2/vendors/js/charts/apexcharts.min.js')}}"></script>
+    <script src="{{asset('main2/vendors/js/extensions/dragula.min.js')}}"></script>
+
     <script src="{{ asset('main2/vendors/js/pickers/pickadate/picker.js') }}"></script>
     <script src="{{ asset('main2/vendors/js/pickers/pickadate/picker.date.js') }}"></script>
     <script src="{{ asset('main2/vendors/js/pickers/pickadate/picker.time.js') }}"></script>
     <script src="{{ asset('main2/vendors/js/pickers/pickadate/legacy.js') }}"></script>
     <script src="{{ asset('main2/vendors/js/extensions/moment.min.js') }}"></script>
     <script src="{{ asset('main2/vendors/js/pickers/daterange/daterangepicker.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+
     @yield('scripts')
     @include('sweetalert::alert')
 

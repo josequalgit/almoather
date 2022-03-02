@@ -67,13 +67,13 @@
                                                             
                                                             <td>
                                                                 @can('Delete Category')
-                                                                    <a href="{{ route('dashboard.categories.edit',$item->id) }}">
+                                                                    <a class="btn btn-secondary" href="{{ route('dashboard.categories.edit',$item->id) }}">
                                                                         <i class="bx bx-edit"></i>
                                                                     </a>
                                                                 @endcan
                                                                 @can('Edit Category')
-                                                                    <button style="background: none; border:none;" onclick="openModal('{{ $item->id }}','{{ $item->name }}')">
-                                                                        <i class="bx bx-trash text-danger"></i>
+                                                                    <button class="btn btn-danger" onclick="openModal('{{ $item->id }}','{{ $item->name }}')">
+                                                                        <i class="bx bx-trash buttonIcon"></i>
                                                                     </button>
                                                                 @endcan
 

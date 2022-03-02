@@ -62,7 +62,7 @@
                                                         <td style="text-transform: uppercase;">{{ $item->status }}</td>
                                                         <td>
                                                            @can('Edit Ads')
-                                                            <a href="{{ route('dashboard.ads.edit',$item->id) }}">
+                                                            <a class="btn btn-secondary" href="{{ route('dashboard.ads.edit',$item->id) }}">
                                                                 <i class="bx bx-show"></i>
                                                             </a>                                                               
                                                            @endcan

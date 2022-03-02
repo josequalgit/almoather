@@ -5,14 +5,29 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use Auth , Alert;
+use Carbon\Carbon;
 class CustomerController extends Controller
 {
     public function index()
     {
-        $data = Customer::paginate(10);
-        $counter = Customer::count();
+        $data = Customer::with('users')->paginate(10);
+        $counter = Customer::with('users')->count();
 
-        return view('dashboard.customers.index',compact('data','counter'));
+
+        $months = [1,2,3,4,5,6,7,8,9,10,11,12];
+        $year = Carbon::now()->year;
+        $influncersData = [];
+
+        foreach($months as $month)
+        {
+            $influncerNumber = Customer::whereYear('created_at', '=', $year)
+            ->whereMonth('created_at', '=', $month)
+            ->count();
+            array_push($influncersData,$influncerNumber);
+        }
+
+
+        return view('dashboard.customers.index',compact('data','counter','influncersData'));
     }
 
     public function edit($id)
@@ -37,5 +52,15 @@ class CustomerController extends Controller
             'msg'=>'data was updated',
             'status'=>201
         ]);
+    }
+
+    public function show_ads($id)
+    {
+        $customer = Customer::findOrFail($id);
+        $data = $customer->ads()->paginate(10);
+        $counter = $customer->ads()->count();
+        $ads = $customer->ads()->get()->take(5);
+
+        return view('dashboard.customers.showAds',compact('data' , 'counter' , 'customer','ads'));
     }
 }

@@ -15,7 +15,7 @@ class CategoryController extends Controller
         $productCat = Category::where('type','product')->select(['id','name'])->get();
 
         return response()->json([
-            'msg'=>'product categories available',
+            'msg'=>'the product categories available',
             'service'=>$serviceCat,
             'product'=>$productCat,
             'status'=>200
@@ -27,7 +27,7 @@ class CategoryController extends Controller
         $data = InfluncerCategory::select(['id','name'])->get();
 
         return response()->json([
-            'msg'=>'influncer categories available',
+            'msg'=>'the influncer categories available',
             'data'=>$data
         ]);
     }

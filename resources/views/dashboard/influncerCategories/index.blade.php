@@ -66,14 +66,14 @@
                                                             <td>{{ $item->name }}</td>
                                                             
                                                             <td>
-                                                                @can('Delete Influencer Category')
-                                                                    <a href="{{ route('dashboard.influencerCategories.edit',$item->id) }}">
+                                                                @can('Edit Influencer Category')
+                                                                    <a  class="btn btn-secondary" href="{{ route('dashboard.influencerCategories.edit',$item->id) }}">
                                                                         <i class="bx bx-edit"></i>
                                                                     </a>
                                                                 @endcan
-                                                                @can('Edit Influencer Category')
-                                                                    <button style="background: none; border:none;" onclick="openModal('{{ $item->id }}','{{ $item->name }}')">
-                                                                        <i class="bx bx-trash text-danger"></i>
+                                                                @can('Delete Influencer Category')
+                                                                    <button class="btn btn-danger" onclick="openModal('{{ $item->id }}','{{ $item->name }}')">
+                                                                        <i class="bx bx-trash deleteIcon"></i>
                                                                     </button>
                                                                 @endcan
 

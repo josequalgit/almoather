@@ -53,13 +53,14 @@
                                             <thead>
                                                 <tr>
                                                     <th>Message</th>
-                                                    {{-- <th>Actions</th> --}}
+                                                    <th>Was Sent</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($data as $item)
                                                         <tr>
-                                                            <td>{{ $item['msg'] }}</td>
+                                                            <td>{{ $item->data['msg'] }}</td>
+                                                            <td>{{ $item->created_at->diffForHumans() }}</td>
                                                         </tr>
                                                 @endforeach
                                             </tbody>
