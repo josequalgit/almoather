@@ -41,8 +41,10 @@
                                   
                                    <div class="col-6">
                                        <div id="checkBox{{ $item->id }}" class="form-check form-check-inline">
-                                        <input name="permission[]" class="form-check-input" {{ (in_array($item->id, $permissionIds))?'checked': ''}} type="checkbox" id="inlineCheckbox{{$item->id}}" value="{{ $item->id }}">
-                                        <label class="form-check-label" for="inlineCheckbox1">{{ $item->name }}</label>
+                                        {{-- <input name="permission[]" class="form-check-input" {{ (in_array($item->id, $permissionIds))?'checked': ''}} type="checkbox" id="inlineCheckbox{{$item->id}}" value="{{ $item->id }}"> --}}
+                                        <input name="permission[]" {{ (in_array($item->id, $permissionIds))?'checked': ''}} id="inlineCheckbox{{$item->id}}" value="{{ $item->id }}" type="checkbox" data-toggle="toggle" data-onstyle="primary">
+
+                                        <label class="form-check-label ml-2" for="inlineCheckbox1">{{ $item->name }}</label>
                                       </div>
                                    </div>
                                    @endforeach

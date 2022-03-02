@@ -65,14 +65,14 @@
                                                             <td>{{ $item->answer }}</td>
                                                             
                                                             <td>
-                                                                @can('Delete Faq')
-                                                                    <a href="{{ route('dashboard.faqs.edit',$item->id) }}">
+                                                                @can('Edit Faq')
+                                                                    <a class="btn btn-secondary" href="{{ route('dashboard.faqs.edit',$item->id) }}">
                                                                         <i class="bx bx-edit"></i>
                                                                     </a>
                                                                 @endcan
-                                                                @can('Edit Faq')
-                                                                    <button style="background: none; border:none;" onclick="openModal('{{ $item->id }}','{{ $item->question }}')">
-                                                                        <i class="bx bx-trash text-danger"></i>
+                                                                @can('Delete Faq')
+                                                                    <button class="btn btn-danger" onclick="openModal('{{ $item->id }}','{{ $item->question }}')">
+                                                                        <i class="bx bx-trash buttonIcon"></i>
                                                                     </button>
                                                                 @endcan
 

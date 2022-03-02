@@ -63,14 +63,14 @@
                                                             <td>{{ $item->name }}</td>
                                                             
                                                             <td>
-                                                                @can('Delete Role')
-                                                                    <a href="{{ route('dashboard.roles.edit',$item->id) }}">
+                                                                @can('Edit Role')
+                                                                    <a class="btn btn-secondary" href="{{ route('dashboard.roles.edit',$item->id) }}">
                                                                         <i class="bx bx-edit"></i>
                                                                     </a>
                                                                 @endcan
-                                                                @can('Edit Role')
-                                                                    <button style="background: none; border:none;" onclick="openModal('{{ $item->id }}','{{ $item->name }}')">
-                                                                        <i class="bx bx-trash text-danger"></i>
+                                                                @can('Delete Role')
+                                                                    <button class="btn btn-danger" onclick="openModal('{{ $item->id }}','{{ $item->name }}')">
+                                                                        <i class="bx bx-trash  deleteIcon"></i>
                                                                     </button>
                                                                 @endcan
 
@@ -140,6 +140,10 @@
                 {
                     location.reload();
                 }
+               if(res.err)
+               {
+                location.reload();
+               }
               
             },
             error:(err)=>{

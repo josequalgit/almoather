@@ -16,13 +16,14 @@ class NotificationController extends Controller
     public function index()
     {
         
-        $data = DB::table('notifications')->orderBy('created_at','desc')->paginate(10);
-        $result = $data->getCollection()->transform(function($item, $key) {
-            $obj = json_decode($item->data);
-            return [
-                'msg' => $obj->msg,
-            ];
-        });    
+        // $data = DB::table('notifications')->orderBy('created_at','desc')->paginate(10);
+        // $result = $data->getCollection()->transform(function($item, $key) {
+        //     $obj = json_decode($item->data);
+        //     return [
+        //         'msg' => $obj->msg,
+        //     ];
+        // });    
+        $data = Auth::user()->notifications()->paginate(10);
         return view('dashboard.notifiactions.index',compact('data'));
     }
 

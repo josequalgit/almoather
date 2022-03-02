@@ -1,4 +1,5 @@
 @extends('dashboard.layout.index')
+
 @section('content')
 <div class="app-content content p-5 mt-5">
     
@@ -39,8 +40,10 @@
                                    @foreach ($data as $item)
                                    <div class="col-6">
                                        <div id="checkBox{{ $item->id }}" class="form-check form-check-inline">
-                                        <input name="permission[]" class="form-check-input" type="checkbox" id="inlineCheckbox{{$item->id}}" value="{{ $item->id }}">
-                                        <label class="form-check-label" for="inlineCheckbox1">{{ $item->name }}</label>
+                                        <input name="permission[]" id="inlineCheckbox{{$item->id}}" value="{{ $item->id }}" type="checkbox" data-toggle="toggle" data-onstyle="primary">
+
+                                        {{-- <input name="permission[]" class="form-check-input" type="checkbox" id="inlineCheckbox{{$item->id}}" value="{{ $item->id }}"> --}}
+                                        <label  class="form-check-label ml-2" for="checkBox{{ $item->id }}">{{ $item->name }}</label>
                                       </div>
                                    </div>
                                    @endforeach

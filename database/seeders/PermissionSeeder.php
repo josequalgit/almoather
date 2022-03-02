@@ -31,6 +31,7 @@ class PermissionSeeder extends Seeder
             'Edit Customer',
             'Create Customer',
             'See Customer',
+            'See Customer Ads',
             'Delete Customer',
             'Edit Role',
             'Create Role',

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\AdController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CountryController;
 
 
 Route::group(['prefix'=>'auth'],function(){
@@ -35,6 +36,12 @@ Route::group(['prefix'=>'auth'],function(){
         Route::controller(CategoryController::class)->prefix('categories')->group(function(){
             Route::get('/','index');
             Route::get('/influncers','getInfluncerCategories');
+        });
+
+
+        #COUNTRIES ROUTES
+        Route::controller(CountryController::class)->prefix('countries')->group(function(){
+            Route::get('/','index');
         });
 
         

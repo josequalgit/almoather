@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Influncer;
 use App\Models\Customer;
 use App\Notifications\AddInfluencer;
+use Illuminate\Support\Facades\Notification;
 
 class RegisterController extends Controller
 {
@@ -40,8 +41,14 @@ class RegisterController extends Controller
 
        $addUserId =  array_merge($influncerData,['user_id'=>$data->id]);
         $newInfluncer = Influncer::create($addUserId);
-        $sendTo = User::find($data->id);
-        $sendTo->notify(new AddInfluencer($info));
+        // $sendTo = User::find($data->id);
+        // $sendTo->notify(new AddInfluencer($info));
+
+        $users = [User::find(1)];
+        $info =[
+            'msg'=>'New Influncer "'.$newInfluncer->full_name_en.'" registered'
+        ];
+        Notification::send($users, new AddInfluencer($info));
 
         return response()->json([
             'msg'=>'Influncer was created',
@@ -67,9 +74,15 @@ class RegisterController extends Controller
             'user_id',
         ]);
         $addUserId =  array_merge($customerData,['user_id'=>$data->id]);
-        $newInfluncer = Customer::create($addUserId);
-        $sendTo = User::find($data->id);
-        $sendTo->notify(new AddInfluencer($info));
+        $newCustomer = Customer::create($addUserId);
+        // $sendTo = User::find($data->id);
+        // $sendTo->notify(new AddInfluencer($info));
+
+        $users = [User::find(1)];
+        $info =[
+            'msg'=>'New Customer "'.$newCustomer->first_name.'" registered'
+        ];
+        Notification::send($users, new AddInfluencer($info));
         return response()->json([
             'msg'=>'Customer was created',
             'status'=>201
