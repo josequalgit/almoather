@@ -37,6 +37,8 @@ class CustomerRequest extends FormRequest
             'region_id'=>'required',
             'nationality_id'=>'required',
             'city_id'=>'required',
+            'id_number'=>'required',
+
 
         ];
     }

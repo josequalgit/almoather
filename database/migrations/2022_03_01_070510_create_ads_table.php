@@ -19,8 +19,10 @@ return new class extends Migration
             $table->enum('expense_type',['none','pve','pvn'])->default('none');
             $table->string('store');
             $table->bigInteger('budget');
+            $table->boolean('is_verified')->default(0);
             $table->date('date');
             $table->longText('ad_script')->nullable();
+            $table->longText('scenario')->nullable();
             $table->longText('auth_number')->nullable();
             $table->boolean('onSite')->default(0);
             $table->longText('about');

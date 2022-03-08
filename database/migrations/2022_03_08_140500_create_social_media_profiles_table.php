@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('regions', function (Blueprint $table) {
+        Schema::create('social_media_profiles', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->bigInteger('country_id')->unsigned();
+            $table->string('link');
+            $table->bigInteger('social_media_id')->unsigned();
+            $table->bigInteger('Influncer_id')->unsigned();
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('regions');
+        Schema::dropIfExists('social_media_profiles');
     }
 };

@@ -28,7 +28,14 @@ class Influncer extends Model implements HasMedia
         'status',
         'is_vat',
         'ad_price',
-        'ad_onsite_price'
+        'ad_onsite_price',
+        'birthday',
+        'id_number',
+        'phone',
+        'ratting',
+        'ad_with_vat',
+        'ad_onsite_price_with_vat',
+        'address_id'
     ];
 
     protected $append = [
@@ -67,6 +74,21 @@ class Influncer extends Model implements HasMedia
     public function contracts()
     {
         return $this->hasMany(Contract::class,'influencer_id');
+    }
+
+    public function address()
+    {
+        return $this->belongsTo(Address::class,'address_id');
+    }
+
+    public function banks()
+    {
+        return $this->belongsTo(Banks::class,'bank_id');
+    }
+
+    public function socialMediaProfiles()
+    {
+        return $this->hasMany(SocialMediaProfile::class,'Influncer_id');
     }
 
     public function getVideoAttribute(Type $var = null)
