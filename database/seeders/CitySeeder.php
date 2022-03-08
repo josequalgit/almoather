@@ -17,7 +17,8 @@ class CitySeeder extends Seeder
     {
         City::create([
             'name'=>'jedi',
-            'country_id'=>'1'
+            'country_id'=>'1',
+            'region_id'=>'1'
         ]);
     }
 }

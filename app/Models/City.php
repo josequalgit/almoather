@@ -11,7 +11,8 @@ class City extends Model
 
     protected $fillable = [
         'name',
-        'country_id'
+        'country_id',
+        'region_id'
     ];
 
     public function customers()
@@ -33,4 +34,9 @@ class City extends Model
     {
         return $this->hasMany(Area::class,'city_id');
     }
+
+    public function regions()
+    {
+        return $this->belongs(Region::class,'region_id');
+    } 
 }

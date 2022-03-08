@@ -23,6 +23,7 @@ class Influncer extends Model implements HasMedia
         'country_id',
         'nationality_id',
         'influncer_category_id',
+        'region_id',
         'user_id',
         'status',
         'is_vat',

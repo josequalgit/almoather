@@ -29,6 +29,7 @@ return new class extends Migration
             $table->bigInteger('city_id')->unsigned();
             $table->bigInteger('country_id')->unsigned();
             $table->bigInteger('nationality_id')->unsigned();
+            $table->bigInteger('region_id')->unsigned();
             $table->longText('rejected_note')->nullable();
             $table->enum('status',['pending','accepted','rejected','band'])->default('pending');
             $table->bigInteger('user_id')->unsigned();

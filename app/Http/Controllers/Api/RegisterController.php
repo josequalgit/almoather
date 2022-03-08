@@ -47,6 +47,7 @@ class RegisterController extends Controller
             'city_id',
             'country_id',
             'nationality_id',
+            'region_id',
             'user_id',
             'is_vat',
             'ad_price',
@@ -95,7 +96,10 @@ class RegisterController extends Controller
             'last_name',
             'phone',
             'country_id',
+            'nationality_id',
+            'region_id',
             'user_id',
+            'city_id'
         ]);
         $addUserId =  array_merge($customerData,['user_id'=>$data->id]);
         $newCustomer = Customer::create($addUserId);
