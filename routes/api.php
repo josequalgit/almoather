@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\InfluenecerController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\EmailVerificationController;
 use App\Http\Controllers\Api\CityController;
+use App\Http\Controllers\Api\AreaController;
 
 
 Route::group(['prefix'=>'auth'],function(){
@@ -51,6 +52,11 @@ Route::group(['prefix'=>'auth'],function(){
     #GET CITIES
     Route::controller(CityController::class)->prefix('cities')->group(function(){
         Route::get('/{country_id}','index');
+    });
+
+    #GET AREAS
+    Route::controller(AreaController::class)->prefix('areas')->group(function(){
+        Route::get('/{city_id}','index');
     });
     
     Route::middleware('api_auth')->group(function(){
