@@ -17,7 +17,6 @@ class CustomerSeeder extends Seeder
     public function run()
     {
         $user = User::create([
-            'name'=>'Ahmed',
             'email'=>'ahmed@gmail.com',
             'password'=>bcrypt(123456)
         ]);
@@ -27,7 +26,10 @@ class CustomerSeeder extends Seeder
             'last_name'=>'Khaled',
             'phone'=>'0759545482',
             'country_id'=>1,
-            'user_id'=>$user->id,
+            'region_id'=>1,
+            'nationality_id'=>1,
+            'city_id'=>1,
+            'user_id'=>$user->id
         ]);
         $url = \URL::to('').'/img/products/1.png';
 

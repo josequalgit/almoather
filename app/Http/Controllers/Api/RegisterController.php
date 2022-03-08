@@ -12,6 +12,7 @@ use App\Models\Customer;
 use App\Models\Country;
 use App\Models\Category;
 use App\Models\InfluncerCategory;
+use App\Models\SocialMediaProfile;
 use App\Models\City;
 use App\Notifications\AddInfluencer;
 use Illuminate\Support\Facades\Notification;
@@ -47,18 +48,36 @@ class RegisterController extends Controller
             'city_id',
             'country_id',
             'nationality_id',
+            'region_id',
             'user_id',
             'is_vat',
             'ad_price',
-            'ad_onsite_price'
+            'ad_onsite_price',
+            'id_number',
+            'phone',
+            'ad_with_vat',
+            'ad_onsite_price_with_vat',
+            'birthday',
+            'address_id',
+            'bank_id'
         ]);
 
        $addUserId =  array_merge($influncerData,['user_id'=>$data->id]);
        $newInfluncer = Influncer::create($addUserId);
 
-       foreach($request->influencers as $item)
+       foreach($request->categories as $item)
        {
            $newInfluncer->InfluncerCategories()->attach($item);
+       }
+
+       foreach ($request->social_media as $item) {
+            $obj = $item;
+           if(!is_object($item)) $obj = (object)$item;
+            SocialMediaProfile::create([
+                'link'=>$obj->link,
+                'social_media_id'=>$obj->type,
+                'Influncer_id'=>$newInfluncer->id
+            ]);
        }
 
         $users = [User::find(1)];
@@ -95,7 +114,10 @@ class RegisterController extends Controller
             'last_name',
             'phone',
             'country_id',
+            'nationality_id',
+            'region_id',
             'user_id',
+            'city_id'
         ]);
         $addUserId =  array_merge($customerData,['user_id'=>$data->id]);
         $newCustomer = Customer::create($addUserId);
@@ -156,7 +178,7 @@ class RegisterController extends Controller
             $data = City::find($request->city_id);
             if(!$data) return 'city not found';
         }
-        if((isset($request->influencers)&&count($request->influencers) < 3) || (isset($request->influencers)&&count($request->influencers) > 3))
+        if((isset($request->categories)&&count($request->categories) < 3) || (isset($request->categories)&&count($request->categories) > 3))
         {
             return 'should be 3 categories for the influencer';
         }

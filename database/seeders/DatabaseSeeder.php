@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
             CustomerSeeder::class,
             AdSeeder::class,
             ContractSeeder::class,
+            AddressSeeder::class,
+            BankSeeder::class
         ]);
     }
 }

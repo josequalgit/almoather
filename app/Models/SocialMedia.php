@@ -30,6 +30,11 @@ class SocialMedia extends Model implements HasMedia
         return $this->belongsToMany(Influncer::class);
     }
 
+    public function SocialMediaProfiles()
+    {
+        return $this->hasMany(SocialMediaProfile::class,'social_media_id');
+    }
+
     public function getImageAttribute()
     {
         $mediaItems = $this->getMedia('logos');

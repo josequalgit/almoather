@@ -4,9 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\City;
+use App\Models\Bank;
 
-class CitySeeder extends Seeder
+class BankSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,10 +15,8 @@ class CitySeeder extends Seeder
      */
     public function run()
     {
-        City::create([
-            'name'=>'jedi',
-            'country_id'=>'1',
-            'region_id'=>'1'
+        Bank::create([
+            'name'=>'Best Bank Ever'
         ]);
     }
 }

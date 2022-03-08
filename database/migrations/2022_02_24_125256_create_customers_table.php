@@ -21,6 +21,9 @@ return new class extends Migration
             $table->integer('ratting')->default(0);
             $table->bigInteger('country_id')->unsigned();
             $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('region_id')->unsigned();
+            $table->bigInteger('nationality_id')->unsigned();
+            $table->bigInteger('city_id')->unsigned();
             $table->enum('status',['active','band'])->default('active');
             $table->timestamps();
         });

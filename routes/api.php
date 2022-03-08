@@ -15,6 +15,9 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\EmailVerificationController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\AreaController;
+use App\Http\Controllers\Api\RegionController;
+use App\Http\Controllers\Api\BankController;
+use App\Http\Controllers\Api\AddressController;
 
 
 Route::group(['prefix'=>'auth'],function(){
@@ -29,6 +32,16 @@ Route::group(['prefix'=>'auth'],function(){
 
       #COUNTRIES ROUTES
       Route::controller(CountryController::class)->prefix('countries')->group(function(){
+        Route::get('/','index');
+    });
+
+      #BANKS ROUTES
+      Route::controller(BankController::class)->prefix('banks')->group(function(){
+        Route::get('/','index');
+    });
+
+      #ADDRESSES ROUTES
+      Route::controller(AddressController::class)->prefix('addresses')->group(function(){
         Route::get('/','index');
     });
 
@@ -58,6 +71,17 @@ Route::group(['prefix'=>'auth'],function(){
     Route::controller(AreaController::class)->prefix('areas')->group(function(){
         Route::get('/{city_id}','index');
     });
+
+    #GET REGIONS
+    Route::controller(RegionController::class)->prefix('regions')->group(function(){
+        Route::get('/{country_id}','index');
+    });
+
+     #CATEGORIES ROUTES
+     Route::controller(CategoryController::class)->prefix('categories')->group(function(){
+        Route::get('/','index');
+        Route::get('/influncers','getInfluncerCategories');
+    });
     
     Route::middleware('api_auth')->group(function(){
 
@@ -79,8 +103,6 @@ Route::group(['prefix'=>'auth'],function(){
 
         #CATEGORIES ROUTES
         Route::controller(CategoryController::class)->prefix('categories')->group(function(){
-            Route::get('/','index');
-            Route::get('/influncers','getInfluncerCategories');
             Route::get('/search/{query}','search');
         });
 

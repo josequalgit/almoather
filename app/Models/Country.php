@@ -34,4 +34,14 @@ class Country extends Model
         return $this->hasMany(Ad::class,'country_id');
     }
 
+    public function regions()
+    {
+        return $this->hasMany(Region::class,'country_id');
+    }
+
+    public function address()
+    {
+        return $this->hasMany(Address::class,'country_id');
+    }
+
 }
