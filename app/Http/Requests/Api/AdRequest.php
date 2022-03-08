@@ -36,9 +36,11 @@ class AdRequest extends FormRequest
             'country_id'=>'required',
             'city_id'=>'required',
             'area_id'=>'required',
+            'category_id'=>'required',
+            'date'=>'required|date',
             'image'=>'mimes:jpg,bmp,png',
             'video'=>'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4',
-            'documnet'=>'mimetypes:video/avi,video/mpeg,video/quicktime'
+            'documnet'=>'mimetypes:jpg,bmp,png,pdf'
 
         ];
     }
@@ -58,6 +60,7 @@ class AdRequest extends FormRequest
             'country_id.required' => 'Please choose the country',
             'city_id.required' => 'Please choose the city',
             'area_id.required' => 'Please choose the area',
+            'category_id.required' => 'Please choose the category',
         ];
     }
 

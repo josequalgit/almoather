@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Influncer extends Model
+class Influncer extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory , InteractsWithMedia;
 
     protected $fillable = [
         'full_name_en',
@@ -22,7 +24,14 @@ class Influncer extends Model
         'nationality_id',
         'influncer_category_id',
         'user_id',
-        'status'
+        'status',
+        'is_vat',
+        'ad_price',
+        'ad_onsite_price'
+    ];
+
+    protected $append = [
+        'video'
     ];
 
     public function users()
@@ -52,5 +61,18 @@ class Influncer extends Model
     public function ads()
     {
         return $this->hasMany(Ad::class,'influncer_id');
+    }
+
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class,'influencer_id');
+    }
+
+    public function getVideoAttribute(Type $var = null)
+    {
+        $mediaItems = $this->getMedia('videos');
+        $publicFullUrl = [];
+        if(count($mediaItems) > 0) $publicFullUrl = $mediaItems[0]->getFullUrl();
+        return $publicFullUrl;
     }
 }

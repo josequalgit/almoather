@@ -9,8 +9,13 @@ use App\Http\Requests\Api\CustomerRequest;
 use App\Models\User;
 use App\Models\Influncer;
 use App\Models\Customer;
+use App\Models\Country;
+use App\Models\Category;
+use App\Models\InfluncerCategory;
+use App\Models\City;
 use App\Notifications\AddInfluencer;
 use Illuminate\Support\Facades\Notification;
+use Carbon\Carbon;
 
 class RegisterController extends Controller
 {
@@ -19,6 +24,14 @@ class RegisterController extends Controller
         $info =[
             'msg'=>$request->message,
         ];
+        if($this->checkIfDataAvalibale($request))
+        {
+            return response()->json([
+                'msg'=>$this->checkIfDataAvalibale($request),
+                'status'=>200
+            ]);
+        }
+
         $commingRequest =  array_merge($request->only(['email','password','name']),['password'=>bcrypt($request->password)]);
         $data = User::create($commingRequest);
         $data->addMedia($request->file('image'))
@@ -33,16 +46,20 @@ class RegisterController extends Controller
             'ads_out_country',
             'city_id',
             'country_id',
-            'category_id',
             'nationality_id',
-            'influncer_category_id',
             'user_id',
+            'is_vat',
+            'ad_price',
+            'ad_onsite_price'
         ]);
 
        $addUserId =  array_merge($influncerData,['user_id'=>$data->id]);
-        $newInfluncer = Influncer::create($addUserId);
-        // $sendTo = User::find($data->id);
-        // $sendTo->notify(new AddInfluencer($info));
+       $newInfluncer = Influncer::create($addUserId);
+
+       foreach($request->influencers as $item)
+       {
+           $newInfluncer->InfluncerCategories()->attach($item);
+       }
 
         $users = [User::find(1)];
         $info =[
@@ -58,6 +75,13 @@ class RegisterController extends Controller
 
     public function registerCustomer(CustomerRequest $request)
     {
+        if($this->checkIfDataAvalibale($request))
+        {
+            return response()->json([
+                'msg'=>$this->checkIfDataAvalibale($request),
+                'status'=>200
+            ]);
+        }
         $info =[
             'msg'=>$request->message,
         ];
@@ -75,8 +99,7 @@ class RegisterController extends Controller
         ]);
         $addUserId =  array_merge($customerData,['user_id'=>$data->id]);
         $newCustomer = Customer::create($addUserId);
-        // $sendTo = User::find($data->id);
-        // $sendTo->notify(new AddInfluencer($info));
+       
 
         $users = [User::find(1)];
         $info =[
@@ -88,6 +111,60 @@ class RegisterController extends Controller
             'status'=>201
         ],201);
     }
+
+    public function verify($user_id)
+    {
+        $data = User::find($user_id);
+        
+        # IF THE USER IS NOT FOUND 
+        if(!$data) return response()->json([
+            'err'=>'user not found',
+            'status'=>404
+        ],404);
+
+        #IF THE USER ALREADY VERIFIED
+        if($data->email_verified_at) return response()->json([
+            'err'=>'user already verified',
+            'status'=>200
+        ],200);
+
+        #UPDATE THE USER
+        $data->email_verified_at = Carbon::parse()->now();
+        $data->save();
+
+        #RETURN WITH 204 STATUS CODE
+        return response()->json([
+            'msg'=>'user is verified',
+            'status'=>204
+        ],200);
+    }
+
+    private function checkIfDataAvalibale($request)
+    {
+        if($request->country_id||$request->nationality_id)
+        {
+            $data = Country::find($request->country_id??$request->nationality_id);
+            if(!$data) return 'country not found';
+        }
+        if($request->influncer_category_id)
+        {
+            $data = InfluncerCategory::find($request->influncer_category_id);
+            if(!$data) return 'category not found';
+        }
+        if($request->city_id)
+        {
+            $data = City::find($request->city_id);
+            if(!$data) return 'city not found';
+        }
+        if((isset($request->influencers)&&count($request->influencers) < 3) || (isset($request->influencers)&&count($request->influencers) > 3))
+        {
+            return 'should be 3 categories for the influencer';
+        }
+
+        return null;
+    }
+
+  
 
 
 }

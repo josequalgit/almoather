@@ -23,7 +23,11 @@ class DatabaseSeeder extends Seeder
             PrivaciesTermsSeeder::class,
             CountrySeeder::class,
             CitySeeder::class,
-            AreaSeeder::class
+            AreaSeeder::class,
+            CategorySeeder::class,
+            CustomerSeeder::class,
+            AdSeeder::class,
+            ContractSeeder::class,
         ]);
     }
 }

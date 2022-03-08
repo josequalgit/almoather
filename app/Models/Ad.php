@@ -25,9 +25,18 @@ class Ad extends Model implements HasMedia
         'area_id',
         'customer_id',
         'influncer_id',
+        'category_id',
         'website_link',
         'ad_script',
-        'reject_note'
+        'reject_note',
+        'date',
+        'expense_type'
+    ];
+
+    protected $append = [
+        'videos',
+        'image',
+        'document',
     ];
 
     public function socialMedias()
@@ -59,4 +68,42 @@ class Ad extends Model implements HasMedia
     {
         return $this->belongsTo(Influncer::class,'influncer_id');
     }
+
+    public function categories()
+    {
+        return $this->belongsTo(Category::class,'category_id');
+    }
+
+    public function contacts()
+    {
+        return $this->hasOne(Contract::class,'ad_id');
+    }
+
+    public function getImageAttribute() {
+        $mediaItems = $this->getMedia('adImage');
+        $publicFullUrl = null;
+        if(count($mediaItems) > 0)
+        {
+            $publicFullUrl = $mediaItems[0]->getFullUrl();
+        }
+        return $publicFullUrl;
+   }
+    public function getVideosAttribute() {
+        $mediaItems = $this->getMedia('adVideos');
+        $publicFullUrl = [];
+        if(count($mediaItems) > 0)
+        {
+            $publicFullUrl = $mediaItems[0]->getFullUrl();
+        }
+        return $publicFullUrl;
+   }
+    public function getDocumentAttribute() {
+        $mediaItems = $this->getMedia('documnet');
+        $publicFullUrl = null;
+        if(count($mediaItems) > 0)
+        {
+            $publicFullUrl = $mediaItems[0]->getFullUrl();
+        }
+        return $publicFullUrl;
+   }
 }

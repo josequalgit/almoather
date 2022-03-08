@@ -4,14 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class SocialMedia extends Model
+class SocialMedia extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory , InteractsWithMedia;
 
     protected $fillable = [
         'name',
         'active'
+    ];
+
+    protected $append = [
+        'image'
     ];
 
     public function ads()
@@ -22,6 +28,15 @@ class SocialMedia extends Model
     public function influncers()
     {
         return $this->belongsToMany(Influncer::class);
+    }
+
+    public function getImageAttribute()
+    {
+        $mediaItems = $this->getMedia('logos');
+        $publicFullUrl = null;
+        if(count($mediaItems) > 0) $publicFullUrl = $mediaItems[0]->getFullUrl();
+       
+        return $publicFullUrl;
     }
     
 }

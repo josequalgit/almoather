@@ -143,6 +143,31 @@
             </div>
           </div>
         </div>
+        <div id="expensiveType" class="modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Expence type</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">select</label>
+                  <select class="form-control" id="expense_type">
+                    <option value="pvn">PVN</option>
+                    <option value="pve">PVE</option>
+                  </select>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button onclick="sendStatusRequest()" type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
    
         </section>
 
@@ -169,7 +194,9 @@
     }
     else
     {
-        sendStatusRequest();
+      $('#expensiveType').modal('toggle');
+
+      //  sendStatusRequest();
     }
     
   }
@@ -183,7 +210,8 @@
       type:'POST',
       data:{
         status:document.getElementById('status').value,
-        note:document.getElementById('rejectedNote').value
+        note:document.getElementById('rejectedNote').value,
+        expense_type:document.getElementById('expense_type').value
       },
       success:(res)=>{
         let url = '{{ route("dashboard.ads.index") }}'

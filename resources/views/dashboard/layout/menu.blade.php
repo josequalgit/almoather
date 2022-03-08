@@ -660,6 +660,13 @@ input[type="radio"] .styled:checked + label::after {
                 {{-- <li class="nav-item"><a ><span class="menu-title text-truncate" data-i18n="ads">Ads</span></a>
                 </li> --}}
                 <li class="menu-item
+                {{ (($name == 'dashboard.ads.index'&&$para == null)|| ($name == 'dashboard.ads.create'&&$para == null)||($name == 'dashboard.ads.edit')&&$para == null) ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.ads.index') }}" class="menu-link">
+                    <div data-i18n="List">All</div>
+                  </a>
+                </li>
+                <li class="menu-item
                 {{ (($name == 'dashboard.ads.index'&&$para == 'pending')|| ($name == 'dashboard.ads.create'&&$para == 'pending')||($name == 'dashboard.ads.edit')&&$para == 'pending') ? 'active':''  }}
                 ">
                   <a href="{{ route('dashboard.ads.index','pending') }}" class="menu-link">

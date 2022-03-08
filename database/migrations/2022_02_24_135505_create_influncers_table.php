@@ -22,6 +22,10 @@ return new class extends Migration
             $table->longText('bank_account_number');
             $table->longText('bio');
             $table->boolean('ads_out_country')->default(0);
+            $table->boolean('is_vat');
+            $table->integer('ad_price');
+            $table->integer('ratting')->default(0);
+            $table->integer('ad_onsite_price');
             $table->bigInteger('city_id')->unsigned();
             $table->bigInteger('country_id')->unsigned();
             $table->bigInteger('nationality_id')->unsigned();

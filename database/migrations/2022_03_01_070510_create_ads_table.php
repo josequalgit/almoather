@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('ads', function (Blueprint $table) {
             $table->id();
             $table->enum('type',['service','product']);
+            $table->enum('expense_type',['none','pve','pvn'])->default('none');
             $table->string('store');
             $table->bigInteger('budget');
+            $table->date('date');
             $table->longText('ad_script')->nullable();
             $table->longText('auth_number')->nullable();
             $table->boolean('onSite')->default(0);
@@ -28,6 +30,7 @@ return new class extends Migration
             $table->bigInteger('city_id')->unsigned();
             $table->bigInteger('area_id')->unsigned();
             $table->bigInteger('customer_id')->unsigned();
+            $table->bigInteger('category_id')->unsigned();
             $table->bigInteger('influncer_id')->unsigned()->nullable();
             $table->longText('reject_note')->nullable();
             $table->enum('status',['pending','prepay','fullpayment','progress','influncer_complete','complete','incomplete','rejected','waiting_for_payment']);

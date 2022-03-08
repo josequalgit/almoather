@@ -17,28 +17,40 @@ class SocialMediaSeeder extends Seeder
     {
         $data = [
             [
-                'name'=>'Facebook'
+                'name'=>'Facebook',
+                'logo'=>\URL::to('').'/img/media/facebook.png'
             ],
             [
-                'name'=>'Twitter'
+                'name'=>'Twitter',
+                  'logo'=>\URL::to('').'/img/media/twitter.png'
             ],
             [
-                'name'=>'Instagram'
+                'name'=>'Instagram',
+                  'logo'=>\URL::to('').'/img/media/instagram.png'
             ],
             [
-                'name'=>'Snapchat'
+                'name'=>'Snapchat',
+                  'logo'=>\URL::to('').'/img/media/snapchat.png'
             ],
             [
-                'name'=>'Youtube'
+                'name'=>'Youtube',
+                  'logo'=>\URL::to('').'/img/media/youtube.png'
             ],
             [
-                'name'=>'Tiktok'
+                'name'=>'Tiktok',
+                  'logo'=>\URL::to('').'/img/media/tiktok.png'
             ]
         ];
+  
+
+      
+
         foreach ($data as $key => $value) {
-            SocialMedia::create([
+          $media = SocialMedia::create([
                 'name'=>$value['name']
             ]);
+            $media->addMediaFromUrl($value['logo'])
+            ->toMediaCollection('logos');
         }
     }
 }
