@@ -27,9 +27,9 @@ class Category extends Model implements HasMedia
         return $this->belongsTo(InfluncerCategory::class,'influncer_category_id');
     }
 
-    public function prodocts()
+    public function ads()
     {
-        return $this->hasMany(Product::class,'category_id');
+        return $this->hasMany(Ad::class,'category_id');
     }
 
     public function getImageAttribute() {

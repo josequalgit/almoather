@@ -16,8 +16,10 @@ class CategoryController extends Controller
 
         return response()->json([
             'msg'=>'the product categories available',
-            'service'=>$serviceCat,
-            'product'=>$productCat,
+            'data'=>[
+                'service'=>$serviceCat,
+                'product'=>$productCat
+            ],
             'status'=>200
         ],200);
     }
@@ -30,5 +32,21 @@ class CategoryController extends Controller
             'msg'=>'the influncer categories available',
             'data'=>$data
         ]);
+    }
+
+    public function search($query)
+    {
+        $data = InfluncerCategory::where('name','LIKE',"%$query%")->paginate(10);
+      $data->getCollection()->transform(function($item){
+            return[
+                'id'=>$item->id,
+                'name'=>$item->name,
+            ];
+        });
+
+        return response()->json([
+            'msg'=>'search result for the categories',
+            'data'=>$data
+        ],200);
     }
 }

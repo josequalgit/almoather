@@ -8,10 +8,15 @@ use Auth,Alert;
 
 class AdController extends Controller
 {
-    public function index($status = 'pending')
+    public function index($status = null)
     {
         $data = Ad::where('status',$status)->paginate(10);
         $counter = Ad::where('status',$status)->count();
+        if(!$status)
+        {
+            $data = Ad::paginate(10);
+            $counter = Ad::count();
+        }
         return view('dashboard.ads.index',compact('data','counter'));
     }
 
@@ -32,8 +37,13 @@ class AdController extends Controller
             'msg'=>'please add a status',
             'status'=>401
         ],401);
+        if(!$request->status) return response()->json([
+            'msg'=>'please add a status',
+            'status'=>401
+        ],401);
         $data->status = $request->status;
         $data->reject_note = $request->note ?? null;
+        $data->expense_type = $request->expense_type;
         $data->save();
 
 

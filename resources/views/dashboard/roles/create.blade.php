@@ -33,6 +33,8 @@
     
                             </div>
                            <div class="col">
+                               <button id="checkAllButton" onclick="checkAll()" type="button" class="btn btn-success mb-2">Check All</button>
+                               <button id="unCheckAllButton" onclick="unCheckAll()" type="button" class="btn btn-secondary mb-2">Uncheck All</button>
                                <h6>
                                    Permissions
                                </h6>
@@ -40,7 +42,7 @@
                                    @foreach ($data as $item)
                                    <div class="col-6">
                                        <div id="checkBox{{ $item->id }}" class="form-check form-check-inline">
-                                        <input name="permission[]" id="inlineCheckbox{{$item->id}}" value="{{ $item->id }}" type="checkbox" data-toggle="toggle" data-onstyle="primary">
+                                        <input class="checkboxAll" name="permission[]" id="inlineCheckbox{{$item->id}}" value="{{ $item->id }}" type="checkbox" data-toggle="toggle" data-onstyle="primary">
 
                                         {{-- <input name="permission[]" class="form-check-input" type="checkbox" id="inlineCheckbox{{$item->id}}" value="{{ $item->id }}"> --}}
                                         <label  class="form-check-label ml-2" for="checkBox{{ $item->id }}">{{ $item->name }}</label>
@@ -63,4 +65,23 @@
       
 </div>
 
+@endsection
+
+@section('scripts')
+<script>
+    $('#unCheckAllButton').hide();
+   function checkAll() {
+    $('#unCheckAllButton').show();
+     $('#checkAllButton').hide();
+
+     $('.checkboxAll').prop('checked', true).change();
+    }
+   function unCheckAll() {
+     $('.checkboxAll').prop('checked', false).change();
+     $('#unCheckAllButton').hide();
+     $('#checkAllButton').show();
+
+    }
+
+</script>
 @endsection

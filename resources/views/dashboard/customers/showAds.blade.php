@@ -32,20 +32,20 @@
                 <div class="col-12 col-sm-7">
                     <div class="media mb-2">
                         <a class="mr-1" href="javascript:void(0);">
-                            <img src="{{ asset('main2/images/portrait/small/avatar-s-26.jpg') }}" alt="users view avatar" class="users-avatar-shadow rounded-circle" height="64" width="64">
+                            <img src="{{ $customer->users->image }}" alt="users view avatar" class="users-avatar-shadow rounded-circle" height="64" width="64">
                         </a>
                         <div class="media-body pt-25">
-                            <h4 class="media-heading"><span class="users-view-name">{{ $customer->first_name }} </h4>
+                            <h4 class="media-heading"><span class="users-view-name">{{ $customer->first_name }} {{ $customer->last_name }}</h4>
                             <span>Type:</span>
                             <span class="users-view-id">Customer</span>
                         </div>
                     </div>
                 </div>
-                {{-- <div class="col-12 col-sm-5 px-0 d-flex justify-content-end align-items-center px-1 mb-2">
-                    <a href="javascript:void(0);" class="btn btn-sm mr-25 border"><i class="bx bx-envelope font-small-3"></i></a>
-                    <a href="javascript:void(0);" class="btn btn-sm mr-25 border">Profile</a>
-                    <a href="../../../html/ltr/vertical-menu-template/app-users-edit.html" class="btn btn-sm btn-primary">Edit</a>
-                </div> --}}
+                <div class="col-12 col-sm-5 px-0 d-flex justify-content-end align-items-center px-1 mb-2">
+                    {{-- <a href="javascript:void(0);" class="btn btn-sm mr-25 border"><i class="bx bx-envelope font-small-3"></i></a>
+                    <a href="javascript:void(0);" class="btn btn-sm mr-25 border">Profile</a> --}}
+                    <a href="{{ route('dashboard.customers.edit',$customer->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                </div>
             </div>
             <div class="card">
                 <div class="card-body">
@@ -71,7 +71,7 @@
                                     </tr>
                                     <tr>
                                         <td>Status:</td>
-                                        <td><span class="badge badge-light-success users-view-status">{{ $customer->status }}</span></td>
+                                        <td><span class="badge badge-light-{{ $customer->status == 'active'?'success':'danger' }} users-view-status">{{ $customer->status }}</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -99,7 +99,7 @@
                                                 <td style="text-transform: uppercase;">{{ $item->status }}</td>
                                                 <td>
                                                 @can('Edit Ads')
-                                                    <a href="{{ route('dashboard.ads.edit',$item->id) }}">
+                                                    <a  class="btn btn-secondary" href="{{ route('dashboard.ads.edit',$item->id) }}">
                                                         <i class="bx bx-show"></i>
                                                     </a>                                                               
                                                 @endcan
@@ -151,7 +151,7 @@
                                                 <td style="text-transform: uppercase;">{{ $item->status }}</td>
                                                 <td>
                                                    @can('Edit Ads')
-                                                    <a href="{{ route('dashboard.ads.edit',$item->id) }}">
+                                                    <a  class="btn btn-secondary" href="{{ route('dashboard.ads.edit',$item->id) }}">
                                                         <i class="bx bx-show"></i>
                                                     </a>                                                               
                                                    @endcan

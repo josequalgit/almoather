@@ -13,6 +13,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 
+
 class User extends Authenticatable implements JWTSubject , HasMedia
 {
     use HasApiTokens, HasFactory, Notifiable , HasRoles , InteractsWithMedia;
@@ -37,6 +38,12 @@ class User extends Authenticatable implements JWTSubject , HasMedia
         'password',
         'remember_token',
     ];
+
+    protected $append = [
+        'image',
+        'infulncerImage'
+    ];
+
 
     /**
      * The attributes that should be cast.
@@ -76,4 +83,17 @@ class User extends Authenticatable implements JWTSubject , HasMedia
     {
         return $this->hasOne(Influncer::class,'user_id');
     }
+
+    public function getImageAttribute() {
+        $mediaItems = $this->getMedia('customers');
+        $publicFullUrl = $mediaItems[0]->getFullUrl();
+        return $publicFullUrl;
+   }
+
+    public function getInfulncerImageAttribute() {
+        $mediaItems = $this->getMedia('influncers');
+        $publicFullUrl = $mediaItems[0]->getFullUrl();
+        return $publicFullUrl;
+   }
+
 }

@@ -58,10 +58,10 @@
             <div class="form-group">
               <label for="inputAddress2">Category</label>
               <select class="form-control" id="exampleFormControlSelect1">
+                
                 @foreach ($data->InfluncerCategories as $item)
                 <option  selected disabled value="{{ $item->id }}">{{ $item->name }}</option>                    
                 @endforeach
-               
               </select>
             </div>
             <div class="form-group">

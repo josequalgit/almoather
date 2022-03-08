@@ -41,6 +41,10 @@ class InfluncerRequest extends FormRequest
             'name'=>'required',
             'password'=>'required',
             'image'=>'required',
+            'is_vat'=>'required',
+            'ad_price'=>'required',
+            'ad_onsite_price'=>'required',
+            'influencers'=>'required'
         ];
     }
 

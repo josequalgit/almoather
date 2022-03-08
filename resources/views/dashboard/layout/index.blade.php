@@ -273,8 +273,8 @@
     <script src="{{ asset('main2/vendors/js/extensions/moment.min.js') }}"></script>
     <script src="{{ asset('main2/vendors/js/pickers/daterange/daterangepicker.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+@yield('scripts')
 
-    @yield('scripts')
     @include('sweetalert::alert')
 
 

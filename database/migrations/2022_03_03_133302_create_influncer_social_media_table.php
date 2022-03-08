@@ -13,15 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('influncer_social_media', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('phone');
-            $table->integer('ratting')->default(0);
-            $table->bigInteger('country_id')->unsigned();
-            $table->bigInteger('user_id')->unsigned();
-            $table->enum('status',['active','band'])->default('active');
+            $table->bigInteger('influncer_id')->unsigned();
+            $table->bigInteger('social_media_id')->unsigned();
             $table->timestamps();
         });
     }
@@ -33,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('influncer_social_media');
     }
 };
