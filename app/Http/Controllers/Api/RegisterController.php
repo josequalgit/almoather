@@ -29,8 +29,8 @@ class RegisterController extends Controller
         {
             return response()->json([
                 'msg'=>$this->checkIfDataAvalibale($request),
-                'status'=>200
-            ]);
+                'status'=>422
+            ],422);
         }
 
         $commingRequest =  array_merge($request->only(['email','password','name']),['password'=>bcrypt($request->password)]);
@@ -98,8 +98,8 @@ class RegisterController extends Controller
         {
             return response()->json([
                 'msg'=>$this->checkIfDataAvalibale($request),
-                'status'=>200
-            ]);
+                'status'=>422
+            ],422);
         }
         $info =[
             'msg'=>$request->message,
@@ -147,17 +147,17 @@ class RegisterController extends Controller
         #IF THE USER ALREADY VERIFIED
         if($data->email_verified_at) return response()->json([
             'err'=>'user already verified',
-            'status'=>200
-        ],200);
+            'status'=>422
+        ],422);
 
         #UPDATE THE USER
         $data->email_verified_at = Carbon::parse()->now();
         $data->save();
 
-        #RETURN WITH 204 STATUS CODE
+        #RETURN WITH 200 STATUS CODE
         return response()->json([
             'msg'=>'user is verified',
-            'status'=>204
+            'status'=>200
         ],200);
     }
 

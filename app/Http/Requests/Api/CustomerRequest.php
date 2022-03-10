@@ -66,7 +66,7 @@ class CustomerRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'err' => $validator->errors()->all()[0],
-            'status' => true
+            'status' => 422
         ], 422));
     }
     
