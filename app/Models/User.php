@@ -87,7 +87,7 @@ class User extends Authenticatable implements JWTSubject , HasMedia
     public function getImageAttribute() {
         $mediaItems = $this->getMedia('customers');
         $publicFullUrl = null;
-        if($mediaItems)
+        if(count($mediaItems) > 0)
         {
             $publicFullUrl = $mediaItems[0]->getFullUrl();
         }
@@ -97,7 +97,7 @@ class User extends Authenticatable implements JWTSubject , HasMedia
     public function getInfulncerImageAttribute() {
         $mediaItems = $this->getMedia('influncers');
         $publicFullUrl = null;
-        if($mediaItems)
+        if(count($mediaItems) > 0)
         {
             $publicFullUrl = $mediaItems[0]->getFullUrl();
         }

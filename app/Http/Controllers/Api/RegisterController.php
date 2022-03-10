@@ -17,6 +17,7 @@ use App\Models\City;
 use App\Notifications\AddInfluencer;
 use Illuminate\Support\Facades\Notification;
 use Carbon\Carbon;
+use Auth;
 
 class RegisterController extends Controller
 {
@@ -64,6 +65,8 @@ class RegisterController extends Controller
 
        $addUserId =  array_merge($influncerData,['user_id'=>$data->id]);
        $newInfluncer = Influncer::create($addUserId);
+       
+
 
        foreach($request->categories as $item)
        {
@@ -85,9 +88,44 @@ class RegisterController extends Controller
             'msg'=>'New Influncer "'.$newInfluncer->full_name_en.'" registered'
         ];
         Notification::send($users, new AddInfluencer($info));
+        $info = $data->influncers;
+        $token = Auth::guard('api')->attempt(['email'=>$request->email,'password'=>$request->password]);
 
         return response()->json([
             'msg'=>'Influncer was created',
+            'data'=>[
+                'id'=>$info->id,
+                'full_name_en' =>$info->full_name_en,
+                'full_name_ar'=>$info->full_name_ar,
+                'image'=>$data->infulncerImage,
+                'nick_name'=>$info->nick_name,
+                'nationality_id'=>$info->nationality_id,
+                'country_id'=>$info->country_id,
+                'region_id'=>$info->region_id,
+                'city_id'=>$info->city_id,
+                'influencer_category'=>$info->InfluncerCategories()->get()->map(function($item){
+                    return[
+                        'id'=>$item->id,
+                        'name'=>$item->name
+                    ];
+                }),
+                'bio'=>$info->bio,
+                'address_id'=>$info->address_id,
+                'ad_price'=>$info->ad_price,
+                'ad_onsite_price'=>$info->ad_onsite_price,
+                'bank_id'=>$info->banks->id,
+                'bank_account_number'=>$info->bank_account_number,
+                'email'=>$data->email,
+                'phone'=>$info->phone,
+                'id_number'=>$info->id_number,
+                'status'=>$info->status,
+                'is_vat'=>$info->is_vat,
+                'birthday'=>$info->birthday,
+                'ads_out_country'=>$info->ads_out_country,
+                'ad_with_vat'=>$info->ad_with_vat,
+                'ad_onsite_price_with_vat'=>$info->ad_onsite_price_with_vat,
+                'token'=>$token
+            ],
             'status'=>201
         ],201);
     }
@@ -128,8 +166,37 @@ class RegisterController extends Controller
             'msg'=>'New Customer "'.$newCustomer->first_name.'" registered'
         ];
         Notification::send($users, new AddInfluencer($info));
+        $info = $data->customers;
         return response()->json([
             'msg'=>'Customer was created',
+            'data'=>[
+                'id'=>$data->id,
+                'email'=>$data->email,
+                'full_name_en' =>$info->full_name_en,
+                'full_name_ar'=>$info->full_name_ar,
+                'nick_name'=>$info->nick_name,
+                'bank_name'=>$info->bank_name,
+                'bank_account_number'=>$info->bank_account_number,
+                'bio'=>$info->bio,
+                'ads_out_country'=>$info->ads_out_country,
+                'city_id'=>$info->city_id,
+                'country_id'=>$info->country_id,
+                'nationality_id'=>$info->nationality_id,
+                'influncer_category_id'=>$info->influncer_category_id,
+                'region_id'=>$info->region_id,
+                'user_id'=>$info->user_id,
+                'status'=>$info->status,
+                'is_vat'=>$info->is_vat,
+                'ad_price'=>$info->ad_price,
+                'ad_onsite_price'=>$info->ad_onsite_price,
+                'birthday'=>$info->birthday,
+                'id_number'=>$info->id_number,
+                'phone'=>$info->phone,
+                'ratting'=>$info->ratting,
+                'ad_with_vat'=>$info->ad_with_vat,
+                'ad_onsite_price_with_vat'=>$info->ad_onsite_price_with_vat,
+                'address_id'=>$info->address_id
+            ],
             'status'=>201
         ],201);
     }

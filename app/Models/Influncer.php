@@ -35,7 +35,8 @@ class Influncer extends Model implements HasMedia
         'ratting',
         'ad_with_vat',
         'ad_onsite_price_with_vat',
-        'address_id'
+        'address_id',
+        'bank_id'
     ];
 
     protected $append = [
@@ -83,7 +84,7 @@ class Influncer extends Model implements HasMedia
 
     public function banks()
     {
-        return $this->belongsTo(Banks::class,'bank_id');
+        return $this->belongsTo(Bank::class,'bank_id');
     }
 
     public function socialMediaProfiles()
