@@ -155,7 +155,8 @@ class RegisterController extends Controller
             'nationality_id',
             'region_id',
             'user_id',
-            'city_id'
+            'city_id',
+            'id_number'
         ]);
         $addUserId =  array_merge($customerData,['user_id'=>$data->id]);
         $newCustomer = Customer::create($addUserId);
@@ -167,35 +168,23 @@ class RegisterController extends Controller
         ];
         Notification::send($users, new AddInfluencer($info));
         $info = $data->customers;
+        $token = Auth::guard('api')->attempt(['email'=>$request->email,'password'=>$request->password]);
+
         return response()->json([
             'msg'=>'Customer was created',
             'data'=>[
                 'id'=>$data->id,
-                'email'=>$data->email,
-                'full_name_en' =>$info->full_name_en,
-                'full_name_ar'=>$info->full_name_ar,
-                'nick_name'=>$info->nick_name,
-                'bank_name'=>$info->bank_name,
-                'bank_account_number'=>$info->bank_account_number,
-                'bio'=>$info->bio,
-                'ads_out_country'=>$info->ads_out_country,
-                'city_id'=>$info->city_id,
-                'country_id'=>$info->country_id,
-                'nationality_id'=>$info->nationality_id,
-                'influncer_category_id'=>$info->influncer_category_id,
-                'region_id'=>$info->region_id,
-                'user_id'=>$info->user_id,
-                'status'=>$info->status,
-                'is_vat'=>$info->is_vat,
-                'ad_price'=>$info->ad_price,
-                'ad_onsite_price'=>$info->ad_onsite_price,
-                'birthday'=>$info->birthday,
+                'image'=>$data->image,
+                'first_name' =>$info->first_name,
+                'last_name'=>$info->last_name,
                 'id_number'=>$info->id_number,
+                'nationality_id'=>$info->nationalities->id,
+                'country_id'=>$info->countrys->id,
+                'region_id'=>$info->regions->id,
+                'city_id'=>$info->citys->id,
+                'email'=>$data->email,
                 'phone'=>$info->phone,
-                'ratting'=>$info->ratting,
-                'ad_with_vat'=>$info->ad_with_vat,
-                'ad_onsite_price_with_vat'=>$info->ad_onsite_price_with_vat,
-                'address_id'=>$info->address_id
+                'token'=>$token
             ],
             'status'=>201
         ],201);
