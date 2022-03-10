@@ -86,13 +86,21 @@ class User extends Authenticatable implements JWTSubject , HasMedia
 
     public function getImageAttribute() {
         $mediaItems = $this->getMedia('customers');
-        $publicFullUrl = $mediaItems[0]->getFullUrl();
+        $publicFullUrl = null;
+        if($mediaItems)
+        {
+            $publicFullUrl = $mediaItems[0]->getFullUrl();
+        }
         return $publicFullUrl;
    }
 
     public function getInfulncerImageAttribute() {
         $mediaItems = $this->getMedia('influncers');
-        $publicFullUrl = $mediaItems[0]->getFullUrl();
+        $publicFullUrl = null;
+        if($mediaItems)
+        {
+            $publicFullUrl = $mediaItems[0]->getFullUrl();
+        }
         return $publicFullUrl;
    }
 

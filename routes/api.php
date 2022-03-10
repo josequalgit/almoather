@@ -99,6 +99,9 @@ Route::group(['prefix'=>'auth'],function(){
             Route::get('contract/{contract_id}','get_ad_contract');
             Route::put('contract/accept_contract/{contract_id}/{influencer_id}','accept_ad_contract');
             Route::get('search/{query}','search');
+            Route::get('influencers/{influncer_id}/{status?}','get_influencer_ads');
+            Route::get('customers/{customer_id}/{status?}','get_customers_ads');
+
         });
 
         #CATEGORIES ROUTES
@@ -120,6 +123,7 @@ Route::group(['prefix'=>'auth'],function(){
             Route::get('/{id}/{type}','index');
         });
 
+    
         
 
 

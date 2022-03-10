@@ -65,8 +65,8 @@ class CustomerRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-        'errors' => $validator->errors(),
-        'status' => true
+            'err' => $validator->errors()->all()[0],
+            'status' => true
         ], 422));
     }
     

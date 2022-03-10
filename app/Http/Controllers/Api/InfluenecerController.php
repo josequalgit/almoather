@@ -14,13 +14,13 @@ class InfluenecerController extends Controller
         $data = User::find($id);
         #IF THE USER NOT FOUND
         if(!$data) return response()->json([
-            'msg'=>'Influenecer was not found',
+            'err'=>'Influenecer was not found',
             'status'=>404
-        ],200);
+        ],404);
 
         #IF THE USER IS NOT AN INFLUENCER
         if(!$data->influncers) return response()->json([
-            'msg'=>'user is not a influenecer',
+            'err'=>'user is not a influenecer',
             'status'=>401
         ],401);
 

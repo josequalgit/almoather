@@ -10,12 +10,18 @@ use Auth;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\AddInfluencer;
 use App\Models\User;
+use App\Models\Influncer;
+use App\Models\Customer;
 use App\Models\Contract;
 use Validator;
+use App\Http\Traits\ApiPaginator;
+
 
 class AdController extends Controller
 {
     protected $guard = 'api';
+
+    use ApiPaginator;
 
     public function store(AdRequest $request)
     {
@@ -178,6 +184,7 @@ class AdController extends Controller
                 ];
             }
             return [
+                'id'=>$item->id,
                 'store_name'=>$item->store,
                 'image'=>$item->image,
                 'budget'=>$item->budget,
@@ -203,6 +210,143 @@ class AdController extends Controller
             'data'=>$data,
             'status'=>200
         ]);
+    }
+
+
+    public function get_influencer_ads($influencer_id,$status = null)
+    {
+        $data = Influncer::find($influencer_id);
+        $itemsPaginated  = [];
+        if(!$data) return response()->json([
+            'err'=>'influencer not found',
+            'status'=>404
+        ],404);
+
+        if($status)
+        {
+          $itemsPaginated  =  $data->ads()->where('status',$status)->paginate(10);
+
+        }
+        else
+        {
+            $itemsPaginated  = $data->ads()->paginate(10);
+        }
+
+
+        $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item){
+            $customer_info = null;
+            if($item->customers) 
+            {
+                $customer_info = [
+                    'first_name'=>$item->customers->first_name,
+                    'last_name'=>$item->customers->last_name,
+                    'phone'=>$item->customers->phone,
+                    'country'=>$item->customers->countrys->name,
+                    'cities'=>$item->customers->citys->name,
+                    'nationality'=>$item->customers->nationalities->name,
+                    'status'=>$item->customers->status,
+                    'image'=>$item->customers->users->image
+                ];
+            }
+
+          
+
+            return [
+                'id'=>$item->id,
+                'store_name'=>$item->store,
+                'image'=>$item->image,
+                'budget'=>$item->budget,
+                'about'=>$item->about,
+                'city'=>$item->cities()->select(['id','name'])->first(),
+                'country'=>$item->countries()->select(['id','name'])->first(),
+                'auth_number'=>$item->auth_number,
+                'category'=>$item->categories->name,
+                'date'=>$item->date,
+                 'videos'=>$item->videos,
+                'social_media'=>[
+                    'name'=>$item->socialMedias->name,
+                    'logo'=>$item->socialMedias->image
+                ],
+                'customer'=>$customer_info,
+                'script'=>$item->ad_script,
+                'service_type'=>$item->type,
+                'type'=>$item->onSite ? 'Online Advertisement' :'Site Advertisement',
+            ];
+
+        })->toArray();
+
+
+        return response()->json([
+            'msg'=>'all influencer ads',
+            'data'=>$this->formate($itemsTransformed , $itemsPaginated),
+            'status'=>200
+        ],200);
+    }
+
+
+    public function get_customers_ads($customer_id , $status = null)
+    {
+        $data = Customer::find($customer_id);
+        $itemsPaginated  = [];
+        if(!$data) return response()->json([
+            'err'=>'customer not found',
+            'status'=>404
+        ],404);
+
+        if($status)
+        {
+          $itemsPaginated  =  $data->ads()->where('status',$status)->paginate(10);
+
+        }
+        else
+        {
+            $itemsPaginated  = $data->ads()->paginate(10);
+        }
+
+
+        $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item){
+            $customer_info = null;
+            if($item->customers) 
+            {
+                $customer_info = [
+                    'name_en'=>$item->customers->full_name_en,
+                    'name_ar'=>$item->customers->full_name_ar,
+                    'image'=>$item->customers->users->image
+                ];
+            }
+
+          
+
+            return [
+                'id'=>$item->id,
+                'store_name'=>$item->store,
+                'image'=>$item->image,
+                'budget'=>$item->budget,
+                'about'=>$item->about,
+                'city'=>$item->cities()->select(['id','name'])->first(),
+                'country'=>$item->countries()->select(['id','name'])->first(),
+                'auth_number'=>$item->auth_number,
+                'category'=>$item->categories->name,
+                'date'=>$item->date,
+                 'videos'=>$item->videos,
+                'social_media'=>[
+                    'name'=>$item->socialMedias->name,
+                    'logo'=>$item->socialMedias->image
+                ],
+                'customer'=>$customer_info,
+                'script'=>$item->ad_script,
+                'service_type'=>$item->type,
+                'type'=>$item->onSite ? 'Online Advertisement' :'Site Advertisement',
+            ];
+
+        })->toArray();
+
+
+        return response()->json([
+            'msg'=>'all customer ads',
+            'data'=>$this->formate($itemsTransformed , $itemsPaginated),
+            'status'=>200
+        ],200);
     }
 
 

@@ -12,7 +12,7 @@ class TermsAndConditionsController extends Controller
     {
         $data = Terms::select('text')->find(1);
         if(!$data) return response()->json([
-            'msg'=>'terms and conditions data was not found',
+            'err'=>'terms and conditions data was not found',
             'status'=>404
         ],200);
         return response()->json([

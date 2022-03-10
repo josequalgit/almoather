@@ -12,9 +12,9 @@ class PrivacyController extends Controller
     {
         $data = Privacy::select('text')->find(1);
         if(!$data) return response()->json([
-            'msg'=>'privacy data not found',
+            'err'=>'privacy data not found',
             'status'=>404
-        ],200);
+        ],404);
         return response()->json([
             'msg'=>'privacy data was found',
             'data'=>$data,

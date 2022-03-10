@@ -14,8 +14,8 @@ class Customer extends Model
         'last_name',
         'phone',
         'country_id',
-        'region_id',
         'user_id',
+        'region_id',
         'city_id',
         'nationality_id',
         'status'
