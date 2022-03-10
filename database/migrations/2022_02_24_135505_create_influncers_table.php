@@ -24,6 +24,7 @@ return new class extends Migration
             $table->bigInteger('region_id')->unsigned();
             $table->bigInteger('city_id')->unsigned();
             $table->bigInteger('address_id')->unsigned();
+            $table->bigInteger('bank_id')->unsigned();
             $table->string('phone');
             $table->string('nick_name');
             $table->longText('bank_name');
