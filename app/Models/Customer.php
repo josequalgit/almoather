@@ -18,7 +18,8 @@ class Customer extends Model
         'region_id',
         'city_id',
         'nationality_id',
-        'status'
+        'status',
+        'id_number'
     ];
 
     public function users()
@@ -34,6 +35,10 @@ class Customer extends Model
     public function countrys()
     {
         return $this->belongsTo(Country::class,'country_id');
+    }
+    public function regions()
+    {
+        return $this->belongsTo(Region::class,'region_id');
     }
 
     public function nationalities()
