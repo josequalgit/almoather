@@ -25,6 +25,11 @@ class CategorySeeder extends Seeder
                 'name'=>'Entertainment',
                 'type'=>'product',
                 'influncer_category_id'=>1
+            ],
+			 [
+                'name'=>'Test',
+                'type'=>'product',
+                'influncer_category_id'=>1
             ]
         ];
         foreach ($data as $item) {
@@ -40,7 +45,10 @@ class CategorySeeder extends Seeder
             ],
             [
                 'name'=>'Movies'
-            ]
+            ],
+			 [
+                'name'=>'Games'
+            ],
         ];
         foreach($data2 as $item)
         {
