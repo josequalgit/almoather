@@ -101,6 +101,7 @@ class AuthController extends Controller
         $userData = null;
 
 
+        /// Customer
         if($type == 1)
         {
             $userData = [
@@ -127,17 +128,6 @@ class AuthController extends Controller
                     'name'=>$registeredUserData->nationalities->name
                 ],
                 'token'=>$token
-                // 'status'=>$registeredUserData->ads_out_country,
-                // 'is_vat'=>$registeredUserData->is_vat,
-                // 'ad_price'=>$registeredUserData->ad_price,
-                // 'ad_onsite_price'=>$registeredUserData->ad_onsite_price,
-               
-              
-             
-                // 'influencer_category'=>[
-                //     'id'=>$registeredUserData->nationalities->id,
-                //     'name'=>$registeredUserData->nationalities->name
-                // ],
             ];
         }
         else
@@ -175,17 +165,15 @@ class AuthController extends Controller
                 'ad_onsite_price_with_vat'=>$registeredUserData->ad_onsite_price_with_vat,
                 'token'=>$token
             ];
-          //  dd($userData);
 
 
         }
 
         return response()->json([
-           // 'access_token' => $token,
-            // 'token_type' => 'bearer',
-            'user'=>$userData,
+            'msg'=>'login successfully',
+            'data'=>$userData,
             'type'=>$type == 1?'customer':'Influencer',
-            // 'expires_in' => auth()->guard('api')->factory()->getTTL() * 60
-        ]);
+            'status'=>200
+        ],200);
     }
 }
