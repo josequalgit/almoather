@@ -27,18 +27,19 @@ class AuthController extends Controller
     public function login()
     {
         $credentials = request(['email', 'password']);
-
         if (! $token = Auth::guard('api')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         $user = Auth::guard('api')->user();
+
         if($user->customers)
         {
             return $this->respondWithToken($token,$user,1);
         }
         if($user->influncers)
         {
+
             return $this->respondWithToken($token,$user,2);
         }
         else
@@ -93,55 +94,94 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token , $user,$type)
     {
+
         $registeredUserData = $user->customers ?? $user->influncers;
+
+
         $userData = null;
+
 
         if($type == 1)
         {
             $userData = [
                 'id'=>$user->id,
-                'email'=>$user->email,
-                'first_name'=>$registeredUserData->first_name,
+                'first_name'=> $user->customers->first_name,
                 'last_name'=>$registeredUserData->last_name,
                 'phone'=>$registeredUserData->phone,
-                'status'=>$registeredUserData->status
-            ];
-        }
-        else
-        {
-            $userData = [
-                'id'=>$user->id,
-                'name'=>$registeredUserData->full_name_en,
-                'nick_name'=>$registeredUserData->nick_name,
-                'bank_name'=>$registeredUserData->bank_name,
-                'bank_account_number'=>$registeredUserData->bank_account_number,
-                'bio'=>$registeredUserData->bio,
-                'ads_out_country'=>$registeredUserData->ads_out_country,
-                'status'=>$registeredUserData->ads_out_country,
-                'is_vat'=>$registeredUserData->is_vat,
-                'ad_price'=>$registeredUserData->ad_price,
-                'ad_onsite_price'=>$registeredUserData->ad_onsite_price,
-                'city'=>[
+                'nationality'=>$registeredUserData->nationalities->id,
+                'id_number'=>$registeredUserData->id_number,
+                'country'=>[
+                    'id'=>$registeredUserData->countrys->id,
+                    'name'=>$registeredUserData->countrys->name
+                ],
+                 'region'=>[
+                    'id'=>$registeredUserData->regions->id,
+                    'name'=>$registeredUserData->regions->name
+                ],
+                 'city'=>[
                     'id'=>$registeredUserData->citys->id,
                     'name'=>$registeredUserData->citys->name
-                ],
-                'country'=>[
-                    'id'=>$registeredUserData->countries->id,
-                    'name'=>$registeredUserData->countries->name
                 ],
                 'nationality'=>[
                     'id'=>$registeredUserData->nationalities->id,
                     'name'=>$registeredUserData->nationalities->name
                 ],
-                'influencer_category'=>[
-                    'id'=>$registeredUserData->nationalities->id,
-                    'name'=>$registeredUserData->nationalities->name
-                ],
+                'token'=>$token
+                // 'status'=>$registeredUserData->ads_out_country,
+                // 'is_vat'=>$registeredUserData->is_vat,
+                // 'ad_price'=>$registeredUserData->ad_price,
+                // 'ad_onsite_price'=>$registeredUserData->ad_onsite_price,
+               
+              
+             
+                // 'influencer_category'=>[
+                //     'id'=>$registeredUserData->nationalities->id,
+                //     'name'=>$registeredUserData->nationalities->name
+                // ],
             ];
+        }
+        else
+        {
+            $userData = [
+                'id'=>$registeredUserData->id,
+                'full_name_en' =>$registeredUserData->full_name_en,
+                'full_name_ar'=>$registeredUserData->full_name_ar,
+                'image'=>$user->infulncerImage,
+                'nick_name'=>$registeredUserData->nick_name,
+                'nationality_id'=>$registeredUserData->nationality_id,
+                'country_id'=>$registeredUserData->country_id,
+                'region_id'=>$registeredUserData->region_id,
+                'city_id'=>$registeredUserData->city_id,
+                'influencer_category'=>$registeredUserData->InfluncerCategories()->get()->map(function($item){
+                    return[
+                        'id'=>$item->id,
+                        'name'=>$item->name
+                    ];
+                }),
+                'bio'=>$registeredUserData->bio,
+                'address_id'=>$registeredUserData->address_id,
+                'ad_price'=>$registeredUserData->ad_price,
+                'ad_onsite_price'=>$registeredUserData->ad_onsite_price,
+                'bank_id'=>$registeredUserData->banks->id,
+                'bank_account_number'=>$registeredUserData->bank_account_number,
+                'email'=>$user->email,
+                'phone'=>$registeredUserData->phone,
+                'id_number'=>$registeredUserData->id_number,
+                'status'=>$registeredUserData->status,
+                'is_vat'=>$registeredUserData->is_vat,
+                'birthday'=>$registeredUserData->birthday,
+                'ads_out_country'=>$registeredUserData->ads_out_country,
+                'ad_with_vat'=>$registeredUserData->ad_with_vat,
+                'ad_onsite_price_with_vat'=>$registeredUserData->ad_onsite_price_with_vat,
+                'token'=>$token
+            ];
+          //  dd($userData);
+
+
         }
 
         return response()->json([
-            'access_token' => $token,
+           // 'access_token' => $token,
             // 'token_type' => 'bearer',
             'user'=>$userData,
             'type'=>$type == 1?'customer':'Influencer',
