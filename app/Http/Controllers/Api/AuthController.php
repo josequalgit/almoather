@@ -111,22 +111,10 @@ class AuthController extends Controller
                 'phone'=>$registeredUserData->phone,
                 'nationality'=>$registeredUserData->nationalities->id,
                 'id_number'=>$registeredUserData->id_number,
-                'country'=>[
-                    'id'=>$registeredUserData->countrys->id,
-                    'name'=>$registeredUserData->countrys->name
-                ],
-                 'region'=>[
-                    'id'=>$registeredUserData->regions->id,
-                    'name'=>$registeredUserData->regions->name
-                ],
-                 'city'=>[
-                    'id'=>$registeredUserData->citys->id,
-                    'name'=>$registeredUserData->citys->name
-                ],
-                'nationality'=>[
-                    'id'=>$registeredUserData->nationalities->id,
-                    'name'=>$registeredUserData->nationalities->name
-                ],
+                'country_id'=>$registeredUserData->countrys->id,
+                 'region_id'=>$registeredUserData->regions->id,
+                 'city_id'=>$registeredUserData->citys->id,
+                'nationality_id'=>$registeredUserData->nationalities->id,
                 'token'=>$token
             ];
         }
