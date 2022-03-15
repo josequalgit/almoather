@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\AddressController;
 
 Route::group(['prefix'=>'auth'],function(){
     Route::post('login',[AuthController::class,'login']);
+    Route::get('changeLanguage/{lang}',[AuthController::class,'changeLang']);
 
     #REGISTER ROUTES
     Route::controller(RegisterController::class)->prefix('register')->group(function(){
@@ -85,6 +86,9 @@ Route::group(['prefix'=>'auth'],function(){
     
     Route::middleware('api_auth')->group(function(){
 
+        
+        #USER DETAILS
+        Route::get('users/details',[AuthController::class,'details']);
         # AUTH ROUTES
         Route::controller(AuthController::class)->group(function(){
             Route::post('logout','logout');
@@ -114,13 +118,12 @@ Route::group(['prefix'=>'auth'],function(){
 
         #GET INFLUENECER
         Route::controller(InfluenecerController::class)->prefix('influenecers')->group(function(){
-            Route::get('/details/{id}','details');
             Route::get('/get_matched_influencers/{category_id}','get_matched_influencers');
         });
 
         #GET NOTIFICATION
         Route::controller(NotificationController::class)->prefix('notifications')->group(function(){
-            Route::get('/{id}/{type}','index');
+            Route::get('/{type}','index');
         });
 
     
