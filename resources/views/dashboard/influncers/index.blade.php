@@ -61,6 +61,18 @@
                                     There is {{ $counter }} Influncer/'s
                                 </p>
                                 @endcan
+                                <div class="dropdown float-right">
+                                    <button style="text-transform: uppercase;" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                     {{ $status ?? 'Status' }}
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" style="text-transform: uppercase;" href="{{ route('dashboard.influncers.index') }}">All</a>
+                                      <a class="dropdown-item" style="text-transform: uppercase;" href="{{ route('dashboard.influncers.index','pending') }}">Pending</a>
+                                      <a class="dropdown-item" style="text-transform: uppercase;" href="{{ route('dashboard.influncers.index','accepted') }}">Accepted</a>
+                                      <a class="dropdown-item" style="text-transform: uppercase;" href="{{ route('dashboard.influncers.index','rejected') }}">Rejected</a>
+                                      <a class="dropdown-item" style="text-transform: uppercase;" href="{{ route('dashboard.influncers.index','band') }}">Band</a>
+                                    </div>
+                                  </div>
                                 <div class="table-responsive">
                                     @can('See Influncer')
                                     <table class="table zero-configuration">

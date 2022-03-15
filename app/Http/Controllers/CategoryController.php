@@ -23,23 +23,44 @@ class CategoryController extends Controller
     public function create()
     {
         $data = InfluncerCategory::get();
-        return view('dashboard.categories.create',compact('data'));
+        $categories = InfluncerCategory::get();
+
+        return view('dashboard.categories.create',compact('data','categories'));
     }
 
     public function edit($id)
     {
         $data = Category::findOrFail($id);
         $categories = InfluncerCategory::get();
-
-        return view('dashboard.categories.edit',compact('data','categories'));
+        $selectedCategories = $data->influncerCategories->pluck('id')->toArray();
+        $preferredCategories = $data->preferredCategories->pluck('id')->toArray();
+        $excludeCategories = $data->excludeCategories->pluck('id')->toArray();
+        return view('dashboard.categories.edit',compact('data','categories','selectedCategories','preferredCategories','excludeCategories'));
     }
 
     public function store(CategoryRequest $request)
     {
-       $data =  Category::create($request->all());
+        $addTranslate = [
+            'name'=>[
+                'ar'=>$request->name_ar,
+                'en'=>$request->name_en,
+            ],
+            'type'=>$request->type,
+        ];
+       $data =  Category::create($addTranslate);
        $data->addMedia($request->file('image'))
        ->toMediaCollection('categories');
-    
+
+       foreach ($request->preferred_categories as $value) {
+        $data->preferredCategories()->attach($value);
+        }   
+       foreach ($request->influncer_category_id as $value) {
+          $data->influncerCategories()->attach($value);
+       }    
+       foreach ($request->exclude_categories as $value) {
+          $data->excludeCategories()->attach($value);
+       }    
+
         activity()->log('Admin "'.Auth::user()->name.'" Added '. $data->name .' category');
         Alert::toast('Category was added', 'success');
 
@@ -48,8 +69,27 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request,$id)
     {
+        $addTranslate = [
+            'name'=>[
+                'ar'=>$request->name_ar,
+                'en'=>$request->name_en,
+            ],
+            'type'=>$request->type,
+        ];
         $data = Category::find($id);
-        $data->update($request->all());     
+        $data->update($addTranslate); 
+        $data->influncerCategories()->detach();
+        $data->preferredCategories()->detach();
+        $data->excludeCategories()->detach();
+        foreach ($request->influncer_category_id as $value) {
+           $data->influncerCategories()->attach($value);
+        }    
+        foreach ($request->preferred_categories as $value) {
+           $data->preferredCategories()->attach($value);
+        }    
+        foreach ($request->exclude_categories as $value) {
+            $data->excludeCategories()->attach($value);
+        }    
         if($request->hasFile('image'))
         {
             $data

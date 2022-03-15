@@ -9,10 +9,12 @@ use Carbon\Carbon;
 
 class InfluncerController extends Controller
 {
-    public function index()
+    public function index($status = null)
     {
-        $data = Influncer::with('users')->paginate(10);
-        $counter = Influncer::with('users')->count();
+        $data = Influncer::with('users');
+        $allStatus = ['pending','accepted','rejected','band'];
+        if($status) $data->where('status',$status);
+        $counter = $data->count();
         $months = [1,2,3,4,5,6,7,8,9,10,11,12];
         $year = Carbon::now()->year;
         $influncersData = [];
@@ -25,9 +27,10 @@ class InfluncerController extends Controller
             array_push($influncersData,$influncerNumber);
         }
 
+       $data =  $data->paginate(10);
+       if(!in_array($status,$allStatus)) $status = null;
 
-
-        return view('dashboard.influncers.index',compact('data','counter','influncersData'));
+        return view('dashboard.influncers.index',compact('data','counter','influncersData','status'));
     }
 
     public function edit($id)

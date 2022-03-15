@@ -90,7 +90,9 @@ class AdController extends Controller
         }
 
         return response()->json([
-            'store_name'=>$data->store,
+            'msg'=>'ad details',
+            'data'=>[
+                'store_name'=>$data->store,
             'image'=>$data->image,
             'budget'=>$data->budget,
             'about'=>$data->about,
@@ -106,7 +108,9 @@ class AdController extends Controller
             'influencer'=>$influncers_info,
             'script'=>$data->ad_script,
             'contract_id'=>$data->contacts->id
-        ]);
+        ],
+        'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 
     private function create_contract($ad_id = null)

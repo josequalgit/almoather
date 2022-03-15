@@ -10,11 +10,11 @@ class AdController extends Controller
 {
     public function index($status = null)
     {
-        $data = Ad::where('status',$status)->paginate(10);
+        $data = Ad::where('status',$status)->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
         $counter = Ad::where('status',$status)->count();
         if(!$status)
         {
-            $data = Ad::paginate(10);
+            $data = Ad::paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
             $counter = Ad::count();
         }
         return view('dashboard.ads.index',compact('data','counter'));
@@ -31,16 +31,33 @@ class AdController extends Controller
         $data = Ad::find($id);
         if(!$data) return response()->json([
             'msg'=>'ad not found',
-            'status'=>200
-        ],200);
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
         if(!$request->status) return response()->json([
             'msg'=>'please add a status',
-            'status'=>401
-        ],401);
-        if(!$request->status) return response()->json([
-            'msg'=>'please add a status',
-            'status'=>401
-        ],401);
+            'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
+        ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
+        if(!$request->expense_type) return response()->json([
+            'msg'=>'please add a type',
+            'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
+        ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
+
+        $influencers = $data->categories->influncerCategories[0]->influncers;
+
+        return response()->json([$influencers[0]->verify],500);
+     //   $influencers = [];
+        // foreach ($categories as $category) {
+        //     return response()->json([$category],500);
+
+        //     foreach ($category->influncers as $key => $influencer) {
+        //         if(!in_array($influencer->id,array_keys($influencers))){
+        //             $influencers[$influencer->id] = $influencer;
+        //         }
+        //     }
+            
+        // }
+        return response()->json([$influencers],500);
+
         $data->status = $request->status;
         $data->reject_note = $request->note ?? null;
         $data->expense_type = $request->expense_type;

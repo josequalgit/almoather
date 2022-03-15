@@ -86,8 +86,12 @@
                                       </div><!-- col-2 -->
                                 </fieldset>
                                 <fieldset class="form-group">
-                                    <label for="basicInput">Name</label>
-                                    <input id="name" value="{{ old('name')?old('name'):$data->name }}" type="text" class="form-control"  name="name" placeholder="Enter name" />
+                                    <label for="basicInput">Name EN</label>
+                                    <input id="name" value="{{ old('name_en')?old('name'):$data->getTranslations('name')['en'] }}" type="text" class="form-control"  name="name_en" placeholder="Enter name" />
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <label for="basicInput">Name AR</label>
+                                    <input id="name" value="{{ old('name_ar')?old('name'):$data->getTranslations('name')['ar'] }}" type="text" class="form-control"  name="name_ar" placeholder="Enter name" />
                                 </fieldset>
     
     

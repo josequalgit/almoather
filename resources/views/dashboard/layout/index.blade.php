@@ -15,6 +15,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('main2/images/logo/logo.png') }}" />
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,600%7CIBM+Plex+Sans:300,400,500,600,700" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('main2/vendors/css/vendors.min.css') }}">
@@ -53,6 +54,12 @@
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
         }
+        .select2-container{
+    width: 100% !important;
+}
+.select2-selection--multiple .select2-selection__choice__display {
+    padding-left: 13px !important;
+}
     </style>
 
     <!-- BEGIN: Header-->
@@ -273,6 +280,8 @@
     <script src="{{ asset('main2/vendors/js/extensions/moment.min.js') }}"></script>
     <script src="{{ asset('main2/vendors/js/pickers/daterange/daterangepicker.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 @yield('scripts')
 
     @include('sweetalert::alert')

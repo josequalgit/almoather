@@ -11,12 +11,13 @@ use Spatie\Permission\Traits\HasRoles;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Http\Traits\GetVerifiedUsers;
 
 
 class User extends Authenticatable implements JWTSubject , HasMedia
 {
-    use HasApiTokens, HasFactory, Notifiable , HasRoles , InteractsWithMedia;
+    use HasApiTokens, HasFactory, Notifiable , HasRoles , InteractsWithMedia,SoftDeletes,GetVerifiedUsers;
 
     /**
      * The attributes that are mass assignable.
@@ -27,6 +28,7 @@ class User extends Authenticatable implements JWTSubject , HasMedia
         'name',
         'email',
         'password',
+        'lang'
     ];
 
     /**
@@ -41,7 +43,8 @@ class User extends Authenticatable implements JWTSubject , HasMedia
 
     protected $append = [
         'image',
-        'infulncerImage'
+        'infulncerImage',
+        'snapChatVideo'
     ];
 
 
@@ -96,6 +99,16 @@ class User extends Authenticatable implements JWTSubject , HasMedia
 
     public function getInfulncerImageAttribute() {
         $mediaItems = $this->getMedia('influncers');
+        $publicFullUrl = null;
+        if(count($mediaItems) > 0)
+        {
+            $publicFullUrl = $mediaItems[0]->getFullUrl();
+        }
+        return $publicFullUrl;
+   }
+
+    public function getSnapChatVideoAttribute() {
+        $mediaItems = $this->getMedia('snapchat_videos');
         $publicFullUrl = null;
         if(count($mediaItems) > 0)
         {
