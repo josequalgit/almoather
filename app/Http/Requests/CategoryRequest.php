@@ -24,10 +24,13 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>'required',
+            'name_en'=>'required',
+            'name_ar'=>'required',
             'image'=>'required',
             'type'=>'required',
-            'influncer_category_id'=>'required'
+            'influncer_category_id'=>'required',
+            'preferred_categories'=>'required',
+            'exclude_categories'=>'required',
         ];
     }
 

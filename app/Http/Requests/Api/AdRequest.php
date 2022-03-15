@@ -39,6 +39,7 @@ class AdRequest extends FormRequest
             'category_id'=>'required',
             'date'=>'required|date',
             'image'=>'mimes:jpg,bmp,png',
+            'social_media_id'=>'required',
             'video'=>'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4',
             'documnet'=>'mimetypes:jpg,bmp,png,pdf'
 
@@ -61,6 +62,7 @@ class AdRequest extends FormRequest
             'city_id.required' => 'Please choose the city',
             'area_id.required' => 'Please choose the area',
             'category_id.required' => 'Please choose the category',
+            'social_media_id.required' => 'Please add a social media',
         ];
     }
 
@@ -72,7 +74,7 @@ class AdRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
         'err' => $validator->errors()->all()[0],
-        'status' => true
-        ], 422));
+        'status' => config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS')));
     }
 }

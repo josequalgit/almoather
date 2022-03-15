@@ -42,7 +42,7 @@ class InfluncerRequest extends FormRequest
             'email'=>'required|unique:users',
             'password'=>'required|confirmed',
             'password_confirmation' => 'required',
-            'image'=>'required|mimes:jpg,bmp,png',
+            'image'=>'required',
             'is_vat'=>'required',
             'ad_price'=>'required',
             'ad_onsite_price'=>'required',
@@ -55,7 +55,6 @@ class InfluncerRequest extends FormRequest
             'social_media'=>'required',
             'bank_id'=>'required',
             'snap_chat_views'=>'required',
-            'preferred_socialMedias'=>'required',
             'snap_chat_video'=>'required|mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4',
         ];
     }
