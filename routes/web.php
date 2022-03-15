@@ -43,7 +43,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
         });
 
         Route::middleware('role_or_permission:superAdmin|Edit Influncer|See Influncer')->name('influncers.')->controller(InfluncerController::class)->group(function(){
-            Route::get('influncer/','index')->name('index')->middleware('permission:Edit Influncer|See Influncer');
+            Route::get('influncer/{status?}','index')->name('index')->middleware('permission:Edit Influncer|See Influncer');
             Route::get('influncer/edit/{id}','edit')->name('edit')->middleware('permission:Edit Influncer');
             Route::post('influncer/updateStatus/{id}','updateStatus')->name('updateStatus')->middleware('permission:Edit Influncer');
 

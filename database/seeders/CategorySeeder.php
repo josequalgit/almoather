@@ -17,11 +17,14 @@ class CategorySeeder extends Seeder
     {
         $data = [
             [
-                'name'=>'Sport',
+                'name'=>[
+                    'ar'=>'رياضة',
+                    'en'=>'Sport'
+                ],
                 'type'=>'service',
-                'influncer_category_id'=>1
             ],
             [
+<<<<<<< HEAD
                 'name'=>'Entertainment',
                 'type'=>'product',
                 'influncer_category_id'=>1
@@ -30,10 +33,19 @@ class CategorySeeder extends Seeder
                 'name'=>'Test',
                 'type'=>'product',
                 'influncer_category_id'=>1
+=======
+                'name'=>[
+                    'ar'=>'ترفيه',
+                    'en'=>'Entertainment'
+                ],
+                'type'=>'product'
+>>>>>>> 1979e59ea89a0acb2a7e5f82d92823ed957a389e
             ]
         ];
         foreach ($data as $item) {
           $cat =   Category::create($item);
+          $cat->preferredCategories()->attach(1);
+          $cat->excludeCategories()->attach(2);
           $url = \URL::to('').'/img/products/1.png';
           $cat->addMediaFromUrl($url)
           ->toMediaCollection('categories');
@@ -41,18 +53,30 @@ class CategorySeeder extends Seeder
 
         $data2 = [
             [
-                'name'=>'BaseBall'
+                'name'=>[
+                    'ar'=>'بيس بول',
+                    'en'=>'BaseBall'
+                ]
             ],
             [
+<<<<<<< HEAD
                 'name'=>'Movies'
             ],
 			 [
                 'name'=>'Games'
             ],
+=======
+                'name'=>[
+                    'ar'=>'افلام',
+                    'en'=>'Movies'
+                ]
+            ]
+>>>>>>> 1979e59ea89a0acb2a7e5f82d92823ed957a389e
         ];
         foreach($data2 as $item)
         {
             $cat = InfluncerCategory::create($item);
+            $cat->categories()->attach(1);
             $url = \URL::to('').'/img/products/1.png';
             $cat->addMediaFromUrl($url)
             ->toMediaCollection('influncerCategories');

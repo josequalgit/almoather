@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('customer_ad_ratings', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->enum('type',['service','product']);
-            $table->softDeletes();
+            $table->bigInteger('ad_id')->unsigned();
+            $table->integer('rate');
+            $table->longText('note')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('customer_ad_ratings');
     }
 };
