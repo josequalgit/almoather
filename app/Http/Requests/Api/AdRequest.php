@@ -74,12 +74,7 @@ class AdRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
         'err' => $validator->errors()->all()[0],
-<<<<<<< HEAD
-        'status' => 422
-        ], 422));
-=======
         'status' => config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS')));
->>>>>>> debd44a20059f95b9f88a34179476e97b992e334
     }
 }

@@ -23,23 +23,12 @@ class CategorySeeder extends Seeder
                 ],
                 'type'=>'service',
             ],
-            [
-<<<<<<< HEAD
-                'name'=>'Entertainment',
-                'type'=>'product',
-                'influncer_category_id'=>1
-            ],
-			 [
-                'name'=>'Test',
-                'type'=>'product',
-                'influncer_category_id'=>1
-=======
+[
                 'name'=>[
                     'ar'=>'ترفيه',
                     'en'=>'Entertainment'
                 ],
                 'type'=>'product'
->>>>>>> 1979e59ea89a0acb2a7e5f82d92823ed957a389e
             ]
         ];
         foreach ($data as $item) {
@@ -57,21 +46,12 @@ class CategorySeeder extends Seeder
                     'ar'=>'بيس بول',
                     'en'=>'BaseBall'
                 ]
-            ],
-            [
-<<<<<<< HEAD
-                'name'=>'Movies'
-            ],
-			 [
-                'name'=>'Games'
-            ],
-=======
+            ],[
                 'name'=>[
                     'ar'=>'افلام',
                     'en'=>'Movies'
                 ]
             ]
->>>>>>> 1979e59ea89a0acb2a7e5f82d92823ed957a389e
         ];
         foreach($data2 as $item)
         {
