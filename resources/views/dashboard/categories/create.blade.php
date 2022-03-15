@@ -105,15 +105,11 @@
                                         </select>
                                       </div>
                                 </fieldset>
-                                <fieldset class="form-group">
+                                {{-- <fieldset class="form-group">
                                     <label for="basicInput">Influencer Category</label>
                                     <div class="form-group">
                                    
-                                        {{-- <select  multiple name='influncer_category_id[]' class="form-control" id="exampleFormControlSelect1">
-                                            @foreach ($categories as $item)
-                                            <option  {{ in_array($item->id,$selectedCategories) ? 'selected':'' }} value="{{ $item->id }}">{{ $item->name }}</option>                                                
-                                            @endforeach
-                                        </select> --}}
+                                       
                                         <select multiple id="influncer_category_id" name='influncer_category_id[]' class="categories form-control" name="state">
                                             @foreach ($categories as $item)
                                             <option   value="{{ $item->id }}">{{ $item->name }}</option>                                                
@@ -121,7 +117,7 @@
                                           </select>
                                           
                                       </div>
-                                </fieldset>
+                                </fieldset> --}}
 
                                 <fieldset class="form-group">
                                     <label for="basicInput">Preferred Category</label>

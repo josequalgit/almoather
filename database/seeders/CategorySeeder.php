@@ -56,7 +56,7 @@ class CategorySeeder extends Seeder
         foreach($data2 as $item)
         {
             $cat = InfluncerCategory::create($item);
-            $cat->categories()->attach(1);
+           // $cat->categories()->attach(1);
             $url = \URL::to('').'/img/products/1.png';
             $cat->addMediaFromUrl($url)
             ->toMediaCollection('influncerCategories');

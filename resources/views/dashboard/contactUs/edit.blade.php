@@ -61,8 +61,12 @@
                 <div class="card-body">
                         <div class="">
                             <div class="form-group col">
-                              <label for="inputEmail4">Text</label>
-                              <textarea name="text" class="form-control" id="exampleFormControlTextarea1" rows="10">{{ old('text')?old('text'):$terms->text }}</textarea>
+                              <label for="inputEmail4">Text EN</label>
+                              <textarea name="text_en" class="form-control" id="exampleFormControlTextarea1" rows="10">{{ old('text')?old('text'):$terms->getTranslations('text')['en'] }}</textarea>
+                            </div>
+                            <div class="form-group col">
+                              <label for="inputEmail4">Text AR</label>
+                              <textarea name="text_ar" class="form-control" id="exampleFormControlTextarea1" rows="10">{{ old('text')?old('text'):$terms->getTranslations('text')['ar'] }}</textarea>
                             </div>
                           
                          
@@ -89,8 +93,13 @@
                         <div class="card-body">
                                 <div class="">
                                     <div class="form-group col">
-                                    <label for="inputEmail4">Text</label>
-                                    <textarea name="text" class="form-control" id="exampleFormControlTextarea1" rows="10">{{ old('text')?old('text'):$privacy->text }}</textarea>
+                                    <label for="inputEmail4">Text EN</label>
+                                    <textarea name="text_en" class="form-control" id="exampleFormControlTextarea1" rows="10">{{ old('text_en')?old('text_en'):$privacy->getTranslations('text')['en'] }}</textarea>
+                                    </div>
+                                
+                                    <div class="form-group col">
+                                    <label for="inputEmail4">Text AR</label>
+                                    <textarea name="text_ar" class="form-control" id="exampleFormControlTextarea1" rows="10">{{ old('text_ar')?old('text_ar'):$privacy->getTranslations('text')['ar'] }}</textarea>
                                     </div>
                                 
                                 

@@ -22,21 +22,27 @@
                     
                         <div class="row">
                             <div class="col-12">
-                             
                                 <fieldset class="form-group">
-                                    <label for="basicInput">Question</label>
-                                    <input id="question" value="{{ old('question') }}" type="text" class="form-control"  name="question" placeholder="Enter question" />
+                                    <label for="basicInput">Question En</label>
+                                    <input id="question" value="{{ old('question_en') }}" type="text" class="form-control"  name="question_en" placeholder="Enter question" />
                                 </fieldset>
                                 <fieldset class="form-group">
-                                    <label for="basicInput">Answer</label>
-                                    <textarea  class="form-control" name="answer">{{ old('answer') }}</textarea>
+                                    <label for="basicInput">Answer En</label>
+                                    <textarea  class="form-control" name="answer_en">{{ old('answer_en') }}</textarea>
                                 </fieldset>
-                             
-    
-                               
-    
                             </div>
-                        
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <fieldset class="form-group">
+                                    <label for="basicInput">Question Ar</label>
+                                    <input id="question" value="{{ old('question_ar') }}" type="text" class="form-control"  name="question_ar" placeholder="Enter question" />
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <label for="basicInput">Answer Ar</label>
+                                    <textarea  class="form-control" name="answer_ar">{{ old('answer_ar') }}</textarea>
+                                </fieldset>
+                            </div>
                         </div>
                         <hr/>
                         <button type="submit" class="btn btn-primary float-right">Create</button>

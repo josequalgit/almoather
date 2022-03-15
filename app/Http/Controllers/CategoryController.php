@@ -32,10 +32,9 @@ class CategoryController extends Controller
     {
         $data = Category::findOrFail($id);
         $categories = InfluncerCategory::get();
-        $selectedCategories = $data->influncerCategories->pluck('id')->toArray();
         $preferredCategories = $data->preferredCategories->pluck('id')->toArray();
         $excludeCategories = $data->excludeCategories->pluck('id')->toArray();
-        return view('dashboard.categories.edit',compact('data','categories','selectedCategories','preferredCategories','excludeCategories'));
+        return view('dashboard.categories.edit',compact('data','categories','preferredCategories','excludeCategories'));
     }
 
     public function store(CategoryRequest $request)
@@ -54,9 +53,9 @@ class CategoryController extends Controller
        foreach ($request->preferred_categories as $value) {
         $data->preferredCategories()->attach($value);
         }   
-       foreach ($request->influncer_category_id as $value) {
-          $data->influncerCategories()->attach($value);
-       }    
+    //    foreach ($request->influncer_category_id as $value) {
+    //       $data->influncerCategories()->attach($value);
+    //    }    
        foreach ($request->exclude_categories as $value) {
           $data->excludeCategories()->attach($value);
        }    
@@ -78,12 +77,12 @@ class CategoryController extends Controller
         ];
         $data = Category::find($id);
         $data->update($addTranslate); 
-        $data->influncerCategories()->detach();
+      //  $data->influncerCategories()->detach();
         $data->preferredCategories()->detach();
         $data->excludeCategories()->detach();
-        foreach ($request->influncer_category_id as $value) {
-           $data->influncerCategories()->attach($value);
-        }    
+        // foreach ($request->influncer_category_id as $value) {
+        //    $data->influncerCategories()->attach($value);
+        // }    
         foreach ($request->preferred_categories as $value) {
            $data->preferredCategories()->attach($value);
         }    

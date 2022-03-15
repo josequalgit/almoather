@@ -78,12 +78,30 @@
                             <div class="col-12">
                              
                                 <fieldset class="form-group">
-                                    <label for="basicInput">Question</label>
-                                    <input id="question" value="{{ old('question')?old('question'):$data->question }}" type="text" class="form-control"  name="question" placeholder="Enter question" />
+                                    <label for="basicInput">Question En</label>
+                                    <input id="question_en" value="{{ old('question_en')?old('question_en'):$data->getTranslations('question')['en'] }}" type="text" class="form-control"  name="question_en" placeholder="Enter question" />
                                 </fieldset>
                                 <fieldset class="form-group">
-                                    <label for="basicInput">Answer</label>
-                                    <textarea  class="form-control" name="answer">{{ old('answer')?old('answer'):$data->answer }}</textarea>
+                                    <label for="basicInput">Answer En</label>
+                                    <textarea  class="form-control" name="answer_en">{{ old('answer_en')?old('answer_en'):$data->getTranslations('answer')['en'] }}</textarea>
+                                </fieldset>
+                             
+    
+                               
+    
+                            </div>
+                        
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                             
+                                <fieldset class="form-group">
+                                    <label for="basicInput">Question Ar</label>
+                                    <input id="question_ar" value="{{ old('question_ar')?old('question_ar'):$data->getTranslations('answer')['ar'] }}" type="text" class="form-control"  name="question_ar" placeholder="Enter question" />
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <label for="basicInput">Answer Ar</label>
+                                    <textarea  class="form-control" name="answer_ar">{{ old('answer_ar')?old('answer_ar'):$data->getTranslations('answer')['ar'] }}</textarea>
                                 </fieldset>
                              
     

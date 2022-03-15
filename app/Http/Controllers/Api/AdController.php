@@ -54,10 +54,15 @@ class AdController extends Controller
             $data->addMedia($request->file('image'))
             ->toMediaCollection('adImage');
         }
-        if($request->hasFile('documnet'))
+        if($request->hasFile('document'))
         {
             $data->addMedia($request->file('document'))
             ->toMediaCollection('document');
+        }
+        if($request->hasFile('logo'))
+        {
+            $data->addMedia($request->file('logo'))
+            ->toMediaCollection('logos');
         }
         $users = [User::find(1)];
         $info =[

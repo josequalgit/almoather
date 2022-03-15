@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ContactUs;
 use App\Http\Requests\ContactUsRequest;
+use App\Http\Requests\UpdateTermsRequest;
 use App\Models\Privacy;
 use App\Models\Terms;
 use Alert;
@@ -29,26 +30,40 @@ class ContactUsController extends Controller
         return back();
     }
 
-    public function updateTerms(Request $request)
+    public function updateTerms(UpdateTermsRequest $request)
     {
-        if(!$request->text){
+        if(!$request->text_ar||!$request->text_en){
             Alert::toast('Please fill the terms and conditions section', 'error');
             return back();
         }
-        Terms::find(1)->update($request->all());
+        $allFelids = $request->all();
+        $addTranslate = [
+            'text'=>[
+                'ar'=>$request->text_ar,
+                'en'=>$request->text_en,
+            ],
+        ];
+        Terms::find(1)->update($addTranslate);
         activity()->log('Admin "'.Auth::user()->name.'" updated the terms and conditions');
         Alert::toast('Terms and conditions was updated', 'success');
 
         return back();
     }
 
-    public function updatePrivacy(Request $request)
+    public function updatePrivacy(UpdateTermsRequest $request)
     {
-        if(!$request->text){
+        if(!$request->text_ar||!$request->text_en){
             Alert::toast('Please fill the privacy section', 'error');
             return back();
         }
-        Privacy::find(1)->update($request->all());
+        $allFelids = $request->all();
+        $addTranslate = [
+            'text'=>[
+                'ar'=>$request->text_ar,
+                'en'=>$request->text_en,
+            ],
+        ];
+        Privacy::find(1)->update($addTranslate);
         activity()->log('Admin "'.Auth::user()->name.'" updated the privacy');
         Alert::toast('Privacy was updated', 'success');
 

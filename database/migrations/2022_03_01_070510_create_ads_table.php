@@ -33,6 +33,7 @@ return new class extends Migration
             $table->bigInteger('area_id')->unsigned();
             $table->bigInteger('customer_id')->unsigned();
             $table->bigInteger('category_id')->unsigned();
+            $table->bigInteger('media_account_id')->unsigned();
             $table->bigInteger('influncer_id')->unsigned()->nullable();
             $table->longText('reject_note')->nullable();
             $table->softDeletes();

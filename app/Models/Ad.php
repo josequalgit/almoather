@@ -31,18 +31,26 @@ class Ad extends Model implements HasMedia
         'ad_script',
         'reject_note',
         'date',
-        'expense_type'
+        'expense_type',
+        'is_verified'
     ];
 
     protected $append = [
         'videos',
         'image',
         'document',
+        'logo'
     ];
 
     public function socialMedias()
     {
         return $this->belongsTo(SocialMedia::class,'social_media_id');
+    }
+
+
+    public function socialMediasAccount()
+    {
+        return $this->belongsTo(SocialMedia::class,'media_account_id');
     }
 
     public function countries()
@@ -115,6 +123,15 @@ class Ad extends Model implements HasMedia
    }
     public function getDocumentAttribute() {
         $mediaItems = $this->getMedia('documnet');
+        $publicFullUrl = null;
+        if(count($mediaItems) > 0)
+        {
+            $publicFullUrl = $mediaItems[0]->getFullUrl();
+        }
+        return $publicFullUrl;
+   }
+    public function getLogoAttribute() {
+        $mediaItems = $this->getMedia('logos');
         $publicFullUrl = null;
         if(count($mediaItems) > 0)
         {
