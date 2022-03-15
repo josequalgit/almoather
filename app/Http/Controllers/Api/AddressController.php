@@ -14,7 +14,7 @@ class AddressController extends Controller
         return response()->json([
             'msg'=>'all address available',
             'data'=>$data,
-            'status'=>200
-        ],200);
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 }

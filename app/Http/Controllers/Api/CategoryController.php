@@ -20,8 +20,8 @@ class CategoryController extends Controller
                 'service'=>$serviceCat,
                 'product'=>$productCat
             ],
-            'status'=>200
-        ],200);
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 
     public function getInfluncerCategories()
@@ -30,13 +30,14 @@ class CategoryController extends Controller
 
         return response()->json([
             'msg'=>'the influncer categories available',
-            'data'=>$data
-        ]);
+            'data'=>$data,
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 
     public function search($query)
     {
-        $data = InfluncerCategory::where('name','LIKE',"%$query%")->paginate(10);
+        $data = InfluncerCategory::where('name','LIKE',"%$query%")->paginate(config('global.PAGINATION_NUMBER'));
       $data->getCollection()->transform(function($item){
             return[
                 'id'=>$item->id,
@@ -46,7 +47,8 @@ class CategoryController extends Controller
 
         return response()->json([
             'msg'=>'search result for the categories',
-            'data'=>$data
-        ],200);
+            'data'=>$data,
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 }

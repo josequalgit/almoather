@@ -13,13 +13,13 @@ class RegionController extends Controller
     $data = Country::find($id);
     if(!$data) return response()->json([
         'err'=>"Country dose't exist",
-        'status'=>404
-    ],404);
+        'status'=>config('global.NOT_FOUND_STATUS')
+    ],config('global.NOT_FOUND_STATUS'));
 
     return response()->json([
         'msg'=>'all regions belongs to '.$data->name,
         'data'=>$data->regions()->select(['id','name'])->get(),
-        'status'=>200
-    ],200);
+        'status'=>config('global.OK_STATUS')
+    ],config('global.OK_STATUS'));
    }
 }

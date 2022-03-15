@@ -14,15 +14,15 @@ class InfluenecerController extends Controller
         $data = User::find($id);
         #IF THE USER NOT FOUND
         if(!$data) return response()->json([
-            'err'=>'Influenecer was not found',
-            'status'=>404
-        ],404);
+            'err'=>'user was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
 
         #IF THE USER IS NOT AN INFLUENCER
         if(!$data->influncers) return response()->json([
             'err'=>'user is not a influenecer',
-            'status'=>401
-        ],401);
+            'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
+        ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
 
         #GET THE USE SOCIAL MEDIA
         $get_social_media = $data->influncers->socialMedias()->get()->map(function($item){
@@ -48,8 +48,8 @@ class InfluenecerController extends Controller
         return response()->json([
             'msg'=>'Influencer was found',
             'data'=>$formate,
-            'status'=>200,
-        ],200);
+            'status'=>config('global.OK_STATUS'),
+        ],config('global.OK_STATUS'));
     }
 
     public function get_matched_influencers($category_id)
@@ -58,8 +58,8 @@ class InfluenecerController extends Controller
 
         if(!$category) return response()->json([
             'err'=>'category not found',
-            'status'=>404
-        ],404);
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
         $data = $category->influncers;
         $now = Carbon::now();
         $year =  $now->year;

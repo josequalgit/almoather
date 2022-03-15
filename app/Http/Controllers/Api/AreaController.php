@@ -13,12 +13,13 @@ class AreaController extends Controller
         $data = City::find($id);
         if(!$data) return response()->json([
             'err'=>'city not found',
-            'status'=>404
-        ],404);
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
         return response()->json([
             'msg'=>'areas for '.$data->name.' city',
             'data'=>$data->areas()->select(['id','name'])->get(),
-            'status'=>200
-        ]);
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 }

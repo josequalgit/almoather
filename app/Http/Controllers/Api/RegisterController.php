@@ -18,9 +18,12 @@ use App\Notifications\AddInfluencer;
 use Illuminate\Support\Facades\Notification;
 use Carbon\Carbon;
 use Auth;
+use App\Http\Traits\UserResponse;
 
 class RegisterController extends Controller
 {
+    use UserResponse;
+
     public function registerInfluncer(InfluncerRequest $request)
     {
         $info =[
@@ -30,14 +33,18 @@ class RegisterController extends Controller
         {
             return response()->json([
                 'msg'=>$this->checkIfDataAvalibale($request),
-                'status'=>422
-            ],422);
+                'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
         $commingRequest =  array_merge($request->only(['email','password','name']),['password'=>bcrypt($request->password)]);
         $data = User::create($commingRequest);
         $data->addMedia($request->file('image'))
         ->toMediaCollection('influncers');
+        
+        $data->addMedia($request->file('snap_chat_video'))
+        ->toMediaCollection('snapchat_videos');
+
         $influncerData = $request->only([
             'full_name_en',
             'full_name_ar',
@@ -60,17 +67,23 @@ class RegisterController extends Controller
             'ad_onsite_price_with_vat',
             'birthday',
             'address_id',
-            'bank_id'
+            'bank_id',
+            'snap_chat_views',
+            'snap_chat_video'
         ]);
 
        $addUserId =  array_merge($influncerData,['user_id'=>$data->id]);
        $newInfluncer = Influncer::create($addUserId);
-       
 
 
        foreach($request->categories as $item)
        {
            $newInfluncer->InfluncerCategories()->attach($item);
+       }
+
+       foreach($request->preferred_socialMedias as $item)
+       {
+           $newInfluncer->socialMedias()->attach($item);
        }
 
        foreach ($request->social_media as $item) {
@@ -93,41 +106,9 @@ class RegisterController extends Controller
 
         return response()->json([
             'msg'=>'Influncer was created',
-            'data'=>[
-                'id'=>$info->id,
-                'full_name_en' =>$info->full_name_en,
-                'full_name_ar'=>$info->full_name_ar,
-                'image'=>$data->infulncerImage,
-                'nick_name'=>$info->nick_name,
-                'nationality_id'=>$info->nationality_id,
-                'country_id'=>$info->country_id,
-                'region_id'=>$info->region_id,
-                'city_id'=>$info->city_id,
-                'influencer_category'=>$info->InfluncerCategories()->get()->map(function($item){
-                    return[
-                        'id'=>$item->id,
-                        'name'=>$item->name
-                    ];
-                }),
-                'bio'=>$info->bio,
-                'address_id'=>$info->address_id,
-                'ad_price'=>$info->ad_price,
-                'ad_onsite_price'=>$info->ad_onsite_price,
-                'bank_id'=>$info->banks->id,
-                'bank_account_number'=>$info->bank_account_number,
-                'email'=>$data->email,
-                'phone'=>$info->phone,
-                'id_number'=>$info->id_number,
-                'status'=>$info->status,
-                'is_vat'=>$info->is_vat,
-                'birthday'=>$info->birthday,
-                'ads_out_country'=>$info->ads_out_country,
-                'ad_with_vat'=>$info->ad_with_vat,
-                'ad_onsite_price_with_vat'=>$info->ad_onsite_price_with_vat,
-                'token'=>$token
-            ],
-            'status'=>201
-        ],201);
+            'data'=>$this->userDataResponse($data , $token),
+            'status'=>config('global.CREATED_STATUS')
+        ],config('global.CREATED_STATUS'));
     }
 
     public function registerCustomer(CustomerRequest $request)
@@ -136,8 +117,8 @@ class RegisterController extends Controller
         {
             return response()->json([
                 'msg'=>$this->checkIfDataAvalibale($request),
-                'status'=>422
-            ],422);
+                'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
         }
         $info =[
             'msg'=>$request->message,
@@ -172,22 +153,9 @@ class RegisterController extends Controller
 
         return response()->json([
             'msg'=>'Customer was created',
-            'data'=>[
-                'id'=>$data->id,
-                'image'=>$data->image,
-                'first_name' =>$info->first_name,
-                'last_name'=>$info->last_name,
-                'id_number'=>$info->id_number,
-                'nationality_id'=>$info->nationalities->id,
-                'country_id'=>$info->countrys->id,
-                'region_id'=>$info->regions->id,
-                'city_id'=>$info->citys->id,
-                'email'=>$data->email,
-                'phone'=>$info->phone,
-                'token'=>$token
-            ],
-            'status'=>201
-        ],201);
+            'data'=>$this->userDataResponse($data , $token),
+            'status'=>config('global.CREATED_STATUS')
+        ],config('global.CREATED_STATUS'));
     }
 
     public function verify($user_id)
@@ -197,14 +165,14 @@ class RegisterController extends Controller
         # IF THE USER IS NOT FOUND 
         if(!$data) return response()->json([
             'err'=>'user not found',
-            'status'=>404
-        ],404);
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
 
         #IF THE USER ALREADY VERIFIED
         if($data->email_verified_at) return response()->json([
             'err'=>'user already verified',
-            'status'=>422
-        ],422);
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
 
         #UPDATE THE USER
         $data->email_verified_at = Carbon::parse()->now();
@@ -213,8 +181,8 @@ class RegisterController extends Controller
         #RETURN WITH 200 STATUS CODE
         return response()->json([
             'msg'=>'user is verified',
-            'status'=>200
-        ],200);
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 
     private function checkIfDataAvalibale($request)
