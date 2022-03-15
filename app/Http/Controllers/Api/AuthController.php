@@ -38,14 +38,12 @@ class AuthController extends Controller
 
         if($user->customers)
         {
-            // return $this->respondWithToken($token,$user,1);
-            return $this->userDataResponse($user,$token);
+             return $this->respondWithToken($token,$user,1);
         }
         if($user->influncers)
         {
 
             return $this->userDataResponse($user,$token);
-            // return $this->respondWithToken($token,$user,2);
         }
         else
         {
@@ -100,74 +98,10 @@ class AuthController extends Controller
     protected function respondWithToken($token , $user,$type)
     {
 
-        $registeredUserData = $user->customers ?? $user->influncers;
-
-
-        $userData = null;
-
-
-        /// Customer
-        if($type == 1)
-        {
-            $userData = [
-                'id'=>$user->id,
-                'image'=>$user->image,
-                'image'=>$user->email,
-                'first_name'=> $user->customers->first_name,
-                'last_name'=>$registeredUserData->last_name,
-                'phone'=>$registeredUserData->phone,
-                'id_number'=>$registeredUserData->id_number,
-                'country_id'=>$registeredUserData->countrys->id,
-                 'region_id'=>$registeredUserData->regions->id,
-                 'city_id'=>$registeredUserData->citys->id,
-                'nationality_id'=>$registeredUserData->nationalities->id,
-                'status'=>$registeredUserData->status,
-                'verify'=>$registeredUserData->email_verified_at ? true : false,
-                'token'=>$token
-            ];
-        }
-        else
-        {
-            $userData = [
-                'id'=>$registeredUserData->id,
-                'full_name_en' =>$registeredUserData->full_name_en,
-                'full_name_ar'=>$registeredUserData->full_name_ar,
-                'image'=>$user->infulncerImage,
-                'nick_name'=>$registeredUserData->nick_name,
-                'nationality_id'=>$registeredUserData->nationality_id,
-                'country_id'=>$registeredUserData->country_id,
-                'region_id'=>$registeredUserData->region_id,
-                'city_id'=>$registeredUserData->city_id,
-                'influencer_category'=>$registeredUserData->InfluncerCategories()->get()->map(function($item){
-                    return[
-                        'id'=>$item->id,
-                        'name'=>$item->name
-                    ];
-                }),
-                'bio'=>$registeredUserData->bio,
-                'address_id'=>$registeredUserData->address_id,
-                'ad_price'=>$registeredUserData->ad_price,
-                'ad_onsite_price'=>$registeredUserData->ad_onsite_price,
-                'bank_id'=>$registeredUserData->banks->id,
-                'bank_account_number'=>$registeredUserData->bank_account_number,
-                'email'=>$user->email,
-                'phone'=>$registeredUserData->phone,
-                'id_number'=>$registeredUserData->id_number,
-                'status'=>$registeredUserData->status,
-                'is_vat'=>$registeredUserData->is_vat,
-                'birthday'=>$registeredUserData->birthday,
-                'ads_out_country'=>$registeredUserData->ads_out_country,
-                'ad_with_vat'=>$registeredUserData->ad_with_vat,
-                'ad_onsite_price_with_vat'=>$registeredUserData->ad_onsite_price_with_vat,
-                'token'=>$token
-            ];
-
-
-        }
 
         return response()->json([
             'msg'=>'login successfully',
-            'data'=>$userData,
+            'data'=>$this->userDataResponse($user,$token),
             'type'=>$type == 1?'customer':'Influencer',
             'status'=>200
         ],200);
@@ -179,7 +113,7 @@ class AuthController extends Controller
         return response()->json([
             'msg'=>'user data',
             'data'=>$this->userDataResponse($data),
-            'status'=>config('global.OK_STATUS')
+            'status'=>config('global.NOT_FOUND_STATUS')
 
         ],200);
     }

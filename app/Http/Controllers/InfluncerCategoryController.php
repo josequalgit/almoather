@@ -27,7 +27,14 @@ class InfluncerCategoryController extends Controller
 
     public function store(InfluncerCategoryRequest $request)
     {
-       $data =  InfluncerCategory::create($request->all());
+        $addTranslate = [
+            'name'=>[
+                'ar'=>$request->name_ar,
+                'en'=>$request->name_en,
+            ],
+            'type'=>$request->type,
+        ];
+       $data =  InfluncerCategory::create($addTranslate);
        $data->addMedia($request->file('image'))
        ->toMediaCollection('influncerCategories');
         activity()->log('Admin "'.Auth::user()->name.'" Added "'. $data->name .'" Influncer Category');

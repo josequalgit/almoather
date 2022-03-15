@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ad extends Model implements HasMedia
 {
-    use HasFactory , InteractsWithMedia;
+    use HasFactory , InteractsWithMedia,SoftDeletes;
 
     protected $fillable = [
         'type',
@@ -79,6 +80,21 @@ class Ad extends Model implements HasMedia
         return $this->hasOne(Contract::class,'ad_id');
     }
 
+    public function customerAdRateings()
+    {
+        return $this->hasMany(CustomerAdRating::class,'ad_id');
+    }
+
+    public function marketingAdRatings()
+    {
+        return $this->hasMany(MarketingAdRating::class,'ad_id');
+    }
+
+    public function adSuccess()
+    {
+        return $this->hasMany(AdSuccess::class,'ad_id');
+    }
+
     public function getImageAttribute() {
         $mediaItems = $this->getMedia('adImage');
         $publicFullUrl = null;
@@ -90,7 +106,7 @@ class Ad extends Model implements HasMedia
    }
     public function getVideosAttribute() {
         $mediaItems = $this->getMedia('adVideos');
-        $publicFullUrl = [];
+        $publicFullUrl = null;
         if(count($mediaItems) > 0)
         {
             $publicFullUrl = $mediaItems[0]->getFullUrl();

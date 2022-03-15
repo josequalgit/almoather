@@ -36,11 +36,13 @@ class Influncer extends Model implements HasMedia
         'ad_with_vat',
         'ad_onsite_price_with_vat',
         'address_id',
-        'bank_id'
+        'bank_id',
+        'snap_chat_views'
     ];
 
     protected $append = [
-        'video'
+        'video',
+        'verify'
     ];
 
     public function users()
@@ -98,5 +100,10 @@ class Influncer extends Model implements HasMedia
         $publicFullUrl = [];
         if(count($mediaItems) > 0) $publicFullUrl = $mediaItems[0]->getFullUrl();
         return $publicFullUrl;
+    }
+    public function getVerifyAttribute(Type $var = null)
+    {
+       
+        return $this->users->email_verify_at ? true : false;
     }
 }

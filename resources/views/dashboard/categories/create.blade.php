@@ -89,8 +89,12 @@
                                     
                                 </fieldset>
                                 <fieldset class="form-group">
-                                    <label for="basicInput">Name</label>
-                                    <input id="name" value="{{ old('name') }}" type="text" class="form-control"  name="name" placeholder="Enter name" />
+                                    <label for="basicInput">Name EN</label>
+                                    <input id="name" value="{{ old('name_en') }}" type="text" class="form-control"  name="name_en" placeholder="Enter name" />
+                                </fieldset>
+                                <fieldset class="form-group">
+                                    <label for="basicInput">Name AR</label>
+                                    <input id="name" value="{{ old('name_ar') }}" type="text" class="form-control"  name="name_ar" placeholder="Enter name" />
                                 </fieldset>
                                 <fieldset class="form-group">
                                     <label for="basicInput">Type</label>
@@ -104,9 +108,38 @@
                                 <fieldset class="form-group">
                                     <label for="basicInput">Influencer Category</label>
                                     <div class="form-group">
-                                        <select  name='influncer_category_id' class="form-control" id="exampleFormControlSelect1">
-                                            @foreach ($data as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>                                                
+                                   
+                                        {{-- <select  multiple name='influncer_category_id[]' class="form-control" id="exampleFormControlSelect1">
+                                            @foreach ($categories as $item)
+                                            <option  {{ in_array($item->id,$selectedCategories) ? 'selected':'' }} value="{{ $item->id }}">{{ $item->name }}</option>                                                
+                                            @endforeach
+                                        </select> --}}
+                                        <select multiple id="influncer_category_id" name='influncer_category_id[]' class="categories form-control" name="state">
+                                            @foreach ($categories as $item)
+                                            <option   value="{{ $item->id }}">{{ $item->name }}</option>                                                
+                                            @endforeach
+                                          </select>
+                                          
+                                      </div>
+                                </fieldset>
+
+                                <fieldset class="form-group">
+                                    <label for="basicInput">Preferred Category</label>
+                                    <div class="form-group">
+                                        <select  multiple name='preferred_categories[]' class="form-control preferred_categories" id="preferred_categories">
+                                            @foreach ($categories as $item)
+                                            <option  value="{{ $item->id }}">{{ $item->name }}</option>                                                
+                                            @endforeach
+                                        </select>
+                                      </div>
+                                </fieldset>
+
+                                <fieldset class="form-group">
+                                    <label for="basicInput">Exclude Category</label>
+                                    <div class="form-group">
+                                        <select  multiple name='exclude_categories[]' class="form-control exclude_categories" id="exclude_categories">
+                                            @foreach ($categories as $item)
+                                            <option  value="{{ $item->id }}">{{ $item->name }}</option>                                                
                                             @endforeach
                                         </select>
                                       </div>
@@ -133,7 +166,14 @@
 
 @section('scripts')
     <script>
+        $(document).ready(function() {
+    $('.categories').select2();
+    $('.preferred_categories').select2();
+    $('.exclude_categories').select2();
+});
+
 $(function() {
+
     $(document).on("change",".uploadFile", function()
     {
         alert

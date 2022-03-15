@@ -80,7 +80,37 @@
                 <textarea class="form-control" disabled rows="11">{{ $data->reject_note }}</textarea>
             </div>
             @endif
-            
+
+            <div class="form-group">
+              <label class="col mb-2" for="inputAddress2">Image</label>
+              <a target="_blank" download href="{{ $data->image }}">
+              <img src="{{ $data->image }}" />
+            </a>
+              
+            </div>
+            @if ($data->document)
+            <div class="form-group">
+              <label class="col mb-2" for="inputAddress2">document</label>
+              <a target="_blank" download href="{{ $data->document }}">
+                <img src="{{ $data->document }}" />
+              </a>
+             
+            </div>
+                
+            @endif
+          
+            @if($data->videos)
+            <div class="form-group">
+              <label class="col mb-2" for="inputAddress2">Videos</label>
+              <video class="col" width="320" height="240" controls>
+                <source src="{{ $data->videos }}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              
+            </div>
+            @endif
+
+
             <div class="form-group">
               <label for="inputAddress2">Status</label>
               @if($data->status == 'pending'||$data->status == 'rejected')
