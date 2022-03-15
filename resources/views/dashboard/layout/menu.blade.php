@@ -819,6 +819,16 @@ input[type="radio"] .styled:checked + label::after {
                   </a>
                 </li>
                 @endcanany
+
+                @canany(['Edit Slide','Create Slide','See Slide'])
+                <li class="menu-item
+                {{ ($name == 'dashboard.slides.index'|| $name == 'dashboard.slides.create'|| $name == 'dashboard.slides.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.slides.index') }}" class="menu-link">
+                    <div data-i18n="List">Slides</div>
+                  </a>
+                </li>
+                @endcanany
             
               </ul>
             </li>

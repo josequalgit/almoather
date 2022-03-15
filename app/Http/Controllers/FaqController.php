@@ -29,7 +29,18 @@ class FaqController extends Controller
 
     public function store(FaqRequest $request)
     {
-        $data = FAQ::create($request->all());
+        $allFelids = $request->all();
+        $addTranslate = [
+            'question'=>[
+                'ar'=>$request->answer_ar,
+                'en'=>$request->answer_en,
+            ],
+            'answer'=>[
+                'ar'=>$request->question_ar,
+                'en'=>$request->question_en,
+            ]
+        ];
+        $data = FAQ::create($addTranslate);
         activity()->log('Admin "'.Auth::user()->name.'" added new question"'. $data->question .'".');
         Alert::toast('Faq was added', 'success');
         return redirect()->route('dashboard.faqs.index');
@@ -37,7 +48,18 @@ class FaqController extends Controller
     public function update(FaqRequest $request,$id)
     {
         $data = FAQ::find($id);
-        $data->update($request->all());
+        $allFelids = $request->all();
+        $addTranslate = [
+            'question'=>[
+                'ar'=>$request->question_ar,
+                'en'=>$request->question_en,
+            ],
+            'answer'=>[
+                'ar'=>$request->answer_ar,
+                'en'=>$request->answer_en,
+            ]
+        ];
+        $data->update($addTranslate);
         activity()->log('Admin "'.Auth::user()->name.'" updated question"'. $data->question .'".');
         Alert::toast('Faq was updated', 'success');
         return redirect()->route('dashboard.faqs.index');

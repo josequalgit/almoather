@@ -15,8 +15,7 @@ return new class extends Migration
     {
         Schema::create('influncers', function (Blueprint $table) {
             $table->id();
-            $table->string('full_name_en');
-            $table->string('full_name_ar');
+            $table->string('full_name');
             $table->date('birthday');
             $table->bigInteger('nationality_id')->unsigned();
             $table->string('id_number');

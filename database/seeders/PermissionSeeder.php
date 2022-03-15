@@ -58,6 +58,11 @@ class PermissionSeeder extends Seeder
             'See Faq',
             'Delete Faq',
             'Edit Faq',
+            'See Slide',
+            'Create Slide',
+            'Delete Slide',
+            'Edit Slide',
+            
             
         ];
 

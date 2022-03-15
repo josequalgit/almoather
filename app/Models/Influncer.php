@@ -6,14 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Translatable\HasTranslations;
 
 class Influncer extends Model implements HasMedia
 {
-    use HasFactory , InteractsWithMedia;
+    use HasFactory , InteractsWithMedia,HasTranslations;
+
+    public $translatable = ['full_name'];
 
     protected $fillable = [
-        'full_name_en',
-        'full_name_ar',
+        'full_name',
         'nick_name',
         'bank_name',
         'bank_account_number',

@@ -26,7 +26,12 @@ class CategoryController extends Controller
 
     public function getInfluncerCategories()
     {
-        $data = InfluncerCategory::select(['id','name'])->get();
+        $data = InfluncerCategory::select(['id','name'])->get()->map(function($item){
+            return[
+                'id'=>$item->id,
+                'name'=>$item->name
+            ];
+        });
 
         return response()->json([
             'msg'=>'the influncer categories available',

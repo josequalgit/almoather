@@ -25,10 +25,10 @@ class Category extends Model implements HasMedia
 
 
    
-    public function influncerCategories()
-    {
-        return $this->belongsToMany(InfluncerCategory::class,'influncer_category_id');
-    }
+    // public function influncerCategories()
+    // {
+    //     return $this->belongsToMany(InfluncerCategory::class,'influncer_category_id');
+    // }
 
     public function ads()
     {

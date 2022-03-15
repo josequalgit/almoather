@@ -18,6 +18,7 @@ use App\Notifications\AddInfluencer;
 use Illuminate\Support\Facades\Notification;
 use Carbon\Carbon;
 use Auth;
+use App;
 use App\Http\Traits\UserResponse;
 
 class RegisterController extends Controller
@@ -46,8 +47,7 @@ class RegisterController extends Controller
         ->toMediaCollection('snapchat_videos');
 
         $influncerData = $request->only([
-            'full_name_en',
-            'full_name_ar',
+            'full_name',
             'nick_name',
             'bank_name',
             'bank_account_number',
@@ -73,7 +73,11 @@ class RegisterController extends Controller
         ]);
 
        $addUserId =  array_merge($influncerData,['user_id'=>$data->id]);
-       $newInfluncer = Influncer::create($addUserId);
+       $addTranslate =  array_merge($addUserId,['full_name'=>[
+           'ar'=>$request->full_name_ar,
+           'en'=>$request->full_name_en
+       ]]);
+       $newInfluncer = Influncer::create($addTranslate);
 
 
        foreach($request->categories as $item)
@@ -98,7 +102,7 @@ class RegisterController extends Controller
 
         $users = [User::find(1)];
         $info =[
-            'msg'=>'New Influncer "'.$newInfluncer->full_name_en.'" registered'
+            'msg'=>'New Influncer "'.$newInfluncer->full_name.'" registered'
         ];
         Notification::send($users, new AddInfluencer($info));
         $info = $data->influncers;

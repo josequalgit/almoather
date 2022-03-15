@@ -15,6 +15,7 @@ use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AdController;
+use App\Http\Controllers\SlideController;
 
 Route::redirect('/','/dashboard/admins')->name('home');
 
@@ -105,6 +106,14 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/ads/{status?}','index')->name('index')->middleware('permission:See Ads');
             Route::get('/ads/edit/{id}','edit')->name('edit')->middleware('permission:Edit Ads');
             Route::post('/ads/update/{id}','update')->name('update')->middleware('permission:Edit Ads');
+        });
+
+        Route::middleware('role_or_permission:superAdmin|Edit Slide|See Slide|Create Slide')->name('slides.')->controller(SlideController::class)->group(function(){
+            Route::get('/slides','index')->name('index')->middleware('permission:See Slide');
+            Route::get('/slides/create','create')->name('create')->middleware('permission:Create Slide');
+            Route::post('/slides/store','store')->name('store')->middleware('permission:Create Slide');
+            Route::get('/slides/edit/{id}','edit')->name('edit')->middleware('permission:Edit Slide');
+            Route::post('/slides/update/{id}','update')->name('update')->middleware('permission:Edit Slide');
         });
 
         Route::middleware('role_or_permission:superAdmin|Edit Terms')->name('terms.')->controller(ContactUsController::class)->group(function(){

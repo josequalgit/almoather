@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FaqRequest extends FormRequest
+class UpdateTermsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,8 @@ class FaqRequest extends FormRequest
     public function rules()
     {
         return [
-            'question_ar'=>'required',
-            'answer_ar'=>'required',
-            'question_en'=>'required',
-            'answer_en'=>'required',
+            'text_ar'=>'',
+            'text_en'=>'',
         ];
     }
 }

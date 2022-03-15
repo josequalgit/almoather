@@ -28,6 +28,7 @@ class AdRequest extends FormRequest
     {
         return [
             'type'=>'required',
+            'logo'=>'required',
             'store'=>'required',
             'budget'=>'required',
             'onSite'=>'required',
@@ -40,8 +41,8 @@ class AdRequest extends FormRequest
             'date'=>'required|date',
             'image'=>'mimes:jpg,bmp,png',
             'social_media_id'=>'required',
-            'video'=>'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4',
-            'documnet'=>'mimetypes:jpg,bmp,png,pdf'
+            'video'=>'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:100000',
+            'documnet'=>'mimes:jpg,bmp,png,pdf|max:2048'
 
         ];
     }
@@ -63,6 +64,8 @@ class AdRequest extends FormRequest
             'area_id.required' => 'Please choose the area',
             'category_id.required' => 'Please choose the category',
             'social_media_id.required' => 'Please add a social media',
+            'video.max' => 'The Video Size max should be 100Mb',
+            'document.max' => 'The Video Size max should be 100Mb',
         ];
     }
 
