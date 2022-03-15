@@ -13,12 +13,12 @@ class TermsAndConditionsController extends Controller
         $data = Terms::select('text')->find(1);
         if(!$data) return response()->json([
             'err'=>'terms and conditions data was not found',
-            'status'=>404
-        ],200);
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
         return response()->json([
             'msg'=>'terms and conditions data was found',
             'data'=>$data,
-            'status'=>200
-        ],200);
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 }

@@ -28,17 +28,16 @@ class AdController extends Controller
         #CHECK IF THERE IS A CONTRACT IN THE DATABASE
         if(!$this->create_contract()) return response()->json([
             'err'=>'There is no contract in the system',
-            'status'=>200
-        ],200);
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
 
         #CHECK REQUEST 
         if(!$request->hasFile('documnet')&&!$request->auth_number)
         {
-           
             return response()->json([
                 'err'=>'please upload a document or add the authentication number',
-                'status'=>403
-            ],200);
+                'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
         }
         $data = array_merge($request->all(),['customer_id'=>Auth::guard('api')->user()->customers->id]);
 
@@ -68,8 +67,8 @@ class AdController extends Controller
 
         return response()->json([
             'msg'=>'ad was created',
-            'status'=>201
-        ],201);
+            'status'=>config('global.CREATED_STATUS')
+        ],config('global.CREATED_STATUS'));
     }
 
     public function details($id)
@@ -77,8 +76,8 @@ class AdController extends Controller
         $data = Ad::find($id);
         if(!$data) return response()->json([
             'err'=>'ad not found',
-            'status'=>404
-        ],200);
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
 
         $influncers_info = null;
         if($data->influncers) 
@@ -139,40 +138,43 @@ class AdController extends Controller
         $data = Contract::select(['title','content'])->find($contract_id);
         if(!$data) return response()->json([
             'err'=>'contract not found',
-            'status'=>404
-        ],404);
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
         return response()->json([
             'msg'=>'ad contract',
             'data'=>$data,
-            'status'=>200
-        ],200);
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 
     public function accept_ad_contract($contract_id,$influencer_id)
     {
         $data = Contract::find($contract_id);
+
         if(!$data) return response()->json([
             'err'=>'contract not found',
-            'status'=>404
-        ],404);
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
         $inf_data = User::find($influencer_id);
         if(!$inf_data || !$inf_data->influncers) return response()->json([
             'err'=>"influencer not found, please make sure the id you'r adding is belongs to influencer",
-            'status'=>404
-        ],404);
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+        
         $data->ads()->associate($inf_data);
         $data->is_accepted = true;
         $data->save();
 
         return response()->json([
             'msg'=>'data was updated',
-            'status'=>204
-        ],200);
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 
     public function search($query)
     {
-        $data = Ad::where('store','LIKE',"%{$query}%")->paginate(10);
+        $data = Ad::where('store','LIKE',"%{$query}%")->paginate(config('global.PAGINATION_NUMBER'));
         $data->getCollection()->transform(function($item){
             $influncers_info = null;
             if($item->influncers) 
@@ -208,7 +210,7 @@ class AdController extends Controller
         return response()->json([
             'msg'=>'the search result',
             'data'=>$data,
-            'status'=>200
+            'status'=>config('global.OK_STATUS')
         ]);
     }
 
@@ -219,17 +221,17 @@ class AdController extends Controller
         $itemsPaginated  = [];
         if(!$data) return response()->json([
             'err'=>'influencer not found',
-            'status'=>404
-        ],404);
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
 
         if($status)
         {
-          $itemsPaginated  =  $data->ads()->where('status',$status)->paginate(10);
+          $itemsPaginated  =  $data->ads()->where('status',$status)->paginate(config('global.PAGINATION_NUMBER'));
 
         }
         else
         {
-            $itemsPaginated  = $data->ads()->paginate(10);
+            $itemsPaginated  = $data->ads()->paginate(config('global.PAGINATION_NUMBER'));
         }
 
 
@@ -279,8 +281,8 @@ class AdController extends Controller
         return response()->json([
             'msg'=>'all influencer ads',
             'data'=>$this->formate($itemsTransformed , $itemsPaginated),
-            'status'=>200
-        ],200);
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 
 
@@ -290,17 +292,17 @@ class AdController extends Controller
         $itemsPaginated  = [];
         if(!$data) return response()->json([
             'err'=>'customer not found',
-            'status'=>404
-        ],404);
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
 
         if($status)
         {
-          $itemsPaginated  =  $data->ads()->where('status',$status)->paginate(10);
+          $itemsPaginated  =  $data->ads()->where('status',$status)->paginate(config('global.PAGINATION_NUMBER'));
 
         }
         else
         {
-            $itemsPaginated  = $data->ads()->paginate(10);
+            $itemsPaginated  = $data->ads()->paginate(config('global.PAGINATION_NUMBER'));
         }
 
 
@@ -345,8 +347,8 @@ class AdController extends Controller
         return response()->json([
             'msg'=>'all customer ads',
             'data'=>$this->formate($itemsTransformed , $itemsPaginated),
-            'status'=>200
-        ],200);
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 
 

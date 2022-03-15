@@ -5,22 +5,21 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
-use App\Models\User;
-
+use Auth;
 
 class NotificationController extends Controller
 {
-    public function index($id , $type = null)
+    public function index($type = null)
     {
-        $user = User::find($id);
+        $user = Auth::guard('api')->user();
         $data = [];
         if(!$user) return response()->json([
             'msg'=>'user is not found',
-            'status'=>404
-        ],404);
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
         if($type == 'read')
         {
-            $data = $user->notifications()->select(['data','id'])->paginate(10);
+            $data = $user->notifications()->select(['data','id'])->paginate(config('global.PAGINATION_NUMBER'));
            $data->getCollection()->transform(function($item){
             if(array_key_exists('msg', $item->data))
             {
@@ -33,12 +32,13 @@ class NotificationController extends Controller
         }
         else
         {
-            $data = $user->unreadNotifications()->select('data')->paginate(10);
+            $data = $user->unreadNotifications()->select('data')->paginate(config('global.PAGINATION_NUMBER'));
         }
         return response()->json([
             'msg'=>'user notification',
             'data'=>$data,
-            'type'=>$type
-        ]);
+            'type'=>$type,
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 }

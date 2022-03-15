@@ -24,7 +24,22 @@ class UpdateCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>'required'
+            'name_en'=>'required',
+            'name_ar'=>'required',
+            'influncer_category_id'=>'required'
+        ];
+    }
+
+      /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+          
+            'influncer_category_id.required' => 'Please choose any category',
         ];
     }
 }

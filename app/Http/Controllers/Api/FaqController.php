@@ -15,7 +15,7 @@ class FaqController extends Controller
         return response()->json([
             'msg'=>"get all faq's",
             'data'=>$data,
-            'status'=>200
-        ],200);
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 }

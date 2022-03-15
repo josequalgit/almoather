@@ -13,7 +13,8 @@ class CountryController extends Controller
         $data = Country::select(['id','name','code'])->get();
         return response()->json([
             'msg'=>'all the countries avalibale',
-            'data'=>$data
-        ]);
+            'data'=>$data,
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 }
