@@ -13,11 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('influncer_category_id', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->enum('type',['service','product']);
-            $table->softDeletes();
+            $table->bigInteger('category_id')->unsigned();
+            $table->bigInteger('influncer_category_id')->unsigned();
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('influncer_category_id');
     }
 };

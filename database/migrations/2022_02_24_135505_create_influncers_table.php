@@ -37,6 +37,7 @@ return new class extends Migration
             $table->integer('ad_with_vat');
             $table->integer('ad_onsite_price');
             $table->integer('ad_onsite_price_with_vat');
+            $table->longText('snap_chat_views');
             $table->longText('rejected_note')->nullable();
             $table->enum('status',['pending','accepted','rejected','band'])->default('pending');
             $table->bigInteger('user_id')->unsigned();

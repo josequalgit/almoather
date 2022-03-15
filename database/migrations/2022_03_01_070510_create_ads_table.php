@@ -35,7 +35,8 @@ return new class extends Migration
             $table->bigInteger('category_id')->unsigned();
             $table->bigInteger('influncer_id')->unsigned()->nullable();
             $table->longText('reject_note')->nullable();
-            $table->enum('status',['pending','prepay','fullpayment','progress','influncer_complete','complete','incomplete','rejected','waiting_for_payment']);
+            $table->softDeletes();
+            $table->enum('status',['pending','prepay','fullpayment','progress','influncer_complete','complete','incomplete','rejected','waiting_for_payment','cancelled']);
 
             $table->timestamps();
         });
