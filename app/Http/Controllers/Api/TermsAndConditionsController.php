@@ -17,7 +17,7 @@ class TermsAndConditionsController extends Controller
         ],config('global.NOT_FOUND_STATUS'));
         return response()->json([
             'msg'=>'terms and conditions data was found',
-            'data'=>$data,
+            'data'=>$data->getTranslation('text',app()->getLocale()),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }

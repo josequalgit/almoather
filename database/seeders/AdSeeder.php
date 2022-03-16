@@ -32,6 +32,7 @@ class AdSeeder extends Seeder
         'area_id'=>1,
         'customer_id'=>1,
         'website_link'=>'https://www.lenovo.com/jo/en/',
+        'media_account_id'=>1
         ]);
 
         DB::table('influncer_influncer_category')->insert([

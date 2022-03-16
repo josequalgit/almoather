@@ -32,7 +32,8 @@ class Ad extends Model implements HasMedia
         'reject_note',
         'date',
         'expense_type',
-        'is_verified'
+        'is_verified',
+        'media_account_id'
     ];
 
     protected $append = [
