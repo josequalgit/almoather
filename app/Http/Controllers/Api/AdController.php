@@ -14,14 +14,31 @@ use App\Models\Influncer;
 use App\Models\Customer;
 use App\Models\Contract;
 use Validator;
+use App\Http\Traits\UserResponse;
 use App\Http\Traits\ApiPaginator;
+use App\Http\Traits\AdResponse;
 
 
 class AdController extends Controller
 {
     protected $guard = 'api';
 
-    use ApiPaginator;
+    use ApiPaginator , UserResponse , AdResponse;
+
+    public function index($status)
+    {
+        $data = Ad::where('status',$status)->paginate(10);
+        $data->getCollection()->transform(function($item){
+            return $this->adResponse($item);
+        });
+
+
+        return response()->json([
+            'msg'=>'get all ads with the status',
+            'data'=>$data,
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+    }
 
     public function store(AdRequest $request)
     {
@@ -72,6 +89,9 @@ class AdController extends Controller
 
         return response()->json([
             'msg'=>'ad was created',
+            'data'=>[
+                'id'=>$data->id
+            ],
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
     }
@@ -79,42 +99,16 @@ class AdController extends Controller
     public function details($id)
     {
         $data = Ad::find($id);
+        //return $data->videos;
         if(!$data) return response()->json([
             'err'=>'ad not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        $influncers_info = null;
-        if($data->influncers) 
-        {
-            $influncers_info = [
-                'name_en'=>$data->influncers->full_name_en,
-                'name_ar'=>$data->influncers->full_name_ar,
-                'image'=>$data->influncers->users->image
-            ];
-        }
-
         return response()->json([
             'msg'=>'ad details',
-            'data'=>[
-                'store_name'=>$data->store,
-            'image'=>$data->image,
-            'budget'=>$data->budget,
-            'about'=>$data->about,
-            'location'=>$data->countries()->select(['name','code'])->get(),
-            'auth_number'=>$data->auth_number,
-            'category'=>$data->categories->name,
-            'date'=>$data->date,
-            'videos'=>$data->videos,
-            'social_media'=>[
-                'name'=>$data->socialMedias->name,
-                'logo'=>$data->socialMedias->image
-            ],
-            'influencer'=>$influncers_info,
-            'script'=>$data->ad_script,
-            'contract_id'=>$data->contacts->id
-        ],
-        'status'=>config('global.OK_STATUS')
+            'data'=>$this->adResponse($data),
+            'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
 
