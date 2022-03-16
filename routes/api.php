@@ -98,6 +98,7 @@ Route::group(['prefix'=>'auth'],function(){
 
         #Ad ROUTES
         Route::prefix('ads')->controller(AdController::class)->group(function(){
+            Route::get('get/{status}','index');
             Route::post('create','store')->middleware('check_customer');
             Route::get('details/{id}','details');
             Route::get('contract/{contract_id}','get_ad_contract');
