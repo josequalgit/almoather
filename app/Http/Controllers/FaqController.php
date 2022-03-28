@@ -12,7 +12,7 @@ class FaqController extends Controller
     public function index()
     {
         $data = FAQ::paginate(10);
-        //return $data;
+        
         return view('dashboard.faqs.index',compact('data'));
     }
 
