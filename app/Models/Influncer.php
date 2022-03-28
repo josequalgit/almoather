@@ -96,11 +96,16 @@ class Influncer extends Model implements HasMedia
         return $this->hasMany(SocialMediaProfile::class,'Influncer_id');
     }
 
+    public function ad_matches()
+    {
+        return $this->hasMany(AdsInfluencerMatch::class,'influencer_id');
+    }
+
     public function getVideoAttribute(Type $var = null)
     {
         $mediaItems = $this->getMedia('videos');
         $publicFullUrl = [];
-        if(count($mediaItems) > 0) $publicFullUrl = $mediaItems[0]->getFullUrl();
+        if(count($mediaItems) > 0) $publicFullUrl = $mediaItems->getFullUrl();
         return $publicFullUrl;
     }
     public function getVerifyAttribute(Type $var = null)

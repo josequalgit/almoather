@@ -1,5 +1,11 @@
 @extends('dashboard.layout.index')
 @section('content')
+<style>
+  #ad_image{
+    max-width: 100% !important;
+    height: 200px !important;
+  }
+</style>
 <div class="app-content content p-5 mt-5">
     
     <section id="basic-input">
@@ -84,7 +90,7 @@
             <div class="form-group">
               <label class="col mb-2" for="inputAddress2">Image</label>
               <a target="_blank" download href="{{ $data->image }}">
-              <img src="{{ $data->image }}" />
+              <img id="ad_image" src="{{ $data->image }}" />
             </a>
               
             </div>
@@ -117,27 +123,27 @@
               <select id="status" class="form-control" id="exampleFormControlSelect1">
                 <option disabled {{ $data->status == 'pending'?'selected':'' }} value="pending">Pending</option>
                 <option {{ $data->status == 'rejected'?'selected':'' }} value="rejected">Rejecte</option>
-                <option {{ $data->status == 'waiting_for_payment'?'selected':'' }} value="waiting_for_payment">Waiting For Payment</option>
-                <option disabled {{ $data->status == 'prepay'?'selected':'' }} value="prepay">Pre Pay</option>
+                <option {{ $data->status == 'approve'?'selected':'' }} value="approve">Approve</option>
+                {{-- <option disabled {{ $data->status == 'prepay'?'selected':'' }} value="prepay">Pre Pay</option>
                 <option disabled {{ $data->status == 'fullpayment'?'selected':'' }} value="fullpayment">Full Paymet</option>
                 <option disabled {{ $data->status == 'progress'?'selected':'' }} value="progress">Progress</option>
-                <option disabled {{ $data->status == 'complete'?'selected':'' }} value="complete">Complete</option>
+                <option disabled {{ $data->status == 'complete'?'selected':'' }} value="complete">Complete</option> --}}
               </select>
-              @elseif($data->status == 'waiting_for_payment'||$data->status == 'prepay'||$data->status == 'fullpayment')
+              @elseif($data->status == 'approve'||$data->status == 'prepay'||$data->status == 'fullpayment')
               <select id="status" class="form-control" id="exampleFormControlSelect1">
                 <option disabled {{ $data->status == 'pending'?'selected':'' }} value="pending">Pending</option>
                 <option disabled {{ $data->status == 'rejected'?'selected':'' }} value="rejected">Rejecte</option>
-                <option disabled {{ $data->status == 'waiting_for_payment'?'selected':'' }} value="waiting_for_payment">Waiting For Payment</option>
+                <option disabled {{ $data->status == 'approve'?'selected':'' }} value="approve">Approve</option>
                 <option disabled {{ $data->status == 'prepay'?'selected':'' }} value="prepay">Pre Pay</option>
-                <option disabled {{ $data->status == 'fullpayment'?'selected':'' }} value="fullpayment">Full Paymet</option>
+                {{-- <option disabled {{ $data->status == 'fullpayment'?'selected':'' }} value="fullpayment">Full Paymet</option>
                 <option disabled {{ $data->status == 'progress'?'selected':'' }} value="progress">Progress</option>
-                <option disabled {{ $data->status == 'complete'?'selected':'' }} value="complete">Complete</option>
+                <option disabled {{ $data->status == 'complete'?'selected':'' }} value="complete">Complete</option> --}}
               </select>
               @else
               <select id="status" class="form-control" id="exampleFormControlSelect1">
-                <option disabled {{ $data->status == 'pending'?'selected':'' }} value="pending">Pending</option>
+                {{-- <option disabled {{ $data->status == 'pending'?'selected':'' }} value="pending">Pending</option>
                 <option disabled {{ $data->status == 'rejected'?'selected':'' }} value="rejected">Rejecte</option>
-                <option disabled {{ $data->status == 'waiting_for_payment'?'selected':'' }} value="waiting_for_payment">Waiting For Payment</option>
+                <option disabled {{ $data->status == 'approve'?'selected':'' }} value="approve">Approve</option> --}}
                 <option   {{ $data->status == 'prepay'?'selected':'' }} value="prepay">Pre Pay</option>
                 <option disabled {{ $data->status == 'fullpayment'?'selected':'' }} value="fullpayment">Full Paymet</option>
                 <option disabled {{ $data->status == 'progress'?'selected':'' }} value="progress">Progress</option>
@@ -177,17 +183,25 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Expence type</h5>
+                <h5 class="modal-title">Add Data</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body">
                 <div class="form-group">
-                  <label for="exampleFormControlSelect1">select</label>
+                  <label for="exampleFormControlSelect1">Expence type</label>
                   <select class="form-control" id="expense_type">
                     <option value="pvn">PVN</option>
                     <option value="pve">PVE</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">Category</label>
+                  <select class="form-control" id="category_id">
+                    @foreach ($categories as $item)
+                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                    @endforeach
                   </select>
                 </div>
               </div>
@@ -222,11 +236,14 @@
         $('#rejectedReson').modal('toggle');
 
     }
-    else
+    else if(statusValue == 'approve')
     {
       $('#expensiveType').modal('toggle');
 
-      //  sendStatusRequest();
+    }
+    else
+    {
+      sendStatusRequest();
     }
     
   }
@@ -241,13 +258,18 @@
       data:{
         status:document.getElementById('status').value,
         note:document.getElementById('rejectedNote').value,
+        category_id:document.getElementById('category_id').value,
+        onSite:'{{ $data->onSite }}',
+        adBudget:'{{ $data->budget }}',
         expense_type:document.getElementById('expense_type').value
       },
       success:(res)=>{
         let url = '{{ route("dashboard.ads.index") }}'
-        window.location.href = url;
+        // uncomment this
+       window.location.href = url;
       },
       error:(err)=>{
+        console.log("updateding error: ",err);
        alert('something wrong with updateing the ad');
       }
     })

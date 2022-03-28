@@ -9,6 +9,7 @@
         width: 15%;
         -webkit-line-clamp: 2;
     }
+   
 </style>
 <div class="app-content content">
     <div class="content-overlay"></div>

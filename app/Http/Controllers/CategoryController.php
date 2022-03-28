@@ -32,9 +32,8 @@ class CategoryController extends Controller
     {
         $data = Category::findOrFail($id);
         $categories = InfluncerCategory::get();
-        $preferredCategories = $data->preferredCategories->pluck('id')->toArray();
         $excludeCategories = $data->excludeCategories->pluck('id')->toArray();
-        return view('dashboard.categories.edit',compact('data','categories','preferredCategories','excludeCategories'));
+        return view('dashboard.categories.edit',compact('data','categories','excludeCategories'));
     }
 
     public function store(CategoryRequest $request)
@@ -50,9 +49,9 @@ class CategoryController extends Controller
        $data->addMedia($request->file('image'))
        ->toMediaCollection('categories');
 
-       foreach ($request->preferred_categories as $value) {
-        $data->preferredCategories()->attach($value);
-        }   
+    //    foreach ($request->preferred_categories as $value) {
+    //     $data->preferredCategories()->attach($value);
+    //     }   
     //    foreach ($request->influncer_category_id as $value) {
     //       $data->influncerCategories()->attach($value);
     //    }    
@@ -78,14 +77,14 @@ class CategoryController extends Controller
         $data = Category::find($id);
         $data->update($addTranslate); 
       //  $data->influncerCategories()->detach();
-        $data->preferredCategories()->detach();
+        // $data->preferredCategories()->detach();
         $data->excludeCategories()->detach();
         // foreach ($request->influncer_category_id as $value) {
         //    $data->influncerCategories()->attach($value);
         // }    
-        foreach ($request->preferred_categories as $value) {
-           $data->preferredCategories()->attach($value);
-        }    
+        // foreach ($request->preferred_categories as $value) {
+        //    $data->preferredCategories()->attach($value);
+        // }    
         foreach ($request->exclude_categories as $value) {
             $data->excludeCategories()->attach($value);
         }    

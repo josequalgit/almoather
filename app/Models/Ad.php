@@ -33,10 +33,19 @@ class Ad extends Model implements HasMedia
         'date',
         'expense_type',
         'is_verified',
-        'media_account_id'
+        'media_account_id',
+        'delivery_man_name',
+        'delivery_phone_number',
+        'nearest_location',
+        'delivery_city_name',
+        'delivery_area_name',
+        'delivery_street_name',
+        'discount_code'
+
     ];
 
-    protected $append = [
+    protected $append = 
+    [
         'videos',
         'image',
         'document',
@@ -94,6 +103,11 @@ class Ad extends Model implements HasMedia
         return $this->hasMany(CustomerAdRating::class,'ad_id');
     }
 
+    public function influencerRatting()
+    {
+        return $this->hasMany(InfluencerRateing::class,'ad_id');
+    }
+
     public function marketingAdRatings()
     {
         return $this->hasMany(MarketingAdRating::class,'ad_id');
@@ -102,6 +116,11 @@ class Ad extends Model implements HasMedia
     public function adSuccess()
     {
         return $this->hasMany(AdSuccess::class,'ad_id');
+    }
+
+    public function matches()
+    {
+        return $this->hasMany(AdsInfluencerMatch::class,'ad_id');
     }
 
     public function getImageAttribute() {

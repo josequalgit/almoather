@@ -55,7 +55,8 @@ class InfluncerRequest extends FormRequest
             'social_media'=>'required',
             'bank_id'=>'required',
             'snap_chat_views'=>'required',
-            'snap_chat_video'=>'required|mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4',
+            'snap_chat_video'=>'required',
+           // 'snap_chat_video'=>'required|mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4',
         ];
     }
 

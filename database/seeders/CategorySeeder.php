@@ -33,7 +33,7 @@ class CategorySeeder extends Seeder
         ];
         foreach ($data as $item) {
           $cat =   Category::create($item);
-          $cat->preferredCategories()->attach(1);
+          //$cat->preferredCategories()->attach(1);
           $cat->excludeCategories()->attach(2);
           $url = \URL::to('').'/img/products/1.png';
           $cat->addMediaFromUrl($url)

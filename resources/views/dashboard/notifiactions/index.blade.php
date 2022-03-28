@@ -69,7 +69,9 @@
                                 </div>
                             </div>
                             @can('See Notification')
-                            {{ $data->links() }}
+                            <div class="p-1">
+                                {{ $data->links('pagination::bootstrap-5') }}
+                            </div>
                             @endcan
                         </div>
                     </div>

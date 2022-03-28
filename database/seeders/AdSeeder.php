@@ -27,12 +27,13 @@ class AdSeeder extends Seeder
         'status'=>'pending',
         'social_media_id'=>1,
         'country_id'=>1,
-        'category_id'=>1,
         'city_id'=>1,
         'area_id'=>1,
         'customer_id'=>1,
         'website_link'=>'https://www.lenovo.com/jo/en/',
-        'media_account_id'=>1
+        'media_account_id'=>1,
+        'nearest_location'=>'Amman',
+        
         ]);
 
         DB::table('influncer_influncer_category')->insert([

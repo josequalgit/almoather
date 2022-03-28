@@ -120,16 +120,6 @@
                                       </div>
                                 </fieldset> --}}
 
-                                <fieldset class="form-group">
-                                    <label for="basicInput">Preferred Category</label>
-                                    <div class="form-group">
-                                        <select  multiple name='preferred_categories[]' class="form-control preferred_categories" id="preferred_categories">
-                                            @foreach ($categories as $item)
-                                            <option  {{ in_array($item->id,$preferredCategories) ? 'selected':'' }} value="{{ $item->id }}">{{ $item->name }}</option>                                                
-                                            @endforeach
-                                        </select>
-                                      </div>
-                                </fieldset>
 
                                 <fieldset class="form-group">
                                     <label for="basicInput">Exclude Category</label>

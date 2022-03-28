@@ -60,6 +60,11 @@
 .select2-selection--multiple .select2-selection__choice__display {
     padding-left: 13px !important;
 }
+.pagination .page-item.active .page-link, .pagination .page-item.active .page-link:hover {
+    border-radius: 0.267rem;
+    background-color: #475f7b !important;
+    color: #fbd075;
+}
     </style>
 
     <!-- BEGIN: Header-->

@@ -13,12 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('marketing_ad_ratings', function (Blueprint $table) {
+        Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('ad_id')->unsigned();
-            $table->bigInteger('influencer_id')->unsigned();
-            $table->enum('rate',[0,1,2]);
-            $table->longText('note');
+            $table->string('title');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('marketing_ad_ratings');
+        Schema::dropIfExists('questions');
     }
 };

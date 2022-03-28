@@ -166,6 +166,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider::class,
+        willvincent\Rateable\RateableServiceProvider::class,
 
 
 

@@ -88,7 +88,7 @@
                                         <tbody>
                                             @foreach ($data as $item)
                                                     <tr>
-                                                        <td>{{ $item->full_name_en  }}</td>
+                                                        <td>{{ $item->full_name  }}</td>
                                                         <td>{{ $item->users->email }}</td>
                                                         <td>{{ $item->bank_account_number }}</td>
                                                         <td style="text-transform: uppercase;">{{ $item->status }}</td>
@@ -107,7 +107,9 @@
                                 </div>
                             </div>
                             @can('See Influncer')
-                            {{ $data->links() }}
+                            <div class="p-1">
+                                {{ $data->links('pagination::bootstrap-5') }}
+                            </div>
                             @endcan
                         </div>
                     </div>

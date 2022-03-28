@@ -29,7 +29,7 @@ class CategoryRequest extends FormRequest
             'image'=>'required',
             'type'=>'required',
             // 'influncer_category_id'=>'required',
-            'preferred_categories'=>'required',
+            // 'preferred_categories'=>'required',
             'exclude_categories'=>'required',
         ];
     }

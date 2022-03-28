@@ -43,8 +43,10 @@ class RegisterController extends Controller
         $data->addMedia($request->file('image'))
         ->toMediaCollection('influncers');
         
-        $data->addMedia($request->file('snap_chat_video'))
-        ->toMediaCollection('snapchat_videos');
+        foreach ($request->snap_chat_video as $value) {
+            $data->addMedia($value)
+            ->toMediaCollection('snapchat_videos');
+        }
 
         $influncerData = $request->only([
             'full_name',

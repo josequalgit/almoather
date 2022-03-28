@@ -29,7 +29,11 @@ class DatabaseSeeder extends Seeder
             AdSeeder::class,
             ContractSeeder::class,
             AddressSeeder::class,
-            BankSeeder::class
+            BankSeeder::class,
+            InfulencerSeeder::class,
+            QuestionSeeder::class,
+            RattingSeeder::class,
+
         ]);
     }
 }

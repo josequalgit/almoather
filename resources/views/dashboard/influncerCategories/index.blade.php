@@ -9,6 +9,10 @@
         width: 15%;
         -webkit-line-clamp: 2;
     }
+    .cateImage{
+        height:100px !important;
+        max-width:100px !important;
+    }
 </style>
 <div class="app-content content">
     <div class="content-overlay"></div>
@@ -61,7 +65,7 @@
                                                 @foreach ($data as $item)
                                                         <tr>
                                                             <td>
-                                                                <img height="50px" width="150px" src="{{ $item->image }}" />
+                                                                <img class="cateImage" src="{{ $item->image }}" />
                                                             </td>
                                                             <td>{{ $item->name }}</td>
                                                             

@@ -37,12 +37,19 @@ class AdRequest extends FormRequest
             'country_id'=>'required',
             'city_id'=>'required',
             'area_id'=>'required',
-            'category_id'=>'required',
+            'hasStore'=>'required',
+            'has_discount_code'=>'required',
             'date'=>'required|date',
-            'image'=>'mimes:jpg,bmp,png',
+            'delivery_man_name'=>'',
+            'delivery_phone_number'=>'',
+            'delivery_city_name'=>'',
+            'delivery_area_name'=>'',
+            'delivery_street_name'=>'',
+            'nearest_location'=>'required',
+            'image'=>'required|mimes:jpg,bmp,png',
             'social_media_id'=>'required',
             'video'=>'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:100000',
-            'documnet'=>'mimes:jpg,bmp,png,pdf|max:2048'
+            'documnet'=>'mimes:jpg,bmp,png,pdf|max:2048',
 
         ];
     }
@@ -62,7 +69,6 @@ class AdRequest extends FormRequest
             'country_id.required' => 'Please choose the country',
             'city_id.required' => 'Please choose the city',
             'area_id.required' => 'Please choose the area',
-            'category_id.required' => 'Please choose the category',
             'social_media_id.required' => 'Please add a social media',
             'video.max' => 'The Video Size max should be 100Mb',
             'document.max' => 'The Video Size max should be 100Mb',

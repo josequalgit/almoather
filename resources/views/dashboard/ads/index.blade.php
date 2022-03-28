@@ -75,8 +75,11 @@
                                 </div>
                             </div>
                             @can('See Ads')
-                            {{ $data->links() }}
+                            <div class="p-1">
+                                {{ $data->links('pagination::bootstrap-5') }}
+                            </div>
                             @endcan
+
                         </div>
                     </div>
                 </div>

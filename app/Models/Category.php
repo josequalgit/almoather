@@ -35,10 +35,10 @@ class Category extends Model implements HasMedia
         return $this->hasMany(Ad::class,'category_id');
     }
 
-    public function preferredCategories()
-    {
-        return $this->belongsToMany(InfluncerCategory::class,'preferred_categories','category_id','influncer_category_id');
-    }
+    // public function preferredCategories()
+    // {
+    //     return $this->belongsToMany(InfluncerCategory::class,'preferred_categories','category_id','influncer_category_id');
+    // }
 
     public function excludeCategories()
     {

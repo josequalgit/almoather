@@ -85,8 +85,13 @@
                                     @endcan
                                 </div>
                             </div>
-                            @can('See Faq')
+                            {{-- @can('See Faq')
                             {{ $data->links() }}
+                            @endcan --}}
+                            @can('See Faq')
+                            <div class="p-1">
+                                {{ $data->links('pagination::bootstrap-5') }}
+                            </div>
                             @endcan
                         </div>
                     </div>

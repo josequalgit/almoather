@@ -97,7 +97,9 @@
                                 </div>
                             </div>
                             @can('See Admin')
-                            {{ $data->links() }}
+                            <div class="p-1">
+                                {{ $data->links('pagination::bootstrap-5') }}
+                            </div>
                             @endcan
                         </div>
                     </div>

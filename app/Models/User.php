@@ -110,11 +110,16 @@ class User extends Authenticatable implements JWTSubject , HasMedia
     public function getSnapChatVideoAttribute() {
         $mediaItems = $this->getMedia('snapchat_videos');
         $publicFullUrl = null;
+        $array_of_links = [];
         if(count($mediaItems) > 0)
         {
-            $publicFullUrl = $mediaItems[0]->getFullUrl();
+            foreach ($mediaItems as $key => $value) {
+                $publicFullUrl = $mediaItems[$key]->getFullUrl();
+                array_push($array_of_links,$publicFullUrl);
+            }
+           ;
         }
-        return $publicFullUrl;
+        return $array_of_links;
    }
 
 }

@@ -42,6 +42,7 @@ class AdController extends Controller
 
     public function store(AdRequest $request)
     {
+        
         #CHECK IF THERE IS A CONTRACT IN THE DATABASE
         if(!$this->create_contract()) return response()->json([
             'err'=>'There is no contract in the system',
@@ -58,9 +59,20 @@ class AdController extends Controller
         }
         $data = array_merge($request->all(),['customer_id'=>Auth::guard('api')->user()->customers->id]);
 
+        if($request->onSite)
+        {
+            if($this->onSiteValidation($request))
+            {
+                return response()->json([
+                    'err'=>$this->onSiteValidation($request),
+                    'status'=>config('global.WRONG_VALIDATION_STATUS')
+                ],config('global.WRONG_VALIDATION_STATUS'));
+            }
+        }
+
+
         $data = Ad::create($data);
        
-
         if($request->hasFile('video'))
         {
             $data->addMedia($request->file('video'))
@@ -352,6 +364,36 @@ class AdController extends Controller
             'data'=>$this->formate($itemsTransformed , $itemsPaginated),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
+    }
+
+    private function onSiteValidation($request)
+    {
+        if(!$request->delivery_man_name)
+        {
+            return 'Please add a delivery man name';
+        }
+        elseif(!$request->delivery_phone_number)
+        {
+            return 'Please add a delivery phone number';
+        }
+        elseif(!$request->delivery_city_name)
+        {
+            return 'Please add a city name';
+        }
+        elseif(!$request->delivery_area_name)
+        {
+            return 'Please add a area name';
+        }
+        elseif(!$request->delivery_street_name)
+        {
+            return 'Please add a street name';
+        }
+        elseif(!$request->nearest_location)
+        {
+            return 'Please add a nearest location';
+        }
+
+        return false;
     }
 
 

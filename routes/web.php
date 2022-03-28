@@ -108,12 +108,14 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::post('/ads/update/{id}','update')->name('update')->middleware('permission:Edit Ads');
         });
 
-        Route::middleware('role_or_permission:superAdmin|Edit Slide|See Slide|Create Slide')->name('slides.')->controller(SlideController::class)->group(function(){
+        Route::middleware('role_or_permission:superAdmin|Edit Slide|See Slide|Create Slide|Delete Slide')->name('slides.')->controller(SlideController::class)->group(function(){
             Route::get('/slides','index')->name('index')->middleware('permission:See Slide');
             Route::get('/slides/create','create')->name('create')->middleware('permission:Create Slide');
             Route::post('/slides/store','store')->name('store')->middleware('permission:Create Slide');
             Route::get('/slides/edit/{id}','edit')->name('edit')->middleware('permission:Edit Slide');
             Route::post('/slides/update/{id}','update')->name('update')->middleware('permission:Edit Slide');
+            Route::post('/slides/update/{id}','update')->name('update')->middleware('permission:Edit Slide');
+            Route::post('/slides/delete/{id}','delete')->name('delete')->middleware('permission:Delete Slide');
         });
 
         Route::middleware('role_or_permission:superAdmin|Edit Terms')->name('terms.')->controller(ContactUsController::class)->group(function(){
