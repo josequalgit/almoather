@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RegisterController;
+use App\Http\Controllers\Api\UpdateDataController;
 use App\Http\Controllers\Api\AdController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CountryController;
@@ -29,6 +30,14 @@ Route::group(['prefix'=>'auth'],function(){
         Route::post('/influncer','registerInfluncer');
         Route::post('/cutomer','registerCustomer');
         Route::get('/verify/{id}','verify');
+        Route::post('/customer/update/{id}',[RegisterController::class,'updateCustomer']);
+    });
+
+    #UPDATE ROUTES
+    Route::controller(UpdateDataController::class)->prefix('update')->group(function(){
+        Route::post('/customer/{id}','updateCustomer');
+        Route::post('/influencer/{id}','updateInfluncer');
+     
     });
 
       #COUNTRIES ROUTES
@@ -106,6 +115,9 @@ Route::group(['prefix'=>'auth'],function(){
             Route::get('search/{query}','search');
             Route::get('influencers/{influncer_id}/{status?}','get_influencer_ads');
             Route::get('customers/{customer_id}/{status?}','get_customers_ads');
+            Route::get('matched/Influencer/{id}','getMatchedInfluencers');
+            Route::get('matched/not_chosen_Influencer/{id}/{removed_inf_id}','getMatchedInfluencersNotChosen');
+            Route::get('matched/replace_influencer/{id}/{removed_influencer}/{chosen_influencer}','getMatchedInfluencersNotChosen');
 
         });
 

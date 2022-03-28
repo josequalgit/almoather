@@ -396,6 +396,90 @@ class AdController extends Controller
         return false;
     }
 
+<<<<<<< HEAD
+    public function getMatchedInfluencers($id)
+    {
+        $data = Ad::findOrFail($id);
+        $infData = $data->matches()->where('chosen',1)->get()->map(function($item){
+            $inf = $item->influencers;
+            return [
+                'name'=>$inf->full_name,
+                'match'=>$item->match
+            ];
+        });
+
+        return response()->json([
+            'msg'=>'all matched under budget influencer',
+            'data'=>$infData,
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+    }
+
+    public function getMatchedInfluencersNotChosen($id,$removed_inf_id)
+    {
+        $data = Ad::findOrFail($id);
+        $info = User::find($removed_inf_id);
+        if(!$data) return response()->json([
+            'err'=>'ad not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+        if(!$info) return response()->json([
+            'err'=>'user not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+        if(!$info->influncers) return response()->json([
+            'err'=>'user is not a influencer',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
+
+        $infData = $data->matches()->where('chosen',0)->get()->map(function($item) use($data , $info){
+            $currentInf = $item->influencers;
+
+            $eligible = 0;
+            $currentBudget = 0;
+            if($data->onSite)
+            {
+                $currentBudget = ($currentInf->ad_onsite_price <= $info->influncers->ad_onsite_price)?1:0;
+            }
+            else
+            {
+                $currentBudget = ($currentInf->ad_price <= $info->influncers->ad_price)?1:0;
+            }
+            return [
+                'name'=>$currentInf->full_name,
+                'match'=>$item->match,
+                'eligible'=>$currentBudget
+            ];
+        });
+
+        return response()->json([
+            'msg'=>'all matched under budget influencer',
+            'data'=>$infData,
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+    }
+
+    public function replace_matched_influencer($id , $removed_influencer , $chosen_influencer)
+    {
+        $removeFromChosen = AdsInfluencerMatch::where([['ad_id',$id],['influencer_id',$removed_influencer]])->first();
+        
+        $removeFromChosen->chosen = 0;
+        $removeFromChosen->save();
+
+        $addToChosen = AdsInfluencerMatch::where([['ad_id',$id],['influencer_id',$chosen_influencer]])->first();
+        $addToChosen->chosen = 0;
+        $addToChosen->save();
+
+        return response()->json([
+            'msg'=>'data was updated',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+
+
+    }
+
+=======
+>>>>>>> 314a8555ed5eb6ec3ff6ca659b2dbc9dbbb49c10
 
    
 }

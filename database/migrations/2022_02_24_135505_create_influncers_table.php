@@ -40,7 +40,12 @@ return new class extends Migration
             $table->longText('rejected_note')->nullable();
             $table->enum('status',['pending','accepted','rejected','band'])->default('pending');
             $table->bigInteger('user_id')->unsigned();
-
+            $table->longText('commercial_registration_no');
+            $table->longText('tax_registration_number');
+            $table->longText('rep_full_name');
+            $table->longText('rep_id_number_name');
+            $table->longText('rep_phone_number');
+            $table->longText('rep_email');
             $table->timestamps();
         });
     }

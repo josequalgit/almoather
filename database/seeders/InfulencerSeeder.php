@@ -43,7 +43,13 @@ class InfulencerSeeder extends Seeder
                 'birthday'=>Carbon::now(),
                 'address_id'=>1,
                 'bank_id'=>1,
-                'snap_chat_views'=>1
+                'snap_chat_views'=>1,
+                'commercial_registration_no'=>'123123',
+                'tax_registration_number'=>'123123',
+                'rep_full_name'=>'this is a full name',
+                'rep_id_number_name'=>'123556',
+                'rep_phone_number'=>'123556',
+                'rep_email'=>'email@gmail.com',
             ],
             [
                 'full_name'=>[
@@ -70,7 +76,13 @@ class InfulencerSeeder extends Seeder
                 'birthday'=>Carbon::now(),
                 'address_id'=>1,
                 'bank_id'=>1,
-                'snap_chat_views'=>1
+                'snap_chat_views'=>1,
+                'commercial_registration_no'=>'123123',
+                'tax_registration_number'=>'123123',
+                'rep_full_name'=>'this is a full name',
+                'rep_id_number_name'=>'123556',
+                'rep_phone_number'=>'123556',
+                'rep_email'=>'email@gmail.com',
             ],
             [
                 'full_name'=>[
@@ -98,6 +110,12 @@ class InfulencerSeeder extends Seeder
                 'address_id'=>1,
                 'bank_id'=>1,
                 'snap_chat_views'=>1,
+                'commercial_registration_no'=>'123123',
+                'tax_registration_number'=>'123123',
+                'rep_full_name'=>'this is a full name',
+                'rep_id_number_name'=>'123556',
+                'rep_phone_number'=>'123556',
+                'rep_email'=>'email@gmail.com'
             ]
         ];
         $users = [

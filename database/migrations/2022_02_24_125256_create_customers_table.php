@@ -25,6 +25,9 @@ return new class extends Migration
             $table->bigInteger('region_id')->unsigned();
             $table->bigInteger('nationality_id')->unsigned();
             $table->bigInteger('city_id')->unsigned();
+            $table->longText('commercial_registration_no');
+            $table->longText('tax_registration_number');
+            $table->date('starting_date')->nullable();
             $table->enum('status',['active','band'])->default('active');
             $table->timestamps();
         });

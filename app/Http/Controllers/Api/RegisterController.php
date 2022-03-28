@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\InfluncerRequest;
 use App\Http\Requests\Api\CustomerRequest;
+<<<<<<< HEAD
+use App\Http\Requests\Api\UpdateCustomerRequest;
+=======
+>>>>>>> 314a8555ed5eb6ec3ff6ca659b2dbc9dbbb49c10
 use App\Models\User;
 use App\Models\Influncer;
 use App\Models\Customer;
@@ -71,7 +75,17 @@ class RegisterController extends Controller
             'address_id',
             'bank_id',
             'snap_chat_views',
+<<<<<<< HEAD
+            'snap_chat_video',
+            'commercial_registration_no',
+            'tax_registration_number',
+            'rep_full_name',
+            'rep_id_number_name',
+            'rep_phone_number',
+            'rep_email',
+=======
             'snap_chat_video'
+>>>>>>> 314a8555ed5eb6ec3ff6ca659b2dbc9dbbb49c10
         ]);
 
        $addUserId =  array_merge($influncerData,['user_id'=>$data->id]);
@@ -143,7 +157,14 @@ class RegisterController extends Controller
             'region_id',
             'user_id',
             'city_id',
+<<<<<<< HEAD
+            'id_number',
+            'commercial_registration_no',
+            'tax_registration_number',
+            'starting_date'    
+=======
             'id_number'
+>>>>>>> 314a8555ed5eb6ec3ff6ca659b2dbc9dbbb49c10
         ]);
         $addUserId =  array_merge($customerData,['user_id'=>$data->id]);
         $newCustomer = Customer::create($addUserId);
@@ -216,6 +237,61 @@ class RegisterController extends Controller
         return null;
     }
 
+<<<<<<< HEAD
+    public function updateCustomer(UpdateCustomerRequest $request , $id)
+    {
+        if($this->checkIfDataAvalibale($request))
+        {
+            return response()->json([
+                'msg'=>$this->checkIfDataAvalibale($request),
+                'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
+        }
+        $info =[
+            'msg'=>$request->message,
+        ];
+        $commingRequest =  array_merge($request->only(['email','password','name']),['password'=>bcrypt($request->password)]);
+        $data = User::find($id);
+        $data->update($commingRequest);
+        if($request->hasFile('image')){
+            $data->clearCollection('customers')
+            ->addMedia($request->file('image'))
+            ->toMediaCollection('customers');
+        }
+
+        $customerData = $request->only([
+            'first_name',
+            'last_name',
+            'phone',
+            'country_id',
+            'nationality_id',
+            'region_id',
+            'user_id',
+            'city_id',
+            'id_number'
+        ]);
+        $addUserId =  array_merge($customerData,['user_id'=>$data->id]);
+        $newCustomer = Customer::find($data->customers->id);
+        $newCustomer->update($addUserId);
+       
+
+        $users = [User::find(1)];
+        $info =[
+            'msg'=>'Customer "'.$newCustomer->first_name.'" was updated'
+        ];
+        Notification::send($users, new AddInfluencer($info));
+        $info = $data->customers;
+        $token = Auth::guard('api')->attempt(['email'=>$request->email,'password'=>$request->password]);
+
+        return response()->json([
+            'msg'=>'Customer was updated',
+            'data'=>$this->userDataResponse($data , $token),
+            'status'=>config('global.CREATED_STATUS')
+        ],config('global.CREATED_STATUS'));
+    }
+
+=======
+>>>>>>> 314a8555ed5eb6ec3ff6ca659b2dbc9dbbb49c10
   
 
 

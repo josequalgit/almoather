@@ -7,7 +7,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CustomerRequest extends FormRequest
+class UpdateCustomerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,51 +30,29 @@ class CustomerRequest extends FormRequest
             'first_name'=>'required',
             'last_name'=>'required',
             'phone'=>'required',
-            'password'=>'required|confirmed',
-            'password_confirmation' => 'required',
-            'email'=>'required|unique:users',
+            'password'=>'confirmed',
+            'password_confirmation' => '',
+            'email'=>'required',
             'country_id'=>'required',
-            'image'=>'required',
             'region_id'=>'required',
             'nationality_id'=>'required',
             'city_id'=>'required',
             'id_number'=>'required',
-<<<<<<< HEAD
             'commercial_registration_no'=>'required',
             'tax_registration_number'=>'required',
             'starting_date'=>''  
-=======
->>>>>>> 314a8555ed5eb6ec3ff6ca659b2dbc9dbbb49c10
-
-
         ];
     }
-
-     /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'country_id.required' => 'Please choose your country',
-            'city_id.required' => 'Please choose your city',
-            'region_id.required' => 'Please choose your region',
-            'nationality_id.required' => 'Please choose your nationality'
-        ];
-    }
-
-         /**
+    
+          /**
     * Get the error messages for the defined validation rules.*
     * @return array
     */
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-            'err' => $validator->errors()->all()[0],
-            'status' => 422
-        ], 422));
+        'err' => $validator->errors()->all()[0],
+        'status' => config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS')));
     }
-    
 }

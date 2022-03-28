@@ -39,6 +39,12 @@ trait UserResponse {
              'ad_with_vat'=>$info->ad_with_vat,
              'snap_chat_views'=>$info->snap_chat_views,
              'snap_chat_video'=>$user->snapChatVideo,
+             'commercial_registration_no'=>$info->commercial_registration_no,
+             'tax_registration_number'=>$info->tax_registration_number,
+             'rep_full_name'=>$info->rep_full_name,
+             'rep_id_number_name'=>$info->rep_id_number_name,
+             'rep_phone_number'=>$info->rep_phone_number,
+             'rep_email'=>$info->rep_email,
              'ad_onsite_price_with_vat'=>$info->ad_onsite_price_with_vat,
              'preferred_socialMedias'=>$info->socialMedias->pluck('id')->toArray(),
              'is_verify'=>$info->users->email_verified_at ? true : false,
@@ -62,6 +68,9 @@ trait UserResponse {
                 'city_id'=>$info->citys->id,
                 'email'=>$user->email,
                 'phone'=>$info->phone,
+                'commercial_registration_no'=>$info->commercial_registration_no,
+                'tax_registration_number'=>$info->tax_registration_number,
+                'starting_date'=>$info->starting_date,
            ];
            if($token) $formate['token'] = $token;
 

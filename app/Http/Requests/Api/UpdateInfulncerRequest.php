@@ -7,7 +7,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class InfluncerRequest extends FormRequest
+class UpdateInfulncerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -39,10 +39,10 @@ class InfluncerRequest extends FormRequest
             'city_id'=>'required',
             'country_id'=>'required',
             'nationality_id'=>'required',
-            'email'=>'required|unique:users',
-            'password'=>'required|confirmed',
-            'password_confirmation' => 'required',
-            'image'=>'required',
+            'email'=>'',
+            'password'=>'',
+            'password_confirmation' => '',
+            'image'=>'',
             'is_vat'=>'required',
             'ad_price'=>'required',
             'ad_onsite_price'=>'required',
@@ -54,23 +54,11 @@ class InfluncerRequest extends FormRequest
             'address_id'=>'required',
             'social_media'=>'required',
             'bank_id'=>'required',
-            'snap_chat_views'=>'required',
-            'snap_chat_video'=>'required',
-            'commercial_registration_no'=>'required',
-            'tax_registration_number'=>'required',
-            'rep_full_name'=>'required',
-            'rep_id_number_name'=>'required',
-            'rep_phone_number'=>'required',
-            'rep_email'=>'required',
-           // 'snap_chat_video'=>'required|mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4',
+            'snap_chat_views'=>'',
+            'snap_chat_video'=>'',
         ];
     }
 
-      /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array
-     */
     public function messages()
     {
         return [
@@ -85,13 +73,6 @@ class InfluncerRequest extends FormRequest
         ];
     }
 
-   
-	
-	
-	   /**
-    * Get the error messages for the defined validation rules.*
-    * @return array
-    */
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
@@ -99,4 +80,4 @@ class InfluncerRequest extends FormRequest
         'status' => 422
         ], 422));
     }
-    }
+}

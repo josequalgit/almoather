@@ -19,7 +19,10 @@ class Customer extends Model
         'city_id',
         'nationality_id',
         'status',
-        'id_number'
+        'id_number',
+        'commercial_registration_no',
+        'tax_registration_number',
+        'starting_date',
     ];
 
     public function users()
