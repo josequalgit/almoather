@@ -396,6 +396,7 @@ class AdController extends Controller
         return false;
     }
 
+<<<<<<< HEAD
     public function getMatchedInfluencers($id)
     {
         $data = Ad::findOrFail($id);
@@ -477,6 +478,8 @@ class AdController extends Controller
 
     }
 
+=======
+>>>>>>> 314a8555ed5eb6ec3ff6ca659b2dbc9dbbb49c10
 
    
 }

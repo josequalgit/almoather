@@ -12,7 +12,11 @@ class FaqController extends Controller
     public function index()
     {
         $data = FAQ::paginate(10);
+<<<<<<< HEAD
         //return $data;
+=======
+        
+>>>>>>> 314a8555ed5eb6ec3ff6ca659b2dbc9dbbb49c10
         return view('dashboard.faqs.index',compact('data'));
     }
 
