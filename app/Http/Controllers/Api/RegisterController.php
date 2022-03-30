@@ -41,8 +41,15 @@ class RegisterController extends Controller
 
         $commingRequest =  array_merge($request->only(['email','password','name']),['password'=>bcrypt($request->password)]);
         $data = User::create($commingRequest);
+
         $data->addMedia($request->file('image'))
         ->toMediaCollection('influncers');
+
+        $data->addMedia($request->file('commercial_registration_no_files'))
+        ->toMediaCollection('commercial_registration_no_files');
+
+        $data->addMedia($request->file('tax_registration_number_file'))
+        ->toMediaCollection('tax_registration_number_file');
         
         foreach ($request->snap_chat_video as $value) {
             $data->addMedia($value)
@@ -141,6 +148,11 @@ class RegisterController extends Controller
         $data = User::create($commingRequest);
         $data->addMedia($request->file('image'))
         ->toMediaCollection('customers');
+        $data->addMedia($request->file('commercial_registration_no_files'))
+        ->toMediaCollection('commercial_registration_no_files');
+
+        $data->addMedia($request->file('tax_registration_number_file'))
+        ->toMediaCollection('tax_registration_number_file');
 
         $customerData = $request->only([
             'first_name',

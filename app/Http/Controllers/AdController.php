@@ -33,8 +33,10 @@ class AdController extends Controller
     public function edit($id)
     {
         $data = Ad::findOrFail($id);
+        $matches = $data->matches()->where('chosen',1)->get();
+        $unMatched = $data->matches()->where('chosen',0)->get();
         $categories = Category::get();
-        return view('dashboard.ads.edit',compact('data','categories'));
+        return view('dashboard.ads.edit',compact('data','matches','unMatched','categories'));
     }
 
     public function update(Request $request , $id)
@@ -167,6 +169,64 @@ class AdController extends Controller
             'msg'=>'data was updated',
             'status'=>201
         ],201);
+    }
+
+    public function changeMatch($ad_id,$removed_inf,$chosen_inf)
+    {
+        $ad = Ad::find($ad_id);
+
+        $chosenInf = $ad->onSite ? User::find($chosen_inf)->influncers->ad_onsite_price:User::find($chosen_inf)->influncers->ad_price;
+        $oldInf = $ad->onSite ? User::find($removed_inf)->influncers->ad_onsite_price:User::find($removed_inf)->influncers->ad_price;
+        $newBud = $ad->budget + $chosenInf - $oldInf;
+
+
+        if($chosenInf > $oldInf && $ad->budget > $newBud)
+        {
+            return response()->json([
+                'msg'=>'please increase your budget',
+                'status'=>401
+            ],401);
+        }
+
+
+
+        $changeOld = AdsInfluencerMatch::where([['ad_id',$ad->id],['influencer_id',User::find($removed_inf)->influncers->id]])->first();
+        $changeOld->chosen = 0;
+        $changeOld->save();   
+        
+
+
+        $changeNew = AdsInfluencerMatch::where([['ad_id',$ad->id],['influencer_id',User::find($chosen_inf)->influncers->id]])->first();
+        $changeNew->chosen = 1;
+        $changeNew->save();
+
+        
+        return response()->json([
+            'msg'=>'data was updated',
+            'status'=>200
+        ],200);
+    }
+
+    public function seeMatched($ad_id)
+    {
+        $data = Ad::find($ad_id);
+        if(!$data) return response()->json([
+            'msg'=>'ad not found',
+            'status'=>404
+        ],404);
+        $matches = $data->matches()->where('chosen',1)->get()->map(function($item){
+            return[
+                'image'=>$item->influencers->users->infulncerImage,
+                'name'=>$item->influencers->full_name,
+                'match'=>$item->match
+            ];
+        });
+
+        return response()->json([
+            'msg'=>'ad was found',
+            'data'=>$matches,
+            'status'=>200
+        ],200);
     }
 
     private function makOneArray($arrayOfArray)

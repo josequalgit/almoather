@@ -27,29 +27,20 @@ class AdRequest extends FormRequest
     public function rules()
     {
         return [
-            'type'=>'required',
+            // 'type'=>'required',
             'logo'=>'required',
             'store'=>'required',
             'budget'=>'required',
-            'onSite'=>'required',
+            'ad_type'=>'required',
             'about'=>'required',
-            'status'=>'required',
+            // 'status'=>'required',
             'country_id'=>'required',
             'city_id'=>'required',
             'area_id'=>'required',
-            'hasStore'=>'required',
-            'has_discount_code'=>'required',
-            'date'=>'required|date',
-            'delivery_man_name'=>'',
-            'delivery_phone_number'=>'',
-            'delivery_city_name'=>'',
-            'delivery_area_name'=>'',
-            'delivery_street_name'=>'',
-            'nearest_location'=>'required',
-            'image'=>'required|mimes:jpg,bmp,png',
-            'social_media_id'=>'required',
-            'video'=>'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:100000',
-            'documnet'=>'mimes:jpg,bmp,png,pdf|max:2048',
+            'image'=>'required',
+            'social_media'=>'required',
+            //'video'=>'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:100000',
+            'cr_image'=>'mimes:jpg,bmp,png,pdf|max:2048',
 
         ];
     }
@@ -62,10 +53,10 @@ class AdRequest extends FormRequest
     public function messages()
     {
         return [
-            'type.required' => 'Please choose the ad type',
+            // 'type.required' => 'Please choose the ad type',
             'store.required' => 'Please add the store name',
             'budget.required' => 'Please add the ad budget',
-            'onSite.required' => 'Please choose if the ad require to be onsite',
+            'ad_type.required' => 'Please choose if the ad require to be onsite',
             'country_id.required' => 'Please choose the country',
             'city_id.required' => 'Please choose the city',
             'area_id.required' => 'Please choose the area',

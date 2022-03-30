@@ -17,7 +17,7 @@ use Validator;
 use App\Http\Traits\UserResponse;
 use App\Http\Traits\ApiPaginator;
 use App\Http\Traits\AdResponse;
-
+use DB;
 
 class AdController extends Controller
 {
@@ -49,7 +49,7 @@ class AdController extends Controller
         ],config('global.NOT_FOUND_STATUS'));
 
         #CHECK REQUEST 
-        if(!$request->hasFile('documnet')&&!$request->auth_number)
+        if(!$request->hasFile('cr_image')&&!$request->has_marouf_num)
         {
             return response()->json([
                 'err'=>'please upload a document or add the authentication number',
@@ -58,7 +58,7 @@ class AdController extends Controller
         }
         $data = array_merge($request->all(),['customer_id'=>Auth::guard('api')->user()->customers->id]);
 
-        if($request->onSite)
+        if($request->ad_type == 'onsite')
         {
             if($this->onSiteValidation($request))
             {
@@ -71,20 +71,53 @@ class AdController extends Controller
 
 
         $data = Ad::create($data);
-       
-        if($request->hasFile('video'))
+
+        if(count($request->prefered_media_id) > 0)
         {
-            $data->addMedia($request->file('video'))
-            ->toMediaCollection('adVideos');
+            foreach ($request->prefered_media_id as $value) {
+
+              //  DB::table('ads_media_id')->insert([
+                //    'ad_id'=>$data->id,
+              //      'social_media_id'=>$value['type']??$value->type,
+              //      'link'=>$value['link']??$value->type
+             //   ]);
+				$data->socialMediasAccount()->attach($value);
+				$data->save();
+
+				
+            }
         }
-        if($request->hasFile('image'))
+		 if(count($request->social_media) > 0)
         {
-            $data->addMedia($request->file('image'))
+            foreach ($request->social_media as $value) {
+
+                DB::table('social_media_id')->insert([
+                    'ad_id'=>$data->id,
+                   'social_media_id'=>$value['type']??$value->type,
+                   'link'=>$value['link']??$value->type
+                ]);
+				//$data->socialMedias()->attach($value);
+			//	$data->save();
+            }
+        }
+        if($request->video&&count($request->video) > 0)
+        {
+            foreach ($request->video as $value) {
+                $data->addMedia($value)
+                ->toMediaCollection('adVideos');
+            }
+        }
+
+        if($request->video&&count($request->image) > 0)
+        {
+            foreach ($request->image as $value) {
+                $data->addMedia($value)
             ->toMediaCollection('adImage');
+            }
         }
-        if($request->hasFile('document'))
+        if($request->hasFile('cr_image'))
         {
-            $data->addMedia($request->file('document'))
+            $data->addMedia($request->file('cr_image'))
             ->toMediaCollection('document');
         }
         if($request->hasFile('logo'))
@@ -92,6 +125,8 @@ class AdController extends Controller
             $data->addMedia($request->file('logo'))
             ->toMediaCollection('logos');
         }
+
+
         $users = [User::find(1)];
         $info =[
             'msg'=>'Customer "'.Auth::guard('api')->user()->customers->first_name.'" added new ad'
@@ -100,9 +135,7 @@ class AdController extends Controller
 
         return response()->json([
             'msg'=>'ad was created',
-            'data'=>[
-                'id'=>$data->id
-            ],
+            'data'=>$this->adResponse($data),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
     }
@@ -367,30 +400,43 @@ class AdController extends Controller
 
     private function onSiteValidation($request)
     {
-        if(!$request->delivery_man_name)
+        if($request->has_marouf_num&&!$request->marouf_num)
         {
-            return 'Please add a delivery man name';
+            return 'Please add a marouf  number';
         }
-        elseif(!$request->delivery_phone_number)
+        elseif(!$request->has_marouf_num&&!$request->cr_num)
         {
-            return 'Please add a delivery phone number';
+            return 'Please add a cr number';
         }
-        elseif(!$request->delivery_city_name)
+        elseif(!$request->has_marouf_num&&!$request->cr_image)
         {
-            return 'Please add a city name';
+            return 'Please add a cr image';
         }
-        elseif(!$request->delivery_area_name)
+        elseif($request->has_online_store&&!$request->store_link)
         {
-            return 'Please add a area name';
+            return 'Please add a store link';
         }
-        elseif(!$request->delivery_street_name)
+		  elseif($request->has_offer&&!$request->offer > 0)
         {
-            return 'Please add a street name';
+            return 'Please add an offer';
         }
-        elseif(!$request->nearest_location)
+		  elseif(!$request->prefered_media_id)
         {
-            return 'Please add a nearest location';
+            return 'Please add an prefered media id';
         }
+		  elseif($request->has_marouf_num == 1&&!$request->marouf_num)
+        {
+            return 'Please add marouf number';
+        }
+		  elseif($request->has_marouf_num == 0&&!$request->cr_num)
+        {
+            return 'Please add cr number';
+        }
+		  elseif($request->has_marouf_num == 0&&!$request->cr_image)
+        {
+            return 'Please add cr image';
+        }
+
 
         return false;
     }
@@ -475,6 +521,5 @@ class AdController extends Controller
 
 
     }
-
    
 }

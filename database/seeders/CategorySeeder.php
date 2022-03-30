@@ -29,6 +29,20 @@ class CategorySeeder extends Seeder
                     'en'=>'Entertainment'
                 ],
                 'type'=>'product'
+            ],
+            [
+                'name'=>[
+                    'ar'=>'تجربه1',
+                    'en'=>'Test1'
+                ],
+                'type'=>'service',
+            ],
+            [
+                'name'=>[
+                    'ar'=>'تجربه2',
+                    'en'=>'Test2'
+                ],
+                'type'=>'product'
             ]
         ];
         foreach ($data as $item) {
@@ -50,6 +64,18 @@ class CategorySeeder extends Seeder
                 'name'=>[
                     'ar'=>'افلام',
                     'en'=>'Movies'
+                ]
+            ],
+            [
+                'name'=>[
+                    'ar'=>'2بيس بول',
+                    'en'=>'BaseBall2'
+                ]
+            ],
+            [
+                'name'=>[
+                    'ar'=>'2افلام',
+                    'en'=>'Movies2'
                 ]
             ]
         ];

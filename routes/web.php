@@ -106,6 +106,9 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/ads/{status?}','index')->name('index')->middleware('permission:See Ads');
             Route::get('/ads/edit/{id}','edit')->name('edit')->middleware('permission:Edit Ads');
             Route::post('/ads/update/{id}','update')->name('update')->middleware('permission:Edit Ads');
+            Route::get('/ads/changeMatch/{ad_id}/{removed_inf}/{chosen_inf}','changeMatch')->name('changeMatch')->middleware('permission:Edit Ads');
+            Route::get('/ads/seeMatched/{ad_id}','seeMatched')->name('seeMatched');
+
         });
 
         Route::middleware('role_or_permission:superAdmin|Edit Slide|See Slide|Create Slide|Delete Slide')->name('slides.')->controller(SlideController::class)->group(function(){

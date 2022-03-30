@@ -22,7 +22,6 @@ class Customer extends Model
         'id_number',
         'commercial_registration_no',
         'tax_registration_number',
-        'starting_date',
     ];
 
     public function users()

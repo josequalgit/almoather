@@ -148,6 +148,22 @@ class UpdateDataController extends Controller
             ->toMediaCollection('influncers');
         }
 
+        if($request->hasFile('commercial_registration_no_files'))
+        {
+
+            $data->clearCollection('customers')
+            ->addMedia($request->file('commercial_registration_no_files'))
+            ->toMediaCollection('commercial_registration_no_files');
+        }
+
+        if($request->hasFile('tax_registration_number_file'))
+        {
+
+            $data->clearCollection('customers')
+            ->addMedia($request->file('tax_registration_number_file'))
+            ->toMediaCollection('tax_registration_number_file');
+        }
+
         if($request->snap_chat_video)
         {
 
@@ -257,5 +273,5 @@ class UpdateDataController extends Controller
 
         return null;
     }
-
+    
 }

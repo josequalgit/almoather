@@ -40,9 +40,9 @@ class CustomerRequest extends FormRequest
             'city_id'=>'required',
             'id_number'=>'required',
             'commercial_registration_no'=>'required',
+            'commercial_registration_no_files'=>'required',
             'tax_registration_number'=>'required',
-            'starting_date'=>''  
-
+            'tax_registration_number_file'=>'required'
         ];
     }
 

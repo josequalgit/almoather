@@ -72,7 +72,7 @@ trait UserResponse {
                 'tax_registration_number'=>$info->tax_registration_number,
                 'starting_date'=>$info->starting_date,
            ];
-           if($token) $formate['token'] = $token;
+           if($token) $formate['token'] = $token; 
 
        }
 

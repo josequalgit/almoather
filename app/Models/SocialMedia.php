@@ -22,7 +22,12 @@ class SocialMedia extends Model implements HasMedia
 
     public function ads()
     {
-        return $this->hasMany(Ad::class,'social_media_id');
+        return $this->belongsToMany(Ad::class,'social_media_id');
+    }
+	
+	 public function prefired_ads()
+    {
+        return $this->belongsToMany(Ad::class,'prefired_id');
     }
 
     public function influncers()

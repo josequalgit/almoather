@@ -15,33 +15,25 @@ class Ad extends Model implements HasMedia
     protected $fillable = [
         'type',
         'store',
-        'budget',
-        'auth_number',
-        'onSite',
+        'ad_type',
+        'marouf_num',
+        'store_link',
+        'cr_num',
         'about',
-        'status',
+        'scenario',
+        'budget',
+        'discount_code',
         'social_media_id',
         'country_id',
         'city_id',
         'area_id',
         'customer_id',
-        'influncer_id',
         'category_id',
-        'website_link',
-        'ad_script',
+        'status',
+        'influncer_id',
         'reject_note',
-        'date',
         'expense_type',
-        'is_verified',
-        'media_account_id',
-        'delivery_man_name',
-        'delivery_phone_number',
-        'nearest_location',
-        'delivery_city_name',
-        'delivery_area_name',
-        'delivery_street_name',
-        'discount_code'
-
+        'is_verified'
     ];
 
     protected $append = 
@@ -54,13 +46,13 @@ class Ad extends Model implements HasMedia
 
     public function socialMedias()
     {
-        return $this->belongsTo(SocialMedia::class,'social_media_id');
+        return $this->belongsToMany(SocialMedia::class,'social_media_id');
     }
-
+	
 
     public function socialMediasAccount()
     {
-        return $this->belongsTo(SocialMedia::class,'media_account_id');
+        return $this->belongsToMany(SocialMedia::class,'prefered_media_id','ad_id','media_id');
     }
 
     public function countries()
@@ -125,19 +117,28 @@ class Ad extends Model implements HasMedia
 
     public function getImageAttribute() {
         $mediaItems = $this->getMedia('adImage');
-        $publicFullUrl = null;
+        $publicFullUrl = [];
         if(count($mediaItems) > 0)
         {
-            $publicFullUrl = $mediaItems[0]->getFullUrl();
-        }
+			foreach($mediaItems as $item)
+			{
+				// $publicFullUrl = $item->getFullUrl();
+				array_push($publicFullUrl,$item->getFullUrl());
+			}
+			        }
         return $publicFullUrl;
    }
     public function getVideosAttribute() {
         $mediaItems = $this->getMedia('adVideos');
-        $publicFullUrl = null;
+        $publicFullUrl = [];
         if(count($mediaItems) > 0)
         {
-            $publicFullUrl = $mediaItems[0]->getFullUrl();
+			foreach($mediaItems as $item)
+			{
+				// $publicFullUrl = $item->getFullUrl();
+				array_push($publicFullUrl,$item->getFullUrl());
+			}
+           
         }
         return $publicFullUrl;
    }
