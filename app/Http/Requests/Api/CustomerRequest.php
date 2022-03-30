@@ -38,9 +38,7 @@ class CustomerRequest extends FormRequest
             'region_id'=>'required',
             'nationality_id'=>'required',
             'city_id'=>'required',
-            'milestone'=>'required',
-            'street'=>'required',
-            'neighborhood'=>'required',
+           
 
         ];
     }

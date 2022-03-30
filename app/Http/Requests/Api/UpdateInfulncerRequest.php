@@ -55,6 +55,9 @@ class UpdateInfulncerRequest extends FormRequest
             'bank_id'=>'required',
             'snap_chat_views'=>'',
             'snap_chat_video'=>'',
+            'milestone'=>'required',
+            'street'=>'required',
+            'neighborhood'=>'required',
         ];
     }
 
