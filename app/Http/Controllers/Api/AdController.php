@@ -27,7 +27,17 @@ class AdController extends Controller
 
     public function index($status)
     {
-        $data = Ad::where('status',$status)->paginate(10);
+        $user_id = Auth::guard('api')->user()->influncers ? Auth::guard('api')->user()->influncers->id :Auth::guard('api')->user()->customers->id;
+
+        if(Auth::guard('api')->user()->influncers)
+        {
+            $data = Ad::where([['influncer_id',$user_id],['status',$status]])->paginate(10);
+        }
+        else
+        {
+            $data = Ad::where([['customer_id',$user_id],['status',$status]])->paginate(10);
+        }
+
         $data->getCollection()->transform(function($item){
             return $this->adResponse($item);
         });
@@ -221,36 +231,19 @@ class AdController extends Controller
 
     public function search($query)
     {
-        $data = Ad::where('store','LIKE',"%{$query}%")->paginate(config('global.PAGINATION_NUMBER'));
+
+        $user_id = Auth::guard('api')->user()->influncers ? Auth::guard('api')->user()->influncers->id :Auth::guard('api')->user()->customers->id;
+        if(Auth::guard('api')->user()->influncers)
+        {
+            $data = Ad::where([['influncer_id',$user_id],['store','LIKE',"%{$query}%"]])->paginate(10);
+        }
+        else
+        {
+            $data = Ad::where([['customer_id',$user_id],['store','LIKE',"%{$query}%"]])->paginate(10);
+        }
+
         $data->getCollection()->transform(function($item){
-            $influncers_info = null;
-            if($item->influncers) 
-            {
-                $influncers_info = [
-                    'name_en'=>$item->influncers->full_name_en,
-                    'name_ar'=>$item->influncers->full_name_ar,
-                    'image'=>$item->influncers->users->image
-                ];
-            }
-            return [
-                'id'=>$item->id,
-                'store_name'=>$item->store,
-                'image'=>$item->image,
-                'budget'=>$item->budget,
-                'about'=>$item->about,
-                'location'=>$item->countries()->select(['name','code'])->get(),
-                'auth_number'=>$item->auth_number,
-                'category'=>$item->categories->name,
-                'date'=>$item->date,
-                'videos'=>$item->videos,
-                'social_media'=>[
-                    'name'=>$item->socialMedias->name,
-                    'logo'=>$item->socialMedias->image
-                ],
-                'influencer'=>$influncers_info,
-                'script'=>$item->ad_script,
-                'contract_id'=>$item->contacts->id
-            ];
+             return $this->adResponse($item);
         });
 
 
@@ -283,44 +276,7 @@ class AdController extends Controller
 
 
         $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item){
-            $customer_info = null;
-            if($item->customers) 
-            {
-                $customer_info = [
-                    'first_name'=>$item->customers->first_name,
-                    'last_name'=>$item->customers->last_name,
-                    'phone'=>$item->customers->phone,
-                    'country'=>$item->customers->countrys->name,
-                    'cities'=>$item->customers->citys->name,
-                    'nationality'=>$item->customers->nationalities->name,
-                    'status'=>$item->customers->status,
-                    'image'=>$item->customers->users->image
-                ];
-            }
-
-          
-
-            return [
-                'id'=>$item->id,
-                'store_name'=>$item->store,
-                'image'=>$item->image,
-                'budget'=>$item->budget,
-                'about'=>$item->about,
-                'city'=>$item->cities()->select(['id','name'])->first(),
-                'country'=>$item->countries()->select(['id','name'])->first(),
-                'auth_number'=>$item->auth_number,
-                'category'=>$item->categories->name,
-                'date'=>$item->date,
-                 'videos'=>$item->videos,
-                'social_media'=>[
-                    'name'=>$item->socialMedias->name,
-                    'logo'=>$item->socialMedias->image
-                ],
-                'customer'=>$customer_info,
-                'script'=>$item->ad_script,
-                'service_type'=>$item->type,
-                'type'=>$item->onSite ? 'Online Advertisement' :'Site Advertisement',
-            ];
+            return $this->adResponse($item);
 
         })->toArray();
 
@@ -354,40 +310,7 @@ class AdController extends Controller
 
 
         $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item){
-            $customer_info = null;
-            if($item->customers) 
-            {
-                $customer_info = [
-                    'name_en'=>$item->customers->full_name_en,
-                    'name_ar'=>$item->customers->full_name_ar,
-                    'image'=>$item->customers->users->image
-                ];
-            }
-
-          
-
-            return [
-                'id'=>$item->id,
-                'store_name'=>$item->store,
-                'image'=>$item->image,
-                'budget'=>$item->budget,
-                'about'=>$item->about,
-                'city'=>$item->cities()->select(['id','name'])->first(),
-                'country'=>$item->countries()->select(['id','name'])->first(),
-                'auth_number'=>$item->auth_number,
-                'category'=>$item->categories->name,
-                'date'=>$item->date,
-                 'videos'=>$item->videos,
-                'social_media'=>[
-                    'name'=>$item->socialMedias->name,
-                    'logo'=>$item->socialMedias->image
-                ],
-                'customer'=>$customer_info,
-                'script'=>$item->ad_script,
-                'service_type'=>$item->type,
-                'type'=>$item->onSite ? 'Online Advertisement' :'Site Advertisement',
-            ];
-
+            return $this->adResponse($item);
         })->toArray();
 
 
@@ -520,6 +443,58 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
 
 
+    }
+
+    public function before_payment($id)
+    {
+        $data = Ad::find($id);
+        if(!$data) return response()->json([
+            'err'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+
+        return response()->json([
+            'msg'=>'all matches blurred',
+            'data'=>[
+                'type'=>$data->type,
+                'category'=>$data->categories->name,
+                'budget'=>$data->budget,
+                'matches'=>$data->matches()->get()->map(function($item){
+                    return $item->match;
+                })
+            ],
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+    }
+
+    public function pay_now($id)
+    {
+        $data = Ad::find($id);
+        if(!$data) return response()->json([
+            'err'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+        $data->status = 'fullpayment';
+        $data->save();
+
+        $cal = $data->budget*5.5%100;
+
+        return response()->json([
+            'msg'=>'all matches',
+            'data'=>[
+                'type'=>$data->type,
+                'category'=>$data->categories->name,
+                'budget'=>$data->budget,
+                'matches'=>$data->matches()->get()->map(function($item){
+                    return [
+                        'name'=>$item->influencers->full_name,
+                        'rate'=>$item->match
+                    ];
+                })
+            ],
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
    
 }
