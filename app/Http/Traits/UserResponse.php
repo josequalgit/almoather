@@ -27,7 +27,7 @@ trait UserResponse {
              'address_id'=>$info->address_id,
              'ad_price'=>$info->ad_price,
              'ad_onsite_price'=>$info->ad_onsite_price,
-             'bank_id'=>$info->banks->id,
+             'bank'=>$info->bank_name,
              'bank_account_number'=>$info->bank_account_number,
              'email'=>$user->email,
              'phone'=>$info->phone,
