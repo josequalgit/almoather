@@ -67,6 +67,7 @@ class InfluncerRequest extends FormRequest
             'rep_email'=>'required',
             'tax_registration_number_file'=>'required',
             'commercial_registration_no_file'=>'required',
+            
            // 'snap_chat_video'=>'required|mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4',
         ];
     }
