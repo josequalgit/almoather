@@ -17,7 +17,11 @@ use Validator;
 use App\Http\Traits\UserResponse;
 use App\Http\Traits\ApiPaginator;
 use App\Http\Traits\AdResponse;
+<<<<<<< HEAD
 use DB;
+=======
+
+>>>>>>> 65256aeaf8b20552bfa3f6570ebcf5e75f9a6ef9
 
 class AdController extends Controller
 {
@@ -42,6 +46,10 @@ class AdController extends Controller
 
     public function store(AdRequest $request)
     {
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 65256aeaf8b20552bfa3f6570ebcf5e75f9a6ef9
         #CHECK IF THERE IS A CONTRACT IN THE DATABASE
         if(!$this->create_contract()) return response()->json([
             'err'=>'There is no contract in the system',
@@ -49,7 +57,11 @@ class AdController extends Controller
         ],config('global.NOT_FOUND_STATUS'));
 
         #CHECK REQUEST 
+<<<<<<< HEAD
         if(!$request->hasFile('cr_image')&&!$request->has_marouf_num)
+=======
+        if(!$request->hasFile('documnet')&&!$request->auth_number)
+>>>>>>> 65256aeaf8b20552bfa3f6570ebcf5e75f9a6ef9
         {
             return response()->json([
                 'err'=>'please upload a document or add the authentication number',
@@ -71,6 +83,7 @@ class AdController extends Controller
 
 
         $data = Ad::create($data);
+<<<<<<< HEAD
 
         if(count($request->social_media) > 0)
         {
@@ -101,6 +114,22 @@ class AdController extends Controller
         if($request->hasFile('cr_image'))
         {
             $data->addMedia($request->file('cr_image'))
+=======
+       
+        if($request->hasFile('video'))
+        {
+            $data->addMedia($request->file('video'))
+            ->toMediaCollection('adVideos');
+        }
+        if($request->hasFile('image'))
+        {
+            $data->addMedia($request->file('image'))
+            ->toMediaCollection('adImage');
+        }
+        if($request->hasFile('document'))
+        {
+            $data->addMedia($request->file('document'))
+>>>>>>> 65256aeaf8b20552bfa3f6570ebcf5e75f9a6ef9
             ->toMediaCollection('document');
         }
         if($request->hasFile('logo'))
@@ -108,8 +137,11 @@ class AdController extends Controller
             $data->addMedia($request->file('logo'))
             ->toMediaCollection('logos');
         }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 65256aeaf8b20552bfa3f6570ebcf5e75f9a6ef9
         $users = [User::find(1)];
         $info =[
             'msg'=>'Customer "'.Auth::guard('api')->user()->customers->first_name.'" added new ad'
@@ -385,6 +417,7 @@ class AdController extends Controller
 
     private function onSiteValidation($request)
     {
+<<<<<<< HEAD
         if($request->has_marouf_num&&!$request->marouf_num)
         {
             return 'Please add a marouf  number';
@@ -400,11 +433,40 @@ class AdController extends Controller
         elseif($request->has_online_store&&$request->store_link)
         {
             return 'Please add a store link';
+=======
+        if(!$request->delivery_man_name)
+        {
+            return 'Please add a delivery man name';
+        }
+        elseif(!$request->delivery_phone_number)
+        {
+            return 'Please add a delivery phone number';
+        }
+        elseif(!$request->delivery_city_name)
+        {
+            return 'Please add a city name';
+        }
+        elseif(!$request->delivery_area_name)
+        {
+            return 'Please add a area name';
+        }
+        elseif(!$request->delivery_street_name)
+        {
+            return 'Please add a street name';
+        }
+        elseif(!$request->nearest_location)
+        {
+            return 'Please add a nearest location';
+>>>>>>> 65256aeaf8b20552bfa3f6570ebcf5e75f9a6ef9
         }
 
         return false;
     }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 65256aeaf8b20552bfa3f6570ebcf5e75f9a6ef9
     public function getMatchedInfluencers($id)
     {
         $data = Ad::findOrFail($id);
@@ -486,6 +548,11 @@ class AdController extends Controller
 
     }
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 314a8555ed5eb6ec3ff6ca659b2dbc9dbbb49c10
+>>>>>>> 65256aeaf8b20552bfa3f6570ebcf5e75f9a6ef9
 
    
 }

@@ -42,10 +42,7 @@ class CustomerRequest extends FormRequest
             'commercial_registration_no'=>'required',
             'commercial_registration_no_files'=>'required',
             'tax_registration_number'=>'required',
-            'tax_registration_number_file'=>'required',
-            'starting_date'=>''
-
-
+            'tax_registration_number_file'=>'required'
         ];
     }
 

@@ -86,6 +86,7 @@ class RegisterController extends Controller
             'rep_id_number_name',
             'rep_phone_number',
             'rep_email',
+            'snap_chat_video'
         ]);
 
        $addUserId =  array_merge($influncerData,['user_id'=>$data->id]);
@@ -288,9 +289,7 @@ class RegisterController extends Controller
             'data'=>$this->userDataResponse($data , $token),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
-    }
-
-  
+    }  
 
 
 }
