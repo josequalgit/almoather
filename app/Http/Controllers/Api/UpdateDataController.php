@@ -25,7 +25,7 @@ class UpdateDataController extends Controller
    
     public function updateCustomer(UpdateCustomerRequest $request , $id)
     {
-        $data = User::find($id);
+        $data = User::find(Auth::guard('api')->user()->id);
 
         if($this->checkIfDataAvalibale($request))
         {
@@ -108,7 +108,7 @@ class UpdateDataController extends Controller
 
     public function updateInfluncer(UpdateInfulncerRequest $request , $id)
     {
-        $data = User::find($id);
+        $data = User::find(Auth::guard('api')->user()->id);
 
         $info =[
             'msg'=>$request->message,
