@@ -15,9 +15,8 @@ return new class extends Migration
     {
         Schema::create('prefered_media_id', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('ad_id')->unsigned();
-            $table->bigInteger('social_media_id')->unsigned();
-            $table->string('link');
+			  $table->bigInteger('ad_id')->unsigned();
+            $table->bigInteger('media_id')->unsigned();
             $table->timestamps();
         });
     }

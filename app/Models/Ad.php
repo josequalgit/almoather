@@ -46,13 +46,13 @@ class Ad extends Model implements HasMedia
 
     public function socialMedias()
     {
-        return $this->belongsTo(SocialMedia::class,'social_media_id');
+        return $this->belongsToMany(SocialMedia::class,'social_media_id');
     }
-
+	
 
     public function socialMediasAccount()
     {
-        return $this->belongsToMany(SocialMedia::class,'prefered_media_id');
+        return $this->belongsToMany(SocialMedia::class,'prefered_media_id','ad_id','media_id');
     }
 
     public function countries()
@@ -117,19 +117,28 @@ class Ad extends Model implements HasMedia
 
     public function getImageAttribute() {
         $mediaItems = $this->getMedia('adImage');
-        $publicFullUrl = null;
+        $publicFullUrl = [];
         if(count($mediaItems) > 0)
         {
-            $publicFullUrl = $mediaItems[0]->getFullUrl();
-        }
+			foreach($mediaItems as $item)
+			{
+				// $publicFullUrl = $item->getFullUrl();
+				array_push($publicFullUrl,$item->getFullUrl());
+			}
+			        }
         return $publicFullUrl;
    }
     public function getVideosAttribute() {
         $mediaItems = $this->getMedia('adVideos');
-        $publicFullUrl = null;
+        $publicFullUrl = [];
         if(count($mediaItems) > 0)
         {
-            $publicFullUrl = $mediaItems[0]->getFullUrl();
+			foreach($mediaItems as $item)
+			{
+				// $publicFullUrl = $item->getFullUrl();
+				array_push($publicFullUrl,$item->getFullUrl());
+			}
+           
         }
         return $publicFullUrl;
    }

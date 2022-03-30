@@ -58,7 +58,7 @@ class AdController extends Controller
         }
         $data = array_merge($request->all(),['customer_id'=>Auth::guard('api')->user()->customers->id]);
 
-        if($request->onSite)
+        if($request->ad_type == 'onsite')
         {
             if($this->onSiteValidation($request))
             {
@@ -72,15 +72,32 @@ class AdController extends Controller
 
         $data = Ad::create($data);
 
-        if(count($request->social_media) > 0)
+        if(count($request->prefered_media_id) > 0)
+        {
+            foreach ($request->prefered_media_id as $value) {
+
+              //  DB::table('ads_media_id')->insert([
+                //    'ad_id'=>$data->id,
+              //      'social_media_id'=>$value['type']??$value->type,
+              //      'link'=>$value['link']??$value->type
+             //   ]);
+				$data->socialMediasAccount()->attach($value);
+				$data->save();
+
+				
+            }
+        }
+		 if(count($request->social_media) > 0)
         {
             foreach ($request->social_media as $value) {
 
-                DB::table('prefered_media_id')->insert([
+                DB::table('social_media_id')->insert([
                     'ad_id'=>$data->id,
-                    'social_media_id'=>$value['type']??$value->type,
-                    'link'=>$value['link']??$value->type
+                   'social_media_id'=>$value['type']??$value->type,
+                   'link'=>$value['link']??$value->type
                 ]);
+				//$data->socialMedias()->attach($value);
+			//	$data->save();
             }
         }
         if($request->video&&count($request->video) > 0)
@@ -94,7 +111,7 @@ class AdController extends Controller
         if($request->video&&count($request->image) > 0)
         {
             foreach ($request->image as $value) {
-                $data->addMedia($request->file('image'))
+                $data->addMedia($value)
             ->toMediaCollection('adImage');
             }
         }
@@ -118,9 +135,7 @@ class AdController extends Controller
 
         return response()->json([
             'msg'=>'ad was created',
-            'data'=>[
-                'id'=>$data->id
-            ],
+            'data'=>$this->adResponse($data),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
     }
@@ -397,10 +412,31 @@ class AdController extends Controller
         {
             return 'Please add a cr image';
         }
-        elseif($request->has_online_store&&$request->store_link)
+        elseif($request->has_online_store&&!$request->store_link)
         {
             return 'Please add a store link';
         }
+		  elseif($request->has_offer&&!$request->offer > 0)
+        {
+            return 'Please add an offer';
+        }
+		  elseif(!$request->prefered_media_id)
+        {
+            return 'Please add an prefered media id';
+        }
+		  elseif($request->has_marouf_num == 1&&!$request->marouf_num)
+        {
+            return 'Please add marouf number';
+        }
+		  elseif($request->has_marouf_num == 0&&!$request->cr_num)
+        {
+            return 'Please add cr number';
+        }
+		  elseif($request->has_marouf_num == 0&&!$request->cr_image)
+        {
+            return 'Please add cr image';
+        }
+
 
         return false;
     }

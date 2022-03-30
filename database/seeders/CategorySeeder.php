@@ -23,7 +23,7 @@ class CategorySeeder extends Seeder
                 ],
                 'type'=>'service',
             ],
-            [
+[
                 'name'=>[
                     'ar'=>'ترفيه',
                     'en'=>'Entertainment'
@@ -60,8 +60,7 @@ class CategorySeeder extends Seeder
                     'ar'=>'بيس بول',
                     'en'=>'BaseBall'
                 ]
-            ],
-            [
+            ],[
                 'name'=>[
                     'ar'=>'افلام',
                     'en'=>'Movies'

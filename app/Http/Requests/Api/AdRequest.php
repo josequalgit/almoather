@@ -39,7 +39,7 @@ class AdRequest extends FormRequest
             'area_id'=>'required',
             'image'=>'required',
             'social_media'=>'required',
-            'video'=>'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:100000',
+            //'video'=>'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:100000',
             'cr_image'=>'mimes:jpg,bmp,png,pdf|max:2048',
 
         ];

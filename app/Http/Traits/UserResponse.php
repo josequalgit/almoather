@@ -14,7 +14,7 @@ trait UserResponse {
        {
 
            $formate = [
-             'id'=>$info->id,
+             'id'=>$user->id,
              'full_name' =>$info->full_name,
              'image'=>$user->infulncerImage,
              'nick_name'=>$info->nick_name,

@@ -25,6 +25,8 @@ class UpdateDataController extends Controller
    
     public function updateCustomer(UpdateCustomerRequest $request , $id)
     {
+        $data = User::find($id);
+
         if($this->checkIfDataAvalibale($request))
         {
             return response()->json([
@@ -36,9 +38,16 @@ class UpdateDataController extends Controller
             'msg'=>$request->message,
         ];
         $commingRequest =  array_merge($request->only(['email','password','name']),['password'=>bcrypt($request->password)]);
+        
+        if(!$data->customers)
+        {
+            return response()->json([
+                'msg'=>'user is not a customer',
+                'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
+        }
 
         $updateUser = [];
-        $data = User::find($id);
         if($request->password)
         {
             $updateUser['password'] = bcrypt($request->password);
@@ -76,7 +85,7 @@ class UpdateDataController extends Controller
                     'city_id',
                     'id_number'
         ]);
-
+       
         $addUserId =  array_merge($customerData,['user_id'=>$data->id]);
         $newCustomer = Customer::find($data->customers->id);
         $newCustomer->update($addUserId);
@@ -99,6 +108,8 @@ class UpdateDataController extends Controller
 
     public function updateInfluncer(UpdateInfulncerRequest $request , $id)
     {
+        $data = User::find($id);
+
         $info =[
             'msg'=>$request->message,
         ];
@@ -111,7 +122,6 @@ class UpdateDataController extends Controller
         }
 
         $commingRequest =  array_merge($request->only(['email','password','name']),['password'=>bcrypt($request->password)]);
-        $data = User::find($id);
 
         if(!$data->influncers)
         {
@@ -213,11 +223,15 @@ class UpdateDataController extends Controller
        $newInfluncer = Influncer::find($data->influncers->id);
        $newInfluncer->update($addTranslate);
 
+       $newInfluncer->InfluncerCategories()->detach();
+
 
        foreach($request->categories as $item)
        {
            $newInfluncer->InfluncerCategories()->attach($item);
        }
+
+       $newInfluncer->socialMedias()->detach();
 
        foreach($request->preferred_socialMedias as $item)
        {
@@ -243,7 +257,7 @@ class UpdateDataController extends Controller
         $token = Auth::guard('api')->attempt(['email'=>$request->email,'password'=>$request->password]);
 
         return response()->json([
-            'msg'=>'Influncer was created',
+            'msg'=>'Influncer was updated',
             'data'=>$this->userDataResponse($data),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));

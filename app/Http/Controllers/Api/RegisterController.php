@@ -45,8 +45,8 @@ class RegisterController extends Controller
         $data->addMedia($request->file('image'))
         ->toMediaCollection('influncers');
 
-        $data->addMedia($request->file('commercial_registration_no_files'))
-        ->toMediaCollection('commercial_registration_no_files');
+        $data->addMedia($request->file('commercial_registration_no_file'))
+        ->toMediaCollection('commercial_registration_no_file');
 
         $data->addMedia($request->file('tax_registration_number_file'))
         ->toMediaCollection('tax_registration_number_file');
@@ -166,7 +166,8 @@ class RegisterController extends Controller
             'id_number',
             'commercial_registration_no',
             'tax_registration_number',
-            'starting_date'    
+            'starting_date' ,   
+            'id_number'
         ]);
         $addUserId =  array_merge($customerData,['user_id'=>$data->id]);
         $newCustomer = Customer::create($addUserId);
