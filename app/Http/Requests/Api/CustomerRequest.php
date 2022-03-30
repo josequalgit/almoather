@@ -39,13 +39,9 @@ class CustomerRequest extends FormRequest
             'nationality_id'=>'required',
             'city_id'=>'required',
             'id_number'=>'required',
-<<<<<<< HEAD
             'commercial_registration_no'=>'required',
             'tax_registration_number'=>'required',
             'starting_date'=>''  
-=======
->>>>>>> 314a8555ed5eb6ec3ff6ca659b2dbc9dbbb49c10
-
 
         ];
     }

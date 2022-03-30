@@ -38,12 +38,23 @@ class AuthController extends Controller
 
         if($user->customers)
         {
-             return $this->respondWithToken($token,$user,1);
+            // return $this->respondWithToken($token,$user,1);
+			 return response()->json([
+                'msg'=>"user data",
+				 'data'=>$this->userDataResponse($user,$token),
+				 'type'=>'customer',
+                'status'=>config('global.OK_STATUS') 
+            ],config('global.OK_STATUS'));
         }
         if($user->influncers)
         {
-
-            return $this->userDataResponse($user,$token);
+			 return response()->json([
+                'msg'=>"user data",
+				 'data'=>$this->userDataResponse($user,$token),
+				 'type'=>'influencer',
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
+         //   return ;
         }
         else
         {

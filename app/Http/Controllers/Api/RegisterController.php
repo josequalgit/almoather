@@ -6,10 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\InfluncerRequest;
 use App\Http\Requests\Api\CustomerRequest;
-<<<<<<< HEAD
 use App\Http\Requests\Api\UpdateCustomerRequest;
-=======
->>>>>>> 314a8555ed5eb6ec3ff6ca659b2dbc9dbbb49c10
 use App\Models\User;
 use App\Models\Influncer;
 use App\Models\Customer;
@@ -75,7 +72,6 @@ class RegisterController extends Controller
             'address_id',
             'bank_id',
             'snap_chat_views',
-<<<<<<< HEAD
             'snap_chat_video',
             'commercial_registration_no',
             'tax_registration_number',
@@ -83,9 +79,7 @@ class RegisterController extends Controller
             'rep_id_number_name',
             'rep_phone_number',
             'rep_email',
-=======
             'snap_chat_video'
->>>>>>> 314a8555ed5eb6ec3ff6ca659b2dbc9dbbb49c10
         ]);
 
        $addUserId =  array_merge($influncerData,['user_id'=>$data->id]);
@@ -157,14 +151,11 @@ class RegisterController extends Controller
             'region_id',
             'user_id',
             'city_id',
-<<<<<<< HEAD
             'id_number',
             'commercial_registration_no',
             'tax_registration_number',
-            'starting_date'    
-=======
+            'starting_date' ,   
             'id_number'
->>>>>>> 314a8555ed5eb6ec3ff6ca659b2dbc9dbbb49c10
         ]);
         $addUserId =  array_merge($customerData,['user_id'=>$data->id]);
         $newCustomer = Customer::create($addUserId);
@@ -237,7 +228,6 @@ class RegisterController extends Controller
         return null;
     }
 
-<<<<<<< HEAD
     public function updateCustomer(UpdateCustomerRequest $request , $id)
     {
         if($this->checkIfDataAvalibale($request))
@@ -288,11 +278,7 @@ class RegisterController extends Controller
             'data'=>$this->userDataResponse($data , $token),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
-    }
-
-=======
->>>>>>> 314a8555ed5eb6ec3ff6ca659b2dbc9dbbb49c10
-  
+    }  
 
 
 }
