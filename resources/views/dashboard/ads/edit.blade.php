@@ -1,4 +1,4 @@
-@extends('dashboard.layout.index')
+  @extends('dashboard.layout.index')
 @section('content')
 <style>
   #ad_image{
@@ -200,6 +200,7 @@
               @endforeach
           </div>
           @endif
+        
         <form method="post" enctype="multipart/form-data">
            @csrf
             <div class="form-row">
@@ -233,6 +234,7 @@
               <input disabled value="{{ old('auth_number')?old('auth_number'):$data->auth_number}}" name="auth_number" type="text" class="form-control" id="inputAddress2" placeholder="auth_number">
             </div>
             @endif
+          
             <div class="form-group">
                 <label for="inputAddress2">Is Onsite</label>
                 <input disabled value="{{ old('onSite')?old('onSite'):($data->onSite?'Yes':'No')}}" name="onSite" type="text" class="form-control" id="inputAddress2" placeholder="onSite">
@@ -243,10 +245,11 @@
                 <input disabled value="{{ old('website_link')?old('website_link'):$data->website_link}}" name="website_link" type="text" class="form-control" id="inputAddress2" placeholder="website_link">
             </div>
             @endif
-            <div class="form-group">
+            {{-- <div class="form-group">
                 <label for="inputAddress2">Social Media</label>
                 <input disabled value="{{ old('social_media_id')?old('social_media_id'):$data->socialMedias->name}}" name="social_media_id" type="text" class="form-control" id="inputAddress2" placeholder="social_media_id">
             </div>
+          
             <div class="form-group">
                 <label for="inputAddress2">Country</label>
                 <input disabled value="{{ old('country_id')?old('country_id'):$data->countries->name}}" name="country_id" type="text" class="form-control" id="inputAddress2" placeholder="country_id">
@@ -255,14 +258,16 @@
                 <label for="inputAddress2">City</label>
                 <input disabled value="{{ old('city_id')?old('city_id'):$data->cities->name}}" name="city_id" type="text" class="form-control" id="inputAddress2" placeholder="city_id">
             </div>
+          
             <div class="form-group">
                 <label for="inputAddress2">Area</label>
                 <input disabled value="{{ old('area_id')?old('area_id'):$data->areas?->name}}" name="area_id" type="text" class="form-control" id="inputAddress2" placeholder="area_id">
-            </div>
+            </div> --}}
             <div class="form-group">
                 <label for="inputAddress2">About</label>
                 <textarea class="form-control" disabled rows="11">{{ $data->about }}</textarea>
             </div>
+            
             @if($data->reject_note)
             <div class="form-group">
                 <label for="inputAddress2">Reject Note</label>
@@ -271,9 +276,9 @@
             @endif
 
             <div class="form-group">
-              <label class="col mb-2" for="inputAddress2">Image</label>
+              {{-- <label class="col mb-2" for="inputAddress2">Image</label>
               <a target="_blank" download href="{{ $data->image }}">
-              <img id="ad_image" src="{{ $data->image }}" />
+              <img id="ad_image" src="{{ $data->image }}" /> --}}
             </a>
               
             </div>
