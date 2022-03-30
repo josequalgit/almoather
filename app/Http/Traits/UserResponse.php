@@ -24,7 +24,9 @@ trait UserResponse {
              'city_id'=>$info->city_id,
              'influencer_category'=>$info->InfluncerCategories->pluck('id')->toArray(),
              'bio'=>$info->bio,
-             'address_id'=>$info->address_id,
+             'milestone'=>$info->milestone,
+             'street'=>$info->street,
+             'neighborhood'=>$info->neighborhood,
              'ad_price'=>$info->ad_price,
              'ad_onsite_price'=>$info->ad_onsite_price,
              'bank'=>$info->bank_name,
@@ -68,9 +70,6 @@ trait UserResponse {
                 'city_id'=>$info->citys->id,
                 'email'=>$user->email,
                 'phone'=>$info->phone,
-                'commercial_registration_no'=>$info->commercial_registration_no,
-                'tax_registration_number'=>$info->tax_registration_number,
-                'starting_date'=>$info->starting_date,
            ];
            if($token) $formate['token'] = $token; 
 

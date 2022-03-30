@@ -38,14 +38,16 @@ class Influncer extends Model implements HasMedia
         'ad_with_vat',
         'ad_onsite_price_with_vat',
         'address',
-        'bank_id',
         'snap_chat_views',
         'commercial_registration_no',
         'tax_registration_number',
         'rep_full_name',
         'rep_id_number_name',
         'rep_phone_number',
-        'rep_email'
+        'rep_email',
+        'milestone',
+        'street',
+        'neighborhood',
     ];
 
     protected $append = [

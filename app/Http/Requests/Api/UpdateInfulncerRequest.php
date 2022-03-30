@@ -51,7 +51,6 @@ class UpdateInfulncerRequest extends FormRequest
             'phone'=>'required',
             'ad_with_vat'=>'required',
             'ad_onsite_price_with_vat'=>'required',
-            'address_id'=>'required',
             'social_media'=>'required',
             'bank_id'=>'required',
             'snap_chat_views'=>'',
