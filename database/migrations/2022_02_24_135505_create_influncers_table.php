@@ -28,7 +28,6 @@ return new class extends Migration
             $table->string('nick_name');
             $table->longText('bank_name');
             $table->longText('bank_account_number');
-            $table->longText('address');
             $table->longText('bio');
             $table->boolean('ads_out_country')->default(0);
             $table->boolean('is_vat');
@@ -38,6 +37,9 @@ return new class extends Migration
             $table->integer('ad_onsite_price');
             $table->integer('ad_onsite_price_with_vat');
             $table->longText('snap_chat_views');
+            $table->longText('milestone');
+            $table->longText('street');
+            $table->longText('neighborhood');
             $table->longText('rejected_note')->nullable();
             $table->enum('status',['pending','accepted','rejected','band'])->default('pending');
             $table->bigInteger('user_id')->unsigned();

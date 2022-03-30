@@ -76,8 +76,6 @@ class RegisterController extends Controller
             'ad_with_vat',
             'ad_onsite_price_with_vat',
             'birthday',
-            'address_id',
-            'bank_id',
             'snap_chat_views',
             'snap_chat_video',
             'commercial_registration_no',
@@ -86,7 +84,10 @@ class RegisterController extends Controller
             'rep_id_number_name',
             'rep_phone_number',
             'rep_email',
-            'snap_chat_video'
+            'snap_chat_video',
+            'milestone',
+            'street',
+            'neighborhood',
         ]);
 
        $addUserId =  array_merge($influncerData,['user_id'=>$data->id]);
@@ -148,12 +149,6 @@ class RegisterController extends Controller
         $data = User::create($commingRequest);
         $data->addMedia($request->file('image'))
         ->toMediaCollection('customers');
-        $data->addMedia($request->file('commercial_registration_no_files'))
-        ->toMediaCollection('commercial_registration_no_files');
-
-        $data->addMedia($request->file('tax_registration_number_file'))
-        ->toMediaCollection('tax_registration_number_file');
-
         $customerData = $request->only([
             'first_name',
             'last_name',
@@ -163,11 +158,6 @@ class RegisterController extends Controller
             'region_id',
             'user_id',
             'city_id',
-            'id_number',
-            'commercial_registration_no',
-            'tax_registration_number',
-            'starting_date' ,   
-            'id_number'
         ]);
         $addUserId =  array_merge($customerData,['user_id'=>$data->id]);
         $newCustomer = Customer::create($addUserId);

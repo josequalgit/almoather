@@ -37,10 +37,9 @@ class UpdateCustomerRequest extends FormRequest
             'region_id'=>'required',
             'nationality_id'=>'required',
             'city_id'=>'required',
-            'id_number'=>'required',
-            'commercial_registration_no'=>'required',
-            'tax_registration_number'=>'required',
-            'starting_date'=>''  
+            'milestone'=>'required',
+            'street'=>'required',
+            'neighborhood'=>'required',
         ];
     }
     
