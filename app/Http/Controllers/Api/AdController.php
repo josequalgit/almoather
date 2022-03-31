@@ -429,12 +429,20 @@ class AdController extends Controller
 
     public function replace_matched_influencer($id , $removed_influencer , $chosen_influencer)
     {
+		
         $removeFromChosen = AdsInfluencerMatch::where([['ad_id',$id],['influencer_id',$removed_influencer]])->first();
-        
+        if(!$removeFromChosen) return response()->json([
+            'err'=>'data not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
         $removeFromChosen->chosen = 0;
         $removeFromChosen->save();
 
         $addToChosen = AdsInfluencerMatch::where([['ad_id',$id],['influencer_id',$chosen_influencer]])->first();
+		if(!$removeFromChosen) return response()->json([
+            'err'=>'data not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
         $addToChosen->chosen = 0;
         $addToChosen->save();
 
@@ -508,10 +516,11 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        if(!$user->influncers) return response()->json([
+        if(!$user||!$user->influncers) return response()->json([
             'err'=>'influencer was not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
+		
         $inf = $user->influncers;
 
         $alldata = $data->matches()->where('chosen',0)->get()->map(function($item) use($inf,$data){
