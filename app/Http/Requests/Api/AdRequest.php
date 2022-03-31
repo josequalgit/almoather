@@ -37,6 +37,7 @@ class AdRequest extends FormRequest
             'country_id'=>'required',
             'city_id'=>'required',
             'area_id'=>'required',
+            'category_id'=>'required',
             'image'=>'required',
             'social_media'=>'required',
             //'video'=>'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:100000',

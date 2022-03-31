@@ -385,7 +385,7 @@ class AdController extends Controller
 
     public function getMatchedInfluencersNotChosen($id,$removed_inf_id)
     {
-        $data = Ad::findOrFail($id);
+        $data = Ad::find($id);
         $info = User::find($removed_inf_id);
         if(!$data) return response()->json([
             'err'=>'ad not found',
@@ -413,11 +413,8 @@ class AdController extends Controller
             {
                 $currentBudget = ($currentInf->ad_price <= $info->influncers->ad_price)?1:0;
             }
-            return [
-                'name'=>$currentInf->full_name,
-                'match'=>$item->match,
-                'eligible'=>$currentBudget
-            ];
+            return $this->matchResponse($currentInf,$item->match,$currentBudget);
+            
         });
 
         return response()->json([
@@ -430,16 +427,35 @@ class AdController extends Controller
     public function replace_matched_influencer($id , $removed_influencer , $chosen_influencer)
     {
         $removeFromChosen = AdsInfluencerMatch::where([['ad_id',$id],['influencer_id',$removed_influencer]])->first();
-        
+        if(!$removeFromChosen) return response()->json([
+            'err'=>'data not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
         $removeFromChosen->chosen = 0;
         $removeFromChosen->save();
 
         $addToChosen = AdsInfluencerMatch::where([['ad_id',$id],['influencer_id',$chosen_influencer]])->first();
+        if(!$addToChosen) return response()->json([
+            'err'=>'data not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
         $addToChosen->chosen = 0;
         $addToChosen->save();
+        $data = Ad::findOrFail($id);
 
         return response()->json([
             'msg'=>'data was updated',
+            'type'=>$data->type,
+            'category'=>$data->categories->name,
+            'budget'=>$data->budget,
+            'matches'=> $data->matches()->where('chosen',1)->get()->map(function($item){
+                $inf = $item->influencers;
+                return [
+                    'name'=>$inf->full_name,
+                    'match'=>$item->match
+                ];
+            }),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
 
@@ -487,12 +503,13 @@ class AdController extends Controller
                 'type'=>$data->type,
                 'category'=>$data->categories->name,
                 'budget'=>$data->budget,
-                'matches'=>$data->matches()->where('chosen',1)->get()->map(function($item){
-                    return [
-                        'name'=>$item->influencers->full_name,
-                        'rate'=>$item->match
-                    ];
-                })
+                'match'=> $data->matches()->where('chosen',1)->get()->map(function($item){
+                        return [
+                            'name'=>$item->influencers->full_name,
+                            'image'=>$item->infulncerImage ?? 'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80',
+                            'match'=>$item->match
+                        ];
+                    })
             ],
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
@@ -508,13 +525,13 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        if(!$user->influncers) return response()->json([
+        if(!$user||!$user->influncers) return response()->json([
             'err'=>'influencer was not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
         $inf = $user->influncers;
 
-        $alldata = $data->matches()->where('chosen',0)->get()->map(function($item) use($inf,$data){
+        $alldata = $data->matches()->where('chosen',0)->get()->map(function($item) use($inf,$data,$removed_inf){
             $chosenInf = $data->onSite ?$inf->ad_onsite_price:$inf->ad_price;
             $oldInf = $data->ad_type == 'onsite' ? User::find($removed_inf)->influncers->ad_onsite_price:User::find($removed_inf)->influncers->ad_price;
             $newBud = $data->budget + $chosenInf - $oldInf;
@@ -533,4 +550,15 @@ class AdController extends Controller
 
     }
    
+
+    private function matchResponse($inf,$match,$eligible)
+    {
+        return [
+            'name'=>$inf->full_name,
+            'image'=>$inf->users->infulncerImage ?? 'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80',
+            'match'=>$match,
+            'eligible'=>$eligible
+        ];
+    }
+
 }
