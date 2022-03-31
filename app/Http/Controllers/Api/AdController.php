@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Influncer;
 use App\Models\Customer;
 use App\Models\Contract;
+use App\Models\AdsInfluencerMatch;
 use Validator;
 use App\Http\Traits\UserResponse;
 use App\Http\Traits\ApiPaginator;
@@ -486,7 +487,7 @@ class AdController extends Controller
                 'type'=>$data->type,
                 'category'=>$data->categories->name,
                 'budget'=>$data->budget,
-                'matches'=>$data->matches()->get()->map(function($item){
+                'matches'=>$data->matches()->where('chosen',1)->get()->map(function($item){
                     return [
                         'name'=>$item->influencers->full_name,
                         'rate'=>$item->match
@@ -495,6 +496,41 @@ class AdController extends Controller
             ],
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
+    }
+
+    public function back_up_influencers($id,$removed_inf)
+    {
+        $data = Ad::find($id);
+        $user = User::find($removed_inf);
+
+        if(!$data) return response()->json([
+            'err'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        if(!$user->influncers) return response()->json([
+            'err'=>'influencer was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+        $inf = $user->influncers;
+
+        $alldata = $data->matches()->where('chosen',0)->get()->map(function($item) use($inf,$data){
+            $chosenInf = $data->onSite ?$inf->ad_onsite_price:$inf->ad_price;
+            $oldInf = $data->ad_type == 'onsite' ? User::find($removed_inf)->influncers->ad_onsite_price:User::find($removed_inf)->influncers->ad_price;
+            $newBud = $data->budget + $chosenInf - $oldInf;
+
+            return[
+                'type'=>$data->type,
+                'category'=>$data->categories->name,
+                'eligible'=>$newBud < $data->budget?true:false,
+            ];
+        });
+        return response()->json([
+            'msg'=>'unchosen match',
+            'data'=>$alldata,
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+
     }
    
 }

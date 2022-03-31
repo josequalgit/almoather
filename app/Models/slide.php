@@ -24,7 +24,7 @@ class slide extends Model implements HasMedia
     ];
 
     public function getImageAttribute() {
-        $mediaItems = $this->getMedia('slides');
+        $mediaItems = $this->getMedia('slideImages');
         $publicFullUrl = null;
         if(count($mediaItems) > 0)
         {

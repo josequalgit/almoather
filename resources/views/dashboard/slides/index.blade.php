@@ -9,6 +9,9 @@
         width: 15%;
         -webkit-line-clamp: 2;
     }
+    .thumbnail{
+        width: 100px;
+    }
 </style>
 <div class="app-content content">
     <div class="content-overlay"></div>
@@ -48,7 +51,7 @@
                                 </p> --}}
                              
                                 <div class="table-responsive">
-                                    @can('See Faq')
+                                    @can('See Slide')
                                         <table class="table zero-configuration">
                                             <thead>
                                                 <tr>
@@ -64,22 +67,23 @@
                                                 @foreach ($data as $item)
                                                         <tr>
                                                          
-                                                            <td>{{ $item->getTranslations('answer')['en'] }}</td>
-                                                            <td>{{ $item->getTranslations('answer')['ar'] }}</td>
+                                                            <td><img class="thumbnail" src="{{ $item->image }}"></td>
+                                                            <td>{{ $item->getTranslations('title')['en'] }}</td>
+                                                            <td>{{ $item->getTranslations('title')['ar'] }}</td>
                                                             <td>{{ $item->getTranslations('description')['en'] }}</td>
                                                             <td>{{ $item->getTranslations('description')['ar'] }}</td>
                                                             
                                                             <td>
-                                                                @can('Edit Faq')
-                                                                    <a class="btn btn-secondary" href="{{ route('dashboard.faqs.edit',$item->id) }}">
+                                                                @can('Edit Slide')
+                                                                    <a class="btn btn-secondary" href="{{ route('dashboard.slides.edit',$item->id) }}">
                                                                         <i class="bx bx-edit"></i>
                                                                     </a>
                                                                 @endcan
-                                                                @can('Delete Faq')
+                                                                {{-- @can('Delete Slide')
                                                                     <button class="btn btn-danger" onclick="openModal('{{ $item->id }}','{{ $item->question }}')">
                                                                         <i class="bx bx-trash buttonIcon"></i>
                                                                     </button>
-                                                                @endcan
+                                                                @endcan --}}
 
                                                             </td>
                                                         
@@ -90,7 +94,7 @@
                                     @endcan
                                 </div>
                             </div>
-                            @can('See Faq')
+                            @can('See Slide')
                             {{ $data->links() }}
                             @endcan
                         </div>
@@ -99,17 +103,17 @@
             </section>
         </div>
     </div>
-    <div id="faqModel" class="modal" tabindex="-1" role="dialog">
+    <div id="slideModel" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Delete Faq!</h5>
+              <h5 class="modal-title">Delete Slide!</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              <p>Are you sure you want to delete this  '<span id="faqName"></span>' faq ?</p>
+              <p>Are you sure you want to delete this  '<span id="slideName"></span>' slide ?</p>
             </div>
             <div class="modal-footer">
               <button onclick="deleteApi()" type="button" class="btn btn-primary">Delete</button>
@@ -129,9 +133,9 @@
     function openModal(id,name)
     {
         role_id = id;
-        $('#faqName').empty();
-        $('#faqName').append(name);
-        $('#faqModel').modal('toggle');
+        $('#slideName').empty();
+        $('#slideName').append(name);
+        $('#slideModel').modal('toggle');
     };
 
     function deleteApi()
