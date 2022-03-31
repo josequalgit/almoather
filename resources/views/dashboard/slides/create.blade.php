@@ -57,13 +57,13 @@
 <div class="app-content content p-5 mt-5">
     
     <section id="basic-input">
-        <form method="post" enctype="multipart/form-data" action="{{ route('dashboard.categories.store') }}">
+        <form method="post" enctype="multipart/form-data" action="{{ route('dashboard.slides.store') }}">
             @csrf
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Create Categories</h4>
+                        <h4 class="card-title">Create Slide</h4>
                     </div>
                     <div class="card-body">
                         @if($errors->any())
@@ -89,46 +89,27 @@
                                     
                                 </fieldset>
                                 <fieldset class="form-group">
-                                    <label for="basicInput">Name EN</label>
-                                    <input id="name" value="{{ old('name_en') }}" type="text" class="form-control"  name="name_en" placeholder="Enter name" />
+                                    <label for="basicInput">Title EN</label>
+                                    <input id="title_en" value="{{ old('title_en') }}" type="text" class="form-control"  name="title_en" placeholder="Enter title" />
                                 </fieldset>
                                 <fieldset class="form-group">
-                                    <label for="basicInput">Name AR</label>
-                                    <input id="name" value="{{ old('name_ar') }}" type="text" class="form-control"  name="name_ar" placeholder="Enter name" />
+                                    <label for="basicInput">Title AR</label>
+                                    <input id="title_ar" value="{{ old('title_ar') }}" type="text" class="form-control"  name="title_ar" placeholder="Enter name" />
                                 </fieldset>
-                                <fieldset class="form-group">
-                                    <label for="basicInput">Type</label>
-                                    <div class="form-group">
-                                        <select  name='type' class="form-control" id="exampleFormControlSelect1">
-                                          <option value="service">Service</option>
-                                          <option value="product">Product</option>
-                                        </select>
-                                      </div>
-                                </fieldset>
-                                {{-- <fieldset class="form-group">
-                                    <label for="basicInput">Influencer Category</label>
-                                    <div class="form-group">
-                                   
-                                       
-                                        <select multiple id="influncer_category_id" name='influncer_category_id[]' class="categories form-control" name="state">
-                                            @foreach ($categories as $item)
-                                            <option   value="{{ $item->id }}">{{ $item->name }}</option>                                                
-                                            @endforeach
-                                          </select>
-                                          
-                                      </div>
-                                </fieldset> --}}
+
+
 
                                 <fieldset class="form-group">
-                                    <label for="basicInput">Exclude Category</label>
-                                    <div class="form-group">
-                                        <select  multiple name='exclude_categories[]' class="form-control exclude_categories" id="exclude_categories">
-                                            @foreach ($categories as $item)
-                                            <option  value="{{ $item->id }}">{{ $item->name }}</option>                                                
-                                            @endforeach
-                                        </select>
-                                      </div>
+                                    <label for="basicInput">Description En</label>
+                                    <textarea name="description_en" class="form-control">{{ old('description_en') }}</textarea>
                                 </fieldset>
+                                <fieldset class="form-group">
+                                    <label for="basicInput">Description AR</label>
+                                    <textarea name="description_ar" class="form-control">{{ old('description_ar') }}</textarea>
+                                </fieldset>
+                              
+
+                              
     
                                
     

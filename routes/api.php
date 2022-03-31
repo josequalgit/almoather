@@ -117,9 +117,10 @@ Route::group(['prefix'=>'auth'],function(){
             Route::get('customers/{customer_id}/{status?}','get_customers_ads');
             Route::get('matched/Influencer/{id}','getMatchedInfluencers');
             Route::get('matched/not_chosen_Influencer/{id}/{removed_inf_id}','getMatchedInfluencersNotChosen');
-            Route::get('matched/replace_influencer/{id}/{removed_influencer}/{chosen_influencer}','getMatchedInfluencersNotChosen');
+            Route::get('matched/replace_influencer/{id}/{removed_influencer}/{chosen_influencer}','replace_matched_influencer');
             Route::get('before_payment/{id}','before_payment');
             Route::post('pay_now/{id}','pay_now');
+            Route::get('back_up_influencers/{id}/{removed_inf}','back_up_influencers');
         });
 
         #CATEGORIES ROUTES
