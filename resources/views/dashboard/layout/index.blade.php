@@ -277,7 +277,7 @@
     <!-- END: Page JS-->
     <script src="{{asset('main2/vendors/js/charts/apexcharts.min.js')}}"></script>
     <script src="{{asset('main2/vendors/js/extensions/dragula.min.js')}}"></script>
-
+    <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
     <script src="{{ asset('main2/vendors/js/pickers/pickadate/picker.js') }}"></script>
     <script src="{{ asset('main2/vendors/js/pickers/pickadate/picker.date.js') }}"></script>
     <script src="{{ asset('main2/vendors/js/pickers/pickadate/picker.time.js') }}"></script>

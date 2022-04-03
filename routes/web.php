@@ -15,6 +15,7 @@ use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AdController;
+use App\Http\Controllers\ContractController;
 use App\Http\Controllers\SlideController;
 
 Route::redirect('/','/dashboard/admins')->name('home');
@@ -79,6 +80,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::post('/categories/store','store')->name('store')->middleware('permission:Create Category');
             Route::get('/categories/delete/{id}','delete')->name('delete')->middleware('permission:Delete Category');
         });
+
         Route::middleware('role_or_permission:superAdmin|Edit Influencer Category|Create Influencer Category|See Influencer Category|Delete Influencer Category')->name('influencerCategories.')->controller(InfluncerCategoryController::class)->group(function(){
             Route::get('/influencerCategories','index')->name('index')->middleware('permission:Edit Influencer Category|Create Influencer Category|See Influencer Category|Delete Influencer Category');
             Route::get('/influencerCategories/edit/{id}','edit')->name('edit')->middleware('permission:Edit Influencer Category');
@@ -108,7 +110,6 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::post('/ads/update/{id}','update')->name('update')->middleware('permission:Edit Ads');
             Route::get('/ads/changeMatch/{ad_id}/{removed_inf}/{chosen_inf}','changeMatch')->name('changeMatch')->middleware('permission:Edit Ads');
             Route::get('/ads/seeMatched/{ad_id}','seeMatched')->name('seeMatched');
-
         });
 
         Route::middleware('role_or_permission:superAdmin|Edit Slide|See Slide|Create Slide|Delete Slide')->name('slides.')->controller(SlideController::class)->group(function(){
@@ -136,6 +137,15 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/Faq/create','create')->name('create')->middleware('permission:Create Faq');
             Route::post('/Faq/store','store')->name('store')->middleware('permission:Create Faq');
             Route::get('/Faq/delete/{id}','delete')->name('delete')->middleware('permission:Delete Faq');
+        });
+        
+        Route::middleware('role_or_permission:superAdmin|Edit Contract|Create Contract|See Contract|Delete Contract')->name('contracts.')->controller(ContractController::class)->group(function(){
+            Route::get('/contract','index')->name('index')->middleware('permission:Edit Contract|Create Contract|See Contract|Delete Contract');
+            Route::get('/contract/edit','edit')->name('edit')->middleware('permission:Edit Contract');
+            Route::post('/contract/update','update')->name('update')->middleware('permission:Edit Contract');
+            Route::get('/contract/create','create')->name('create')->middleware('permission:Create Contract');
+            Route::post('/contract/store','store')->name('store')->middleware('permission:Create Contract');
+            Route::get('/contract/delete/{id}','delete')->name('delete')->middleware('permission:Delete Contract');
         });
 
         Route::middleware('role_or_permission:superAdmin|See Notification|Create Notification|Edit Notiification|Delete Notification')

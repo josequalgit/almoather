@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\AreaController;
 use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\BankController;
 use App\Http\Controllers\Api\AddressController;
+use App\Http\Controllers\Api\SlideController;
 
 Route::group(['prefix'=>'auth'],function(){
     Route::post('login',[AuthController::class,'login']);
@@ -109,7 +110,7 @@ Route::group(['prefix'=>'auth'],function(){
             Route::get('get/{status}','index');
             Route::post('create','store')->middleware('check_customer');
             Route::get('details/{id}','details');
-            Route::get('contract/{contract_id}','get_ad_contract');
+            Route::get('contract/{ad_id}','get_ad_contract');
             Route::put('contract/accept_contract/{contract_id}/{influencer_id}','accept_ad_contract');
             Route::get('search/{query}','search');
             Route::get('influencers/{influncer_id}/{status?}','get_influencer_ads');
@@ -120,6 +121,7 @@ Route::group(['prefix'=>'auth'],function(){
             Route::get('before_payment/{id}','before_payment');
             Route::post('pay_now/{id}','pay_now');
             Route::get('back_up_influencers/{id}/{removed_inf}','back_up_influencers');
+            Route::get('/ads/contract/{ad_id}','get_ad_contract');
         });
 
         #CATEGORIES ROUTES
@@ -141,6 +143,12 @@ Route::group(['prefix'=>'auth'],function(){
         Route::controller(NotificationController::class)->prefix('notifications')->group(function(){
             Route::get('/{type}','index');
         });
+
+        #GET SLIDES
+        Route::controller(SlideController::class)->prefix('slides')->group(function(){
+            Route::get('/','index');
+        });
+
 
     
         

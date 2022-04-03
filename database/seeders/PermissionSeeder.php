@@ -62,6 +62,7 @@ class PermissionSeeder extends Seeder
             'Create Slide',
             'Delete Slide',
             'Edit Slide',
+            'Edit Contract',
             
             
         ];

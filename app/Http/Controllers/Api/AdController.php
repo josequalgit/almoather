@@ -53,11 +53,7 @@ class AdController extends Controller
 
     public function store(AdRequest $request)
     {
-        #CHECK IF THERE IS A CONTRACT IN THE DATABASE
-        if(!$this->create_contract()) return response()->json([
-            'err'=>'There is no contract in the system',
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
+       
 
         #CHECK REQUEST 
         if(!$request->hasFile('cr_image')&&!$request->has_marouf_num)
@@ -82,6 +78,12 @@ class AdController extends Controller
 
 
         $data = Ad::create($data);
+
+         #CHECK IF THERE IS A CONTRACT IN THE DATABASE
+         if(!$this->create_contract($data->id,Auth::guard('api')->user()->customers)) return response()->json([
+            'err'=>'There is no contract in the system',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
 
         if(count($request->prefered_media_id) > 0)
         {
@@ -167,20 +169,23 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    private function create_contract($ad_id = null)
+    private function create_contract($ad_id = null , $customer)
     {
         $contractData = Contract::find(1);
+        
         if(!$contractData)
         {
             return false;
         }
 
-      
+         $replace = str_replace("[[Name]]",$customer->first_name.' '.$customer->last_name,$contractData->content);
+
+
         if($contractData)
         {
             return Contract::create([
                 'title'=>$contractData->title,
-                'content'=>$contractData->content,
+                'content'=>$replace,
                 'ad_id'=>$ad_id
             ]);
         }
@@ -191,36 +196,46 @@ class AdController extends Controller
       
     }
 
-    public function get_ad_contract($contract_id)
+    public function get_ad_contract($ad_id)
     {
-        $data = Contract::select(['title','content'])->find($contract_id);
+        $ad = Ad::find($ad_id);
+        if(!$ad) return response()->json([
+            'err'=>'ad was not',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        if(!$ad||$ad->status == 'pending'||$ad->status == 'rejected') return response()->json([
+            'err'=>'there is no contract for the ad because ad status is '.$ad->status,
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
+        $data = Contract::select(['title','content'])->find($ad->contacts->id);
         if(!$data) return response()->json([
             'err'=>'contract not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
         return response()->json([
             'msg'=>'ad contract',
-            'data'=>$data,
+            'data'=>$data->content,
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
 
-    public function accept_ad_contract($contract_id,$influencer_id)
+    public function accept_ad_contract($ad_id)
     {
-        $data = Contract::find($contract_id);
+        $ad = Ad::find($ad_id);
+
+        if(!$ad) return response()->json([
+            'err'=>"ad was not found",
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $data = Contract::find($ad->contacts->id);
 
         if(!$data) return response()->json([
             'err'=>'contract not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        $inf_data = User::find($influencer_id);
-        if(!$inf_data || !$inf_data->influncers) return response()->json([
-            'err'=>"influencer not found, please make sure the id you'r adding is belongs to influencer",
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
-        
-        $data->ads()->associate($inf_data);
         $data->is_accepted = true;
         $data->save();
 
@@ -470,13 +485,15 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
+        $cal = $data->budget*5.5/100;
+
 
         return response()->json([
             'msg'=>'all matches blurred',
             'data'=>[
                 'type'=>$data->type,
                 'category'=>$data->categories->name,
-                'budget'=>$data->budget,
+                'price'=>$cal,
                 'matches'=>$data->matches()->get()->map(function($item){
                     return $item->match;
                 })
@@ -495,14 +512,14 @@ class AdController extends Controller
         $data->status = 'fullpayment';
         $data->save();
 
-        $cal = $data->budget*5.5%100;
+        $cal = $data->budget*5.5/100;
 
         return response()->json([
             'msg'=>'all matches',
             'data'=>[
                 'type'=>$data->type,
                 'category'=>$data->categories->name,
-                'budget'=>$data->budget,
+                'price'=>$data->budget - $cal,
                 'match'=> $data->matches()->where('chosen',1)->get()->map(function($item){
                         return [
                             'name'=>$item->influencers->full_name,
@@ -560,5 +577,8 @@ class AdController extends Controller
             'eligible'=>$eligible
         ];
     }
+
+
+    
 
 }

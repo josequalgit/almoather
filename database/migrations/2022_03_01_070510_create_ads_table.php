@@ -34,6 +34,7 @@ return new class extends Migration
             $table->bigInteger('influncer_id')->unsigned()->nullable();
             $table->longText('reject_note')->nullable();
             $table->boolean('is_verified')->default(0);
+            $table->boolean('is_accepted')->default(0); // check if the customer accept the contract
             $table->softDeletes();
             $table->enum('status',['pending','prepay','fullpayment','progress','influncer_complete','complete','incomplete','rejected','approve','cancelled'])->default('pending');
 

@@ -293,15 +293,18 @@
                 
             @endif
           
-            @if($data->videos)
+            @if($data->videos&&count($data->videos))
+            @foreach ($data->videos as $item)
             <div class="form-group">
               <label class="col mb-2" for="inputAddress2">Videos</label>
               <video class="col" width="320" height="240" controls>
-                <source src="{{ $data->videos }}" type="video/mp4">
+                <source src="{{ $data->item }}" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
               
             </div>
+                
+            @endforeach
             @endif
 
             {{-- <button type="button" class="btn btn-secondary mt-2 mb-2">
@@ -398,6 +401,13 @@
                   <select class="form-control" id="expense_type">
                     <option value="pvn">PVN</option>
                     <option value="pve">PVE</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">Ad type</label>
+                  <select class="form-control" id="ad_type">
+                    <option value="product">Product</option>
+                    <option value="service">Service</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -592,6 +602,7 @@
         status:document.getElementById('status').value,
         note:document.getElementById('rejectedNote').value,
         category_id:document.getElementById('category_id').value,
+        ad_type:document.getElementById('ad_type').value,
         onSite:'{{ $data->onSite }}',
         adBudget:'{{ $data->budget }}',
         expense_type:document.getElementById('expense_type').value

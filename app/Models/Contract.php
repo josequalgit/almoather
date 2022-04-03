@@ -14,6 +14,7 @@ class Contract extends Model
         'content',
         'is_accepted',
         'influencer_id',
+        'customer_id',
         'ad_id'
     ];
 
@@ -25,6 +26,11 @@ class Contract extends Model
     public function influencers()
     {
         return $this->belongsTo(Influncer::class,'influencer_id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Contract::class,'customer_id');
     }
     
 }

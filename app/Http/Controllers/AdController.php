@@ -59,13 +59,19 @@ class AdController extends Controller
             'msg'=>'please choose a category',
             'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
         ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
+        if(!$request->ad_type) return response()->json([
+            'msg'=>'please choose a ad type',
+            'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
+        ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
 
+       // return response()->json([$request->all()],500);
 
         /** SAVE THE DATA */
         $ad->status = $request->status;
         $ad->category_id = $request->category_id;
         $ad->reject_note = $request->note ?? null;
         $ad->expense_type = $request->expense_type;
+        $ad->type = $request->ad_type;
         $ad->save();
 
         // STEP 1 - GET THE PROPERTY CATEGORIES

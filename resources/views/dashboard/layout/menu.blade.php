@@ -829,6 +829,16 @@ input[type="radio"] .styled:checked + label::after {
                   </a>
                 </li>
                 @endcanany
+
+                @canany(['Edit Contract','Create Contract','See Contract'])
+                <li class="menu-item
+                {{ ($name == 'dashboard.contracts.index'|| $name == 'dashboard.contracts.create'|| $name == 'dashboard.contracts.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.contracts.edit') }}" class="menu-link">
+                    <div data-i18n="List">Contract</div>
+                  </a>
+                </li>
+                @endcanany
             
               </ul>
             </li>

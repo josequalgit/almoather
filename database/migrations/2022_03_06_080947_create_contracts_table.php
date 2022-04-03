@@ -20,6 +20,7 @@ return new class extends Migration
             $table->boolean('is_accepted')->default(0);
             $table->bigInteger('ad_id')->unsigned()->nullable();
             $table->bigInteger('influencer_id')->unsigned()->nullable();
+            $table->bigInteger('customer_id')->unsigned()->nullable();
             $table->timestamps();
         });
     }
