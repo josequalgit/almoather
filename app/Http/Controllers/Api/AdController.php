@@ -506,7 +506,7 @@ class AdController extends Controller
             'msg'=>'all matches blurred',
             'data'=>[
                 'type'=>$data->type,
-                'category'=>$data->categories->name,
+                'category'=>$data->categories ? $data->categories->name : null,
                 'price'=>$cal,
                 'matches'=>$data->matches()->get()->map(function($item){
                     return $item->match;
