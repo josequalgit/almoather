@@ -293,15 +293,18 @@
                 
             @endif
           
-            @if($data->videos)
+           @if($data->videos&&count($data->videos))
+            @foreach ($data->videos as $item)
             <div class="form-group">
               <label class="col mb-2" for="inputAddress2">Videos</label>
               <video class="col" width="320" height="240" controls>
-                <source src="{{ $data->videos }}" type="video/mp4">
+                <source src="{{ $data->item }}" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
               
             </div>
+                
+            @endforeach
             @endif
 
             {{-- <button type="button" class="btn btn-secondary mt-2 mb-2">
