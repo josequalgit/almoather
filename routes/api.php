@@ -97,7 +97,7 @@ Route::group(['prefix'=>'auth'],function(){
 
         
         #USER DETAILS
-        Route::get('users/details',[AuthController::class,'details']);
+        Route::get('users/details/{id?}',[AuthController::class,'details']);
         # AUTH ROUTES
         Route::controller(AuthController::class)->group(function(){
             Route::post('logout','logout');

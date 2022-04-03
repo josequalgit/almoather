@@ -402,6 +402,7 @@ class AdController extends Controller
     {
         $data = Ad::find($id);
         $info = Influncer::find($removed_inf_id);
+
         if(!$data) return response()->json([
             'err'=>'ad not found',
             'status'=>config('global.NOT_FOUND_STATUS')
@@ -450,7 +451,6 @@ class AdController extends Controller
     public function replace_matched_influencer($id , $removed_influencer , $chosen_influencer)
     {
         $removeFromChosen = AdsInfluencerMatch::where([['ad_id',$id],['influencer_id',$removed_influencer]])->first();
-		//dd($removeFromChosen);
 		
         if(!$removeFromChosen) return response()->json([
             'err'=>'data not found',
@@ -458,7 +458,7 @@ class AdController extends Controller
         ],config('global.NOT_FOUND_STATUS'));
 		
         $removeFromChosen->chosen = 0;
-      //  $removeFromChosen->save();
+        $removeFromChosen->save();
 
         $addToChosen = AdsInfluencerMatch::where([['ad_id',$id],['influencer_id',$chosen_influencer]])->first();
         if(!$addToChosen) return response()->json([
@@ -466,7 +466,7 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
         $addToChosen->chosen = 1;
-      //  $addToChosen->save();
+        $addToChosen->save();
         $data = Ad::findOrFail($id);
 
         return response()->json([
@@ -477,7 +477,6 @@ class AdController extends Controller
 				'budget'=>$data->budget,
 				'match'=> $data->matches()->where('chosen',1)->get()->map(function($item){
 					$inf = $item->influencers;
-					//dd($inf->id);
 					return [
 						'id'=>$inf->id,
 						'image'=>$inf->users->infulncerImage??'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80',

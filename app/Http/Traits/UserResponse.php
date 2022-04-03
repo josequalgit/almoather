@@ -8,6 +8,7 @@ trait UserResponse {
     public function userDataResponse($user , $token = null)
     {
         $info = $user->influncers ?? $user->customers;
+        
         $formate = [];
         
        if($user->influncers)

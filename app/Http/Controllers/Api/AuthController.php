@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\UserResponse;
+use App\Models\User;
 use App;
 class AuthController extends Controller
 {
@@ -118,9 +119,25 @@ class AuthController extends Controller
         ],200);
     }
 
-    public function details()
+    public function details($id = null)
     {
-        $data = Auth::guard('api')->user();
+        
+        if($id)
+        {
+            $data = User::find($id);
+            if(!$data || (!$data->influncers && !$data->customers)) return response()->json([
+                'err'=>'user not found',
+                'status'=>config('global.NOT_FOUND_STATUS')
+            ],config('global.NOT_FOUND_STATUS'));
+
+        }
+        else
+        {
+            $data = Auth::guard('api')->user();
+        }
+
+
+
         return response()->json([
             'msg'=>'user data',
             'data'=>$this->userDataResponse($data),
