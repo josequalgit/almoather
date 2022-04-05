@@ -168,7 +168,12 @@
 
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
-
+@php
+$checkStatus = array_key_exists("status", request()->route()->parameters);
+$route = Route::current();
+$name = $route->getName();
+$para = $checkStatus ? request()->route()->parameters['status'] : null;
+@endphp
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
@@ -233,10 +238,25 @@
                                                             <a class="btn btn-secondary" href="{{ route('dashboard.ads.edit',$item->id) }}">
                                                                 <i class="bx bx-show"></i>
                                                             </a>                                                               
-                                                            <button onclick="seeMatched('{{$item->id}}')" class="btn btn-secondary" href="{{ route('dashboard.ads.edit',$item->id) }}">
+                                                            <button {{$item->status == 'pending'?'disabled':''}} onclick="seeMatched('{{$item->id}}')" class="btn btn-secondary" href="{{ route('dashboard.ads.edit',$item->id) }}">
                                                                 <i class="bx bx-user"></i>
                                                             </button>                                                               
                                                            @endcan
+                                                        
+                                                           @if ($item->status == 'pending')
+                                                           <button disabled  class="btn btn-secondary" href="{{ route('dashboard.ads.editContract',$item->id) }}">
+                                                            <i class="bx bx-book-content"></i>
+                                                           </button> 
+                                                           @elseif($item->status == 'fullpayment'||$item->status == 'progress'||$item->status == 'influncer_complete'||$item->status == 'complete'||$item->status == 'incomplete'||$item->status == 'rejected')
+                                                           <button  onclick="openModalSeeContract('{{ $item->contacts->content }}')" class="btn btn-secondary">
+                                                            <i class="bx bx-book-content"></i>
+                                                           </button> 
+                                                               @else
+                                                               <a  class="btn btn-secondary" href="{{ route('dashboard.ads.editContract',$item->id) }}">
+                                                                <i class="bx bx-book-content"></i>
+                                                               </a> 
+                                                           @endif
+                                                         
                                                         </td>
                                                     </tr>
                                             @endforeach
@@ -310,8 +330,32 @@
           </div>
         </div>
       </div>
-      
-</div>
+
+       <div id="seeContract" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Contract</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <p id="contractContent">
+
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary text-center align-middle" onclick="printContract()">
+                    <i class="bx bx-printer"></i>
+                </button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
 @endsection
 
 @section('scripts')
@@ -326,6 +370,26 @@
         $('#adminInfluncerModal').append(name);
         $('#deleteModal').modal('toggle');
     };
+
+    function openModalSeeContract(content)
+    {
+        $('#contractContent').empty();
+        $('#contractContent').append(content)
+        $('#seeContract').modal('toggle');
+    }
+
+    function printContract()
+    {
+        var divContents = document.getElementById("contractContent").innerHTML;
+            var a = window.open('', '', 'height=500, width=500');
+            a.document.write('<html>');
+            a.document.write('<body > <h1>Contract<br>');
+            a.document.write(divContents);
+            a.document.write('</body></html>');
+            a.document.close();
+            a.print();
+    }
+    
 
     function deleteApi()
     {

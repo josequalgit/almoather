@@ -218,6 +218,12 @@
               <label for="inputAddress2">Customer</label>
               <input disabled value="{{ old('budget')?old('budget'):$data->customers->first_name.' '.$data->customers->last_name}}" name="budget" type="text" class="form-control" id="inputAddress2" placeholder="budget">
             </div>
+            @if ($data->influncers)
+            <div class="form-group">
+              <label for="inputAddress2">Influencer</label>
+              <input disabled value="{{ old('influncer_id')?old('influncer_id'):$data->influncers->first_name.' '.$data->customers->last_name}}" name="budget" type="text" class="form-control" id="inputAddress2" placeholder="budget">
+            </div>
+            @endif
             <div class="form-group">
               <label for="inputAddress2">Budget</label>
               <input disabled value="{{ old('budget')?old('budget'):$data->budget}}" name="budget" type="text" class="form-control" id="inputAddress2" placeholder="budget">
@@ -228,10 +234,10 @@
               <input disabled value="{{ old('ad_script')?old('ad_script'):$data->ad_script}}" name="ad_script" type="text" class="form-control" id="inputAddress2" placeholder="ad_script">
             </div>
             @endif
-            @if($data->auth_number)
+            @if($data->cr_num)
             <div class="form-group">
-              <label for="inputAddress2">Auth Number</label>
-              <input disabled value="{{ old('auth_number')?old('auth_number'):$data->auth_number}}" name="auth_number" type="text" class="form-control" id="inputAddress2" placeholder="auth_number">
+              <label for="inputAddress2">Certificate number</label>
+              <input disabled value="{{ old('cr_num')?old('cr_num'):$data->cr_num}}" name="cr_num" type="text" class="form-control" id="inputAddress2" placeholder="cr_num">
             </div>
             @endif
           
@@ -239,16 +245,38 @@
                 <label for="inputAddress2">Is Onsite</label>
                 <input disabled value="{{ old('onSite')?old('onSite'):($data->onSite?'Yes':'No')}}" name="onSite" type="text" class="form-control" id="inputAddress2" placeholder="onSite">
             </div>
-            @if($data->website_link)
+            @if($data->store_link)
             <div class="form-group">
-                <label for="inputAddress2">Website Link</label>
-                <input disabled value="{{ old('website_link')?old('website_link'):$data->website_link}}" name="website_link" type="text" class="form-control" id="inputAddress2" placeholder="website_link">
+                <label for="inputAddress2">Store Link</label>
+                <input disabled value="{{ old('store_link')?old('store_link'):$data->store_link}}" name="store_link" type="text" class="form-control" id="inputAddress2" placeholder="store_link">
             </div>
             @endif
+
+            @if($data->marouf_num)
+            <div class="form-group">
+                <label for="inputAddress2">Marouf Number</label>
+                <input disabled value="{{ old('marouf_num')?old('marouf_num'):$data->marouf_num}}" name="marouf_num" type="text" class="form-control" id="inputAddress2" placeholder="marouf_num">
+            </div>
+            @endif
+
+            @if($data->discount_code)
+            <div class="form-group">
+                <label for="inputAddress2">Discount Code</label>
+                <input disabled value="{{ old('discount_code')?old('discount_code'):$data->discount_code}}" name="discount_code" type="text" class="form-control" id="inputAddress2" placeholder="discount_code">
+            </div>
+            @endif
+
+            @if($data->social_media_id)
+            <div class="form-group">
+                <label for="inputAddress2">Spcial Media</label>
+                <input disabled value="{{ old('social_media_id')?old('social_media_id'):$data->socialMedias->name}}" name="social_media_id" type="text" class="form-control" id="inputAddress2" placeholder="social_media_id">
+            </div>
+            @endif
+
             {{-- <div class="form-group">
                 <label for="inputAddress2">Social Media</label>
                 <input disabled value="{{ old('social_media_id')?old('social_media_id'):$data->socialMedias->name}}" name="social_media_id" type="text" class="form-control" id="inputAddress2" placeholder="social_media_id">
-            </div>
+            </div> --}}
           
             <div class="form-group">
                 <label for="inputAddress2">Country</label>
@@ -262,16 +290,31 @@
             <div class="form-group">
                 <label for="inputAddress2">Area</label>
                 <input disabled value="{{ old('area_id')?old('area_id'):$data->areas?->name}}" name="area_id" type="text" class="form-control" id="inputAddress2" placeholder="area_id">
-            </div> --}}
+            </div>
+
             <div class="form-group">
                 <label for="inputAddress2">About</label>
                 <textarea class="form-control" disabled rows="11">{{ $data->about }}</textarea>
             </div>
+
+            @if($data->expense_type !== 'none')
+            <div class="form-group">
+                <label for="inputAddress2">Expense type</label>
+                <textarea class="form-control" disabled rows="11">{{ $data->expense_type }}</textarea>
+            </div>
+            @endif
             
             @if($data->reject_note)
             <div class="form-group">
                 <label for="inputAddress2">Reject Note</label>
                 <textarea class="form-control" disabled rows="11">{{ $data->reject_note }}</textarea>
+            </div>
+            @endif
+
+            @if($data->scenario)
+            <div class="form-group">
+                <label for="inputAddress2">Scenario</label>
+                <textarea class="form-control" disabled rows="11">{{ $data->scenario }}</textarea>
             </div>
             @endif
 
@@ -301,22 +344,20 @@
                 <source src="{{ $data->item }}" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
-              
             </div>
-                
             @endforeach
             @endif
 
             {{-- <button type="button" class="btn btn-secondary mt-2 mb-2">
               <i class="bx bx-show white" aria-hidden="true"></i>
             </button> --}}
-            <div class="form-group">
+            {{-- <div class="form-group">
               <label class="col mb-2" for="inputAddress2">Matched</label>
               <button  {{ $data->status != 'approve'?'disabled':''}} onclick="openModel()" id="myModal" type="button" class="btn btn-secondary mb-2" data-toggle="modal" data-target="#exampleModal">
                 <i class="bx bx-show white" aria-hidden="true"></i>
               </button>
               
-            </div>
+            </div> --}}
            
             
 
@@ -362,6 +403,78 @@
               @endcan
               
             </div>
+
+            <div class="table-responsive mt-2">
+              <label class="col mb-2" for="inputAddress2">Matched</label>
+              <table class="table zero-configuration">
+                  <thead>
+                      <tr>
+                          <th>Image</th>
+                          <th>Full name</th>
+                          <th>Match</th>
+                          <th>Chosen</th>
+                          <th>Accepted</th>
+                          <th>Action</th>
+                          {{-- <th>Action</th> --}}
+                      </tr>
+                  </thead>
+                  <tbody>
+                      @foreach ($matches as $item)
+                              <tr>
+                                <td>
+                                  <div class="thumb">
+                                    <img class="img-fluid" src="{{ $item->influencers->users->infulncerImage }}" alt="">
+                                  </div>
+                                </td>
+
+                                {{-- @php
+                                  dd($item->influencers->checkIfAccepted($data->id));    
+                                @endphp --}}
+                                  <td>{{  $item->influencers->full_name }}</td>
+                                  <td>{{ $item->match }}%</td>
+                                  <td>{{ $item->chosen ? 'Yes':'No' }}</td>
+                                  <td>
+                                  @if ($item->influencers->checkIfAccepted($data->id) == 1)
+                                      Yes
+                                    @elseif($item->influencers->checkIfAccepted($data->id) == 2)
+                                     No Contract avalibale
+                                      @else
+                                      No
+                                  @endif
+                                </td>
+                                  <td>
+                                    
+                                    
+                                    <button type="button" onclick="seeContract('{{$data->contacts->content}}','{{ $item->influencers->id }}')" class="btn btn-secondary">
+                                      <i class="bx bx-send"></i>
+                                     </button> 
+
+                                     {{-- @if ($item->status == 'pending')
+                                     <button disabled  class="btn btn-secondary" href="{{ route('dashboard.ads.editContract',$item->id) }}">
+                                      <i class="bx bx-book-content"></i>
+                                     </button> 
+                                     @elseif($item->status == 'fullpayment'||$item->status == 'progress'||$item->status == 'influncer_complete'||$item->status == 'complete'||$item->status == 'incomplete'||$item->status == 'rejected')
+                                     <button  onclick="openModalSeeContract('{{ $item->contacts->content }}')" class="btn btn-secondary">
+                                      <i class="bx bx-book-content"></i>
+                                     </button> 
+                                         @else
+                                         <a  class="btn btn-secondary" href="{{ route('dashboard.ads.editContract',$item->id) }}">
+                                          <i class="bx bx-book-content"></i>
+                                         </a> 
+                                     @endif --}}
+                                   
+                                  </td>
+                              </tr>
+                      @endforeach
+                  </tbody>
+              </table>
+          </div>
+      </div>
+      {{-- @can('See Ads')
+      <div class="p-1">
+          {{ $data->links('pagination::bootstrap-5') }}
+      </div>
+      @endcan --}}
            
 
           </form>
@@ -418,6 +531,11 @@
                     @endforeach
                   </select>
                 </div>
+
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">Date</label>
+                  <input id="date" value="" name="website_link" type="date" class="form-control" id="inputAddress2" placeholder="date">
+                </div>
               </div>
               <div class="modal-footer">
                 <button onclick="sendStatusRequest()" type="button" class="btn btn-primary">Save changes</button>
@@ -465,7 +583,7 @@
 
                                     </div>
                                     <div class="col">
-                                      <button style="background:none; border:none;" onclick="getUnchosenInfulncers('{{ $item->influencers->users->id }}')" class="float-right" href="http://" target="_blank" rel="noopener noreferrer">
+                                      <button style="background:none; border:none;" onclick=" ('{{ $item->influencers->users->id }}')" class="float-right" href="http://" target="_blank" rel="noopener noreferrer">
                                         <h5 ><i class="bx bx-edit"></i></h5>
                                       </button>
                                     </div>
@@ -550,6 +668,31 @@
             </div>
           </div>
         </div>
+
+        <div id="seeContract" class="modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Contract</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  {{-- <p id="contractContent">
+  
+                  </p> --}}
+                  <textarea name="content" id="contractContent" rows="10" cols="80"></textarea>  
+              </div>
+              <div class="modal-footer">
+                  <button class="btn btn-secondary text-center align-middle" onclick="sendContract()">
+                     Send
+                  </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
         
 
         </section>
@@ -562,6 +705,21 @@
 @endsection
 @section('scripts')
 <script>
+  var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth()+1; //January is 0 so need to add 1 to make it 1!
+var yyyy = today.getFullYear();
+let choosen_inf_id = 0;
+
+if(dd<10){
+  dd='0'+dd
+} 
+if(mm<10){
+  mm='0'+mm
+} 
+
+today = yyyy+'-'+mm+'-'+dd;
+document.getElementById("date").setAttribute("min", today);
   let removed_inf = 0;
 
   $.ajaxSetup({
@@ -569,6 +727,11 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
+CKEDITOR.replace('contractContent', {
+      extraPlugins: 'placeholder',
+      height: 220,
+      removeButtons: 'PasteFromWord'
+    });
 
   function changeStatus()
   {
@@ -603,6 +766,7 @@
         note:document.getElementById('rejectedNote').value,
         category_id:document.getElementById('category_id').value,
         ad_type:document.getElementById('ad_type').value,
+        date:document.getElementById('date').value,
         onSite:'{{ $data->onSite }}',
         adBudget:'{{ $data->budget }}',
         expense_type:document.getElementById('expense_type').value
@@ -655,6 +819,38 @@
             }
         });
 
+  }
+
+  function seeContract(content , inf_id)
+  {
+    choosen_inf_id = inf_id;
+    $('#contractContent').empty();
+    // $('#contractContent').append(content);
+    //document.getElementById('contractContent').innerHTML = content;
+    CKEDITOR.instances['contractContent'].setData(content);
+
+    $('#seeContract').modal('toggle');
+  }
+
+  function sendContract()
+  {
+    let url = '{{ route("dashboard.ads.sendContractToInfluncer",":id") }}';
+    let addId = url.replace(':id','{{ $data->id }}');
+    $.ajax({
+      url:addId,
+      data:{
+        influncers_id:choosen_inf_id
+      },
+      type:'POST',
+      success:(res)=>{
+        console.log('success: ',res);
+      },
+      error:(err)=>{
+        console.log('error: ',err);
+      }
+    })
+    alert('send')
+    
   }
   
 

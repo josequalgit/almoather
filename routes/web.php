@@ -110,6 +110,9 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::post('/ads/update/{id}','update')->name('update')->middleware('permission:Edit Ads');
             Route::get('/ads/changeMatch/{ad_id}/{removed_inf}/{chosen_inf}','changeMatch')->name('changeMatch')->middleware('permission:Edit Ads');
             Route::get('/ads/seeMatched/{ad_id}','seeMatched')->name('seeMatched');
+            Route::get('/ads/contract/edit/{ad_id}','editContract')->name('editContract');
+            Route::post('/ads/contract/update/{ad_id}','updateContract')->name('updateContract');
+            Route::post('/ads/contract/influencers/{ad_id}','sendContractToInfluencer')->name('sendContractToInfluncer');
         });
 
         Route::middleware('role_or_permission:superAdmin|Edit Slide|See Slide|Create Slide|Delete Slide')->name('slides.')->controller(SlideController::class)->group(function(){
@@ -119,7 +122,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/slides/edit/{id}','edit')->name('edit')->middleware('permission:Edit Slide');
             Route::post('/slides/update/{id}','update')->name('update')->middleware('permission:Edit Slide');
             Route::post('/slides/update/{id}','update')->name('update')->middleware('permission:Edit Slide');
-            Route::post('/slides/delete/{id}','delete')->name('delete')->middleware('permission:Delete Slide');
+            Route::get('/slides/delete/{id}','delete')->name('delete')->middleware('permission:Delete Slide');
         });
 
         Route::middleware('role_or_permission:superAdmin|Edit Terms')->name('terms.')->controller(ContactUsController::class)->group(function(){

@@ -674,9 +674,9 @@ input[type="radio"] .styled:checked + label::after {
                   </a>
                 </li>
                 <li class="menu-item 
-                {{ (($name == 'dashboard.ads.index'&&$para == 'waiting_for_payment')|| ($name == 'dashboard.ads.create'&&$para == 'waiting_for_payment')||($name == 'dashboard.ads.edit')&&$para == 'waiting_for_payment') ? 'active':''  }}">
-                  <a href="{{ route('dashboard.ads.index','waiting_for_payment') }}" class="menu-link">
-                    <div data-i18n="List">Waiting For Payment</div>
+                {{ (($name == 'dashboard.ads.index'&&$para == 'APPROVE')|| ($name == 'dashboard.ads.create'&&$para == 'APPROVE')||($name == 'dashboard.ads.edit')&&$para == 'APPROVE') ? 'active':''  }}">
+                  <a href="{{ route('dashboard.ads.index','APPROVE') }}" class="menu-link">
+                    <div data-i18n="List">Approved</div>
                   </a>
                 </li>
                 <li class="menu-item

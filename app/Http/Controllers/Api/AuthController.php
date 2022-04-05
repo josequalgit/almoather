@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\UserResponse;
 use App\Models\User;
 use App;
+use Illuminate\Http\Request;
+use App\Http\Requests\Api\ChangePasswordRequest;
+
 class AuthController extends Controller
 {
     use UserResponse;
@@ -164,5 +167,30 @@ class AuthController extends Controller
             'msg'=>'language is not supported',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
+    }
+
+
+    public function changePassword(ChangePasswordRequest $request)
+    {
+
+        if(Auth::guard('api')->attempt(['email'=>Auth::guard('api')->user()->email,'password'=>$request->password]))
+        {
+            $data = User::find(Auth::guard('api')->user()->id);
+            $data->password = bcrypt($request->new_password);
+            $data->save();
+
+            return response()->json([
+                'msg'=>'password was changed',
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
+        }
+        else
+        {
+            return response()->json([
+                'msg'=>'wrong password',
+                'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
+        }
+
     }
 }

@@ -81,5 +81,27 @@ class SlideController extends Controller
 
     }
 
+    public function delete($id)
+    {
+        $slide = Slide::find($id);
+        if($slide)
+        {
+            $slide->clearMediaCollection('slideImages');
+            $slide->delete();
+
+            return response()->json([
+                'msg'=>'slide was deleted',
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
+        }
+        else
+        {
+            return response()->json([
+                'msg'=>'ad not found',
+                'status'=>config('global.NOT_FOUND_STATUS')
+            ],config('global.NOT_FOUND_STATUS'));
+        }
+    }
+
 
 }

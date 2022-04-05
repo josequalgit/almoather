@@ -79,11 +79,11 @@
                                                                         <i class="bx bx-edit"></i>
                                                                     </a>
                                                                 @endcan
-                                                                {{-- @can('Delete Slide')
-                                                                    <button class="btn btn-danger" onclick="openModal('{{ $item->id }}','{{ $item->question }}')">
+                                                                @can('Delete Slide')
+                                                                    <button class="btn btn-danger" onclick="openModal('{{ $item->id }}','{{ $item->getTranslations('title')['en'] }}')">
                                                                         <i class="bx bx-trash buttonIcon"></i>
                                                                     </button>
-                                                                @endcan --}}
+                                                                @endcan
 
                                                             </td>
                                                         

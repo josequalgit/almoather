@@ -103,6 +103,7 @@ Route::group(['prefix'=>'auth'],function(){
             Route::post('logout','logout');
             Route::post('refresh','refresh');
             Route::post('me','me');
+            Route::post('changePassword','changePassword');
         });
 
         #Ad ROUTES

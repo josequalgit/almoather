@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
+use App\Models\Contract;
 
 class Influncer extends Model implements HasMedia
 {
@@ -120,5 +121,33 @@ class Influncer extends Model implements HasMedia
     {
        
         return $this->users->email_verify_at ? true : false;
+    }
+
+    public function checkIfAccepted($ad_id)
+    {
+        /**
+         *  0 => is rejected
+         *  1 => is accepted
+         *  2 => no Contract avalibale
+         */
+        $contract = Contract::where(['influencer_id'=>$this->id])
+        ->where(['ad_id'=>$ad_id])
+        ->first();
+        
+        if($contract)
+        {
+            if($contract->is_accepted)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else
+        {
+            return 2;
+        }
     }
 }

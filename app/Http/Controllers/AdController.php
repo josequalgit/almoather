@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Ad;
 use App\Models\CustomerAdRating;
 use App\Models\Category;
+use App\Models\Contract;
 use App\Models\Influncer;
 use App\Models\User;
 use App\Models\InfluncerCategory;
@@ -14,6 +15,7 @@ use Carbon\Carbon;
 use App\Models\InfluencerRateing;
 use App\Models\MarketingAdRating;
 use App\Models\AdsInfluencerMatch;
+use App\Http\Requests\UpdateContractAds;
 
 
 class AdController extends Controller
@@ -63,6 +65,10 @@ class AdController extends Controller
             'msg'=>'please choose a ad type',
             'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
         ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
+        if(!$request->date) return response()->json([
+            'msg'=>'please select an ad date',
+            'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
+        ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
 
        // return response()->json([$request->all()],500);
 
@@ -72,6 +78,7 @@ class AdController extends Controller
         $ad->reject_note = $request->note ?? null;
         $ad->expense_type = $request->expense_type;
         $ad->type = $request->ad_type;
+        $ad->date = $request->date;
         $ad->save();
 
         // STEP 1 - GET THE PROPERTY CATEGORIES
@@ -249,6 +256,41 @@ class AdController extends Controller
         }
 
         return $data;
+    }
+
+    public function editContract ($ad_id)
+    {
+        $data = Ad::findOrFail($ad_id)->contacts;
+        return view('dashboard.ads.editContract',compact('data'));
+    }
+
+    public function updateContract(UpdateContractAds $request,$ad_id)
+    {
+        $contract_id = Ad::findOrFail($ad_id)->contacts->id;
+        $contract = Contract::findOrFail($contract_id)->update($request->all());
+        return redirect()->route('dashboard.ads.index');
+    }
+
+    public function sendContractToInfluencer(Request $request,$ad_id)
+    {
+        $contract = Ad::find($ad_id)->contacts;
+       
+        if(!$contract) return response()->json([
+            'msg'=>'contract was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+        
+        $data = new Contract;
+        $data->title = $contract->title;
+        $data->content = $contract->content;
+        $data->influencer_id =$request->influncers_id;
+        $data->ad_id = $ad_id;
+        $data->save();
+        
+        return response()->json([
+            'msg'=>'contract was sent',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 
 
