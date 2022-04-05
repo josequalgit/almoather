@@ -508,6 +508,7 @@ class AdController extends Controller
                 'type'=>$data->type,
                 'category'=>$data->categories ? $data->categories->name : null,
                 'price'=>$cal,
+                'budget'=>$data->budget,
                 'matches'=>$data->matches()->get()->map(function($item){
                     return $item->match;
                 })
@@ -535,6 +536,7 @@ class AdController extends Controller
                 'type'=>$data->type,
                 'category'=>$data->categories->name,
                 'price'=>$data->budget - $cal,
+                'budget'=>$data->budget,
                 'match'=> $data->matches()->where('chosen',1)->get()->map(function($item){
                         return [
 							'id'=>$item->influencers->id,
