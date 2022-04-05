@@ -534,7 +534,7 @@ class AdController extends Controller
             'data'=>[
 				'id'=>$data->id,
                 'type'=>$data->type,
-                'category'=>$data->categories->name,
+                'category'=>$data->categories?$data->categories->name:null,
                 'price'=>$data->budget - $cal,
                 'budget'=>$data->budget,
                 'match'=> $data->matches()->where('chosen',1)->get()->map(function($item){
