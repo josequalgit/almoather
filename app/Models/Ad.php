@@ -33,7 +33,7 @@ class Ad extends Model implements HasMedia
         'influncer_id',
         'reject_note',
         'expense_type',
-        'is_verified'
+        'is_verified',
     ];
 
     protected $append = 
