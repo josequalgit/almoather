@@ -18,11 +18,16 @@ trait UserResponse {
              'id'=>$user->id,
              'full_name' =>$info->full_name,
              'image'=>$user->infulncerImage,
+             'address'=>$info->address,
              'nick_name'=>$info->nick_name,
              'nationality_id'=>$info->nationality_id,
+             'nationality'=>$info->nationalities->name,
              'country_id'=>$info->country_id,
+             'country'=>$info->countries->name,
              'region_id'=>$info->region_id,
+             'region'=>$info->regions->name,
              'city_id'=>$info->city_id,
+             'city'=>$info->citys->name,
              'influencer_category'=>$info->InfluncerCategories->pluck('id')->toArray(),
              'bio'=>$info->bio,
              'milestone'=>$info->milestone,
@@ -50,6 +55,12 @@ trait UserResponse {
              'rep_email'=>$info->rep_email,
              'ad_onsite_price_with_vat'=>$info->ad_onsite_price_with_vat,
              'preferred_socialMedias'=>$info->socialMedias->pluck('id')->toArray(),
+             'preferred_socialMedias_details'=>$info->socialMedias()->get()->map(function($item){
+                 return [
+                     'id'=>$item->id,
+                     'image'=>$item->image
+                 ];
+             }),
              'is_verify'=>$info->users->email_verified_at ? true : false,
          ];
 

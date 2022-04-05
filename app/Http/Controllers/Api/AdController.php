@@ -524,9 +524,7 @@ class AdController extends Controller
             'err'=>'ad was not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
-        // $data->status = 'fullpayment';
-        // $data->save();
-
+        
         $cal = $data->budget*5.5/100;
 
         return response()->json([

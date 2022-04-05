@@ -105,6 +105,11 @@ class Influncer extends Model implements HasMedia
         return $this->hasMany(SocialMediaProfile::class,'Influncer_id');
     }
 
+    public function regions()
+    {
+        return $this->belongsTo(Region::class,'region_id');
+    }
+
     public function ad_matches()
     {
         return $this->hasMany(AdsInfluencerMatch::class,'influencer_id');
