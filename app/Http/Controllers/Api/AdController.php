@@ -524,8 +524,8 @@ class AdController extends Controller
             'err'=>'ad was not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
-        $data->status = 'fullpayment';
-        $data->save();
+        // $data->status = 'fullpayment';
+        // $data->save();
 
         $cal = $data->budget*5.5/100;
 
@@ -596,6 +596,24 @@ class AdController extends Controller
             'match'=>$match,
             'eligible'=>$eligible
         ];
+    }
+
+    public function full_payment($ad_id)
+    {
+        $ad = Ad::find($ad_id);
+        if(!$ad) return response()->json([
+            'err'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $ad->status = 'fullpayment';
+        $ad->save();
+
+        return response()->json([
+            'msg'=>'ad status was changed to '.$ad->status.'',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+
     }
 
 

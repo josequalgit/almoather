@@ -123,6 +123,7 @@ Route::group(['prefix'=>'auth'],function(){
             Route::post('pay_now/{id}','pay_now');
             Route::get('back_up_influencers/{id}/{removed_inf}','back_up_influencers');
             Route::get('/ads/contract/{ad_id}','get_ad_contract');
+            Route::post('fullPayment/{ad_id}','full_payment');
         });
 
         #CATEGORIES ROUTES
