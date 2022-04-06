@@ -329,7 +329,6 @@ class UpdateDataController extends Controller
             'en'=>$request->full_name_ar,
         ];
         $inf->country_id = $request->country_id;
-        $inf->nick_name = $request->nick_name;
         $inf->id_number = $request->id_number;
         $inf->city_id = $request->city_id;
         $inf->is_vat = $request->is_vat;
@@ -469,14 +468,14 @@ class UpdateDataController extends Controller
             'rep_email'=>$request->rep_email
         ]);
 
-        $data->clearMediaCollection('commercial_registration_no_file');
+        $user->clearMediaCollection('commercial_registration_no_file');
 
-        $data->addMedia($request->file('commercial_registration_no_file'))
+        $user->addMedia($request->file('commercial_registration_no_file'))
         ->toMediaCollection('commercial_registration_no_file');
 
-        $data->clearMediaCollection('tax_registration_number_file');
+        $user->clearMediaCollection('tax_registration_number_file');
 
-        $data->addMedia($request->file('tax_registration_number_file'))
+        $user->addMedia($request->file('tax_registration_number_file'))
         ->toMediaCollection('tax_registration_number_file');
 
 
