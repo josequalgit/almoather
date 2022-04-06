@@ -307,9 +307,9 @@ class UpdateDataController extends Controller
         $data = User::find(Auth::guard('api')->user()->id);
 
         if($request->hasFile('image')){
-            $data->clearMediaCollection('customers')
+            $data->clearMediaCollection('influncers')
             ->addMedia($request->file('image'))
-            ->toMediaCollection('customers');
+            ->toMediaCollection('influncers');
         }
 
         if(!$data) return response()->json([

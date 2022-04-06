@@ -38,7 +38,7 @@
             </div>
             <div class="form-group">
               <label for="inputAddress2">Ads Out if Country</label>
-              <input disabled value="{{ old('ads_out_country')?old('ads_out_country'):$data->ads_out_country}}" name="city_id" type="text" class="form-control" id="inputAddress2" placeholder="city_id">
+              <input disabled value="{{$data->ads_out_country?'Yes':'No'}}" name="city_id" type="text" class="form-control" id="inputAddress2" placeholder="city_id">
             </div>
             <div class="form-group">
               <label for="inputAddress2">City</label>
@@ -50,6 +50,11 @@
             </div>
             <div class="form-group">
               <label for="inputAddress2">Nationality</label>
+              <input disabled value="{{ old('nationality_id')?old('nationality_id'):$data->nationalities->name}}" name="nationality_id" type="text" class="form-control" id="inputAddress2" placeholder="nationality_id">
+            </div>
+
+            <div class="form-group">
+              <label for="inputAddress2">Category</label>
               <input disabled value="{{ old('nationality_id')?old('nationality_id'):$data->nationalities->name}}" name="nationality_id" type="text" class="form-control" id="inputAddress2" placeholder="nationality_id">
             </div>
 
