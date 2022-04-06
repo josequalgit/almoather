@@ -416,9 +416,16 @@ class UpdateDataController extends Controller
         foreach ($request->preferred_socialMedias as $item) {
              $inf->socialMedias()->attach($item);
         }
-
-        if($request->snap_chat_video&&count($request->snap_chat_video) > 0)
+        
+        if($request->snap_chat_video)
         {
+            if(!is_array($request->snap_chat_video))
+            return response()->json([
+                'msg'=>'videos must be in array',
+                'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
+
+
             $user->clearMediaCollection('snapchat_videos');
             foreach ($request->snap_chat_video as $value) {
                 $user->addMedia($value)
