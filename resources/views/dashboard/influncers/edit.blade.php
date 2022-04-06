@@ -37,6 +37,10 @@
               <textarea class="form-control" disabled>{{ old('bio')?old('bio'):$data->bio}}</textarea>
             </div>
             <div class="form-group">
+              <label for="inputAddress2">Ads Out if Country</label>
+              <input disabled value="{{ old('ads_out_country')?old('ads_out_country'):$data->ads_out_country}}" name="city_id" type="text" class="form-control" id="inputAddress2" placeholder="city_id">
+            </div>
+            <div class="form-group">
               <label for="inputAddress2">City</label>
               <input disabled value="{{ old('city_id')?old('city_id'):$data->citys->name}}" name="city_id" type="text" class="form-control" id="inputAddress2" placeholder="city_id">
             </div>
