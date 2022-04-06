@@ -29,8 +29,13 @@ class UpdateDataController extends Controller
    
     public function updateCustomer(UpdateCustomerRequest $request , $id)
     {
-        $data = User::find(Auth::guard('api')->user()->id);
+        if(!Auth::guard('api')->user())  return response()->json([
+            'msg'=>'user not found',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
 
+        $data = User::find(Auth::guard('api')->user()->id);
+       
         if($this->checkIfDataAvalibale($request))
         {
             return response()->json([
@@ -344,6 +349,11 @@ class UpdateDataController extends Controller
 
     public function updateMediaDetailsInfluncer(UpdateMediaDetailsRequest $request)
     {
+        if(!Auth::guard('api')->user())return response()->json([
+            'msg'=>'user not found',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
+
         $user = User::find(Auth::guard('api')->user()->id);
 
         if(!Auth::guard('api')->user()) return response()->json([
@@ -430,6 +440,11 @@ class UpdateDataController extends Controller
 
     public function updateExtraInfoInfluencers(UpdateExtraInfluncerRequest $request)
     {
+        if(!Auth::guard('api')->user())return response()->json([
+            'msg'=>'user not found',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
+
         $user = User::find(Auth::guard('api')->user()->id);
 
         if(!$user) return response()->json([
@@ -476,6 +491,10 @@ class UpdateDataController extends Controller
 
     public function updatePriceInfoInfluencers(UpdatePriceInfluncerRequest $request)
     {
+        if(!Auth::guard('api')->user())return response()->json([
+            'msg'=>'user not found',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
         
         $user = User::find(Auth::guard('api')->user()->id);
 
