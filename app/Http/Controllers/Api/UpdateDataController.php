@@ -454,6 +454,16 @@ class UpdateDataController extends Controller
             'rep_email'=>$request->rep_email
         ]);
 
+        $data->clearMediaCollection('commercial_registration_no_file');
+
+        $data->addMedia($request->file('commercial_registration_no_file'))
+        ->toMediaCollection('commercial_registration_no_file');
+
+        $data->clearMediaCollection('tax_registration_number_file');
+
+        $data->addMedia($request->file('tax_registration_number_file'))
+        ->toMediaCollection('tax_registration_number_file');
+
 
         return response()->json([
             'msg'=>'data was update',
