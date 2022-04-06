@@ -96,6 +96,13 @@ Route::group(['prefix'=>'auth'],function(){
         Route::get('/','index');
         Route::get('/influncers','getInfluncerCategories');
     });
+
+     #GET SLIDES
+     Route::controller(SlideController::class)->prefix('slides')->group(function(){
+        Route::get('/','index');
+    });
+
+
     
     Route::middleware('api_auth')->group(function(){
 
@@ -150,12 +157,7 @@ Route::group(['prefix'=>'auth'],function(){
             Route::get('/{type}','index');
         });
 
-        #GET SLIDES
-        Route::controller(SlideController::class)->prefix('slides')->group(function(){
-            Route::get('/','index');
-        });
-
-
+       
     
         
 
