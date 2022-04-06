@@ -34,11 +34,13 @@ class UpdatePersonalDataRequest extends FormRequest
             'nationality_id'=>'required',
             'id_number'=>'required',
             'city_id'=>'required',
-            'email'=>'required',
+            //'email'=>'required',
             'name'=>'required',
             'is_vat'=>'required',
             'region_id'=>'required',
-            'phone'=>'required'
+            'phone'=>'required',
+            'nick_name'=>'required',
+            'image'=>'required'
         ];
     }
 

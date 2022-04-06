@@ -39,6 +39,7 @@ class UpdateMediaDetailsRequest extends FormRequest
             'social_media'=>'required',
             'categories'=>'required',
             'preferred_socialMedias'=>'required',
+            //'snap_chat_video'=>'required',
         ];
     }
 

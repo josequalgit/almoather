@@ -110,7 +110,7 @@ class UpdateDataController extends Controller
         ],config('global.CREATED_STATUS'));
     }
 
-    public function updateInfluncer(UpdateInfulncerRequest $request , $id)
+    public function updateInfluncer(UpdatePersonalDataRequest $request , $id)
     {
         $data = User::find(Auth::guard('api')->user()->id);
 
@@ -139,18 +139,18 @@ class UpdateDataController extends Controller
         {
             $updateUser['password'] = bcrypt($request->password);
         }
-        if($request->email !== $data->email)
-        {
-            $checkEmail = User::where('email',$request->email)->first();
-            if($checkEmail)
-            {
-                return response()->json([
-                    'msg'=>'email was already found',
-                    'status'=>config('global.WRONG_VALIDATION_STATUS')
-                ],config('global.WRONG_VALIDATION_STATUS'));
-            }
-            $updateUser['email'] = $request->email;
-        }
+        // if($request->email !== $data->email)
+        // {
+        //     $checkEmail = User::where('email',$request->email)->first();
+        //     if($checkEmail)
+        //     {
+        //         return response()->json([
+        //             'msg'=>'email was already found',
+        //             'status'=>config('global.WRONG_VALIDATION_STATUS')
+        //         ],config('global.WRONG_VALIDATION_STATUS'));
+        //     }
+        //     $updateUser['email'] = $request->email;
+        // }
 
         $data->update($updateUser);
 
@@ -292,9 +292,21 @@ class UpdateDataController extends Controller
         return null;
     }
 
-    public function updatePersonalInfluncerData(UpdatePersonalDataRequest $request , $user_id)
+    public function updatePersonalInfluncerData(UpdatePersonalDataRequest $request)
     {
-        $data = User::find($user_id);
+        if(!Auth::guard('api')->user()) return response()->json([
+            'msg'=>'user not found',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
+
+        $data = User::find(Auth::guard('api')->user()->id);
+
+        if($request->hasFile('image')){
+            $data->clearMediaCollection('customers')
+            ->addMedia($request->file('image'))
+            ->toMediaCollection('customers');
+        }
+
         if(!$data) return response()->json([
             'msg'=>'user not found',
             'status'=>config('global.WRONG_VALIDATION_STATUS')
@@ -306,19 +318,22 @@ class UpdateDataController extends Controller
         ],config('global.WRONG_VALIDATION_STATUS'));
 
         $inf = Influncer::find($data->influncers->id);
+
         $inf->full_name = [
             'ar'=>$request->full_name_ar,
             'en'=>$request->full_name_ar,
         ];
         $inf->country_id = $request->country_id;
+        $inf->nick_name = $request->nick_name;
         $inf->id_number = $request->id_number;
         $inf->city_id = $request->city_id;
         $inf->is_vat = $request->is_vat;
         $inf->region_id = $request->region_id;
         $inf->phone = $request->phone;
-        $data->email = $request->email;
         $data->save();
         $inf->save();
+
+        
 
         return response()->json([
             'msg'=>'data was update',
@@ -327,9 +342,14 @@ class UpdateDataController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    public function updateMediaDetailsInfluncer(UpdateMediaDetailsRequest $request , $user_id)
+    public function updateMediaDetailsInfluncer(UpdateMediaDetailsRequest $request)
     {
-        $user = User::find($user_id);
+        $user = User::find(Auth::guard('api')->user()->id);
+
+        if(!Auth::guard('api')->user()) return response()->json([
+            'msg'=>'user not found',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
 
         if(!$user) return response()->json([
             'msg'=>'user not found',
@@ -354,6 +374,7 @@ class UpdateDataController extends Controller
             'street'=>$request->street,
             'neighborhood'=>$request->neighborhood,
         ]);
+        
 
        
 
@@ -387,6 +408,17 @@ class UpdateDataController extends Controller
              $inf->socialMedias()->attach($item);
         }
 
+        if($request->snap_chat_video&&count($request->snap_chat_video) > 0)
+        {
+            $user->clearMediaCollection('snapchat_videos');
+            foreach ($request->snap_chat_video as $value) {
+                $user->addMedia($value)
+                ->toMediaCollection('snapchat_videos');
+            }
+        }
+
+       
+
 
         return response()->json([
                     'msg'=>'data was update',
@@ -396,9 +428,9 @@ class UpdateDataController extends Controller
         
     }
 
-    public function updateExtraInfoInfluencers(UpdateExtraInfluncerRequest $request, $user_id)
+    public function updateExtraInfoInfluencers(UpdateExtraInfluncerRequest $request)
     {
-        $user = User::find($user_id);
+        $user = User::find(Auth::guard('api')->user()->id);
 
         if(!$user) return response()->json([
             'msg'=>'user not found',
@@ -432,11 +464,12 @@ class UpdateDataController extends Controller
 
     }
 
-    public function updatePriceInfoInfluencers(UpdatePriceInfluncerRequest $request , $user_id)
+    public function updatePriceInfoInfluencers(UpdatePriceInfluncerRequest $request)
     {
         
-        $user = User::find($user_id);
+        $user = User::find(Auth::guard('api')->user()->id);
 
+    
         if(!$user) return response()->json([
             'msg'=>'user not found',
             'status'=>config('global.WRONG_VALIDATION_STATUS')
