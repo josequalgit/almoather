@@ -41,6 +41,8 @@ Route::group(['prefix'=>'auth'],function(){
         Route::post('/influencer/media','updateMediaDetailsInfluncer');
         Route::post('/influencer/extra','updateExtraInfoInfluencers');
         Route::post('/influencer/price','updatePriceInfoInfluencers');
+        Route::post('/influencer/deleteFile/{id}','deleteFiles');
+        Route::post('/influencer/uploadFile/{id}/{type}','uploadFiles');
      
     });
 

@@ -114,8 +114,13 @@ class User extends Authenticatable implements JWTSubject , HasMedia
         if(count($mediaItems) > 0)
         {
             foreach ($mediaItems as $key => $value) {
-                $publicFullUrl = $mediaItems[$key]->getFullUrl();
-                array_push($array_of_links,$publicFullUrl);
+                //$publicFullUrl = $mediaItems[$key]->getFullUrl();
+                $publicFullUrl = $mediaItems[$key];
+                $data = [
+                    'id'=>$publicFullUrl->id,
+                    'url'=>$publicFullUrl->getFullUrl()
+                ];
+                array_push($array_of_links,$data);
             }
            ;
         }

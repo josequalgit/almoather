@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Http\Traits;
+use App\Models\User;
 
 trait UserResponse {
 
 
-    public function userDataResponse($user , $token = null)
+    public function userDataResponse($user , $token = null , $id = null)
     {
+        $user = User::find($id);
         $info = $user->influncers ?? $user->customers;
         
         $formate = [];
@@ -48,7 +50,9 @@ trait UserResponse {
              'snap_chat_views'=>$info->snap_chat_views,
              'snap_chat_video'=>$user->snapChatVideo,
              'commercial_registration_no'=>$info->commercial_registration_no,
+             'commercial_registration_no_files'=>[],
              'tax_registration_number'=>$info->tax_registration_number,
+             'tax_registration_number_files'=>[],
              'rep_full_name'=>$info->rep_full_name,
              'rep_id_number_name'=>$info->rep_id_number_name,
              'rep_phone_number'=>$info->rep_phone_number,

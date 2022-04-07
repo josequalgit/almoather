@@ -30,7 +30,7 @@ trait AdResponse {
             'category'=>$ad->categories?$ad->categories->name:null,
             'scenario'=>$ad->scenario,
             'videos'=>$ad->videos,
-            'influencer'=> $info ? $this->userDataResponse($info->users) : null,
+            'influencer'=> $info ? $this->userDataResponse($info->users,null,$info->users->id) : null,
             'budget'=>$ad->budget,
             'type'=>$ad->ad_type,
             'nearest_location'=>$ad->nearest_location,

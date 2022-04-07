@@ -45,7 +45,7 @@ class AuthController extends Controller
             // return $this->respondWithToken($token,$user,1);
 			 return response()->json([
                 'msg'=>"user data",
-				 'data'=>$this->userDataResponse($user,$token),
+				 'data'=>$this->userDataResponse($user,$token , $user->id),
 				 'type'=>'customer',
                 'status'=>config('global.OK_STATUS') 
             ],config('global.OK_STATUS'));
@@ -54,7 +54,7 @@ class AuthController extends Controller
         {
 			 return response()->json([
                 'msg'=>"user data",
-				 'data'=>$this->userDataResponse($user,$token),
+				 'data'=>$this->userDataResponse($user,$token, $user->id),
 				 'type'=>'influencer',
                 'status'=>config('global.OK_STATUS')
             ],config('global.OK_STATUS'));
@@ -116,7 +116,7 @@ class AuthController extends Controller
 
         return response()->json([
             'msg'=>'login successfully',
-            'data'=>$this->userDataResponse($user,$token),
+            'data'=>$this->userDataResponse($user,$token, $user->id),
             'type'=>$type == 1?'customer':'Influencer',
             'status'=>200
         ],200);
@@ -143,7 +143,7 @@ class AuthController extends Controller
 
         return response()->json([
             'msg'=>'user data',
-            'data'=>$this->userDataResponse($data),
+            'data'=>$this->userDataResponse($data,null,$user->id),
             'type'=>$data->customers?'customer':'Influencer',
             'status'=>config('global.NOT_FOUND_STATUS')
 

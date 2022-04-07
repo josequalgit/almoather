@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\InfluncerCategory;
 use Carbon\Carbon;
+
 class InfluenecerController extends Controller
 {
     public function details($id)
@@ -86,5 +87,7 @@ class InfluenecerController extends Controller
 
         return $data;
     }
+
+   
     
 }

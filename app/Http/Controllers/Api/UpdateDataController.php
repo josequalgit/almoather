@@ -21,6 +21,9 @@ use Auth;
 use App\Http\Traits\UserResponse;
 use App\Models\Influncer;
 use App\Models\SocialMediaProfile;
+//use Spatie\MediaLibrary\Models\Media;
+use Illuminate\Support\Facades\Storage;
+use DB;
 
 
 class UpdateDataController extends Controller
@@ -110,7 +113,7 @@ class UpdateDataController extends Controller
 
         return response()->json([
             'msg'=>'Customer was updated',
-            'data'=>$this->userDataResponse($data),
+            'data'=>$this->userDataResponse($data,null,$data->id),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
     }
@@ -267,7 +270,7 @@ class UpdateDataController extends Controller
 
         return response()->json([
             'msg'=>'Influncer was updated',
-            'data'=>$this->userDataResponse($data),
+            'data'=>$this->userDataResponse($data,null,$data->id),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
     }
@@ -306,11 +309,11 @@ class UpdateDataController extends Controller
 
         $data = User::find(Auth::guard('api')->user()->id);
 
-        if($request->hasFile('image')){
-            $data->clearMediaCollection('influncers')
-            ->addMedia($request->file('image'))
-            ->toMediaCollection('influncers');
-        }
+        // if($request->hasFile('image')){
+        //     $data->clearMediaCollection('influncers')
+        //     ->addMedia($request->file('image'))
+        //     ->toMediaCollection('influncers');
+        // }
 
         if(!$data) return response()->json([
             'msg'=>'user not found',
@@ -341,7 +344,7 @@ class UpdateDataController extends Controller
 
         return response()->json([
             'msg'=>'data was update',
-            'data'=>$this->userDataResponse($data),
+            'data'=>$this->userDataResponse($data,null,$data->id),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
@@ -438,7 +441,7 @@ class UpdateDataController extends Controller
 
         return response()->json([
                     'msg'=>'data was update',
-                    'data'=>$this->userDataResponse($user),
+                    'data'=>$this->userDataResponse($user,null,$user->id),
                     'status'=>config('global.OK_STATUS')
                 ],config('global.OK_STATUS'));
         
@@ -488,7 +491,7 @@ class UpdateDataController extends Controller
 
         return response()->json([
             'msg'=>'data was update',
-            'data'=>$this->userDataResponse($user),
+            'data'=>$this->userDataResponse($user,null,$user->id),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
 
@@ -529,10 +532,95 @@ class UpdateDataController extends Controller
 
         return response()->json([
             'msg'=>'data was update',
-            'data'=>$this->userDataResponse($user),
+            'data'=>$this->userDataResponse($user,null,$user->id),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
 
     }
+
+    public function deleteFiles($id)
+    {
+        $media = DB::table('media')->where('id',$id)->first();
+
+        if(!$media)return response()->json([
+            'err'=>'file not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        Storage::deleteDirectory(public_path('storage/'.$media->model_id.'/'.$media->file_name));
+
+
+        $model_type = $media->model_type;
+
+        $model = $model_type::find($media->model_id);
+        $model->deleteMedia($media->id);
+
+        return response()->json([
+            'msg'=>'file was deleted',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
+
+    }
+
+    public function uploadFiles(Request $request ,$id,$type)
+    {
+        /**
+         *  type =>
+         *  1=> upload image 
+         *  2=> upload registration  commercial
+         *  3=> upload registration  tax
+         *  4=> upload snapchat_videos
+         */
+
+
+        $user = User::find($id);
+
+        if(!$user)return response()->json([
+            'err'=>'user not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        if(!$user->influncers)return response()->json([
+            'err'=>'user not influencer',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        if(!$request->hasFile('file')) return response()->json([
+            'err'=>'Please add a file',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
+
+      
+
+        if($type == 1)
+        {
+            
+            $user->addMedia($request->file('file'))
+            ->toMediaCollection('influncers');
+        }
+        if($type == 2)
+        {
+            $user->addMedia($request->file('file'))
+            ->toMediaCollection('commercial_registration_no_file');
+        }
+        if($type == 3)
+        {
+            $user->addMedia($request->file('file'))
+            ->toMediaCollection('tax_registration_number_file');
+        }
+        if($type == 4)
+        {
+            $user->addMedia($request->file('file'))
+            ->toMediaCollection('snapchat_videos');
+        }
+
+
+        return response()->json([
+            'status'=>config('global.OK_STATUS'),
+            'data'=>$this->userDataResponse($user,null,$user->id)
+        ],config('global.OK_STATUS'));
+
+    }
+    
     
 }

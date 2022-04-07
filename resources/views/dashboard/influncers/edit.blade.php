@@ -40,6 +40,14 @@
               <label for="inputAddress2">Ads Out if Country</label>
               <input disabled value="{{$data->ads_out_country?'Yes':'No'}}" name="city_id" type="text" class="form-control" id="inputAddress2" placeholder="city_id">
             </div>
+            {{-- <div class="form-group">
+              <label for="inputAddress2">Categories</label>
+              <select class="form-control" name="" id="" disabled="disabled">
+                @foreach ($data->InfluncerCategories as $item)
+                    <option>{{ $data->name }}</option>
+                @endforeach
+              </select>
+            </div> --}}
             <div class="form-group">
               <label for="inputAddress2">City</label>
               <input disabled value="{{ old('city_id')?old('city_id'):$data->citys->name}}" name="city_id" type="text" class="form-control" id="inputAddress2" placeholder="city_id">

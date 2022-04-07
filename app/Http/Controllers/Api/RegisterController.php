@@ -129,7 +129,7 @@ class RegisterController extends Controller
 
         return response()->json([
             'msg'=>'Influncer was created',
-            'data'=>$this->userDataResponse($data , $token),
+            'data'=>$this->userDataResponse($data , $token,$data->id),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
     }
@@ -174,7 +174,7 @@ class RegisterController extends Controller
 
         return response()->json([
             'msg'=>'Customer was created',
-            'data'=>$this->userDataResponse($data , $token),
+            'data'=>$this->userDataResponse($data , $token,$data->id),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
     }
@@ -278,7 +278,7 @@ class RegisterController extends Controller
 
         return response()->json([
             'msg'=>'Customer was updated',
-            'data'=>$this->userDataResponse($data , $token),
+            'data'=>$this->userDataResponse($data , $token,$data->id),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
     }  
