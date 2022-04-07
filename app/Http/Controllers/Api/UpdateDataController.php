@@ -557,8 +557,8 @@ class UpdateDataController extends Controller
 
         return response()->json([
             'msg'=>'file was deleted',
-            'status'=>config('global.WRONG_VALIDATION_STATUS')
-        ],config('global.WRONG_VALIDATION_STATUS'));
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
 
     }
 
@@ -596,7 +596,8 @@ class UpdateDataController extends Controller
 
         if($type == 1)
         {
-            $inf->clearMediaCollection('influncers');
+            $user->clearMediaCollection('influncers');
+
             $file = $user->addMedia($request->file('file'))
             ->toMediaCollection('influncers');
         }
