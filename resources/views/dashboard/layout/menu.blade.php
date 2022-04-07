@@ -840,7 +840,7 @@ input[type="radio"] .styled:checked + label::after {
                 </li>
                 @endcanany
 
-                @canany(['Add Campaign Goal','Delete Campaign Goal'])
+                {{-- @canany(['Add Campaign Goal','Delete Campaign Goal'])
                 <li class="menu-item
                 {{ ($name == 'dashboard.campainGoals.index'|| $name == 'dashboard.campainGoals.create'|| $name == 'dashboard.campainGoals.edit') ? 'active':''  }}
                 ">
@@ -848,7 +848,7 @@ input[type="radio"] .styled:checked + label::after {
                     <div data-i18n="List">Campaing Goal</div>
                   </a>
                 </li>
-                @endcanany
+                @endcanany --}}
             
               </ul>
             </li>
