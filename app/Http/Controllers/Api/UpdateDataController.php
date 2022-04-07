@@ -578,6 +578,7 @@ class UpdateDataController extends Controller
         ],config('global.NOT_FOUND_STATUS'));
 
         $user = User::find(Auth::guard('api')->user()->id);
+        $inf = $user->influncers;
 
      
 
@@ -601,12 +602,12 @@ class UpdateDataController extends Controller
         }
         if($type == 2)
         {
-            $user->addMedia($request->file('file'))
+            $inf->addMedia($request->file('file'))
             ->toMediaCollection('commercial_registration_no_file');
         }
         if($type == 3)
         {
-            $user->addMedia($request->file('file'))
+            $inf->addMedia($request->file('file'))
             ->toMediaCollection('tax_registration_number_file');
         }
         if($type == 4)

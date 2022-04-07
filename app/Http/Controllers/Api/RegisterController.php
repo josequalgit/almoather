@@ -42,19 +42,6 @@ class RegisterController extends Controller
         $commingRequest =  array_merge($request->only(['email','password','name']),['password'=>bcrypt($request->password)]);
         $data = User::create($commingRequest);
 
-        $data->addMedia($request->file('image'))
-        ->toMediaCollection('influncers');
-
-        $data->addMedia($request->file('commercial_registration_no_file'))
-        ->toMediaCollection('commercial_registration_no_file');
-
-        $data->addMedia($request->file('tax_registration_number_file'))
-        ->toMediaCollection('tax_registration_number_file');
-        
-        foreach ($request->snap_chat_video as $value) {
-            $data->addMedia($value)
-            ->toMediaCollection('snapchat_videos');
-        }
 
         $influncerData = $request->only([
             'full_name',
@@ -90,6 +77,7 @@ class RegisterController extends Controller
             'street',
             'neighborhood',
         ]);
+        
 
        $addUserId =  array_merge($influncerData,['user_id'=>$data->id]);
        $addTranslate =  array_merge($addUserId,['full_name'=>[
@@ -98,6 +86,21 @@ class RegisterController extends Controller
        ]]);
        $newInfluncer = Influncer::create($addTranslate);
 
+
+        
+       $data->addMedia($request->file('image'))
+       ->toMediaCollection('influncers');
+
+       $newInfluncer->addMedia($request->file('commercial_registration_no_file'))
+       ->toMediaCollection('commercial_registration_no_file');
+
+       $newInfluncer->addMedia($request->file('tax_registration_number_file'))
+       ->toMediaCollection('tax_registration_number_file');
+       
+       foreach ($request->snap_chat_video as $value) {
+           $data->addMedia($value)
+           ->toMediaCollection('snapchat_videos');
+       }
 
        foreach($request->categories as $item)
        {

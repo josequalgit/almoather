@@ -54,7 +54,9 @@ class Influncer extends Model implements HasMedia
 
     protected $append = [
         'video',
-        'verify'
+        'verify',
+        'commercialFiles',
+        'taxFiles'
     ];
 
     public function users()
@@ -156,4 +158,48 @@ class Influncer extends Model implements HasMedia
             return 2;
         }
     }
+
+    public function getCommercialFilesAttribute()
+    {
+        $mediaItems = $this->getMedia('commercial_registration_no_file');
+        $publicFullUrl = null;
+        $array_of_links = [];
+        if(count($mediaItems) > 0)
+        {
+            foreach ($mediaItems as $key => $value) {
+                //$publicFullUrl = $mediaItems[$key]->getFullUrl();
+                $publicFullUrl = $mediaItems[$key];
+                $data = [
+                    'id'=>$publicFullUrl->id,
+                    'url'=>$publicFullUrl->getFullUrl()
+                ];
+                array_push($array_of_links,$data);
+            }
+           ;
+        }
+        return $array_of_links;
+    }
+
+    public function getTaxFilesAttribute()
+    {
+        $mediaItems = $this->getMedia('tax_registration_number_file');
+        $publicFullUrl = null;
+        $array_of_links = [];
+        if(count($mediaItems) > 0)
+        {
+            foreach ($mediaItems as $key => $value) {
+                //$publicFullUrl = $mediaItems[$key]->getFullUrl();
+                $publicFullUrl = $mediaItems[$key];
+                $data = [
+                    'id'=>$publicFullUrl->id,
+                    'url'=>$publicFullUrl->getFullUrl()
+                ];
+                array_push($array_of_links,$data);
+            }
+           ;
+        }
+        return $array_of_links;
+    }
+
+
 }
