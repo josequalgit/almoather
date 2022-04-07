@@ -161,25 +161,43 @@ class Influncer extends Model implements HasMedia
 
     public function getCommercialFilesAttribute()
     {
-        $mediaItems = $this->getMedia('commercial_registration_no_file')[0];
-        $publicFullUrl = null;
-        $array_of_links = [];
-       
-        return [
-            'id'=>$mediaItems->id,
-            'url'=>$mediaItems->getFullUrl()
-        ];
+        $mediaItems = $this->getMedia('commercial_registration_no_file');
+        if(count($mediaItems) > 0)
+        {
+            $mediaItems = $this->getMedia('commercial_registration_no_file')[0];
+            $publicFullUrl = null;
+            $array_of_links = [];
+           
+            return [
+                'id'=>$mediaItems->id,
+                'url'=>$mediaItems->getFullUrl()
+            ];
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public function getTaxFilesAttribute()
     {
-        $mediaItems = $this->getMedia('tax_registration_number_file')[0];
-        $publicFullUrl = null;
-        $array_of_links = [];
-        return [
-            'id'=>$mediaItems->id,
-            'url'=>$mediaItems->getFullUrl()
-        ];
+        $mediaItems = $this->getMedia('tax_registration_number_file');
+        if(count($mediaItems) > 0)
+        {
+            $mediaItems = $this->getMedia('tax_registration_number_file')[0];
+            $publicFullUrl = null;
+            $array_of_links = [];
+           
+            return [
+                'id'=>$mediaItems->id,
+                'url'=>$mediaItems->getFullUrl()
+            ];
+        }
+        else
+        {
+            return null;
+        }
+       
     }
 
 
