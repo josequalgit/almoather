@@ -596,7 +596,7 @@ class UpdateDataController extends Controller
 
         if($type == 1)
         {
-            
+            $inf->clearMediaCollection('influncers');
             $file = $user->addMedia($request->file('file'))
             ->toMediaCollection('influncers');
         }
