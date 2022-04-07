@@ -592,34 +592,38 @@ class UpdateDataController extends Controller
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
-      
+        $file = [];
 
         if($type == 1)
         {
             
-            $user->addMedia($request->file('file'))
+            $file = $user->addMedia($request->file('file'))
             ->toMediaCollection('influncers');
         }
         if($type == 2)
         {
-            $inf->addMedia($request->file('file'))
+            $file =  $inf->addMedia($request->file('file'))
             ->toMediaCollection('commercial_registration_no_file');
         }
         if($type == 3)
         {
-            $inf->addMedia($request->file('file'))
+            $file = $inf->addMedia($request->file('file'))
             ->toMediaCollection('tax_registration_number_file');
         }
         if($type == 4)
         {
-            $user->addMedia($request->file('file'))
+            $file = $user->addMedia($request->file('file'))
             ->toMediaCollection('snapchat_videos');
         }
 
 
         return response()->json([
             'status'=>config('global.OK_STATUS'),
-            'data'=>$this->userDataResponse($user,null,$user->id)
+            // 'data'=>$this->userDataResponse($user,null,$user->id)
+            'data'=>[
+                'id'=>$file->id,
+                'url'=>$file->getFullUrl()
+            ],
         ],config('global.OK_STATUS'));
 
     }

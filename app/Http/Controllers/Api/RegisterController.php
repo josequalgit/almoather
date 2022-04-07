@@ -76,6 +76,7 @@ class RegisterController extends Controller
             'milestone',
             'street',
             'neighborhood',
+            // 'address'
         ]);
         
 

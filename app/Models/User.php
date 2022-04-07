@@ -92,7 +92,10 @@ class User extends Authenticatable implements JWTSubject , HasMedia
         $publicFullUrl = null;
         if(count($mediaItems) > 0)
         {
-            $publicFullUrl = $mediaItems[0]->getFullUrl();
+            $publicFullUrl = [
+                'id'=>$mediaItems[0]->id,
+                'url'=>$mediaItems[0]->getFullUrl()
+            ];
         }
         return $publicFullUrl;
    }
@@ -102,7 +105,10 @@ class User extends Authenticatable implements JWTSubject , HasMedia
         $publicFullUrl = null;
         if(count($mediaItems) > 0)
         {
-            $publicFullUrl = $mediaItems[0]->getFullUrl();
+            $publicFullUrl = [
+                'id'=>$mediaItems[0]->id,
+                'url'=>$mediaItems[0]->getFullUrl()
+            ];
         }
         return $publicFullUrl;
    }
