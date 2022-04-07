@@ -34,8 +34,8 @@ class UpdateExtraInfluncerRequest extends FormRequest
             'rep_id_number_name'=>'required',
             'rep_phone_number'=>'required',
             'rep_email'=>'required',
-            'tax_registration_number_file'=>'required',
-            'commercial_registration_no_file'=>'required',
+            // 'tax_registration_number_file'=>'required',
+            // 'commercial_registration_no_file'=>'required',
         ];
     }
 

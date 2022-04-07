@@ -478,15 +478,15 @@ class UpdateDataController extends Controller
             'rep_email'=>$request->rep_email
         ]);
 
-        $user->clearMediaCollection('commercial_registration_no_file');
+        // $user->clearMediaCollection('commercial_registration_no_file');
 
-        $user->addMedia($request->file('commercial_registration_no_file'))
-        ->toMediaCollection('commercial_registration_no_file');
+        // $user->addMedia($request->file('commercial_registration_no_file'))
+        // ->toMediaCollection('commercial_registration_no_file');
 
-        $user->clearMediaCollection('tax_registration_number_file');
+        // $user->clearMediaCollection('tax_registration_number_file');
 
-        $user->addMedia($request->file('tax_registration_number_file'))
-        ->toMediaCollection('tax_registration_number_file');
+        // $user->addMedia($request->file('tax_registration_number_file'))
+        // ->toMediaCollection('tax_registration_number_file');
 
 
         return response()->json([
@@ -562,7 +562,7 @@ class UpdateDataController extends Controller
 
     }
 
-    public function uploadFiles(Request $request ,$id,$type)
+    public function uploadFiles(Request $request,$type)
     {
         /**
          *  type =>
@@ -572,13 +572,14 @@ class UpdateDataController extends Controller
          *  4=> upload snapchat_videos
          */
 
-
-        $user = User::find($id);
-
-        if(!$user)return response()->json([
+        if(!Auth::guard('api')->user())return response()->json([
             'err'=>'user not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
+
+        $user = User::find(Auth::guard('api')->user()->id);
+
+     
 
         if(!$user->influncers)return response()->json([
             'err'=>'user not influencer',

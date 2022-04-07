@@ -38,8 +38,7 @@ class UpdatePersonalDataRequest extends FormRequest
             'name'=>'required',
             'is_vat'=>'required',
             'region_id'=>'required',
-            'phone'=>'required',
-            'image'=>'required'
+            'phone'=>'required'
         ];
     }
 

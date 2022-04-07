@@ -42,7 +42,7 @@ Route::group(['prefix'=>'auth'],function(){
         Route::post('/influencer/extra','updateExtraInfoInfluencers');
         Route::post('/influencer/price','updatePriceInfoInfluencers');
         Route::post('/influencer/deleteFile/{id}','deleteFiles');
-        Route::post('/influencer/uploadFile/{id}/{type}','uploadFiles');
+        Route::post('/influencer/uploadFile/{type}','uploadFiles');
      
     });
 
