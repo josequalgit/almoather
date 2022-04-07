@@ -161,44 +161,25 @@ class Influncer extends Model implements HasMedia
 
     public function getCommercialFilesAttribute()
     {
-        $mediaItems = $this->getMedia('commercial_registration_no_file');
+        $mediaItems = $this->getMedia('commercial_registration_no_file')[0];
         $publicFullUrl = null;
         $array_of_links = [];
-        if(count($mediaItems) > 0)
-        {
-            foreach ($mediaItems as $key => $value) {
-                //$publicFullUrl = $mediaItems[$key]->getFullUrl();
-                $publicFullUrl = $mediaItems[$key];
-                $data = [
-                    'id'=>$publicFullUrl->id,
-                    'url'=>$publicFullUrl->getFullUrl()
-                ];
-                array_push($array_of_links,$data);
-            }
-           ;
-        }
-        return $array_of_links;
+       
+        return [
+            'id'=>$mediaItems->id,
+            'url'=>$mediaItems->getFullUrl()
+        ];
     }
 
     public function getTaxFilesAttribute()
     {
-        $mediaItems = $this->getMedia('tax_registration_number_file');
+        $mediaItems = $this->getMedia('tax_registration_number_file')[0];
         $publicFullUrl = null;
         $array_of_links = [];
-        if(count($mediaItems) > 0)
-        {
-            foreach ($mediaItems as $key => $value) {
-                //$publicFullUrl = $mediaItems[$key]->getFullUrl();
-                $publicFullUrl = $mediaItems[$key];
-                $data = [
-                    'id'=>$publicFullUrl->id,
-                    'url'=>$publicFullUrl->getFullUrl()
-                ];
-                array_push($array_of_links,$data);
-            }
-           ;
-        }
-        return $array_of_links;
+        return [
+            'id'=>$mediaItems->id,
+            'url'=>$mediaItems->getFullUrl()
+        ];
     }
 
 

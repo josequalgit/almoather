@@ -602,11 +602,13 @@ class UpdateDataController extends Controller
         }
         if($type == 2)
         {
+            $inf->clearMediaCollection('commercial_registration_no_file');
             $file =  $inf->addMedia($request->file('file'))
             ->toMediaCollection('commercial_registration_no_file');
         }
         if($type == 3)
         {
+            $inf->clearMediaCollection('tax_registration_number_file');
             $file = $inf->addMedia($request->file('file'))
             ->toMediaCollection('tax_registration_number_file');
         }
