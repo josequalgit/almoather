@@ -63,8 +63,8 @@ class PermissionSeeder extends Seeder
             'Delete Slide',
             'Edit Slide',
             'Edit Contract',
-            
-            
+            'Add Campaign Goal',
+            'Delete Campaign Goal',
         ];
 
         foreach ($permissions as $key => $value) {

@@ -839,6 +839,16 @@ input[type="radio"] .styled:checked + label::after {
                   </a>
                 </li>
                 @endcanany
+
+                @canany(['Add Campaign Goal','Delete Campaign Goal'])
+                <li class="menu-item
+                {{ ($name == 'dashboard.campainGoals.index'|| $name == 'dashboard.campainGoals.create'|| $name == 'dashboard.campainGoals.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.campainGoals.edit') }}" class="menu-link">
+                    <div data-i18n="List">Campaing Goal</div>
+                  </a>
+                </li>
+                @endcanany
             
               </ul>
             </li>

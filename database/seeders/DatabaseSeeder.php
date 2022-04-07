@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             InfulencerSeeder::class,
             QuestionSeeder::class,
             RattingSeeder::class,
+            SettingSeeder::class
 
         ]);
     }

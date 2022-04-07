@@ -143,7 +143,7 @@ class AuthController extends Controller
 
         return response()->json([
             'msg'=>'user data',
-            'data'=>$this->userDataResponse($data,null,$user->id),
+            'data'=>$this->userDataResponse($data,null,$data->id),
             'type'=>$data->customers?'customer':'Influencer',
             'status'=>config('global.NOT_FOUND_STATUS')
 
