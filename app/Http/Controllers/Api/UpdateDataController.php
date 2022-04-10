@@ -349,7 +349,7 @@ class UpdateDataController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    public function updateMediaDetailsInfluncer(Request $request)
+    public function updateMediaDetailsInfluncer(UpdateMediaDetailsRequest $request)
     {
         //UpdateMediaDetailsRequest
          return response()->json([
