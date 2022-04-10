@@ -160,4 +160,33 @@ class Ad extends Model implements HasMedia
         }
         return $publicFullUrl;
    }
+   public function checkIfAccepted($inf_id)
+   {
+       /**
+        *  0 => is rejected
+        *  1 => is accepted
+        *  2 => no Contract avalibale
+        */
+        
+       $contract = Contract::where(['influencer_id'=>$inf_id])
+       ->where(['ad_id'=>$this->id])
+       ->first();
+       
+       if($contract)
+       {
+           if($contract->is_accepted)
+           {
+               return 1;
+           }
+           else
+           {
+               return 0;
+           }
+       }
+       else
+       {
+           return 2;
+       }
+   }
+
 }

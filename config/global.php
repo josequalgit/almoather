@@ -11,7 +11,10 @@ return [
     'PAGINATION_NUMBER_DASHBOARD'=>10,
     'CANCELED_DAYS_PERIOD'=>28,
     'WARNING_DAYS_PERIOD'=>26,
-    'LANGS'=>['en','ar']
+    'LANGS'=>['en','ar'],
+    'CUSTOMER_ADS_STATUS'=>['Active','Waiting Payment','Pending','Finished','Rejected'],
+    'INFLUENCER_ADS_STATUS'=>['Pending','Active','Completed','Rejected'],
+
 ]
 
 ?>

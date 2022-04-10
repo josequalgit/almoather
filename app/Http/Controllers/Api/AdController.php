@@ -18,6 +18,7 @@ use Validator;
 use App\Http\Traits\UserResponse;
 use App\Http\Traits\ApiPaginator;
 use App\Http\Traits\AdResponse;
+
 use DB;
 
 class AdController extends Controller
@@ -32,21 +33,130 @@ class AdController extends Controller
 
         if(Auth::guard('api')->user()->influncers)
         {
-            $data = Ad::where([['influncer_id',$user_id],['status',$status]])->paginate(10);
+            if(!in_array($status,config('global.INFLUENCER_ADS_STATUS'))) return response()->json([
+                'err'=>'influencer is not authorized to get ads with this status',
+                'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
+            ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
+
+
+            $data = Ad::where([['influncer_id',$user_id],['status',$status]])->get();
+
+            if($status == 'Pending')
+            {
+
+                $itemsPaginated = Ad::where('influncer_id',$user_id)->paginate(1000);
+
+                $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
+                    if($item->checkIfAccepted($user_id) == 2) return $this->adResponse($item);
+                })->toArray();
+
+
+
+                return response()->json([
+                    'msg'=>'get all ads with the status',
+                    'data'=>$this->formate($itemsTransformed , $itemsPaginated),
+                    'status'=>config('global.OK_STATUS')
+                ],config('global.OK_STATUS'));
+
+               
+
+            }
+            elseif($status == 'Active')
+            {
+              
+                $itemsPaginated = Ad::where([['influncer_id',$user_id],['status','progress']])->paginate(10);
+
+                $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
+                    if($item->checkIfAccepted($user_id) == 2) return $this->adResponse($item);
+                })->toArray();
+
+                
+                return response()->json([
+                    'msg'=>'get all ads with the status',
+                    'data'=>$this->formate($itemsTransformed , $itemsPaginated),
+                    'status'=>config('global.OK_STATUS')
+                ],config('global.OK_STATUS'));
+
+            }
+            elseif($status == 'Completed')
+            {
+                $itemsPaginated = Ad::where([['influncer_id',$user_id],['status','progress']])
+                ->orWhere([['influncer_id',$user_id],['status','complete']])
+                ->orWhere([['influncer_id',$user_id],['status','influncer_complete']])
+                ->paginate(10);
+
+
+                $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
+                    return $this->adResponse($item);
+                })->toArray();
+
+                
+                return response()->json([
+                    'msg'=>'get all ads with the status',
+                    'data'=>$this->formate($itemsTransformed , $itemsPaginated),
+                    'status'=>config('global.OK_STATUS')
+                ],config('global.OK_STATUS'));
+            }
+            elseif($status == 'Rejected')
+            {
+                $itemsPaginated = Ad::where([['influncer_id',$user_id],['status','rejected']])
+                ->paginate(10);
+
+                $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
+                    return $this->adResponse($item);
+                })->toArray();
+
+                
+                return response()->json([
+                    'msg'=>'get all ads with the status',
+                    'data'=>$this->formate($itemsTransformed , $itemsPaginated),
+                    'status'=>config('global.OK_STATUS')
+                ],config('global.OK_STATUS'));
+            }
+
+
         }
         else
         {
-            $data = Ad::where([['customer_id',$user_id],['status',$status]])->paginate(10);
+            if(!in_array($status,config('global.CUSTOMER_ADS_STATUS'))) return response()->json([
+                'err'=>'customer is not authorized to get ads with this status',
+                'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
+            ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
+
+            if($status == 'Waiting Payment')
+            {
+               
+                $itemsPaginated = Ad::where([['customer_id',$user_id],['status','fullpayment']])
+                ->orWhere([['customer_id',$user_id],['status','prepay']])
+                ->paginate(10);
+            }
+            elseif($status == 'Active')
+            {
+                $itemsPaginated = Ad::where([['customer_id',$user_id],['status','progress']])
+                ->orWhere([['customer_id',$user_id],['status','active']])
+                ->paginate(10);
+            }
+            elseif($status == 'Finished')
+            {
+                $itemsPaginated = Ad::where([['customer_id',$user_id],['status','complete']])
+                ->paginate(10);
+            }
+            else
+            {
+                $itemsPaginated = Ad::where([['customer_id',$user_id],['status',$status]])->paginate(10);
+            }
+
+            $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
+                return $this->adResponse($item);
+            })->toArray();
         }
 
-        $data->getCollection()->transform(function($item){
-            return $this->adResponse($item);
-        });
+     
 
 
         return response()->json([
             'msg'=>'get all ads with the status',
-            'data'=>$data,
+            'data'=>$this->formate($itemsTransformed , $itemsPaginated),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
