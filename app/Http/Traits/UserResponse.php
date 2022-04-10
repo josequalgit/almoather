@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 use App\Models\User;
+use App\Models\SocialMediaProfile;
 
 trait UserResponse {
 
@@ -57,6 +58,12 @@ trait UserResponse {
              'rep_id_number_name'=>$info->rep_id_number_name,
              'rep_phone_number'=>$info->rep_phone_number,
              'rep_email'=>$info->rep_email,
+             'social_media_profile'=>$info->socialMediaProfiles()->get()->map(function($item){
+                 return[
+                     'id'=>$item->social_media_id,
+                     'link'=>$item->link
+                 ];
+             }),
              'ad_onsite_price_with_vat'=>$info->ad_onsite_price_with_vat,
              'preferred_socialMedias'=>$info->socialMedias->pluck('id')->toArray(),
              'preferred_socialMedias_details'=>$info->socialMedias()->get()->map(function($item){
