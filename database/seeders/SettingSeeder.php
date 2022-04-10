@@ -23,7 +23,7 @@ class SettingSeeder extends Seeder
             ],
             [
                 'ar'=>'عربي',
-                'en'=>'En Text'
+                'en'=>'En Text2'
             ]
         
         ];

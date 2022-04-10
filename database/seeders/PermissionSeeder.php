@@ -63,7 +63,9 @@ class PermissionSeeder extends Seeder
             'Delete Slide',
             'Edit Slide',
             'Edit Contract',
-            'Add Campaign Goal',
+            'See Campaign Goal',
+            'Create Campaign Goal',
+            'Edit Campaign Goal',
             'Delete Campaign Goal',
         ];
 

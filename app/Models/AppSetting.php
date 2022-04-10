@@ -13,4 +13,14 @@ class AppSetting extends Model
         'key',
         'value'
     ];
+
+    protected $append = [
+        'campaignGoal'
+    ];
+
+    public function getCampaignGoalAttribute()
+    {
+        return json_decode($this->value);
+    }
+    
 }

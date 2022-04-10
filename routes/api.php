@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\BankController;
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\SlideController;
+use App\Http\Controllers\Api\CampaignGoalController;
 
 Route::group(['prefix'=>'auth'],function(){
     Route::post('login',[AuthController::class,'login']);
@@ -104,6 +105,10 @@ Route::group(['prefix'=>'auth'],function(){
         Route::get('/','index');
     });
 
+    #GET CAMPAIGN GOALS
+    Route::controller(CampaignGoalController::class)->prefix('campaignGoals')->group(function(){
+        Route::get('/','index');
+    });
 
     
     Route::middleware('api_auth')->group(function(){
@@ -143,11 +148,6 @@ Route::group(['prefix'=>'auth'],function(){
         Route::controller(CategoryController::class)->prefix('categories')->group(function(){
             Route::get('/search/{query}','search');
         });
-
-        
-
-
-      
 
         #GET INFLUENECER
         Route::controller(InfluenecerController::class)->prefix('influenecers')->group(function(){

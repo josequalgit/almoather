@@ -17,6 +17,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AdController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\SlideController;
+use App\Http\Controllers\CampaignGoalController;
 
 Route::redirect('/','/dashboard/admins')->name('home');
 
@@ -89,6 +90,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::post('/influencerCategories/store','store')->name('store')->middleware('permission:Create Influencer Category');
             Route::get('/influencerCategories/delete/{id}','delete')->name('delete')->middleware('permission:Delete Influencer Category');
         });
+
         Route::middleware('role_or_permission:superAdmin|Edit SocialMedia|Create SocialMedia|See SocialMedia|Delete SocialMedia')->name('socialMedia.')->controller(SocialMediaController::class)->group(function(){
             Route::get('/SocialMedia','index')->name('index')->middleware('permission:Edit SocialMedia|Create SocialMedia|See SocialMedia|Delete SocialMedia');
             Route::get('/SocialMedia/edit/{id}','edit')->name('edit')->middleware('permission:Edit SocialMedia');
@@ -151,17 +153,32 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/contract/delete/{id}','delete')->name('delete')->middleware('permission:Delete Contract');
         });
 
-        Route::middleware('role_or_permission:superAdmin|See Notification|Create Notification|Edit Notiification|Delete Notification')
+        Route::middleware('role_or_permission:superAdmin|See Notification|Create Notification|Edit Notification|Delete Notification')
         ->name('notifications.')
         ->controller(NotificationController::class)
         ->group(function(){
             Route::get('/notifications','index')->middleware('permission:See Notification')->name('index');
             Route::get('/notifications/create','create')->middleware('permission:Create Notification')->name('create');
             Route::post('/notifications/store','store')->middleware('permission:Create Notification')->name('store');
-            Route::get('/notifications/edit/{id}','edit')->middleware('permission:Edit Notiification')->name('edit');
-            Route::post('/notifications/update/{id}','update')->middleware('permission:Edit Notiification')->name('update');
+            Route::get('/notifications/edit/{id}','edit')->middleware('permission:Edit Notification')->name('edit');
+            Route::post('/notifications/update/{id}','update')->middleware('permission:Edit Notification')->name('update');
             Route::get('/notifications/delete/{id}','delete')->middleware('permission:Delete Notification')->name('delete');
         });
+
+
+        Route::middleware('role_or_permission:superAdmin|See Campaign Goal|Create Campaign Goal|Edit Campaign Goal|Delete Campaign Goal')
+        ->name('campaignGoals.')
+        ->controller(CampaignGoalController::class)
+        ->group(function(){
+            Route::get('/campaignGoals','index')->middleware('permission:See Campaign Goal')->name('index');
+            Route::get('/campaignGoals/create','create')->middleware('permission:Create Campaign Goal')->name('create');
+            Route::post('/campaignGoals/store','store')->middleware('permission:Create Campaign Goal')->name('store');
+            Route::get('/campaignGoals/edit/{id}','edit')->middleware('permission:Edit Campaign Goal')->name('edit');
+            Route::post('/campaignGoals/update/{id}','update')->middleware('permission:Edit Campaign Goal')->name('update');
+            Route::get('/campaignGoals/delete/{id}','delete')->middleware('permission:Delete Campaign Goal')->name('delete');
+        });
+
+
         
 
     });
