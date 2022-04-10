@@ -351,11 +351,6 @@ class UpdateDataController extends Controller
 
     public function updateMediaDetailsInfluncer(UpdateMediaDetailsRequest $request)
     {
-        //UpdateMediaDetailsRequest
-         return response()->json([
-            'msg'=>$request->all(),
-            'status'=>config('global.WRONG_VALIDATION_STATUS')
-        ],config('global.WRONG_VALIDATION_STATUS'));
 
         if(!Auth::guard('api')->user())return response()->json([
             'msg'=>'user not found',
