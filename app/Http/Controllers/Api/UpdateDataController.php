@@ -80,11 +80,7 @@ class UpdateDataController extends Controller
         $data->update($updateUser);
         
         
-        if($request->hasFile('image')){
-            $data->clearCollection('customers')
-            ->addMedia($request->file('image'))
-            ->toMediaCollection('customers');
-        }
+        
 
         $customerData = $request->only([
                     'first_name',
@@ -584,10 +580,26 @@ class UpdateDataController extends Controller
 
      
 
-        if(!$user->influncers)return response()->json([
-            'err'=>'user not influencer',
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
+    
+        if($user->customers)
+        {
+            $file = null;
+            if($request->hasFile('file')){
+                $user->clearMediaCollection('customers');
+                
+                $file = $user->addMedia($request->file('file'))
+                ->toMediaCollection('customers');
+            }
+
+            return response()->json([
+                'status'=>config('global.OK_STATUS'),
+                // 'data'=>$this->userDataResponse($user,null,$user->id)
+                'data'=>[
+                    'id'=>$file->id,
+                    'url'=>$file->getFullUrl()
+                ],
+            ],config('global.OK_STATUS'));
+        }
 
         if(!$request->hasFile('file')) return response()->json([
             'err'=>'Please add a file',
