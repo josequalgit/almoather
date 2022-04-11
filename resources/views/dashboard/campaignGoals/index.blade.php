@@ -58,29 +58,29 @@
                                                 <tr>
                                                     <th>Text Ar</th>
                                                     <th>Text En</th>
-                                                    {{-- <th>Actions</th> --}}
+                                                    <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($data as $item)
+                                                @foreach ($data as $key => $item)
                                                         <tr>
                                                             
                                                             <td>{{ $item->ar }}</td>
                                                             <td>{{ $item->en }}</td>
                                                             
-                                                            {{-- <td>
-                                                                @can('Delete Category')
-                                                                    <a class="btn btn-secondary" href="{{ route('dashboard.categories.edit',$item->id) }}">
+                                                            <td>
+                                                                @can('Delete Campaign Goal')
+                                                                    <a class="btn btn-secondary" href="{{ route('dashboard.campaignGoals.edit',$key) }}">
                                                                         <i class="bx bx-edit"></i>
                                                                     </a>
                                                                 @endcan
-                                                                @can('Edit Category')
-                                                                    <button class="btn btn-danger" onclick="openModal('{{ $item->id }}','{{ $item->name }}')">
+                                                                @can('Edit Campaign Goal')
+                                                                    <button class="btn btn-danger" onclick="openModal('{{ $key }}','{{ $item->en }}')">
                                                                         <i class="bx bx-trash buttonIcon"></i>
                                                                     </button>
                                                                 @endcan
 
-                                                            </td> --}}
+                                                            </td>
                                                         
                                                         </tr>
                                                 @endforeach
