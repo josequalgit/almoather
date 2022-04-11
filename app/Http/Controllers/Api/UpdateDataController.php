@@ -30,7 +30,7 @@ class UpdateDataController extends Controller
 {
     use UserResponse;
    
-    public function updateCustomer(UpdateCustomerRequest $request , $id)
+    public function updateCustomer(UpdateCustomerRequest $request)
     {
         if(!Auth::guard('api')->user())  return response()->json([
             'msg'=>'user not found',
@@ -59,25 +59,25 @@ class UpdateDataController extends Controller
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
-        $updateUser = [];
-        if($request->password)
-        {
-            $updateUser['password'] = bcrypt($request->password);
-        }
-        if($request->email !== $data->email)
-        {
-            $checkEmail = User::where('email',$request->email)->first();
-            if($checkEmail)
-            {
-                return response()->json([
-                    'msg'=>'email was already found',
-                    'status'=>config('global.WRONG_VALIDATION_STATUS')
-                ],config('global.WRONG_VALIDATION_STATUS'));
-            }
-            $updateUser['email'] = $request->email;
-        }
+        // $updateUser = [];
+        // if($request->password)
+        // {
+        //     $updateUser['password'] = bcrypt($request->password);
+        // }
+        // if($request->email !== $data->email)
+        // {
+        //     $checkEmail = User::where('email',$request->email)->first();
+        //     if($checkEmail)
+        //     {
+        //         return response()->json([
+        //             'msg'=>'email was already found',
+        //             'status'=>config('global.WRONG_VALIDATION_STATUS')
+        //         ],config('global.WRONG_VALIDATION_STATUS'));
+        //     }
+        //     $updateUser['email'] = $request->email;
+        // }
 
-        $data->update($updateUser);
+        // $data->update($updateUser);
         
         
         

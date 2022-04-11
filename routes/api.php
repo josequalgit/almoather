@@ -36,7 +36,7 @@ Route::group(['prefix'=>'auth'],function(){
 
     #UPDATE ROUTES
     Route::controller(UpdateDataController::class)->prefix('update')->group(function(){
-        Route::post('/customer/{id}','updateCustomer');
+        Route::post('/customer','updateCustomer');
         // Route::post('/influencer/{id}','updateInfluncer');
         Route::post('/influencer/info','updatePersonalInfluncerData');
         Route::post('/influencer/media','updateMediaDetailsInfluncer');
