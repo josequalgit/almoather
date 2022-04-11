@@ -102,8 +102,28 @@ class AdController extends Controller
         $allMatchedInf = [];
         foreach ($influencers as $info) {
 
-            if($request->expense_type == 'pve')  $infAds = $info->ads()->where('expense_type','pve')->whereBetween('created_at',[$startDate,$endDate])->pluck('id')->toArray();
-            else $infAds = $info->ads()->where('expense_type','pvn')->whereBetween('created_at',[$startDate,$endDate])->pluck('id')->toArray();
+            if($request->expense_type == 'pve')
+            {
+                $infAds = $info->ads()->where('expense_type','pve')->whereBetween('created_at',[$startDate,$endDate])->pluck('id')->toArray();
+            }
+            else
+            {
+                
+                $pvn = $info->ads()->where('expense_type','pvn')->whereBetween('created_at',[$startDate,$endDate])->sum('budget');
+                $pve = $info->ads()->where('expense_type','pve')->whereBetween('created_at',[$startDate,$endDate])->sum('budget');
+                if($pvn > $pve)
+                {
+                    $infAds = $info->ads()->where('expense_type','pvn')->whereBetween('created_at',[$startDate,$endDate])->pluck('id')->toArray();
+                }
+                elseif($pvn < $pve)
+                {
+                    $infAds = $info->ads()->where('expense_type','pve')->whereBetween('created_at',[$startDate,$endDate])->pluck('id')->toArray();
+                }
+                else
+                {
+                    $infAds = $info->ads()->where('expense_type','pvn')->whereBetween('created_at',[$startDate,$endDate])->pluck('id')->toArray();
+                }
+            }
            
 
             /** INF RATTING */

@@ -30,7 +30,8 @@ class AdSeeder extends Seeder
         'city_id'=>1,
         'area_id'=>1,
         'customer_id'=>1,
-        'category_id'=>1,        
+        'category_id'=>1,      
+        'campaign_goals_id'=>1,      
         ]);
 
         DB::table('influncer_influncer_category')->insert([

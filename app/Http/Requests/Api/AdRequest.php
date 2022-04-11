@@ -38,6 +38,7 @@ class AdRequest extends FormRequest
             'city_id'=>'required',
             'area_id'=>'required',
             'image'=>'required',
+            'campaign_goals_id'=>'required',
             'social_media'=>'required',
             //'video'=>'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:100000',
             'cr_image'=>'mimes:jpg,bmp,png,pdf|max:2048',
@@ -55,6 +56,7 @@ class AdRequest extends FormRequest
         return [
             // 'type.required' => 'Please choose the ad type',
             'store.required' => 'Please add the store name',
+            'campaign_goals_id.required' => 'Please choose the campaign goal',
             'budget.required' => 'Please add the ad budget',
             'ad_type.required' => 'Please choose if the ad require to be onsite',
             'country_id.required' => 'Please choose the country',

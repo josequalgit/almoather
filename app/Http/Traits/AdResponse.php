@@ -15,6 +15,7 @@ trait AdResponse {
             'image'=>$ad->image,
 		    'videos'=>$ad->videos,
 		  	'documnet'=>$ad->documnet,
+        'campaign_goal'=>$ad->campaignGoals->title,
 		  	'logo'=>$ad->logo,
             'store_name'=>$ad->store,
             'marouf_num'=>$ad->marouf_num,

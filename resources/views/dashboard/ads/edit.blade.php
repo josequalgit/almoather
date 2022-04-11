@@ -250,6 +250,10 @@
                 <label for="inputAddress2">Is Onsite</label>
                 <input disabled value="{{ old('onSite')?old('onSite'):($data->onSite?'Yes':'No')}}" name="onSite" type="text" class="form-control" id="inputAddress2" placeholder="onSite">
             </div>
+            <div class="form-group">
+                <label for="inputAddress2">Goal</label>
+                <input disabled value="{{ old('campaign_goals_id')?old('campaign_goals_id'):($data->campaignGoals->title)}}" name="campaign_goals_id" type="text" class="form-control" id="inputAddress2" placeholder="campaign_goals_id">
+            </div>
             @if($data->store_link)
             <div class="form-group">
                 <label for="inputAddress2">Store Link</label>

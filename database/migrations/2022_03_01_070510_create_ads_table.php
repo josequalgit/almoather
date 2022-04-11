@@ -28,6 +28,7 @@ return new class extends Migration
             $table->longText('discount_code')->nullable();
             $table->bigInteger('country_id')->unsigned();
             $table->bigInteger('city_id')->unsigned();
+            $table->bigInteger('campaign_goals_id')->unsigned();
             $table->bigInteger('area_id')->unsigned();
             $table->bigInteger('customer_id')->unsigned();
             $table->bigInteger('category_id')->unsigned()->nullable();

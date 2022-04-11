@@ -12,7 +12,7 @@ return [
     'CANCELED_DAYS_PERIOD'=>28,
     'WARNING_DAYS_PERIOD'=>26,
     'LANGS'=>['en','ar'],
-    'CUSTOMER_ADS_STATUS'=>['Active','Waiting Payment','Pending','Finished','Rejected'],
+    'CUSTOMER_ADS_STATUS'=>['Active','WaitingPayment','Pending','Finished','Rejected'],
     'INFLUENCER_ADS_STATUS'=>['Pending','Active','Completed','Rejected'],
 
 ]

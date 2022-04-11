@@ -31,8 +31,11 @@
             <div class="row">
                 <div class="col-12 col-sm-7">
                     <div class="media mb-2">
+                        {{-- @php
+                            dd($customer->users->image['url']);
+                        @endphp --}}
                         <a class="mr-1" href="javascript:void(0);">
-                            <img src="{{ $customer->users->image }}" alt="users view avatar" class="users-avatar-shadow rounded-circle" height="64" width="64">
+                            <img src="{{ $customer->users->image['url'] }}" alt="users view avatar" class="users-avatar-shadow rounded-circle" height="64" width="64">
                         </a>
                         <div class="media-body pt-25">
                             <h4 class="media-heading"><span class="users-view-name">{{ $customer->first_name }} {{ $customer->last_name }}</h4>
@@ -120,12 +123,12 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Customers</h4>
+                                <h4 class="card-title">Ads</h4>
                             </div>
                             <div class="card-body card-dashboard">
                                 @can('See Customer')
                                  <p class="card-text">
-                                    There is {{ $counter }} Customer/'s
+                                    There is {{ $counter }} Ad/'s
                                 </p>
                                 @endcan
                                 <div class="table-responsive">

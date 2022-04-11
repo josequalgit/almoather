@@ -123,7 +123,7 @@ class AdController extends Controller
                 'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
             ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
 
-            if($status == 'Waiting Payment')
+            if($status == 'WaitingPayment')
             {
                
                 $itemsPaginated = Ad::where([['customer_id',$user_id],['status','fullpayment']])
@@ -493,6 +493,10 @@ class AdController extends Controller
     public function getMatchedInfluencers($id)
     {
         $data = Ad::findOrFail($id);
+        if($data->status !== 'prepay') return response()->json([
+            'err'=>'ad dosent have the right status',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
         $infData = $data->matches()->where('chosen',1)->get()->map(function($item){
             $inf = $item->influencers;
             return [
@@ -522,7 +526,10 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
       
-
+        if($data->status !== 'prepay') return response()->json([
+            'err'=>'ad dosent have the right status',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
 		
         $infData = $data->matches()->where('chosen',0)->get()->map(function($item) use($data , $info){
 			
@@ -604,6 +611,7 @@ class AdController extends Controller
     public function before_payment($id)
     {
         $data = Ad::find($id);
+        
         if(!$data) return response()->json([
             'err'=>'ad was not found',
             'status'=>config('global.NOT_FOUND_STATUS')
@@ -611,6 +619,13 @@ class AdController extends Controller
 
         $cal = $data->budget*5.5/100;
 
+        if($data->status !== 'approve') return response()->json([
+            'err'=>'ad dosent have the right status',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
+
+        $data->status = 'prepay';
+        $data->save();
 
         return response()->json([
             'msg'=>'all matches blurred',
@@ -634,8 +649,15 @@ class AdController extends Controller
             'err'=>'ad was not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
+
+        if($data->status !== 'prepay') return response()->json([
+            'err'=>'ad dosent have the right status',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
         
         $cal = $data->budget*5.5/100;
+
+        
 
         return response()->json([
             'msg'=>'all matches',
@@ -713,6 +735,11 @@ class AdController extends Controller
             'err'=>'ad was not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
+        
+        if($ad->status !== 'prepay') return response()->json([
+            'err'=>'ad dosent have the right status',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
 
         $ad->status = 'fullpayment';
         $ad->save();

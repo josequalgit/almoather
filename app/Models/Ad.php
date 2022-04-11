@@ -34,6 +34,7 @@ class Ad extends Model implements HasMedia
         'reject_note',
         'expense_type',
         'is_verified',
+        'campaign_goals_id'
     ];
 
     protected $append = 
@@ -108,6 +109,11 @@ class Ad extends Model implements HasMedia
     public function adSuccess()
     {
         return $this->hasMany(AdSuccess::class,'ad_id');
+    }
+
+    public function campaignGoals()
+    {
+        return $this->belongsTo(CampaignGoal::class,'campaign_goals_id');
     }
 
     public function matches()
