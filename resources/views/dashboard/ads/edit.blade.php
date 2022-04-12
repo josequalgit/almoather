@@ -579,7 +579,7 @@
                                 <tr class="candidates-list bg-dnager">
                                   <td class="title">
                                     <div class="thumb">
-                                      <img class="img-fluid" src="{{ $item->influencers->users->infulncerImage }}" alt="">
+                                      {{-- <img class="img-fluid" src="{{ $item->influencers->users->infulncerImage }}" alt=""> --}}
                                     </div>
                                     <div class="candidate-list-details">
                                       <div class="candidate-list-info">
