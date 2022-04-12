@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->longText('content');
+            $table->date('date')->nullable();
             $table->boolean('is_accepted')->default(0);
             $table->bigInteger('ad_id')->unsigned()->nullable();
             $table->bigInteger('influencer_id')->unsigned()->nullable();

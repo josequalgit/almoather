@@ -15,7 +15,8 @@ class Contract extends Model
         'is_accepted',
         'influencer_id',
         'customer_id',
-        'ad_id'
+        'ad_id',
+        'date'
     ];
 
     public function ads()

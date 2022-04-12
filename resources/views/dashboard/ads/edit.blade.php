@@ -454,7 +454,7 @@
                                   <td>
                                     
                                     
-                                    <button type="button" onclick="seeContract('{{$data->contacts->content}}','{{ $item->influencers->id }}')" class="btn btn-secondary">
+                                    <button {{ $item->influencers->checkIfAccepted($data->id) == 1?'disabled':'' }} type="button" onclick="seeContract('{{$data->contacts->content}}','{{ $item->influencers->id }}')" class="btn btn-secondary">
                                       <i class="bx bx-send"></i>
                                      </button> 
 
@@ -692,7 +692,10 @@
   
                   </p> --}}
                   <textarea name="content" id="contractContent" rows="10" cols="80"></textarea>  
-              </div>
+                  <div class="form-group">
+                    <label for="exampleFormControlSelect1">Date</label>
+                    <input id="contractDate" value="" name="website_link" type="date" class="form-control" id="inputAddress2" placeholder="date">
+                  </div>              </div>
               <div class="modal-footer">
                   <button class="btn btn-secondary text-center align-middle" onclick="sendContract()">
                      Send
@@ -848,17 +851,19 @@ CKEDITOR.replace('contractContent', {
     $.ajax({
       url:addId,
       data:{
-        influncers_id:choosen_inf_id
+        influncers_id:choosen_inf_id,
+        date:document.getElementById('contractDate').value
       },
       type:'POST',
       success:(res)=>{
+        document.getElementById('contractContent').value = '';
         console.log('success: ',res);
+        $('#seeContract').modal('toggle');
       },
       error:(err)=>{
         console.log('error: ',err);
       }
     })
-    alert('send')
     
   }
   

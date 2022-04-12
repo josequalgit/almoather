@@ -294,7 +294,6 @@ class AdController extends Controller
     public function sendContractToInfluencer(Request $request,$ad_id)
     {
         $contract = Ad::find($ad_id)->contacts;
-       
         if(!$contract) return response()->json([
             'msg'=>'contract was not found',
             'status'=>config('global.NOT_FOUND_STATUS')
@@ -304,6 +303,7 @@ class AdController extends Controller
         $data->title = $contract->title;
         $data->content = $contract->content;
         $data->influencer_id =$request->influncers_id;
+        $data->date = $request->date;
         $data->ad_id = $ad_id;
         $data->save();
         

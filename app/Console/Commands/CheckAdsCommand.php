@@ -7,6 +7,7 @@ use App\Notifications\AddInfluencer;
 use Carbon\Carbon;
 use App\Models\Ad;
 use App\Models\User;
+use App\Models\Contract;
 use Illuminate\Support\Facades\Notification;
 
 class CheckAdsCommand extends Command
@@ -87,6 +88,39 @@ class CheckAdsCommand extends Command
                     $item->save();
                 }
                
+            }
+
+            // check the not responded contracts
+            $contracts = Contract::get();
+          
+            foreach ($contracts as $item) {
+                if($item->ads)
+                {
+                    $adminMessage =[
+                        'en'=>[
+                            'msg'=>'Please add response to "'.$item->ads->store.'"ad contract"'
+                        ],
+                        'ar'=>[
+                            'msg'=>'الرجاء الرد على عقد "'.$item->ads->store.'"'
+                        ]
+                        ];
+
+                }
+
+                    
+    
+                #SEND NOTIFICATION TO CUSTOMER ABOUT THE AD
+                if($item->influencers)
+                {
+                    $before2DaysDate = date("Y-m-d", strtotime("-2 day"));
+                    $date = $item->date;
+                    if($before2DaysDate == $date)
+                    {
+                        $sendTo = User::find($item->influencers->users->id);
+                        $lang = $item->influencers->users->lang;
+                        Notification::send($sendTo, new AddInfluencer($adminMessage[$lang??'en']));
+                    }
+                }
             }
     }
 

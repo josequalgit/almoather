@@ -195,4 +195,13 @@ class Ad extends Model implements HasMedia
        }
    }
 
+   public function getInfAdContract($inf_id)
+   {
+        
+       return Contract::where(['influencer_id'=>$inf_id])
+        ->where(['ad_id'=>$this->id])
+        ->first();
+    }
+   
+
 }
