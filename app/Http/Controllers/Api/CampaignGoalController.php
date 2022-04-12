@@ -19,7 +19,7 @@ class CampaignGoalController extends Controller
     $itemsPaginated = CampaignGoal::select(['id','title'])->get()->map(function($item){
         return [
             'id'=>$item->id,
-            'title'=>$item->title
+            'name'=>$item->title
         ];
     });
 

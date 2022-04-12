@@ -128,6 +128,7 @@ class AdController extends Controller
                
                 $itemsPaginated = Ad::where([['customer_id',$user_id],['status','fullpayment']])
                 ->orWhere([['customer_id',$user_id],['status','prepay']])
+                ->orWhere([['customer_id',$user_id],['status','approve']])
                 ->paginate(10);
             }
             elseif($status == 'Active')
