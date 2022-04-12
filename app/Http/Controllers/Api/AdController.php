@@ -654,9 +654,10 @@ class AdController extends Controller
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
         
+        $cal = $data->budget*5.5/100;
+
         if($data->status == 'approve')
         {
-            $cal = $data->budget*5.5/100;
             $data->status = 'prepay';
             $data->save();
         }

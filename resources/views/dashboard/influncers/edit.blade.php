@@ -1,5 +1,13 @@
 @extends('dashboard.layout.index')
 @section('content')
+<style>
+  .profileImage{
+    width:150px;
+  }
+  .video{
+    margin: 2%;
+  }
+</style>
 <div class="app-content content p-5 mt-5">
   <form method="post" enctype="multipart/form-data" action="{{ route('dashboard.admins.edit',$data->id) }}">
 
@@ -30,6 +38,13 @@
           </div>
           @endif
            @csrf
+           @if($data->users->infulncerImage)
+            <div class="form-row mb-2">
+              <div class="form-group col-md-6">
+                <img class="profileImage" src="{{ $data->users->infulncerImage ? $data->users->infulncerImage['url'] :null }}"/>
+              </div>
+            </div>
+            @endif
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="inputEmail4">Name</label>
@@ -93,6 +108,24 @@
               <label for="inputAddress2">Category</label>
               <input disabled value="{{ old('nationality_id')?old('nationality_id'):$data->nationalities->name}}" name="nationality_id" type="text" class="form-control" id="inputAddress2" placeholder="nationality_id">
             </div>
+
+
+            @if($data->users->snapChatVideo)
+            <div class="form-row mb-2">
+              <label for="inputAddress2">Snap Chat Videos</label>
+              <div class="form-group col row">
+                @foreach ($data->users->snapChatVideo as $item)
+                <div class="video">
+                  <video  width="320" height="240" controls>
+                    <source src="{{ $item ? $item['url'] :null }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                  </video>
+
+                </div>
+                @endforeach
+              </div>
+            </div>
+            @endif
 
             @if($data->rejected_note)
             <div class="form-group">

@@ -68,12 +68,19 @@ class CampaignGoalController extends Controller
 
     public function delete($id)
     {
-        $goal = AppSetting::where('key','Campaign Goal')->first();
-        $data = (array)json_decode($goal->value);
-        unset($data[$id]);
+        $data = CampaignGoal::find($id);
 
-        $goal->value = json_encode($data);
-        $goal->save();
+        if(!$data) return response()->json([
+            'err'=>'goal not found',
+            'status'=>404
+        ],404);
+
+        if(count($data->ads) > 0) return response()->json([
+            'err'=>'there is an ad connected to this goal',
+            'status'=>422
+        ],422);
+
+        $data->delete();
 
         activity()->log('Admin "'.Auth::user()->name.'" deleted campaign goals');
         Alert::toast('Campaign goals was updated', 'success');

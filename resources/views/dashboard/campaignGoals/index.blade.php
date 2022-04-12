@@ -69,12 +69,12 @@
                                                             <td>{{ $item->getTranslations('title')['en'] }}</td>
                                                             
                                                             <td>
-                                                                @can('Delete Campaign Goal')
+                                                                @can('Edit Campaign Goal')
                                                                     <a class="btn btn-secondary" href="{{ route('dashboard.campaignGoals.edit',$item->id) }}">
                                                                         <i class="bx bx-edit"></i>
                                                                     </a>
                                                                 @endcan
-                                                                @can('Edit Campaign Goal')
+                                                                @can('Delete Campaign Goal')
                                                                     <button class="btn btn-danger" onclick="openModal('{{ $item->id }}','{{ $item->en }}')">
                                                                         <i class="bx bx-trash buttonIcon"></i>
                                                                     </button>
@@ -145,10 +145,13 @@
                 {
                     location.reload();
                 }
+               
               
             },
-            error:(err)=>{
-                console.log('delete role Error')
+            error:(res)=>{
+                 alert(res.responseJSON.err)
+                 $('#deleteModal').modal('toggle');
+                console.log('error response: ',res.responseJSON.err)
             }
         });
     }
