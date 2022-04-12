@@ -84,6 +84,11 @@
                                     <label for="basicInput">Ar</label>
                                     <input id="campaing_goal_ar" value="{{ old('campaing_goal_ar') }}" type="text" class="form-control"  name="campaing_goal_ar" placeholder="Enter campaing goal" />
                                 </fieldset>
+
+                                <fieldset class="form-group row p-2">
+                                    <label for="basicInput">Can Customer Review</label>
+                                    <input id="customer_can_review" value="{{ old('customer_can_review') }}" type="checkbox" class="form-control w-25"  name="customer_can_review" placeholder="Enter campaing goal" />
+                                </fieldset>
                             
     
                                

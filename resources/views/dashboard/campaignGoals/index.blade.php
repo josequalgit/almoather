@@ -62,20 +62,20 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($data as $key => $item)
+                                                @foreach ($data as $item)
                                                         <tr>
                                                             
-                                                            <td>{{ $item->ar }}</td>
-                                                            <td>{{ $item->en }}</td>
+                                                            <td>{{  $item->getTranslations('title')['ar'] }}</td>
+                                                            <td>{{ $item->getTranslations('title')['en'] }}</td>
                                                             
                                                             <td>
                                                                 @can('Delete Campaign Goal')
-                                                                    <a class="btn btn-secondary" href="{{ route('dashboard.campaignGoals.edit',$key) }}">
+                                                                    <a class="btn btn-secondary" href="{{ route('dashboard.campaignGoals.edit',$item->id) }}">
                                                                         <i class="bx bx-edit"></i>
                                                                     </a>
                                                                 @endcan
                                                                 @can('Edit Campaign Goal')
-                                                                    <button class="btn btn-danger" onclick="openModal('{{ $key }}','{{ $item->en }}')">
+                                                                    <button class="btn btn-danger" onclick="openModal('{{ $item->id }}','{{ $item->en }}')">
                                                                         <i class="bx bx-trash buttonIcon"></i>
                                                                     </button>
                                                                 @endcan

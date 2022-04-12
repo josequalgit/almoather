@@ -648,6 +648,10 @@ input[type="radio"] .styled:checked + label::after {
             <li class="{{ ($name == 'dashboard.notifications.index'|| $name == 'dashboard.notifications.create'|| $name == 'dashboard.notifications.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.notifications.index') }}"><i class="bx bx-bell"></i><span class="menu-title text-truncate" data-i18n="notifications">Notifications</span></a>
             </li>
             @endcanany
+            @canany(['Edit Campaign Goal','Create Campaign Goal','See Campaign Goal','Delete Campaign Goal'])
+            <li class="{{ ($name == 'dashboard.campaignGoals.index'|| $name == 'dashboard.campaignGoals.create'|| $name == 'dashboard.campaignGoals.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.campaignGoals.index') }}"><i class="bx bx-bullseye"></i><span class="menu-title text-truncate" data-i18n="campaignGoals">Campaign Goal</span></a>
+            </li>
+            @endcanany
             @canany(['Edit Ads','Create Ads','See Ads','Delete Ads'])
            
             <li class="menu-item  {{ ($name == 'dashboard.ads.index'|| $name == 'dashboard.ads.create'|| $name == 'dashboard.ads.edit') ? 'open active':''  }} ">
@@ -840,7 +844,7 @@ input[type="radio"] .styled:checked + label::after {
                 </li>
                 @endcanany
 
-                @canany(['Add Campaign Goal','Delete Campaign Goal','Edit Campaign Goal'])
+                {{-- @canany(['Add Campaign Goal','Delete Campaign Goal','Edit Campaign Goal'])
                 <li class="menu-item
                 {{ ($name == 'dashboard.campaignGoals.index'|| $name == 'dashboard.campaignGoals.create'|| $name == 'dashboard.campaignGoals.edit') ? 'active':''  }}
                 ">
@@ -848,7 +852,7 @@ input[type="radio"] .styled:checked + label::after {
                     <div data-i18n="List">Campaign Goal</div>
                   </a>
                 </li>
-                @endcanany
+                @endcanany --}}
             
               </ul>
             </li>

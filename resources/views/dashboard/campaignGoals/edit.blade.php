@@ -57,7 +57,7 @@
 <div class="app-content content p-5 mt-5">
     
     <section id="basic-input">
-        <form method="post" enctype="multipart/form-data" action="{{ route('dashboard.campaignGoals.update',$id) }}">
+        <form method="post" enctype="multipart/form-data" action="{{ route('dashboard.campaignGoals.update',$data->id) }}">
             @csrf
         <div class="row">
             <div class="col-md-12">
@@ -78,15 +78,18 @@
                             <div class="col-12">
                                 <fieldset class="form-group">
                                     <label for="basicInput">En</label>
-                                    <input id="campaing_goal_en" value="{{ old('campaing_goal_en')?old('campaing_goal_en'):$data->en }}" type="text" class="form-control"  name="campaing_goal_en" placeholder="Enter campaing goal" />
+                                    <input id="title_en" value="{{ old('title')?old('title'):$data->getTranslations('title')['en'] }}" type="text" class="form-control"  name="title_en" placeholder="Enter campaing goal" />
                                 </fieldset>
                                 <fieldset class="form-group">
                                     <label for="basicInput">Ar</label>
-                                    <input id="campaing_goal_ar" value="{{ old('campaing_goal_ar')?old('campaing_goal_ar'):$data->ar }}" type="text" class="form-control"  name="campaing_goal_ar" placeholder="Enter campaing goal" />
+                                    <input id="title_ar" value="{{ old('title')?old('title'):$data->getTranslations('title')['ar'] }}" type="text" class="form-control"  name="title_ar" placeholder="Enter campaing goal" />
                                 </fieldset>
                             
     
-                               
+                                <fieldset class="form-group row p-2">
+                                    <label for="basicInput">Can Customer Review</label>
+                                    <input id="customer_can_review" value="{{ old('customer_can_review')?old('customer_can_review'):$data->customer_can_review }}" type="checkbox" class="form-control w-25"  name="customer_can_review" placeholder="Enter campaing goal" />
+                                </fieldset>
     
                             </div>
                         

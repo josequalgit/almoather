@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\SuperAdminRequest;
+use App\Http\Requests\CampaignGoalRequest;
 use App\Models\AppSetting;
+use App\Models\CampaignGoal;
 use Alert, Auth;
 
 class CampaignGoalController extends Controller
 {
     public function index()
     {
-        $data = AppSetting::where('key','Campaign Goal')->first()->campaignGoal;
+        $data = CampaignGoal::paginate(10);
 
         return view('dashboard.campaignGoals.index',compact('data'));
     }
@@ -21,20 +23,17 @@ class CampaignGoalController extends Controller
         return view('dashboard.campaignGoals.create');
     }
 
-    public function store(Request $request)
+    public function store(CampaignGoalRequest $request)
     {
-        $data = AppSetting::where('key','Campaign Goal')->first();
+        //$data = AppSetting::where('key','Campaign Goal')->first();
+        $data = CampaignGoal::create([
+            'title'=>[
+                'ar'=>$request->campaing_goal_ar,
+                'en'=>$request->campaing_goal_en
+            ],
+            'customer_can_review'=>$request->customer_can_review ?? 0
+        ]);
         
-        $oldGoals = json_decode($data->value);
-        $newData =(object)[
-            'en'=>$request->campaing_goal_en,
-            'ar'=>$request->campaing_goal_ar
-        ];
-        
-       $addedData = array_push($oldGoals,$newData);
-       $data->update([
-           'value'=>json_encode($oldGoals)
-       ]);
 
        activity()->log('Admin "'.Auth::user()->name.'" created new campaign goal');
        Alert::toast('Campaign goal was created', 'success');
@@ -43,23 +42,22 @@ class CampaignGoalController extends Controller
 
     public function edit($id)
     {   
-        
-        $goal = AppSetting::where('key','Campaign Goal')->first();
-        $data = json_decode($goal->value)[$id];
-
-        return view('dashboard.campaignGoals.edit',compact('data','id'));
+        $data = CampaignGoal::find($id);
+        // return $data;
+       // return $data;
+        return view('dashboard.campaignGoals.edit',compact('data'));
     }
 
-    public function update(Request $request , $id)
+    public function update(CampaignGoalRequest $request , $id)
     {
-        $goal = AppSetting::where('key','Campaign Goal')->first();
-        $data = (array)json_decode($goal->value);
-        $data[$id]->ar = $request->campaing_goal_ar;
-        $data[$id]->en = $request->campaing_goal_en;
+        $data = CampaignGoal::find($id);
+        $data->title = [
+            'en'=>$request->title_en,
+            'ar'=>$request->title_ar,
+        ];
+        $data->customer_can_review = $request->customer_can_review??0;
+        $data->save();
 
-      
-         $goal->value = json_encode($data);
-        $goal->save();
 
         activity()->log('Admin "'.Auth::user()->name.'" updated campaign goals');
         Alert::toast('Campaign goals was updated', 'success');
