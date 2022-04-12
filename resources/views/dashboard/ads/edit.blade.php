@@ -432,7 +432,7 @@
                               <tr>
                                 <td>
                                   <div class="thumb">
-                                    <img  class="img-fluid inf-image" src="{{ $item->influencers->users->infulncerImage }}" alt="">
+                                    {{-- <img  class="img-fluid inf-image" src="{{ $item->influencers->users->infulncerImage }}" alt=""> --}}
                                   </div>
                                 </td>
 
