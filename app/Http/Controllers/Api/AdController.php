@@ -625,8 +625,6 @@ class AdController extends Controller
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
-        $data->status = 'prepay';
-        $data->save();
 
         return response()->json([
             'msg'=>'all matches blurred',
@@ -651,7 +649,7 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        if($data->status !== 'prepay') return response()->json([
+        if($data->status !== 'approve') return response()->json([
             'err'=>'ad dosent have the right status',
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
@@ -659,6 +657,8 @@ class AdController extends Controller
         $cal = $data->budget*5.5/100;
 
         
+        $data->status = 'prepay';
+        $data->save();
 
         return response()->json([
             'msg'=>'all matches',
