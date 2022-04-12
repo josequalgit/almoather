@@ -649,16 +649,20 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        if($data->status !== 'approve') return response()->json([
+        if($data->status !== 'approve'&&$data->status !=='prepay') return response()->json([
             'err'=>'ad dosent have the right status',
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
         
-        $cal = $data->budget*5.5/100;
+        if($data->status == 'approve')
+        {
+            $cal = $data->budget*5.5/100;
+            $data->status = 'prepay';
+            $data->save();
+        }
 
         
-        $data->status = 'prepay';
-        $data->save();
+      
 
         return response()->json([
             'msg'=>'all matches',
