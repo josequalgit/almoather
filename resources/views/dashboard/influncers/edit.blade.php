@@ -13,16 +13,16 @@
 
   <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item">
-      <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Personal</a>
+      <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"><i class="menu-icon tf-icons bx bx-user"></i> Personal</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Address</a>
+      <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"><i class="menu-icon tf-icons bx bx-building"></i> Address</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Billing</a>
+      <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"><i class="menu-icon tf-icons bx bx-money"></i> Billing</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">Representent</a>
+      <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab"><i class="menu-icon tf-icons bx bx-mobile-vibration"></i> Representent</a>
     </li>
   </ul><!-- Tab panes -->
   <div class="tab-content">
@@ -111,13 +111,30 @@
 
 
             @if($data->users->snapChatVideo)
+            <label for="inputAddress2 mt-2">Snap Chat Videos</label>
             <div class="form-row mb-2">
-              <label for="inputAddress2">Snap Chat Videos</label>
               <div class="form-group col row">
                 @foreach ($data->users->snapChatVideo as $item)
                 <div class="video">
                   <video  width="320" height="240" controls>
                     <source src="{{ $item ? $item['url'] :null }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                  </video>
+
+                </div>
+                @endforeach
+              </div>
+            </div>
+            @endif
+
+            @if($data->videos)
+            <label for="inputAddress2 mt-2">Videos</label>
+            <div class="form-row mb-2">
+              <div class="form-group col row">
+                @foreach ($data->videos as $item)
+                <div class="video">
+                  <video  width="320" height="240" controls>
+                    <source src="{{ $item ? $item :null }}" type="video/mp4">
                   Your browser does not support the video tag.
                   </video>
 
@@ -240,10 +257,30 @@
                 <label for="inputAddress2">Commercial Registration No</label>
                 <input disabled value="{{ old('commercial_registration_no')?old('commercial_registration_no'):$data->commercial_registration_no}}" name="commercial_registration_no" type="text" class="form-control" id="inputAddress2" placeholder="commercial_registration_no">
               </div>
+              @if ($data->commercialFiles)
+              <div class="form-group">
+                <label for="inputAddress2">Commercial Registration Files</label>
+                <br/>
+                <a target="_blink" class="btn btn-secondary" href="{{ $data->commercialFiles['url'] }}" download>
+                  Download
+                </a>                
+              </div>
+                  
+              @endif
               <div class="form-group">
                 <label for="inputAddress2">Tax Registration Number</label>
                 <input disabled value="{{ old('tax_registration_number')?old('tax_registration_number'):$data->tax_registration_number}}" name="tax_registration_number" type="text" class="form-control" id="inputAddress2" placeholder="tax_registration_number">
               </div>
+              @if ($data->taxFiles)
+              <div class="form-group">
+                <label for="inputAddress2">Tax Files</label>
+                <br/>
+                <a target="_blink" class="btn btn-secondary" href="{{ $data->taxFiles['url'] }}" download>
+                  Download
+                </a>                
+              </div>
+                  
+              @endif
   
         </section>
       </div>

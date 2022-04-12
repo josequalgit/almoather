@@ -1,5 +1,10 @@
 @extends('dashboard.layout.index')
 @section('content')
+<style>
+   .profileImage{
+    width:150px;
+  }
+</style>
 <div class="app-content content p-5 mt-5">
     
     <section id="basic-input">
@@ -13,6 +18,13 @@
           @endif
         <form method="post" enctype="multipart/form-data">
            @csrf
+           @if($data->users->image)
+           <div class="form-row mb-2">
+             <div class="form-group col-md-6">
+               <img class="profileImage" src="{{ $data->users->image ? $data->users->image['url'] :null }}"/>
+             </div>
+           </div>
+           @endif
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="inputEmail4">First Name</label>
