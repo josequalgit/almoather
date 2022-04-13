@@ -223,12 +223,12 @@
               <label for="inputAddress2">Customer</label>
               <input disabled value="{{ old('budget')?old('budget'):$data->customers->first_name.' '.$data->customers->last_name}}" name="budget" type="text" class="form-control" id="inputAddress2" placeholder="budget">
             </div>
-            @if ($data->influncers)
+            {{-- @if ($data->influncers)
             <div class="form-group">
               <label for="inputAddress2">Influencer</label>
               <input disabled value="{{ old('influncer_id')?old('influncer_id'):$data->influncers->first_name.' '.$data->customers->last_name}}" name="budget" type="text" class="form-control" id="inputAddress2" placeholder="budget">
             </div>
-            @endif
+            @endif --}}
             <div class="form-group">
               <label for="inputAddress2">Budget</label>
               <input disabled value="{{ old('budget')?old('budget'):$data->budget}}" name="budget" type="text" class="form-control" id="inputAddress2" placeholder="budget">

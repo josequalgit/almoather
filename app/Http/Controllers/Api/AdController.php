@@ -43,12 +43,14 @@ class AdController extends Controller
 
             if($status == 'Pending')
             {
-
-                $itemsPaginated = Ad::where('influncer_id',$user_id)->paginate(1000);
+               
+               
+                $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',2)->paginate(10);
 
                 $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
-                    if($item->checkIfAccepted($user_id) == 2) return $this->adResponse($item);
+                    return $this->adResponse($item->ads);
                 })->toArray();
+                
 
 
 
@@ -64,12 +66,12 @@ class AdController extends Controller
             elseif($status == 'Active')
             {
               
-                $itemsPaginated = Ad::where([['influncer_id',$user_id],['status','progress']])->paginate(10);
+                $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',1)->paginate(10);
 
                 $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
-                    if($item->checkIfAccepted($user_id) == 2) return $this->adResponse($item);
+                    return $this->adResponse($item->ads);
                 })->toArray();
-
+                
                 
                 return response()->json([
                     'msg'=>'get all ads with the status',
@@ -80,15 +82,12 @@ class AdController extends Controller
             }
             elseif($status == 'Completed')
             {
-                $itemsPaginated = Ad::where([['influncer_id',$user_id],['status','progress']])
-                ->orWhere([['influncer_id',$user_id],['status','complete']])
-                ->orWhere([['influncer_id',$user_id],['status','influncer_complete']])
-                ->paginate(10);
-
+                $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',0)->paginate(10);
 
                 $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
-                    return $this->adResponse($item);
+                    return $this->adResponse($item->ads);
                 })->toArray();
+                
 
                 
                 return response()->json([
@@ -99,11 +98,10 @@ class AdController extends Controller
             }
             elseif($status == 'Rejected')
             {
-                $itemsPaginated = Ad::where([['influncer_id',$user_id],['status','rejected']])
-                ->paginate(10);
+                $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',0)->paginate(10);
 
                 $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
-                    return $this->adResponse($item);
+                    return $this->adResponse($item->ads);
                 })->toArray();
 
                 
