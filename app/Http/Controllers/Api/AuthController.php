@@ -23,7 +23,7 @@ class AuthController extends Controller
 
     public function __construct()
     {
-      // $this->middleware('auth:api', ['except' => ['login']]);
+     
     }
 
     /**
@@ -31,7 +31,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(Request $request)
     {
         $credentials = request(['email', 'password']);
         if (! $token = Auth::guard('api')->attempt($credentials)) {
@@ -42,7 +42,9 @@ class AuthController extends Controller
 
         if($user->customers)
         {
-            // return $this->respondWithToken($token,$user,1);
+            if($request->fcm_token){
+                $user->update(['fcm_token' => $request->fcm_token]);
+            }
 			 return response()->json([
                 'msg'=>"user data",
 				 'data'=>$this->userDataResponse($user,$token , $user->id),
@@ -53,9 +55,9 @@ class AuthController extends Controller
         if($user->influncers)
         {
 			 return response()->json([
-                'msg'=>"user data",
-				 'data'=>$this->userDataResponse($user,$token, $user->id),
-				 'type'=>'influencer',
+                'msg' => "user data",
+				 'data' => $this->userDataResponse($user,$token, $user->id),
+				 'type' => 'influencer',
                 'status'=>config('global.OK_STATUS')
             ],config('global.OK_STATUS'));
          //   return ;

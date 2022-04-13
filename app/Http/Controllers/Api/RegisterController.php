@@ -31,15 +31,17 @@ class RegisterController extends Controller
         $info =[
             'msg'=>$request->message,
         ];
-        if($this->checkIfDataAvalibale($request))
+
+        $available = $this->checkIfDataAvalibale($request);
+        if($available)
         {
             return response()->json([
-                'msg'=>$this->checkIfDataAvalibale($request),
-                'status'=>config('global.WRONG_VALIDATION_STATUS')
+                'msg'       => $available,
+                'status'    => config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
-        $commingRequest =  array_merge($request->only(['email','password','name']),['password'=>bcrypt($request->password)]);
+        $commingRequest =  array_merge($request->only(['email','password','name','fcm_token']),['password' => bcrypt($request->password)]);
         $data = User::create($commingRequest);
 
 
@@ -75,20 +77,18 @@ class RegisterController extends Controller
             'snap_chat_video',
             'milestone',
             'street',
-            'neighborhood',
-            // 'address'
+            'neighborhood'
         ]);
         
 
        $addUserId =  array_merge($influncerData,['user_id'=>$data->id]);
        $addTranslate =  array_merge($addUserId,['full_name'=>[
-           'ar'=>$request->full_name_ar,
-           'en'=>$request->full_name_en
+           'ar' => $request->full_name_ar,
+           'en' => $request->full_name_en
        ]]);
+
        $newInfluncer = Influncer::create($addTranslate);
 
-
-        
        $data->addMedia($request->file('image'))
        ->toMediaCollection('influncers');
 
@@ -117,24 +117,26 @@ class RegisterController extends Controller
             $obj = $item;
            if(!is_object($item)) $obj = (object)$item;
             SocialMediaProfile::create([
-                'link'=>$obj->link,
-                'social_media_id'=>$obj->type,
-                'Influncer_id'=>$newInfluncer->id
+                'link'              => $obj->link,
+                'social_media_id'   => $obj->type,
+                'Influncer_id'      => $newInfluncer->id
             ]);
        }
 
         $users = [User::find(1)];
+
         $info =[
             'msg'=>'New Influncer "'.$newInfluncer->full_name.'" registered'
         ];
         Notification::send($users, new AddInfluencer($info));
+
         $info = $data->influncers;
-        $token = Auth::guard('api')->attempt(['email'=>$request->email,'password'=>$request->password]);
+        $token = Auth::guard('api')->attempt(['email' => $request->email,'password' => $request->password]);
 
         return response()->json([
-            'msg'=>'Influncer was created',
-            'data'=>$this->userDataResponse($data , $token,$data->id),
-            'status'=>config('global.CREATED_STATUS')
+            'msg'       => 'Influncer was created',
+            'data'      => $this->userDataResponse($data , $token,$data->id),
+            'status'    => config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
     }
 
@@ -150,7 +152,7 @@ class RegisterController extends Controller
         $info =[
             'msg'=>$request->message,
         ];
-        $commingRequest =  array_merge($request->only(['email','password','name']),['password'=>bcrypt($request->password)]);
+        $commingRequest =  array_merge($request->only(['email','password','name','fcm_token']),['password'=>bcrypt($request->password)]);
         $data = User::create($commingRequest);
         $data->addMedia($request->file('image'))
         ->toMediaCollection('customers');
