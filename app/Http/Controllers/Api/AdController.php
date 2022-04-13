@@ -51,8 +51,9 @@ class AdController extends Controller
                     $data['contract']=[
                         'status'=>$status,
                         'data'=>[
-                            'text'=>$item->text,
-                            'id'=>$item->id
+                            'text'=>$item->title,
+                            'id'=>$item->id,
+                            'date'=>$item->date
                         ],
                       ];
                       return $data;
@@ -80,8 +81,9 @@ class AdController extends Controller
                     $data['contract']=[
                         'status'=>$status,
                         'data'=>[
-                            'text'=>$item->text,
-                            'id'=>$item->id
+                            'text'=>$item->title,
+                            'id'=>$item->id,
+                            'date'=>$item->date
                         ],
                       ];
                     return $data;
@@ -105,8 +107,9 @@ class AdController extends Controller
                     $data['contract']=[
                         'status'=>$status,
                         'data'=>[
-                            'text'=>$item->text,
-                            'id'=>$item->id
+                            'text'=>$item->title,
+                            'id'=>$item->id,
+                            'date'=>$item->date
                         ],
                       ];
                     return $data;
@@ -130,7 +133,8 @@ class AdController extends Controller
                         'status'=>$status,
                         'data'=>[
                             'text'=>$item->text,
-                            'id'=>$item->id
+                            'id'=>$item->id,
+                            'date'=>$item->date
                         ],
                       ];
                     return $data;
