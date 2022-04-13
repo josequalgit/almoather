@@ -15,6 +15,9 @@ class Contract extends Model
         'is_accepted',
         'influencer_id',
         'customer_id',
+        'influencer_status',
+        'admin_status',
+        'is_completed',
         'ad_id',
         'date'
     ];
