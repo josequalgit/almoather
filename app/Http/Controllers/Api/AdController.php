@@ -44,7 +44,7 @@ class AdController extends Controller
             if($status == 'Pending')
             {
                
-               
+               dd(Auth::guard('api')->user()->influncers->id);
                 $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',2)->paginate(10);
 
                 $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
