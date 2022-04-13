@@ -56,12 +56,7 @@ trait AdResponse {
            
       ];
 
-      if(Auth::guard('api')->user()->influncers){
-        $basicResponse['contract']=[
-          'status'=>$ad->checkIfAccepted($info),
-          'data'=>$ad->getInfAdContract($info->id),
-        ];
-      }
+      
 
       if(Auth::guard('api')->user()->customers){
         $basicResponse['status']=$ad->status;
