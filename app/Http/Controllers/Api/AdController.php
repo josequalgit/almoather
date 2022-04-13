@@ -31,6 +31,7 @@ class AdController extends Controller
     {
         $user_id = Auth::guard('api')->user()->influncers ? Auth::guard('api')->user()->influncers->id :Auth::guard('api')->user()->customers->id;
         // dd($user_id);
+
         if(Auth::guard('api')->user()->influncers)
         {
             if(!in_array($status,config('global.INFLUENCER_ADS_STATUS'))) return response()->json([
@@ -43,12 +44,15 @@ class AdController extends Controller
 
             if($status == 'Pending')
             {
-               
-            //    dd(Auth::guard('api')->user()->influncers->id);
                 $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',2)->paginate(10);
 
                 $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
-                    return $this->adResponse($item->ads);
+                    $data =  $this->adResponse($item->ads);
+                    $data['contract']=[
+                        'status'=>$status,
+                        'data'=>$item,
+                      ];
+                      return $data;
                 })->toArray();
                 
 
@@ -89,8 +93,14 @@ class AdController extends Controller
             {
                 $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',1)->paginate(10);
 
-                $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
-                    return $this->adResponse($item->ads);
+                $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($status){
+                    // return $this->adResponse($item->ads);
+                    $data = $this->adResponse($item->ads);
+                    $data['contract']=[
+                        'status'=>$status,
+                        'data'=>$item,
+                      ];
+                    return $data;
                 })->toArray();
                 
 
@@ -105,8 +115,14 @@ class AdController extends Controller
             {
                 $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',0)->paginate(10);
 
-                $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
-                    return $this->adResponse($item->ads);
+                $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($status){
+                    $data = $this->adResponse($item->ads);
+                    $data['contract']=[
+                        'status'=>$status,
+                        'data'=>$item,
+                      ];
+                    return $data;
+                    // return $this->adResponse($item->ads);
                 })->toArray();
 
                 
