@@ -46,7 +46,7 @@ class AdController extends Controller
             {
                 $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',2)->paginate(10);
 
-                $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
+                $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($status){
                     $data =  $this->adResponse($item->ads);
                     $data['contract']=[
                         'status'=>$status,
