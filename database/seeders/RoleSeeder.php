@@ -18,8 +18,14 @@ class RoleSeeder extends Seeder
     {
         $roles = [
             'superAdmin',
+            'Contracts Manager',
         ];
         $permissions = Permission::get();
+        $contractManagerPermissions = [
+            'See Contracts',
+            'Edit Contracts',
+            'Delete Contracts',
+        ];
 
         foreach ($roles as $key => $value) {
             $role = null;

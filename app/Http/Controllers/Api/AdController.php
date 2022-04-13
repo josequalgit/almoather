@@ -82,7 +82,7 @@ class AdController extends Controller
             }
             elseif($status == 'Completed')
             {
-                $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',0)->paginate(10);
+                $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',1)->paginate(10);
 
                 $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
                     return $this->adResponse($item->ads);

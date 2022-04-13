@@ -50,7 +50,6 @@ trait AdResponse {
             ],
             'customer_id'=>$ad->customer_id,
             'category_id'=>$ad->category_id,
-		        'influncer_id'=>$ad->influncer_id,
             'discount_code'=>$ad->discount_code,
             'hasStore'=>$ad->has_hasStore?true:false,
             'is_onSite'=>$ad->onSite?'Online':'Site',
@@ -60,7 +59,7 @@ trait AdResponse {
       if(Auth::guard('api')->user()->influncers){
         $basicResponse['contract']=[
           'status'=>$ad->checkIfAccepted($info),
-          'data'=>$ad->getInfAdContract($info),
+          'data'=>$ad->getInfAdContract($info->id),
         ];
       }
 

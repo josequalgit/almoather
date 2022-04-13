@@ -67,6 +67,9 @@ class PermissionSeeder extends Seeder
             'Create Campaign Goal',
             'Edit Campaign Goal',
             'Delete Campaign Goal',
+            'See Contracts',
+            'Edit Contracts',
+            'Delete Contracts'
         ];
 
         foreach ($permissions as $key => $value) {
