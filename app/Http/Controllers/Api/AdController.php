@@ -52,8 +52,9 @@ class AdController extends Controller
 
             $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($status){
                 $data =  $this->adResponse($item->ads);
+                $data['status']         = $status;
                 $data['contract_id']    = $item->id;
-                $data['contract_title']  = $item->title;
+                $data['contract_title'] = $item->title;
                 $data['contract_data']  = $item->content;
                 $data['contract_date']  = $item->date;    
                 return $data;
@@ -74,24 +75,15 @@ class AdController extends Controller
                 'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
             ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
 
-            if($status == 'WaitingPayment')
+            $statusCode = [
+                'WaitingPayment'    => ['approve'],
+                'Active'            => ['fullpayment','active','progress'],
+                'Finished'          => ['complete']
+            ];
+
+            if(in_array($status,array_keys($statusCode)))
             {
-               
-                $itemsPaginated = Ad::where([['customer_id',$user_id],['status','prepay']])
-                ->orWhere([['customer_id',$user_id],['status','approve']])
-                ->paginate(10);
-            }
-            elseif($status == 'Active')
-            {
-                $itemsPaginated = Ad::where([['customer_id',$user_id],['status','progress']])
-                ->orWhere([['customer_id',$user_id],['status','active']])
-                ->orWhere([['customer_id',$user_id],['status','fullpayment']])
-                ->paginate(10);
-            }
-            elseif($status == 'Finished')
-            {
-                $itemsPaginated = Ad::where([['customer_id',$user_id],['status','complete']])
-                ->paginate(10);
+                $itemsPaginated = Ad::where('customer_id',$user_id)->whereIn('status',$statusCode[$status])->paginate(10);
             }
             else
             {
@@ -103,9 +95,6 @@ class AdController extends Controller
             })->toArray();
         }
 
-     
-
-
         return response()->json([
             'msg'=>'get all ads with the status',
             'data'=>$this->formate($itemsTransformed , $itemsPaginated),
@@ -115,8 +104,6 @@ class AdController extends Controller
 
     public function store(AdRequest $request)
     {
-       
-
         #CHECK REQUEST 
         if(!$request->hasFile('cr_image')&&!$request->has_marouf_num)
         {
