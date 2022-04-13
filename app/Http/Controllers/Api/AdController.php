@@ -76,7 +76,10 @@ class AdController extends Controller
                     $data = $this->adResponse($item->ads);
                     $data['contract']=[
                         'status'=>$status,
-                        'data'=>$item,
+                        'data'=>[
+                            'text'=>$item->text,
+                            'id'=>$item->id
+                        ],
                       ];
                     return $data;
                 })->toArray();
@@ -98,7 +101,10 @@ class AdController extends Controller
                     $data = $this->adResponse($item->ads);
                     $data['contract']=[
                         'status'=>$status,
-                        'data'=>$item,
+                        'data'=>[
+                            'text'=>$item->text,
+                            'id'=>$item->id
+                        ],
                       ];
                     return $data;
                 })->toArray();
@@ -119,7 +125,10 @@ class AdController extends Controller
                     $data = $this->adResponse($item->ads);
                     $data['contract']=[
                         'status'=>$status,
-                        'data'=>$item,
+                        'data'=>[
+                            'text'=>$item->text,
+                            'id'=>$item->id
+                        ],
                       ];
                     return $data;
                     // return $this->adResponse($item->ads);
