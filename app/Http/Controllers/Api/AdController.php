@@ -331,23 +331,17 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    public function accept_ad_contract($ad_id)
+    public function accept_ad_contract($contract_id,$status)
     {
-        $ad = Ad::find($ad_id);
 
-        if(!$ad) return response()->json([
-            'err'=>"ad was not found",
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
-
-        $data = Contract::find($ad->contacts->id);
+        $data = Contract::find($contract_id);
 
         if(!$data) return response()->json([
             'err'=>'contract not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        $data->is_accepted = true;
+        $data->is_accepted = $status;
         $data->save();
 
         return response()->json([

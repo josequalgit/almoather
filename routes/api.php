@@ -130,7 +130,7 @@ Route::group(['prefix'=>'auth'],function(){
             Route::post('create','store')->middleware('check_customer');
             Route::get('details/{id}','details');
             Route::get('contract/{ad_id}','get_ad_contract');
-            Route::put('contract/accept_contract/{contract_id}/{influencer_id}','accept_ad_contract');
+            Route::put('contract/accept_contract/{contract_id}/{status}','accept_ad_contract');
             Route::get('search/{query}','search');
             Route::get('influencers/{influncer_id}/{status?}','get_influencer_ads');
             Route::get('customers/{customer_id}/{status?}','get_customers_ads');
