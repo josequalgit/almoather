@@ -49,7 +49,6 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('influncer/{status?}','index')->name('index')->middleware('permission:Edit Influncer|See Influncer');
             Route::get('influncer/edit/{id}','edit')->name('edit')->middleware('permission:Edit Influncer');
             Route::post('influncer/updateStatus/{id}','updateStatus')->name('updateStatus')->middleware('permission:Edit Influncer');
-
         });
 
         Route::middleware('role_or_permission:superAdmin|Edit Customer|Create Customer|See Customer|Delete Customer')->name('customers.')->controller(CustomerController::class)->group(function(){
@@ -144,13 +143,15 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/Faq/delete/{id}','delete')->name('delete')->middleware('permission:Delete Faq');
         });
         
-        Route::middleware('role_or_permission:superAdmin|Edit Contract|Create Contract|See Contract|Delete Contract')->name('contracts.')->controller(ContractController::class)->group(function(){
+        Route::middleware('role_or_permission:superAdmin|Contracts Manager|Edit Contract|Create Contract|See Contract|Delete Contract')->name('contracts.')->controller(ContractController::class)->group(function(){
             Route::get('/contract','index')->name('index')->middleware('permission:Edit Contract|Create Contract|See Contract|Delete Contract');
             Route::get('/contract/edit','edit')->name('edit')->middleware('permission:Edit Contract');
             Route::post('/contract/update','update')->name('update')->middleware('permission:Edit Contract');
             Route::get('/contract/create','create')->name('create')->middleware('permission:Create Contract');
             Route::post('/contract/store','store')->name('store')->middleware('permission:Create Contract');
             Route::get('/contract/delete/{id}','delete')->name('delete')->middleware('permission:Delete Contract');
+            Route::get('/contract/active','get_active_contracts')->name('activeContract')->middleware('role:Contracts Manager|superAdmin');
+            Route::post('/contract/changeStatus/{id}/{status}','change_status_contracts')->name('changeStatus')->middleware('role:Contracts Manager|superAdmin');
         });
 
         Route::middleware('role_or_permission:superAdmin|See Notification|Create Notification|Edit Notification|Delete Notification')

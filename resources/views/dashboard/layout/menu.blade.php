@@ -21,7 +21,7 @@
     background-image: linear-gradient( to right, #bc6428, #ffd77a, #945825 ) !important;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-}
+    }
 .breadcrumb-item.active {
     border-radius: 0.267rem;
     background-image: linear-gradient( to right, #bc6428, #ffd77a, #945825 ) !important;
@@ -543,6 +543,7 @@ input[type="radio"] .styled:checked + label::after {
     $route = Route::current();
     $name = $route->getName();
     $para = $checkStatus ? request()->route()->parameters['status'] : null;
+    $role = Auth::user()->roles[0]->name
     @endphp
     <div class="shadow-bottom"></div>
     <div class="main-menu-content marginFromLogo">
@@ -552,6 +553,11 @@ input[type="radio"] .styled:checked + label::after {
             </li>
             <li class=" navigation-header text-truncate"><span data-i18n="Apps">Sections</span>
             </li>
+           {{-- @php
+               dd(Auth::user()->roles[0]->name);
+           @endphp --}}
+           {{-- @if($role !== 'Contracts Manager') --}}
+           @if($role !== 'superAdmin')
             @canany(['Edit Admin','Create Admin','See Admin','Delete Admin','Edit Role','Create Role','See Role','Delete Role'])
             {{-- <li class="{{ ($name == 'dashboard.admins.index'|| $name == 'dashboard.admins.create'|| $name == 'dashboard.admins.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.admins.index') }}"><i class="bx bx-user"></i><span class="menu-title text-truncate" data-i18n="admins">Admins</span></a>
             </li> --}}
@@ -874,7 +880,19 @@ input[type="radio"] .styled:checked + label::after {
             @can('See Logs')
             <li class="{{ ($name == 'dashboard.logs.index'|| $name == 'dashboard.logs.create'|| $name == 'dashboard.logs.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.logs.index') }}"><i class="bx bx-code-block"></i><span class="menu-title text-truncate" data-i18n="logs">Logs</span></a>
             </li>
-            @endcan           
+            @endcan
+            @php
+            dd($role);
+            @endphp
+            @elseif($role == 'superAdmin')
+            <li class="">
+              <a href="{{route('dashboard.contracts.activeContract')}}"><i class="bx bx-book-content" data-icon="desktop"></i><span class="menu-title text-truncate" data-i18n="Dashboard">Active Contracts</span></a>
+           </li>
+            <li class="">
+              <a href="{{route('dashboard.contracts.activeContract')}}"><i class="bx bx-book-content" data-icon="desktop"></i><span class="menu-title text-truncate" data-i18n="Dashboard">Influncers</span></a>
+           </li>
+            @endif
+         
         </ul>
     </div>
 </div>
