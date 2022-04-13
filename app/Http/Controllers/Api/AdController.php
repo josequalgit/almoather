@@ -34,120 +34,37 @@ class AdController extends Controller
 
         if(Auth::guard('api')->user()->influncers)
         {
-            if(!in_array($status,config('global.INFLUENCER_ADS_STATUS'))) return response()->json([
-                'err'=>'influencer is not authorized to get ads with this status',
-                'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
-            ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
-
-
-            $data = Ad::where([['influncer_id',$user_id],['status',$status]])->get();
-
-            if($status == 'Pending')
-            {
-                $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',2)->paginate(10);
-
-                $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($status){
-                    $data =  $this->adResponse($item->ads);
-                    $data['contract']=[
-                        'status'=>$status,
-                        'data'=>[
-                            'text'=>$item->title,
-                            'id'=>$item->id,
-                            'date'=>$item->date
-                        ],
-                      ];
-                      return $data;
-                })->toArray();
-                
-
-
-
+            if(!in_array($status,config('global.INFLUENCER_ADS_STATUS'))){
                 return response()->json([
-                    'msg'=>'get all ads with the status',
-                    'data'=>$this->formate($itemsTransformed , $itemsPaginated),
-                    'status'=>config('global.OK_STATUS')
-                ],config('global.OK_STATUS'));
-
-               
-
+                    'err'=>'influencer is not authorized to get ads with this status',
+                    'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
+                ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
             }
-            elseif($status == 'Active')
-            {
-              
-                $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',1)->paginate(10);
 
-                $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($status){
-                    $data = $this->adResponse($item->ads);
-                    $data['contract']=[
-                        'status'=>$status,
-                        'data'=>[
-                            'text'=>$item->title,
-                            'id'=>$item->id,
-                            'date'=>$item->date
-                        ],
-                      ];
-                    return $data;
-                })->toArray();
-                
-                
-                return response()->json([
-                    'msg'=>'get all ads with the status',
-                    'data'=>$this->formate($itemsTransformed , $itemsPaginated),
-                    'status'=>config('global.OK_STATUS')
-                ],config('global.OK_STATUS'));
+            $statusCode = [
+                'Pending'   => 0,
+                'Rejected'  => 2,
+                'Completed' => 1,
+                'Active'    => 1
+            ];
 
-            }
-            elseif($status == 'Completed')
-            {
-                $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',1)->paginate(10);
+            $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',$statusCode[$status])->paginate(10);
 
-                $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($status){
-                    // return $this->adResponse($item->ads);
-                    $data = $this->adResponse($item->ads);
-                    $data['contract']=[
-                        'status'=>$status,
-                        'data'=>[
-                            'text'=>$item->title,
-                            'id'=>$item->id,
-                            'date'=>$item->date
-                        ],
-                      ];
-                    return $data;
-                })->toArray();
-                
+            $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($status){
+                $data =  $this->adResponse($item->ads);
+                $data['status']         = $status;
+                $data['contract_id']    = $item->id;
+                $data['contract_title'] = $item->title;
+                $data['contract_data']  = $item->content;
+                $data['contract_date']  = $item->date;    
+                return $data;
+            })->toArray();
 
-                
-                return response()->json([
-                    'msg'=>'get all ads with the status',
-                    'data'=>$this->formate($itemsTransformed , $itemsPaginated),
-                    'status'=>config('global.OK_STATUS')
-                ],config('global.OK_STATUS'));
-            }
-            elseif($status == 'Rejected')
-            {
-                $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',0)->paginate(10);
-
-                $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($status){
-                    $data = $this->adResponse($item->ads);
-                    $data['contract']=[
-                        'status'=>$status,
-                        'data'=>[
-                            'text'=>$item->text,
-                            'id'=>$item->id,
-                            'date'=>$item->date
-                        ],
-                      ];
-                    return $data;
-                    // return $this->adResponse($item->ads);
-                })->toArray();
-
-                
-                return response()->json([
-                    'msg'=>'get all ads with the status',
-                    'data'=>$this->formate($itemsTransformed , $itemsPaginated),
-                    'status'=>config('global.OK_STATUS')
-                ],config('global.OK_STATUS'));
-            }
+            return response()->json([
+                'msg'=>'get all ads with the status',
+                'data'=>$this->formate($itemsTransformed , $itemsPaginated),
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
 
 
         }
@@ -158,24 +75,15 @@ class AdController extends Controller
                 'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
             ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
 
-            if($status == 'WaitingPayment')
+            $statusCode = [
+                'WaitingPayment'    => ['approve'],
+                'Active'            => ['fullpayment','active','progress'],
+                'Finished'          => ['complete']
+            ];
+
+            if(in_array($status,array_keys($statusCode)))
             {
-               
-                $itemsPaginated = Ad::where([['customer_id',$user_id],['status','prepay']])
-                ->orWhere([['customer_id',$user_id],['status','approve']])
-                ->paginate(10);
-            }
-            elseif($status == 'Active')
-            {
-                $itemsPaginated = Ad::where([['customer_id',$user_id],['status','progress']])
-                ->orWhere([['customer_id',$user_id],['status','active']])
-                ->orWhere([['customer_id',$user_id],['status','fullpayment']])
-                ->paginate(10);
-            }
-            elseif($status == 'Finished')
-            {
-                $itemsPaginated = Ad::where([['customer_id',$user_id],['status','complete']])
-                ->paginate(10);
+                $itemsPaginated = Ad::where('customer_id',$user_id)->whereIn('status',$statusCode[$status])->paginate(10);
             }
             else
             {
@@ -187,9 +95,6 @@ class AdController extends Controller
             })->toArray();
         }
 
-     
-
-
         return response()->json([
             'msg'=>'get all ads with the status',
             'data'=>$this->formate($itemsTransformed , $itemsPaginated),
@@ -199,8 +104,6 @@ class AdController extends Controller
 
     public function store(AdRequest $request)
     {
-       
-
         #CHECK REQUEST 
         if(!$request->hasFile('cr_image')&&!$request->has_marouf_num)
         {
