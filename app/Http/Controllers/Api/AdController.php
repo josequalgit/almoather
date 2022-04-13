@@ -30,7 +30,7 @@ class AdController extends Controller
     public function index($status)
     {
         $user_id = Auth::guard('api')->user()->influncers ? Auth::guard('api')->user()->influncers->id :Auth::guard('api')->user()->customers->id;
-
+        dd($user_id);
         if(Auth::guard('api')->user()->influncers)
         {
             if(!in_array($status,config('global.INFLUENCER_ADS_STATUS'))) return response()->json([
