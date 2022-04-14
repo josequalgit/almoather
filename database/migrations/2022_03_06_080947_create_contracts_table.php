@@ -17,16 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->longText('content');
-            $table->longText('link')->nullable();
             $table->date('date')->nullable();
-            $table->boolean('is_accepted')->default(0);
-            $table->boolean('is_completed')->default(0);
-            $table->boolean('influencer_status')->default(0);
-            $table->boolean('admin_status')->default(0);
             $table->bigInteger('ad_id')->unsigned()->nullable();
             $table->bigInteger('influencer_id')->unsigned()->nullable();
             $table->bigInteger('customer_id')->unsigned()->nullable();
-            $table->longText('rejectNote')->nullable();
+            $table->boolean('is_accepted')->default(0);
             $table->timestamps();
         });
     }

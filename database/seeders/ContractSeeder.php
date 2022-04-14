@@ -15,11 +15,15 @@ class ContractSeeder extends Seeder
     public function run()
     {
         Contract::create([
-            'title'=>'This is just a test contract name',
+            'title'=>'This contract for influencer',
             'content'=>'This contract content it just for a test if to show you how it will look like in the mobile',
         ]);
         Contract::create([
-            'title'=>'This is just a test contract name',
+            'title'=>'This contract for customer',
+            'content'=>'This contract content it just for a test if to show you how it will look like in the mobile',
+        ]);
+        Contract::create([
+            'title'=>'This contract for influencer',
             'content'=>'This contract content it just for a test if to show you how it will look like in the mobile',
             'ad_id'=>1
         ]);

@@ -19,7 +19,9 @@ class Contract extends Model
         'admin_status',
         'is_completed',
         'ad_id',
-        'date'
+        'date',
+        'rejectNote',
+        'link',
     ];
 
     public function ads()

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Ad;
 use App\Http\Requests\Api\AdRequest;
+use App\Http\Requests\Api\AcceptAdContractRequest;
 use Auth;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\AddInfluencer;
@@ -127,7 +128,7 @@ class AdController extends Controller
 
 
         $data = Ad::create($data);
-
+        $this->create_customer_contract($data->id,Auth::guard('api')->user()->customers);
          #CHECK IF THERE IS A CONTRACT IN THE DATABASE
          if(!$this->create_contract($data->id,Auth::guard('api')->user()->customers)) return response()->json([
             'err'=>'There is no contract in the system',
@@ -235,7 +236,34 @@ class AdController extends Controller
             return Contract::create([
                 'title'=>$contractData->title,
                 'content'=>$replace,
-                'ad_id'=>$ad_id
+                'ad_id'=>$ad_id,
+            ]);
+        }
+        else
+        {
+            return false;
+        }
+      
+    }
+    private function create_customer_contract($ad_id = null , $customer)
+    {
+        $contractData = Contract::find(2);
+        
+        if(!$contractData)
+        {
+            return false;
+        }
+
+         $replace = str_replace("[[Name]]",$customer->first_name.' '.$customer->last_name,$contractData->content);
+
+
+        if($contractData)
+        {
+            return Contract::create([
+                'title'=>$contractData->title,
+                'content'=>$replace,
+                'ad_id'=>$ad_id,
+                'customer_id'=>$customer->id
             ]);
         }
         else
@@ -269,7 +297,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    public function accept_ad_contract($contract_id,$status)
+    public function accept_ad_contract(AcceptAdContractRequest $request,$contract_id)
     {
 
         $data = Contract::find($contract_id);
@@ -279,7 +307,8 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        $data->is_accepted = $status;
+        $data->is_accepted = $request->status;
+        $data->rejectNote = $request->reject_note;
         $data->save();
 
         return response()->json([

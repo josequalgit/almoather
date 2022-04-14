@@ -29,4 +29,18 @@ class CampaignGoalController extends Controller
         'status'=>config('global.OK_STATUS')
     ],config('global.OK_STATUS'));
    }
+
+   public function rejectReasons()
+   {
+       return response()->json([
+           'msg'=>'reasons',
+           'data'=>[
+               'reasons 1',
+               'reasons 2',
+               'reasons 3',
+               'reasons 4',
+               'reasons 5',
+           ],
+       ],config('global.OK_STATUS'));
+   }
 }
