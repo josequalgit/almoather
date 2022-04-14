@@ -18,12 +18,19 @@ class AdminSeeder extends Seeder
     public function run()
     {
         $role = Role::find(1);
+        $role2 = Role::find(2);
         $user = User::create([
             'name'=>'Super Admin',
             'email'=>'admin@admin.com',
             'password'=>bcrypt(123456)
         ]);
+        $user2 = User::create([
+            'name'=>'Super Admin',
+            'email'=>'businessManager@admin.com',
+            'password'=>bcrypt(123456)
+        ]);
         $user->assignRole($role);
+        $user2->assignRole($role2);
 
     }
 }

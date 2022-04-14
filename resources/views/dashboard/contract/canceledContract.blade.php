@@ -52,13 +52,9 @@
                                             <thead>
                                                 <tr>
                                                     <th>Id</th>
-                                                    <th>Influncer</th>
                                                     <th>Contract view</th>
-                                                    <th>Ad</th>
-                                                    <th>Customer</th>
-                                                    <th>Execute</th>
+                                                    <th>Note</th>
                                                     <th>Created at</th>
-                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -66,17 +62,10 @@
                                                         <tr>
                                                          
                                                             <td>#{{ $item->id }}</td>
-                                                            <td>{{ $item->influencers->full_name }}</td>
                                                             <td>{{ $item->content }}</td>
-                                                            <td>{{ $item->ads->store }}</td>
-                                                            <td>{{ $item->ads->customers->first_name  }} {{ $item->ads->customers->last_name }}</td>
-                                                            <td>{{ $item->date  }}</td>
+                                                            <td>{{ $item->rejectNote }}</td>
                                                             <td>{{ $item->created_at  }}</td>
-                                                            <td>
-                                                                <button onclick="openModal({{$item->id}})" class="btn btn-secondary">
-                                                                    <i class="bx bx-show"></i>
-                                                                </button>
-                                                            </td>
+                                                            
                                                         
                                                         </tr>
                                                 @endforeach

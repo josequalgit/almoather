@@ -48,7 +48,6 @@
                                 </p> --}}
                              
                                 <div class="table-responsive">
-                                    @can('See Faq')
                                         <table class="table zero-configuration">
                                             <thead>
                                                 <tr>
@@ -81,7 +80,6 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
-                                    @endcan
                                 </div>
                             </div>
                             <div class="p-1">
@@ -220,7 +218,7 @@
   {
       if(valdation()) return alert(valdation())
     let url = '{{ route("dashboard.ads.sendContractToCustomer",":id") }}';
-    let addId = url.replace(':id','{{ $item->id }}');
+    let addId = url.replace(':id',customer_id);
     $.ajax({
       url:addId,
       data:{

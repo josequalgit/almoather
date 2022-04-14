@@ -186,11 +186,12 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
 
 
         Route::middleware('role_or_permission:superAdmin|Business Manager')
-        ->name('businessManager')
+        ->name('businessManager.')
         ->prefix('businessManager')
         ->controller(BusinessManagerController::class)
         ->group(function(){
-            Route::get('/canceled','canceledContract');
+            Route::get('/canceled','canceledContract')->name('canceledContract');
+            Route::get('/rejectedAds','rejectedAds')->name('rejectedAds');
         });
 
 

@@ -897,8 +897,11 @@ input[type="radio"] .styled:checked + label::after {
               <a href="{{route('dashboard.influncers.allInfluncerWithViews')}}"><i class="bx bx-book-content" data-icon="desktop"></i><span class="menu-title text-truncate" data-i18n="Dashboard">Influncers</span></a>
            </li>
              @elseif($role == 'Business Manager')
-             <li class="{{ ($name == 'dashboard.contracts.activeContract') ? 'active':''  }}">
-                <a href="{{route('dashboard.contracts.activeContract')}}"><i class="bx bx-book-content" data-icon="desktop"></i><span class="menu-title text-truncate" data-i18n="Dashboard">Influncers Contracts</span></a>
+             <li class="{{ ($name == 'dashboard.businessManager.canceledContract') ? 'active':''  }}">
+                <a href="{{route('dashboard.businessManager.canceledContract')}}"><i class="bx bx-book-content" data-icon="desktop"></i><span class="menu-title text-truncate" data-i18n="Dashboard">Canceled</span></a>
+              </li>
+             <li class="{{ ($name == 'dashboard.businessManager.rejectedAds') ? 'active':''  }}">
+                <a href="{{route('dashboard.businessManager.rejectedAds')}}"><i class="bx bx-book-content" data-icon="desktop"></i><span class="menu-title text-truncate" data-i18n="Dashboard">Rejected Ads</span></a>
               </li>
             @endif
          
