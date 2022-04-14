@@ -14,7 +14,6 @@ return [
     'LANGS'=>['en','ar'],
     'CUSTOMER_ADS_STATUS'=>['Active','WaitingPayment','Pending','Finished','Rejected'],
     'INFLUENCER_ADS_STATUS'=>['Pending','Active','Completed','Rejected'],
-
 ]
 
 ?>

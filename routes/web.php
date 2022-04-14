@@ -18,6 +18,7 @@ use App\Http\Controllers\AdController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\SlideController;
 use App\Http\Controllers\CampaignGoalController;
+use App\Http\Controllers\BusinessManagerController;
 
 Route::redirect('/','/dashboard/admins')->name('home');
 
@@ -181,6 +182,15 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/campaignGoals/edit/{id}','edit')->middleware('permission:Edit Campaign Goal')->name('edit');
             Route::post('/campaignGoals/update/{id}','update')->middleware('permission:Edit Campaign Goal')->name('update');
             Route::get('/campaignGoals/delete/{id}','delete')->middleware('permission:Delete Campaign Goal')->name('delete');
+        });
+
+
+        Route::middleware('role_or_permission:superAdmin|Business Manager')
+        ->name('businessManager')
+        ->prefix('businessManager')
+        ->controller(BusinessManagerController::class)
+        ->group(function(){
+            Route::get('/canceled','canceledContract');
         });
 
 

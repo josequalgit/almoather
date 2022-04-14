@@ -19,6 +19,7 @@ class RoleSeeder extends Seeder
         $roles = [
             'superAdmin',
             'Contracts Manager',
+            'Business Manager'
         ];
         $permissions = Permission::get();
         $contractManagerPermissions = [

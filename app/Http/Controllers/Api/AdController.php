@@ -85,7 +85,7 @@ class AdController extends Controller
             ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
 
             $statusCode = [
-                'WaitingPayment'    => ['approve'],
+                'WaitingPayment'    => ['approve','prepay'],
                 'Active'            => ['fullpayment','active','progress'],
                 'Finished'          => ['complete']
             ];
