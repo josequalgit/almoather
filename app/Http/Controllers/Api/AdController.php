@@ -718,6 +718,24 @@ class AdController extends Controller
 
     }
 
+    public function completeAd($ad_id)
+    {
+        $data = Contract::where([['ad_id',$ad_id],['influencer_id',Auth::guard('api')->user()->influncers->id]])->first();
+
+        if(!$data) return response()->json([
+            'err'=>'contract not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $data->influencer_status = 1;
+        $data->save();
+
+        return response()->json([
+            'msg'=>'data was updated',
+            'status'=>config('global.OK_STATUS'),
+        ],config('global.OK_STATUS'));
+    }
+
 
     
 
