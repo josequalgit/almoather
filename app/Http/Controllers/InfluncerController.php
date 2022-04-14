@@ -58,4 +58,11 @@ class InfluncerController extends Controller
             'status'=>201
         ]);
     }
+
+    public function allInfluncerWithViews ()
+    {
+        $data = Influncer::paginate(10);
+
+        return view('dashboard.influncers.allWithView',compact('data'));
+    }
 }

@@ -16,6 +16,9 @@ use App\Models\InfluencerRateing;
 use App\Models\MarketingAdRating;
 use App\Models\AdsInfluencerMatch;
 use App\Http\Requests\UpdateContractAds;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\AddInfluencer;
+
 
 
 class AdController extends Controller
@@ -311,6 +314,56 @@ class AdController extends Controller
             'msg'=>'contract was sent',
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
+    }
+
+    public function sendContractToCustomer (Request $request , $id)
+    {
+        $data = Contract::find($id);
+        if(!$data) return response()->json([
+            'msg'=>'contract was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $users = [User::find(1),User::find($data->customers->users->id)];
+        $info =[
+            'msg'=>'The contract for ad "'.$data->ads->store.''
+        ];
+        Notification::send($users, new AddInfluencer($info));
+
+        $data->content = $request->content;
+        $data->date = $request->date;
+        $data->save();
+
+        return response()->json([
+            'msg'=>'data was updated',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+
+    }
+
+    public function seeContractInfluencer($contract_id)
+    {
+        $data = Contract::find($contract_id);
+        if(!$data) return response()->json([
+            'msg'=>'contract was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+        $influncers = $data->ads->matches()->where('chosen',1)->get()->map(function($item){
+
+            return [
+                'image'=>$item->influencers->users->infulncerImage??null,
+                'name'=>$item->influencers->full_name,
+                'match'=>$item->match,
+            ];
+
+        });
+        
+        return response()->json([
+            'msg'=>'influncers',
+            'influncers'=>$influncers,
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+
     }
 
 

@@ -132,6 +132,7 @@ Route::group(['prefix'=>'auth'],function(){
             Route::get('details/{id}','details');
             Route::get('contract/{ad_id}','get_ad_contract');
             Route::post('contract/accept_contract/{contract_id}','accept_ad_contract');
+            Route::post('contract/customer/accept_contract/{contract_id}','accept_customer_ad_contract');
             Route::get('search/{query}','search');
             Route::get('influencers/{influncer_id}/{status?}','get_influencer_ads');
             Route::get('customers/{customer_id}/{status?}','get_customers_ads');

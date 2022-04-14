@@ -34,9 +34,9 @@ class Contract extends Model
         return $this->belongsTo(Influncer::class,'influencer_id');
     }
 
-    public function customer()
+    public function customers()
     {
-        return $this->belongsTo(Contract::class,'customer_id');
+        return $this->belongsTo(Customer::class,'customer_id');
     }
     
 }

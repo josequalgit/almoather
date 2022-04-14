@@ -158,6 +158,13 @@ class AuthController extends Controller
         if(in_array($lang,$supportedLang))
         {
             App::setLocale($lang);
+            $user = Auth::guard('api')->user();
+            if($user)
+            {
+                $user = User::find($user->id);
+                $user->lang = $lang;
+                $user->save();
+            }
             
             return response()->json([
                 'msg'=>'language was changed',

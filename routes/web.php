@@ -45,9 +45,10 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/delete/{id}','delete')->name('delete')->middleware('permission:Delete Admin');
         });
 
-        Route::middleware('role_or_permission:superAdmin|Edit Influncer|See Influncer')->name('influncers.')->controller(InfluncerController::class)->group(function(){
+        Route::middleware('role_or_permission:superAdmin|Edit Influncer|See Influncer|Contracts Manager')->name('influncers.')->controller(InfluncerController::class)->group(function(){
             Route::get('influncer/{status?}','index')->name('index')->middleware('permission:Edit Influncer|See Influncer');
             Route::get('influncer/edit/{id}','edit')->name('edit')->middleware('permission:Edit Influncer');
+            Route::get('allInfluncerWithViews/','allInfluncerWithViews')->name('allInfluncerWithViews')->middleware('role:Contracts Manager|superAdmin');
             Route::post('influncer/updateStatus/{id}','updateStatus')->name('updateStatus')->middleware('permission:Edit Influncer');
         });
 
@@ -114,6 +115,8 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/ads/contract/edit/{ad_id}','editContract')->name('editContract');
             Route::post('/ads/contract/update/{ad_id}','updateContract')->name('updateContract');
             Route::post('/ads/contract/influencers/{ad_id}','sendContractToInfluencer')->name('sendContractToInfluncer');
+            Route::post('/ads/contract/customers/{contract_id}','sendContractToCustomer')->name('sendContractToCustomer');
+            Route::get('/ads/contract/customers/seeInfluncer/{contract_id}','seeContractInfluencer')->name('seeContractInfluencer');
         });
 
         Route::middleware('role_or_permission:superAdmin|Edit Slide|See Slide|Create Slide|Delete Slide')->name('slides.')->controller(SlideController::class)->group(function(){
@@ -146,12 +149,13 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
         Route::middleware('role_or_permission:superAdmin|Contracts Manager|Edit Contract|Create Contract|See Contract|Delete Contract')->name('contracts.')->controller(ContractController::class)->group(function(){
             Route::get('/contract','index')->name('index')->middleware('permission:Edit Contract|Create Contract|See Contract|Delete Contract');
             Route::get('/contract/edit','edit')->name('edit')->middleware('permission:Edit Contract');
-            Route::post('/contract/update','update')->name('update')->middleware('permission:Edit Contract');
+            Route::post('/contract/update/{type}','update')->name('update')->middleware('permission:Edit Contract');
             Route::get('/contract/create','create')->name('create')->middleware('permission:Create Contract');
             Route::post('/contract/store','store')->name('store')->middleware('permission:Create Contract');
             Route::get('/contract/delete/{id}','delete')->name('delete')->middleware('permission:Delete Contract');
             Route::get('/contract/active','get_active_contracts')->name('activeContract')->middleware('role:Contracts Manager|superAdmin');
             Route::post('/contract/changeStatus/{id}/{status}','change_status_contracts')->name('changeStatus')->middleware('role:Contracts Manager|superAdmin');
+            Route::get('/contract/customers','customer_contracts')->name('customerContracts')->middleware('role:Contracts Manager|superAdmin');
         });
 
         Route::middleware('role_or_permission:superAdmin|See Notification|Create Notification|Edit Notification|Delete Notification')

@@ -31,7 +31,6 @@ class AdController extends Controller
     public function index($status)
     {
         $user_id = Auth::guard('api')->user()->influncers ? Auth::guard('api')->user()->influncers->id :Auth::guard('api')->user()->customers->id;
-        // dd($user_id);
 
         if(Auth::guard('api')->user()->influncers)
         {
@@ -49,7 +48,16 @@ class AdController extends Controller
                 'Active'    => 1
             ];
 
-            $itemsPaginated = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',$statusCode[$status])->paginate(10);
+            $data = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',$statusCode[$status]);
+
+            if($status == 'Completed'){
+                $itemsPaginated =  $data->where('is_completed',1)->paginate(10);
+            }
+            else
+            {
+                $itemsPaginated = $data->paginate(10);
+            };
+          
 
             $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($status){
                 $data =  $this->adResponse($item->ads);
@@ -321,13 +329,21 @@ class AdController extends Controller
     {
 
         $user_id = Auth::guard('api')->user()->influncers ? Auth::guard('api')->user()->influncers->id :Auth::guard('api')->user()->customers->id;
+
         if(Auth::guard('api')->user()->influncers)
         {
-            $data = Ad::where([['influncer_id',$user_id],['store','LIKE',"%{$query}%"]])->paginate(10);
+            $data = Auth::guard('api')->user()->influncers->ads()->where([['store','LIKE',"%{$query}%"]])->paginate(10);
+            // $data = Auth::guard('api')->user()->influncers
+            // ->join('ad', 'ad.ad_id', '=', 'influncer.influencer_id')
+            // ->whereHas('ad_matches',function($q) use($query){
+            //     $q->ads()->where([['store','LIKE',"%{$query}%"]]);
+            // })->get();
+            // dd($data);
+
         }
         else
         {
-            $data = Ad::where([['customer_id',$user_id],['store','LIKE',"%{$query}%"]])->paginate(10);
+            $data = Auth::guard('api')->user()->customers->ads()->where([['store','LIKE',"%{$query}%"]])->paginate(10);
         }
 
         $data->getCollection()->transform(function($item){
@@ -728,6 +744,24 @@ class AdController extends Controller
         ],config('global.NOT_FOUND_STATUS'));
 
         $data->influencer_status = 1;
+        $data->save();
+
+        return response()->json([
+            'msg'=>'data was updated',
+            'status'=>config('global.OK_STATUS'),
+        ],config('global.OK_STATUS'));
+    }
+
+    public function accept_customer_ad_contract(Request $request , $contract_id)
+    {
+        $data = Contract::find($contract_id);
+        if(!$data) return response()->json([
+            'err'=>'contract not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $data->is_accepted = $request->status;
+        $data->rejectNote = $request->rejectNote;
         $data->save();
 
         return response()->json([

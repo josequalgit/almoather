@@ -548,16 +548,19 @@ input[type="radio"] .styled:checked + label::after {
     <div class="shadow-bottom"></div>
     <div class="main-menu-content marginFromLogo">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation" data-icon-style="lines">
+          @if($role == 'superAdmin')
             <li class="">
                 <a href=""><i class="bx bx-home" data-icon="desktop"></i><span class="menu-title text-truncate" data-i18n="Dashboard">Dashboard</span></a>
             </li>
-            <li class=" navigation-header text-truncate"><span data-i18n="Apps">Sections</span>
-            </li>
+            
+          @endif
+          <li class=" navigation-header text-truncate"><span data-i18n="Apps">Sections</span>
+          </li>
            {{-- @php
                dd(Auth::user()->roles[0]->name);
            @endphp --}}
            {{-- @if($role !== 'Contracts Manager') --}}
-           @if($role !== 'superAdmin')
+           @if($role == 'superAdmin')
             @canany(['Edit Admin','Create Admin','See Admin','Delete Admin','Edit Role','Create Role','See Role','Delete Role'])
             {{-- <li class="{{ ($name == 'dashboard.admins.index'|| $name == 'dashboard.admins.create'|| $name == 'dashboard.admins.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.admins.index') }}"><i class="bx bx-user"></i><span class="menu-title text-truncate" data-i18n="admins">Admins</span></a>
             </li> --}}
@@ -881,15 +884,17 @@ input[type="radio"] .styled:checked + label::after {
             <li class="{{ ($name == 'dashboard.logs.index'|| $name == 'dashboard.logs.create'|| $name == 'dashboard.logs.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.logs.index') }}"><i class="bx bx-code-block"></i><span class="menu-title text-truncate" data-i18n="logs">Logs</span></a>
             </li>
             @endcan
-            @php
-            dd($role);
-            @endphp
-            @elseif($role == 'superAdmin')
-            <li class="">
-              <a href="{{route('dashboard.contracts.activeContract')}}"><i class="bx bx-book-content" data-icon="desktop"></i><span class="menu-title text-truncate" data-i18n="Dashboard">Active Contracts</span></a>
+           
+            @elseif($role == 'Contracts Manager')
+            <li class="{{ ($name == 'dashboard.contracts.activeContract') ? 'active':''  }}">
+              <a href="{{route('dashboard.contracts.activeContract')}}"><i class="bx bx-book-content" data-icon="desktop"></i><span class="menu-title text-truncate" data-i18n="Dashboard">Influncers Contracts</span></a>
            </li>
-            <li class="">
-              <a href="{{route('dashboard.contracts.activeContract')}}"><i class="bx bx-book-content" data-icon="desktop"></i><span class="menu-title text-truncate" data-i18n="Dashboard">Influncers</span></a>
+            <li class="{{ ($name == 'dashboard.contracts.customerContracts') ? 'active':''  }}">
+              <a href="{{route('dashboard.contracts.customerContracts')}}"><i class="bx bx-book-content" data-icon="desktop"></i><span class="menu-title text-truncate" data-i18n="Dashboard">Customers Contracts</span></a>
+           </li>
+           
+            <li class="{{ ($name == 'dashboard.influncers.allInfluncerWithViews') ? 'active':''  }}">
+              <a href="{{route('dashboard.influncers.allInfluncerWithViews')}}"><i class="bx bx-book-content" data-icon="desktop"></i><span class="menu-title text-truncate" data-i18n="Dashboard">Influncers</span></a>
            </li>
             @endif
          

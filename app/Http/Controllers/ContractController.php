@@ -11,13 +11,14 @@ class ContractController extends Controller
     public function edit()
     {
         $data = Contract::find(1);
+        $data2 = Contract::find(2);
 
-        return view('dashboard.contract.edit',compact('data'));
+        return view('dashboard.contract.edit',compact('data','data2'));
     }
 
-    public function update(UpdateContractRequest $request)
+    public function update(UpdateContractRequest $request , $type)
     {
-        $data = Contract::find(1)->update($request->all());
+        $data = Contract::find($type)->update($request->all());
         return back();
     }
 
@@ -45,5 +46,12 @@ class ContractController extends Controller
             'msg'=>'contract was updated',
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
+    }
+
+    public function customer_contracts()
+    {    
+        
+        $data = Contract::where([['customer_id','!=',null],['is_completed',0]])->paginate(10);
+        return view('dashboard.contract.activeCustomerContract',compact('data'));
     }
 }
