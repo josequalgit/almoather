@@ -220,8 +220,9 @@
             </div>
            
             <div class="form-group">
+            
               <label for="inputAddress2">Customer</label>
-              <input disabled value="{{ old('budget')?old('budget'):$data->customers->first_name.' '.$data->customers->last_name}}" name="budget" type="text" class="form-control" id="inputAddress2" placeholder="budget">
+              <input disabled value="{{ $data->customers->full_name }}" name="budget" type="text" class="form-control" id="inputAddress2" placeholder="Customer Name">
             </div>
             {{-- @if ($data->influncers)
             <div class="form-group">

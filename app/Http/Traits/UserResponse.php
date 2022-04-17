@@ -84,8 +84,7 @@ trait UserResponse {
            $formate = [
                 'id'=>$user->id,
                 'image'=>$user->image,
-                'first_name' =>$info->first_name,
-                'last_name'=>$info->last_name,
+                'full_name' =>$info->full_name,
                 'id_number'=>$info->id_number,
                 'nationality_id'=>$info->nationalities->id,
                 'country_id'=>$info->countrys->id,

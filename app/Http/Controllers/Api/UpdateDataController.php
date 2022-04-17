@@ -78,14 +78,9 @@ class UpdateDataController extends Controller
         //     $updateUser['email'] = $request->email;
         // }
 
-         $data->update($updateData);
-        
-        
-        
-
+        $data->update($updateData);
         $customerData = $request->only([
-                    'first_name',
-                    'last_name',
+                    'full_name',
                     'country_id',
                     'nationality_id',
                     'region_id',

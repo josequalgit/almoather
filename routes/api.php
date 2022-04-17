@@ -30,7 +30,7 @@ Route::group(['prefix'=>'auth'],function(){
     Route::controller(RegisterController::class)->prefix('register')->group(function(){
         Route::post('/influncer','registerInfluncer');
         Route::post('/cutomer','registerCustomer');
-        Route::get('/verify/{id}','verify');
+        Route::get('/verify','verify');
         Route::post('/customer/update/{id}',[RegisterController::class,'updateCustomer']);
     });
 

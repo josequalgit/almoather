@@ -153,11 +153,14 @@ class RegisterController extends Controller
         ];
         $commingRequest =  array_merge($request->only(['email','password','name','fcm_token','phone']),['password'=>bcrypt($request->password)]);
         $data = User::create($commingRequest);
-        $data->addMedia($request->file('image'))
-        ->toMediaCollection('customers');
+        if($request->hasFile('image'))
+        {
+            $data->addMedia($request->file('image'))
+            ->toMediaCollection('customers');
+        }
+       
         $customerData = $request->only([
-            'first_name',
-            'last_name',
+            'full_name',
             'country_id',
             'nationality_id',
             'region_id',
@@ -183,9 +186,9 @@ class RegisterController extends Controller
         ],config('global.CREATED_STATUS'));
     }
 
-    public function verify($user_id)
+    public function verify()
     {
-        $data = User::find($user_id);
+        $data = User::find(Auth::guard('api')->user()->id);
         
         # IF THE USER IS NOT FOUND 
         if(!$data) return response()->json([
@@ -203,9 +206,11 @@ class RegisterController extends Controller
         $data->email_verified_at = Carbon::parse()->now();
         $data->save();
 
+
         #RETURN WITH 200 STATUS CODE
         return response()->json([
             'msg'=>'user is verified',
+            'data'=>$this->userDataResponse(null , null ,Auth::guard('api')->user()->id ),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
@@ -257,8 +262,7 @@ class RegisterController extends Controller
         }
 
         $customerData = $request->only([
-            'first_name',
-            'last_name',
+            'full_name',
             'phone',
             'country_id',
             'nationality_id',

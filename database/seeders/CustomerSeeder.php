@@ -23,8 +23,7 @@ class CustomerSeeder extends Seeder
         ]);
 
         $customer = Customer::create([
-            'first_name'=>'Ahmed',
-            'last_name'=>'Khaled',
+            'full_name'=>'Ahmed',
             'country_id'=>1,
             'region_id'=>1,
             'nationality_id'=>1,

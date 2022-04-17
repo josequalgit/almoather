@@ -76,7 +76,7 @@
                                         <tbody>
                                             @foreach ($data as $item)
                                                     <tr>
-                                                        <td>{{ $item->first_name  }} {{ $item->last_name }}</td>
+                                                        <td>{{ $item->full_name }}</td>
                                                         <td>{{ $item->users->email }}</td>
                                                         <td>{{ $item->phone }}</td>
                                                         <td style="text-transform: uppercase;">{{ $item->status }}</td>
