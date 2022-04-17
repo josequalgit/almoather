@@ -26,11 +26,15 @@
            </div>
            @endif
             <div class="form-row">
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <label for="inputEmail4">First Name</label>
                 <input disabled value="{{ old('first_name')?old('first_name'):$data->first_name}}" name="first_name" type="full_name" class="form-control" id="inputfirst_name4" placeholder="first_name">
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
+                <label for="inputPassword4">Middle Name</label>
+                <input disabled value="{{ old('middle_name')?old('middle_name'):$data->middle_name}}" name="middle_name" type="text" class="form-control" id="inputlast_name4" placeholder="last_name">
+              </div>
+              <div class="form-group col-md-4">
                 <label for="inputPassword4">Last Name</label>
                 <input disabled value="{{ old('last_name')?old('last_name'):$data->last_name}}" name="last_name" type="text" class="form-control" id="inputlast_name4" placeholder="last_name">
               </div>
@@ -39,6 +43,10 @@
             <div class="form-group">
               <label for="inputAddress2">Phone</label>
               <input disabled value="{{ old('phone')?old('phone'):$data->phone}}" name="phone" type="text" class="form-control" id="inputAddress2" placeholder="phone">
+            </div>
+            <div class="form-group">
+              <label for="inputAddress2">Id Number</label>
+              <input disabled value="{{ old('id_number')?old('id_number'):$data->id_number}}" name="id_number" type="text" class="form-control" id="inputAddress2" placeholder="id Number">
             </div>
             <div class="form-group">
               <label for="inputAddress2">Gender</label>

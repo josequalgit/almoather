@@ -29,7 +29,7 @@ Route::group(['prefix'=>'auth'],function(){
     #REGISTER ROUTES
     Route::controller(RegisterController::class)->prefix('register')->group(function(){
         Route::post('/influncer','registerInfluncer');
-        Route::post('/cutomer','registerCustomer');
+        Route::post('/customer','registerCustomer');
         Route::get('/verify','verify');
         Route::post('/customer/update/{id}',[RegisterController::class,'updateCustomer']);
     });

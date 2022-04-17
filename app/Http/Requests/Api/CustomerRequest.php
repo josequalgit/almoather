@@ -27,7 +27,9 @@ class CustomerRequest extends FormRequest
     public function rules()
     {
         return [
-            'full_name'=>'required',
+            'first_name'=>'required',
+            'middle_name'=>'required',
+            'last_name'=>'required',
             'gender'=>'required',
             'phone'=>'required',
             'password'=>'required|confirmed',
@@ -37,6 +39,7 @@ class CustomerRequest extends FormRequest
             'region_id'=>'required',
             'nationality_id'=>'required',
             'city_id'=>'required',
+            'id_number'=>'required'
            
 
         ];

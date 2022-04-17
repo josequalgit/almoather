@@ -10,7 +10,9 @@ class Customer extends Model
     use HasFactory;
 
     protected $fillable = [
-        'full_name',
+        'first_name',
+        'middle_name',
+        'last_name',
         'country_id',
         'user_id',
         'region_id',
@@ -18,6 +20,7 @@ class Customer extends Model
         'nationality_id',
         'gender',
         'status',
+        'id_number'
     ];
 
     public function users()

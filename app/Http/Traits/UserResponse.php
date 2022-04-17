@@ -84,7 +84,9 @@ trait UserResponse {
            $formate = [
                 'id'=>$user->id,
                 'image'=>$user->image,
-                'full_name' =>$info->full_name,
+                'first_name' =>$info->first_name,
+                'middle_name' =>$info->middle_name,
+                'last_name' =>$info->last_name,
                 'id_number'=>$info->id_number,
                 'nationality_id'=>$info->nationalities->id,
                 'country_id'=>$info->countrys->id,
@@ -93,6 +95,7 @@ trait UserResponse {
                 'email'=>$user->email,
                 'phone'=>$user->phone,
                 'gender'=>$info->gender,
+                'id_number'=>$info->id_number,
                 'is_verify'=>$info->users->email_verified_at ? true : false
            ];
            if($token) $formate['token'] = $token; 

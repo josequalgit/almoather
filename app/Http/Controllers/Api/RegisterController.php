@@ -160,7 +160,10 @@ class RegisterController extends Controller
         }
        
         $customerData = $request->only([
-            'full_name',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'id_number',
             'country_id',
             'nationality_id',
             'region_id',
