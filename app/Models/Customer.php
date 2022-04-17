@@ -16,6 +16,7 @@ class Customer extends Model
         'region_id',
         'city_id',
         'nationality_id',
+        'gender',
         'status',
     ];
 

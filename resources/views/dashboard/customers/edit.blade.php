@@ -41,6 +41,10 @@
               <input disabled value="{{ old('phone')?old('phone'):$data->phone}}" name="phone" type="text" class="form-control" id="inputAddress2" placeholder="phone">
             </div>
             <div class="form-group">
+              <label for="inputAddress2">Gender</label>
+              <input disabled value="{{ old('gender')?old('gender'):$data->gender}}" name="gender" type="text" class="form-control" id="inputAddress2" placeholder="phone">
+            </div>
+            <div class="form-group">
               <label for="inputAddress2">Country</label>
               <input disabled value="{{ old('country_id')?old('country_id'):$data->countrys->name}}" name="bank_account_number" type="text" class="form-control" id="inputAddress2" placeholder="bank_account_number">
             </div>

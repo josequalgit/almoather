@@ -86,6 +86,7 @@ class UpdateDataController extends Controller
                     'region_id',
                     'user_id',
                     'city_id',
+                    'gender'
         ]);
        
         $addUserId =  array_merge($customerData,['user_id'=>$data->id]);

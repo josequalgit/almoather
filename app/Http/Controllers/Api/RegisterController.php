@@ -166,6 +166,7 @@ class RegisterController extends Controller
             'region_id',
             'user_id',
             'city_id',
+            'gender'
         ]);
         $addUserId =  array_merge($customerData,['user_id'=>$data->id]);
         $newCustomer = Customer::create($addUserId);
@@ -211,6 +212,7 @@ class RegisterController extends Controller
         return response()->json([
             'msg'=>'user is verified',
             'data'=>$this->userDataResponse(null , null ,Auth::guard('api')->user()->id ),
+            'type'=>Auth::guard('api')->user()->customers?'customer':'Influencer',
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }

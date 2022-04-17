@@ -28,6 +28,7 @@ class CustomerRequest extends FormRequest
     {
         return [
             'full_name'=>'required',
+            'gender'=>'required',
             'phone'=>'required',
             'password'=>'required|confirmed',
             'password_confirmation' => 'required',
