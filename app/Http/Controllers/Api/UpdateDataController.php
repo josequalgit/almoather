@@ -304,6 +304,7 @@ class UpdateDataController extends Controller
 
         $data = User::find(Auth::guard('api')->user()->id);
 
+
         // if($request->hasFile('image')){
         //     $data->clearMediaCollection('influncers')
         //     ->addMedia($request->file('image'))
@@ -320,6 +321,7 @@ class UpdateDataController extends Controller
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
+        $data->phone = $request->phone;
         $inf = Influncer::find($data->influncers->id);
 
         $inf->full_name = [
@@ -331,7 +333,6 @@ class UpdateDataController extends Controller
         $inf->city_id = $request->city_id;
         $inf->is_vat = $request->is_vat;
         $inf->region_id = $request->region_id;
-        $inf->phone = $request->phone;
         $data->save();
         $inf->save();
 
