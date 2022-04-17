@@ -92,6 +92,7 @@ trait UserResponse {
                 'city_id'=>$info->citys->id,
                 'email'=>$user->email,
                 'phone'=>$user->phone,
+                'is_verify'=>$info->users->email_verified_at ? true : false
            ];
            if($token) $formate['token'] = $token; 
 
