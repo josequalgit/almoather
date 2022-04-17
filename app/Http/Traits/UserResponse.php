@@ -41,7 +41,7 @@ trait UserResponse {
              'bank'=>$info->bank_name,
              'bank_account_number'=>$info->bank_account_number,
              'email'=>$user->email,
-             'phone'=>$info->phone,
+             'phone'=>$user->phone,
              'id_number'=>$info->id_number,
              'status'=>$info->status,
              'is_vat'=>$info->is_vat,
@@ -92,7 +92,7 @@ trait UserResponse {
                 'region_id'=>$info->regions->id,
                 'city_id'=>$info->citys->id,
                 'email'=>$user->email,
-                'phone'=>$info->phone,
+                'phone'=>$user->phone,
            ];
            if($token) $formate['token'] = $token; 
 

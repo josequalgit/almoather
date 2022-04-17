@@ -41,7 +41,7 @@ class RegisterController extends Controller
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
-        $commingRequest =  array_merge($request->only(['email','password','name','fcm_token']),['password' => bcrypt($request->password)]);
+        $commingRequest =  array_merge($request->only(['email','password','name','fcm_token','phone']),['password' => bcrypt($request->password)]);
         $data = User::create($commingRequest);
 
 
@@ -61,7 +61,6 @@ class RegisterController extends Controller
             'ad_price',
             'ad_onsite_price',
             'id_number',
-            'phone',
             'ad_with_vat',
             'ad_onsite_price_with_vat',
             'birthday',
@@ -152,14 +151,13 @@ class RegisterController extends Controller
         $info =[
             'msg'=>$request->message,
         ];
-        $commingRequest =  array_merge($request->only(['email','password','name','fcm_token']),['password'=>bcrypt($request->password)]);
+        $commingRequest =  array_merge($request->only(['email','password','name','fcm_token','phone']),['password'=>bcrypt($request->password)]);
         $data = User::create($commingRequest);
         $data->addMedia($request->file('image'))
         ->toMediaCollection('customers');
         $customerData = $request->only([
             'first_name',
             'last_name',
-            'phone',
             'country_id',
             'nationality_id',
             'region_id',

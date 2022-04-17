@@ -18,13 +18,13 @@ class CustomerSeeder extends Seeder
     {
         $user = User::create([
             'email'=>'ahmed@gmail.com',
-            'password'=>bcrypt(123456)
+            'password'=>bcrypt(123456),
+            'phone'=>'002490489878'
         ]);
 
         $customer = Customer::create([
             'first_name'=>'Ahmed',
             'last_name'=>'Khaled',
-            'phone'=>'0759545482',
             'country_id'=>1,
             'region_id'=>1,
             'nationality_id'=>1,

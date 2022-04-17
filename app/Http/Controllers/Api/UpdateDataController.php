@@ -49,7 +49,7 @@ class UpdateDataController extends Controller
         $info =[
             'msg'=>$request->message,
         ];
-        $commingRequest =  array_merge($request->only(['email','password','name']),['password'=>bcrypt($request->password)]);
+        $commingRequest =  array_merge($request->only(['email','password','name','phone']),['password'=>bcrypt($request->password)]);
         
         if(!$data->customers)
         {
@@ -58,6 +58,7 @@ class UpdateDataController extends Controller
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
+        $updateData['phone'] = $request->phone;
 
         // $updateUser = [];
         // if($request->password)
@@ -77,7 +78,7 @@ class UpdateDataController extends Controller
         //     $updateUser['email'] = $request->email;
         // }
 
-        // $data->update($updateUser);
+         $data->update($updateData);
         
         
         
@@ -85,13 +86,11 @@ class UpdateDataController extends Controller
         $customerData = $request->only([
                     'first_name',
                     'last_name',
-                    'phone',
                     'country_id',
                     'nationality_id',
                     'region_id',
                     'user_id',
                     'city_id',
-                    'id_number'
         ]);
        
         $addUserId =  array_merge($customerData,['user_id'=>$data->id]);
@@ -129,7 +128,7 @@ class UpdateDataController extends Controller
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
-        $commingRequest =  array_merge($request->only(['email','password','name']),['password'=>bcrypt($request->password)]);
+        $commingRequest =  array_merge($request->only(['email','password','name','phone']),['password'=>bcrypt($request->password)]);
 
         if(!$data->influncers)
         {
@@ -143,6 +142,7 @@ class UpdateDataController extends Controller
         {
             $updateUser['password'] = bcrypt($request->password);
         }
+        $updateData['phone'] = $request->phone;
         // if($request->email !== $data->email)
         // {
         //     $checkEmail = User::where('email',$request->email)->first();

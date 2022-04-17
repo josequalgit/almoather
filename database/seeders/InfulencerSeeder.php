@@ -40,7 +40,6 @@ class InfulencerSeeder extends Seeder
                 'ad_price'=>354,
                 'ad_onsite_price'=>234,
                 'id_number'=>'00928989473',
-                'phone'=>'0929912308',
                 'ad_with_vat'=>'12354',
                 'ad_onsite_price_with_vat'=>123,
                 'birthday'=>Carbon::now(),
@@ -74,7 +73,6 @@ class InfulencerSeeder extends Seeder
                 'ad_price'=>354,
                 'ad_onsite_price'=>234,
                 'id_number'=>'00928989473',
-                'phone'=>'0929912308',
                 'ad_with_vat'=>'12354',
                 'ad_onsite_price_with_vat'=>123,
                 'birthday'=>Carbon::now(),
@@ -108,7 +106,6 @@ class InfulencerSeeder extends Seeder
                 'ad_price'=>354,
                 'ad_onsite_price'=>234,
                 'id_number'=>'00928989473',
-                'phone'=>'0929912308',
                 'ad_with_vat'=>'12354',
                 'ad_onsite_price_with_vat'=>123,
                 'birthday'=>Carbon::now(),
@@ -125,17 +122,20 @@ class InfulencerSeeder extends Seeder
             [
                 'name'=>'7modh',
                 'email'=>'7modh@email.com',
-                'password'=>bcrypt(123456)
+                'password'=>bcrypt(123456),
+                'phone'=>'01238747321'
             ],
             [
                 'name'=>'7madh',
                 'email'=>'7madh@email.com',
-                'password'=>bcrypt(123456)
+                'password'=>bcrypt(123456),
+                'phone'=>'01238747321'
             ],
             [
                 'name'=>'leth',
                 'email'=>'leth@email.com',
-                'password'=>bcrypt(123456)
+                'password'=>bcrypt(123456),
+                'phone'=>'01238747321'
             ],
         ];
         $new_created_users = [];

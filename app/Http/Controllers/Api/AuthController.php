@@ -33,8 +33,17 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = request(['email', 'password']);
-        if (! $token = Auth::guard('api')->attempt($credentials)) {
+        $credentials = request(['phone', 'password']);
+
+        if ($token = Auth::guard('api')->attempt(['email'=>$request->username,'password'=>$request->password])) {
+            // return response()->json(['error' => 'Unauthorized'], config('global.UNAUTHORIZED_VALIDATION_STATUS'));
+        }
+        elseif($token = Auth::guard('api')->attempt(['phone'=>$request->username,'password'=>$request->password]))
+        {
+            
+        }
+        else
+        {
             return response()->json(['error' => 'Unauthorized'], config('global.UNAUTHORIZED_VALIDATION_STATUS'));
         }
 
