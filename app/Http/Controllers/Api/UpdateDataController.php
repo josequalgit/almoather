@@ -213,7 +213,6 @@ class UpdateDataController extends Controller
             'ad_price',
             'ad_onsite_price',
             'id_number',
-            'phone',
             'ad_with_vat',
             'ad_onsite_price_with_vat',
             'birthday',
