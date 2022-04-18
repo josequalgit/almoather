@@ -19,7 +19,9 @@ trait UserResponse {
 
            $formate = [
              'id'=>$user->id,
-             'full_name' =>$info->full_name,
+             'first_name' =>$info->first_name,
+             'middle_name' =>$info->middle_name,
+             'last_name' =>$info->last_name,
              'image'=>$user->infulncerImage,
             //  'address'=>$info->address,
              'nick_name'=>$info->nick_name,
@@ -54,7 +56,9 @@ trait UserResponse {
              'commercial_registration_no_files'=>$info->commercialFiles,
              'tax_registration_number'=>$info->tax_registration_number,
              'tax_registration_number_files'=>$info->taxFiles,
-             'rep_full_name'=>$info->rep_full_name,
+             'rep_first_name'=>$info->rep_first_name,
+             'rep_middle_name'=>$info->rep_middle_name,
+             'rep_last_name'=>$info->rep_last_name,
              'rep_id_number_name'=>$info->rep_id_number_name,
              'rep_phone_number'=>$info->rep_phone_number,
              'rep_email'=>$info->rep_email,
@@ -65,13 +69,13 @@ trait UserResponse {
                  ];
              }),
              'ad_onsite_price_with_vat'=>$info->ad_onsite_price_with_vat,
-             'preferred_socialMedias'=>$info->socialMedias->pluck('id')->toArray(),
-             'preferred_socialMedias_details'=>$info->socialMedias()->get()->map(function($item){
-                 return [
-                     'id'=>$item->id,
-                     'image'=>$item->image
-                 ];
-             }),
+            //  'preferred_socialMedias'=>$info->socialMedias->pluck('id')->toArray(),
+            //  'preferred_socialMedias_details'=>$info->socialMedias()->get()->map(function($item){
+            //      return [
+            //          'id'=>$item->id,
+            //          'image'=>$item->image
+            //      ];
+            //  }),
              'is_verify'=>$info->users->email_verified_at ? true : false,
          ];
 

@@ -88,7 +88,7 @@
                                         <tbody>
                                             @foreach ($data as $item)
                                                     <tr>
-                                                        <td>{{ $item->full_name  }}</td>
+                                                        <td>{{ $item->first_name  }} {{ $item->middle_name }} {{ $item->last_name }}</td>
                                                         <td>{{ $item->users->email }}</td>
                                                         <td>{{ $item->bank_account_number }}</td>
                                                         <td style="text-transform: uppercase;">{{ $item->status }}</td>

@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->enum('gender',['Female','Male'])->default('Male');
+        Schema::table('influncers', function (Blueprint $table) {
+            //
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->dropColumn('gender')->default('Male');
+        Schema::table('influncers', function (Blueprint $table) {
+            //
         });
     }
 };

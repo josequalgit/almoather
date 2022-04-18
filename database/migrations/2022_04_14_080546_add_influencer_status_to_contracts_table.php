@@ -30,7 +30,11 @@ return new class extends Migration
     public function down()
     {
         Schema::table('contracts', function (Blueprint $table) {
-            //
+            $table->dropColumn('influencer_status');
+            $table->dropColumn('admin_status');
+            $table->dropColumn('link');
+            $table->dropColumn('is_completed');
+            $table->dropColumn('rejectNote');
         });
     }
 };

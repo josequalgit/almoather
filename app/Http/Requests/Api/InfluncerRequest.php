@@ -27,8 +27,9 @@ class InfluncerRequest extends FormRequest
     public function rules()
     {
         return [
-            'full_name_en'=>'required',
-            'full_name_ar'=>'required',
+            'first_name'=>'required',
+            'middle_name'=>'required',
+            'last_name'=>'required',
             'nick_name'=>'required',
             'address'=>'required',
             'bank_name'=>'required',
@@ -58,7 +59,9 @@ class InfluncerRequest extends FormRequest
             'snap_chat_video'=>'required',
             'commercial_registration_no'=>'required',
             'tax_registration_number'=>'required',
-            'rep_full_name'=>'required',
+            'rep_first_name'=>'required',
+            'rep_middle_name'=>'required',
+            'rep_last_name'=>'required',
             'rep_id_number_name'=>'required',
             'rep_phone_number'=>'required',
             'milestone'=>'required',

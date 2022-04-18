@@ -46,7 +46,9 @@ class RegisterController extends Controller
 
 
         $influncerData = $request->only([
-            'full_name',
+            'first_name',
+            'middle_name',
+            'last_name',
             'nick_name',
             'bank_name',
             'bank_account_number',
@@ -69,7 +71,9 @@ class RegisterController extends Controller
             'snap_chat_video',
             'commercial_registration_no',
             'tax_registration_number',
-            'rep_full_name',
+            'rep_first_name',
+            'rep_middle_name',
+            'rep_last_name',
             'rep_id_number_name',
             'rep_phone_number',
             'rep_email',
@@ -107,10 +111,11 @@ class RegisterController extends Controller
            $newInfluncer->InfluncerCategories()->attach($item);
        }
 
-       foreach($request->preferred_socialMedias as $item)
-       {
-           $newInfluncer->socialMedias()->attach($item);
-       }
+       // removed
+    //    foreach($request->preferred_socialMedias as $item)
+    //    {
+    //        $newInfluncer->socialMedias()->attach($item);
+    //    }
 
        foreach ($request->social_media as $item) {
             $obj = $item;

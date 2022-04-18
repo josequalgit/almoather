@@ -19,10 +19,9 @@ class InfulencerSeeder extends Seeder
     {
         $data = [
             [
-                'full_name'=>[
-                    'en'=>'Ahmed from seeder',
-                    'ar'=>'احمد من السيدير'
-                ],
+                'first_name'=>'Ahmed',
+                'middle_name'=>'Ahmed',
+                'last_name'=>'Ahmed',
                 'nick_name'=>'7modh',
                 'bank_name'=>'Al-at7ad',
                 'bank_account_number'=>'005648002564',
@@ -52,10 +51,9 @@ class InfulencerSeeder extends Seeder
                 'rep_email'=>'email@gmail.com',
             ],
             [
-                'full_name'=>[
-                    'en'=>'Mohammad from seeder',
-                    'ar'=>'محمد من السيدير'
-                ],
+                'first_name'=>'Ahmed',
+                'middle_name'=>'Ahmed',
+                'last_name'=>'Ahmed',
                 'nick_name'=>'7madh',
                 'milestone'=>'milestone',
                 'street'=>'street',
@@ -85,10 +83,9 @@ class InfulencerSeeder extends Seeder
                 'rep_email'=>'email@gmail.com',
             ],
             [
-                'full_name'=>[
-                    'en'=>'Leth from seeder',
-                    'ar'=>'ليث من السيدير'
-                ],
+                'first_name'=>'Ahmed',
+                'middle_name'=>'Ahmed',
+                'last_name'=>'Ahmed',
                 'nick_name'=>'Abu-najem',
                 'milestone'=>'milestone',
                 'street'=>'street',

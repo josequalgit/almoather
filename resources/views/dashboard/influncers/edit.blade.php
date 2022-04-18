@@ -48,11 +48,18 @@
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="inputEmail4">Name</label>
-                <input disabled value="{{ old('full_name_en')?old('full_name_en'):$data->full_name_en}}" name="full_name_en" type="full_name" class="form-control" id="inputfull_name_en4" placeholder="full_name_en">
+                @php
+                  $fullName = $data->first_name.' '.$data->middle_name.' '.$data->last_name    
+                @endphp
+                <input disabled value="{{ old('full_name_en')?old('full_name_en'):$fullName}}" name="full_name_en" type="full_name" class="form-control" id="inputfull_name_en4" placeholder="full_name_en">
               </div>
               <div class="form-group col-md-6">
                 <label for="inputPassword4">Nick Name</label>
                 <input disabled value="{{ old('nick_name')?old('nick_name'):$data->nick_name}}" name="nick_name" type="text" class="form-control" id="inputnick_name4" placeholder="nick_name">
+              </div>
+              <div class="form-group col">
+                <label for="inputPassword4">Gender</label>
+                <input disabled value="{{ old('gender')?old('gender'):$data->gender}}" name="gender" type="text" class="form-control" id="inputgender4" placeholder="gender">
               </div>
             </div>
            
@@ -289,8 +296,11 @@
       <div class="card p-5">
         <section id="basic-input">
           <div class="form-group">
+            @php
+            $repFullName = $data->rep_first_name .' '.$data->rep_middle_name.' '$data->rep_last_name;
+            @endphp
             <label for="inputAddress2">Full Name</label>
-            <input disabled value="{{ old('rep_full_name')?old('rep_full_name'):$data->rep_full_name}}" name="rep_full_name" type="text" class="form-control" id="inputAddress2" placeholder="rep_full_name">
+            <input disabled value="{{ old('rep_full_name')?old('rep_full_name'):$repFullName}}" name="rep_full_name" type="text" class="form-control" id="inputAddress2" placeholder="rep_full_name">
           </div>
           <div class="form-group">
             <label for="inputAddress2">Id Number Name</label>
