@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('influncers', function (Blueprint $table) {
-            $table->dropColumn('bank_account_name');
+            // $table->dropColumn('bank_account_name');
             $table->string('bank_account_first_name')->nullable();
             $table->string('bank_account_middle_name')->nullable();
             $table->string('bank_account_last_name')->nullable();
