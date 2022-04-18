@@ -40,7 +40,10 @@ trait UserResponse {
              'neighborhood'=>$info->neighborhood,
              'ad_price'=>$info->ad_price,
              'ad_onsite_price'=>$info->ad_onsite_price,
-             'bank'=>$info->bank_name,
+             'bank'=>$info->banks?[
+                 'id'=>$info->banks->id,
+                 'name'=>$info->banks->name,
+             ]:null,
              'bank_account_number'=>$info->bank_account_number,
              'email'=>$user->email,
              'phone'=>$user->phone,
@@ -62,6 +65,10 @@ trait UserResponse {
              'rep_id_number_name'=>$info->rep_id_number_name,
              'rep_phone_number'=>$info->rep_phone_number,
              'rep_email'=>$info->rep_email,
+             'bank_account_first_name'=>$info->bank_account_first_name,
+             'bank_account_middle_name'=>$info->bank_account_middle_name,
+             'bank_account_last_name'=>$info->bank_account_last_name,
+             'gender'=>$info->gender,
              'social_media_profile'=>$info->socialMediaProfiles()->get()->map(function($item){
                  return[
                      'id'=>$item->social_media_id,

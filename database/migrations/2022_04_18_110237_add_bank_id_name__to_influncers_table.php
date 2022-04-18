@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('influncers', function (Blueprint $table) {
-            $table->string('bank_account_name')->nullable();
+            $table->bigInteger('bank_id')->unsigned();
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('influncers', function (Blueprint $table) {
-            $table->dropColumn('bank_account_name');
+            $table->dropColumn('bank_id');
         });
     }
 };

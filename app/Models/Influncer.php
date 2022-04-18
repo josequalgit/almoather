@@ -55,7 +55,11 @@ class Influncer extends Model implements HasMedia
         'milestone',
         'street',
         'neighborhood',
-        'rejected_note'
+        'rejected_note',
+        'bank_id',
+        'bank_account_first_name',
+        'bank_account_middle_name',
+        'bank_account_last_name',
     ];
 
     protected $append = [

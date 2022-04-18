@@ -27,8 +27,10 @@ class UpdatePersonalDataRequest extends FormRequest
     public function rules()
     {
         return [
-            'full_name_ar'=>'required',
-            'full_name_en'=>'required',
+            'first_name'=>'required',
+            'middle_name'=>'required',
+            'last_name'=>'required',
+            'gender'=>'required',
             'country_id'=>'required',
             'birthday'=>'required',
             'nationality_id'=>'required',
@@ -38,7 +40,10 @@ class UpdatePersonalDataRequest extends FormRequest
             'name'=>'required',
             'is_vat'=>'required',
             'region_id'=>'required',
-            'phone'=>'required'
+            'phone'=>'required',
+            'bank_account_first_name'=>'required',
+            'bank_account_middle_name'=>'required',
+            'bank_account_last_name'=>'required',
         ];
     }
 

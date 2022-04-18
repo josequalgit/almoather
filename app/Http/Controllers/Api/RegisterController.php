@@ -49,6 +49,7 @@ class RegisterController extends Controller
             'first_name',
             'middle_name',
             'last_name',
+            'bank_id',
             'nick_name',
             'bank_name',
             'bank_account_number',
@@ -80,7 +81,10 @@ class RegisterController extends Controller
             'snap_chat_video',
             'milestone',
             'street',
-            'neighborhood'
+            'neighborhood',
+            'bank_account_first_name',
+            'bank_account_middle_name',
+            'bank_account_last_name',
         ]);
         
 

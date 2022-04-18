@@ -27,12 +27,16 @@ class UpdatePriceInfluncerRequest extends FormRequest
     public function rules()
     {
         return [
-            'bank_name'=>'required',
+            'bank_id'=>'required',
             'bank_account_number'=>'required',
             'ad_price'=>'required',
             'ad_onsite_price'=>'required',
             'ad_with_vat'=>'required',
-            'ad_onsite_price_with_vat'=>'required'
+            'ad_onsite_price_with_vat'=>'required',
+            'bank_account_first_name'=>'required',
+            'bank_account_middle_name'=>'required',
+            'bank_account_last_name'=>'required',
+
         ];
     }
 

@@ -20,6 +20,7 @@ use App\Models\InfluncerCategory;
 use Auth;
 use App\Http\Traits\UserResponse;
 use App\Models\Influncer;
+use App\Models\Bank;
 use App\Models\SocialMediaProfile;
 //use Spatie\MediaLibrary\Models\Media;
 use Illuminate\Support\Facades\Storage;
@@ -202,6 +203,9 @@ class UpdateDataController extends Controller
             'bank_name',
             'bank_account_number',
             'bio',
+            'bank_account_first_name',
+            'bank_account_middle_name',
+            'bank_account_last_name',
             'ads_out_country',
             'city_id',
             'country_id',
@@ -323,10 +327,10 @@ class UpdateDataController extends Controller
         $data->phone = $request->phone;
         $inf = Influncer::find($data->influncers->id);
 
-        $inf->full_name = [
-            'ar'=>$request->full_name_ar,
-            'en'=>$request->full_name_ar,
-        ];
+        $inf->first_name = $request->first_name;
+        $inf->middle_name = $request->middle_name;
+        $inf->last_name = $request->last_name;
+        $inf->gender = $request->gender;
         $inf->country_id = $request->country_id;
         $inf->id_number = $request->id_number;
         $inf->city_id = $request->city_id;
@@ -516,14 +520,22 @@ class UpdateDataController extends Controller
         ],config('global.WRONG_VALIDATION_STATUS'));
 
         $inf = Influncer::find($user->influncers->id);
+        $bank = Bank::find($request->bank_id);
+        if(!$bank) return response()->json([
+            'msg'=>'bank not found',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
         
         $updateData = $inf->update([
-            'bank_name'=>$request->bank_name,
+            'bank_name'=>$bank->name,
+            'bank_id'=>$request->bank_id,
             'bank_account_number'=>$request->bank_account_number,
             'ad_price'=>$request->ad_price,
             'ad_onsite_price'=>$request->ad_onsite_price,
             'ad_with_vat'=>$request->ad_with_vat,
-            'ad_onsite_price_with_vat'=>$request->ad_onsite_price_with_vat,
+            'bank_account_first_name'=>$request->bank_account_first_name,
+            'bank_account_middle_name'=>$request->bank_account_middle_name,
+            'bank_account_last_name'=>$request->bank_account_last_name,
         ]);
 
         return response()->json([
