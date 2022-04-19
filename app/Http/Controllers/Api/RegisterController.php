@@ -72,9 +72,8 @@ class RegisterController extends Controller
             'snap_chat_video',
             'commercial_registration_no',
             'tax_registration_number',
-            'rep_first_name',
-            'rep_middle_name',
-            'rep_last_name',
+          
+            'rep_full_name',
             'rep_id_number_name',
             'rep_phone_number',
             'rep_email',
@@ -82,9 +81,7 @@ class RegisterController extends Controller
             'milestone',
             'street',
             'neighborhood',
-            'bank_account_first_name',
-            'bank_account_middle_name',
-            'bank_account_last_name',
+            'bank_account_name',
         ]);
         
 

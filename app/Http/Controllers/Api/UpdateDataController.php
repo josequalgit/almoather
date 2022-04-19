@@ -533,9 +533,7 @@ class UpdateDataController extends Controller
             'ad_price'=>$request->ad_price,
             'ad_onsite_price'=>$request->ad_onsite_price,
             'ad_with_vat'=>$request->ad_with_vat,
-            'bank_account_first_name'=>$request->bank_account_first_name,
-            'bank_account_middle_name'=>$request->bank_account_middle_name,
-            'bank_account_last_name'=>$request->bank_account_last_name,
+            'bank_account_name'=>$request->bank_account_name,
         ]);
 
         return response()->json([

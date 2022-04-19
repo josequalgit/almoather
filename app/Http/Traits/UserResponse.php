@@ -59,15 +59,11 @@ trait UserResponse {
              'commercial_registration_no_files'=>$info->commercialFiles,
              'tax_registration_number'=>$info->tax_registration_number,
              'tax_registration_number_files'=>$info->taxFiles,
-             'rep_first_name'=>$info->rep_first_name,
-             'rep_middle_name'=>$info->rep_middle_name,
-             'rep_last_name'=>$info->rep_last_name,
+             'rep_full_name'=>$info->rep_full_name,
              'rep_id_number_name'=>$info->rep_id_number_name,
              'rep_phone_number'=>$info->rep_phone_number,
              'rep_email'=>$info->rep_email,
-             'bank_account_first_name'=>$info->bank_account_first_name,
-             'bank_account_middle_name'=>$info->bank_account_middle_name,
-             'bank_account_last_name'=>$info->bank_account_last_name,
+             'bank_account_name'=>$info->bank_account_name,
              'gender'=>$info->gender,
              'social_media_profile'=>$info->socialMediaProfiles()->get()->map(function($item){
                  return[

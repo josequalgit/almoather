@@ -41,9 +41,6 @@ class UpdatePersonalDataRequest extends FormRequest
             'is_vat'=>'required',
             'region_id'=>'required',
             'phone'=>'required',
-            'bank_account_first_name'=>'required',
-            'bank_account_middle_name'=>'required',
-            'bank_account_last_name'=>'required',
         ];
     }
 
