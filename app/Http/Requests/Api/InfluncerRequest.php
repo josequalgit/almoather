@@ -33,7 +33,7 @@ class InfluncerRequest extends FormRequest
             'nick_name'=>'required',
             // 'address'=>'required',
             // 'bank_name'=>'required',
-            'birthday'=>'required|date',
+            // 'birthday'=>'required|date',
             'id_number'=>'required',
             'bank_account_number'=>'required',
             'bio'=>'required',

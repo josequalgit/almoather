@@ -36,7 +36,7 @@ class Influncer extends Model implements HasMedia
         'is_vat',
         'ad_price',
         'ad_onsite_price',
-        'birthday',
+        // 'birthday',
         'id_number',
         'phone',
         'ratting',

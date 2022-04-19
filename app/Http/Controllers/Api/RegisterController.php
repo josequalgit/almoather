@@ -66,7 +66,7 @@ class RegisterController extends Controller
             'id_number',
             'ad_with_vat',
             'ad_onsite_price_with_vat',
-            'birthday',
+            // 'birthday',
             'bank',
             'snap_chat_views',
             'snap_chat_video',
