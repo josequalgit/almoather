@@ -51,7 +51,7 @@ class RegisterController extends Controller
             'last_name',
             'bank_id',
             'nick_name',
-            'bank_name',
+            // 'bank_name',
             'bank_account_number',
             'bio',
             'ads_out_country',
