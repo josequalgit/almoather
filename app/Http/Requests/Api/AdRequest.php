@@ -27,19 +27,18 @@ class AdRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'type'=>'required',
             'logo'=>'required',
             'store'=>'required',
             'budget'=>'required',
             'ad_type'=>'required',
             'about'=>'required',
-            // 'status'=>'required',
             'country_id'=>'required',
             'city_id'=>'required',
             'area_id'=>'required',
             'image'=>'required',
             'campaign_goals_id'=>'required',
             'social_media'=>'required',
+            'relation'=>'required',
             //'video'=>'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:100000',
             'cr_image'=>'mimes:jpg,bmp,png,pdf|max:2048',
 

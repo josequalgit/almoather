@@ -34,7 +34,9 @@ class Ad extends Model implements HasMedia
         'reject_note',
         'expense_type',
         'is_verified',
-        'campaign_goals_id'
+        'campaign_goals_id',
+        'relation',
+        'is_added_tax'
     ];
 
     protected $append = 

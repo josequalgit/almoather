@@ -50,7 +50,7 @@ trait UserResponse {
              'id_number'=>$info->id_number,
              'status'=>$info->status,
              'is_vat'=>$info->is_vat,
-             'birthday'=>$info->birthday,
+            //  'birthday'=>$info->birthday,
              'ads_out_country'=>$info->ads_out_country,
              'ad_with_vat'=>$info->ad_with_vat,
              'snap_chat_views'=>$info->snap_chat_views,

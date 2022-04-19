@@ -126,6 +126,7 @@ class RegisterController extends Controller
            if(!is_object($item)) $obj = (object)$item;
             SocialMediaProfile::create([
                 'link'              => $obj->link,
+                'views'              => $obj->views,
                 'social_media_id'   => $obj->type,
                 'Influncer_id'      => $newInfluncer->id
             ]);
