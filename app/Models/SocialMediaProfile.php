@@ -12,7 +12,8 @@ class SocialMediaProfile extends Model
     protected $fillable = [
         'link',
         'social_media_id',
-        'Influncer_id'
+        'Influncer_id',
+        'views'
     ];
 
     public function socialMedias()
