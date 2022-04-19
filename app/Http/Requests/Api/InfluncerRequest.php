@@ -31,7 +31,7 @@ class InfluncerRequest extends FormRequest
             'middle_name'=>'required',
             'last_name'=>'required',
             'nick_name'=>'required',
-            'address'=>'required',
+            // 'address'=>'required',
             // 'bank_name'=>'required',
             'birthday'=>'required|date',
             'id_number'=>'required',
@@ -92,7 +92,7 @@ class InfluncerRequest extends FormRequest
             'city_id.required' => 'Please choose your city',
             'region_id.required' => 'Please choose your region',
             'bank.required' => 'Please add your bank name',
-            'address.required' => 'Please add your address',
+            // 'address.required' => 'Please add your address',
             'ads_out_country.required' => 'Please add if you can make ads outside of your country'
         ];
     }

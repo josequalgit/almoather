@@ -42,7 +42,7 @@ class Influncer extends Model implements HasMedia
         'ratting',
         'ad_with_vat',
         'ad_onsite_price_with_vat',
-        'address',
+        // 'address',
         'snap_chat_views',
         'commercial_registration_no',
         'tax_registration_number',
