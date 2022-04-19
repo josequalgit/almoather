@@ -50,6 +50,7 @@ class InfluncerRequest extends FormRequest
             'ad_onsite_price'=>'required',
             'categories'=>'required',
             'region_id'=>'required',
+            'dial_code'=>'required',
             'phone'=>'required',
             'ad_with_vat'=>'required',
             'ad_onsite_price_with_vat'=>'required',

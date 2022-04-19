@@ -61,6 +61,7 @@ class UpdateDataController extends Controller
         }
         $updateData['phone'] = $request->phone;
         $updateData['country_code'] = $request->country_code;
+        $updateData['dial_code'] = $request->dial_code;
 
         // $updateUser = [];
         // if($request->password)
@@ -339,6 +340,8 @@ class UpdateDataController extends Controller
         $inf->is_vat = $request->is_vat;
         $inf->region_id = $request->region_id;
         $data->country_code = $request->country_code;
+        $data->dial_code = $request->dial_code;
+
         $data->save();
         $inf->save();
 

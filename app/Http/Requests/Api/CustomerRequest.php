@@ -37,6 +37,7 @@ class CustomerRequest extends FormRequest
             'email'=>'required|unique:users',
             'country_id'=>'required',
             'country_code'=>'required',
+            'dial_code'=>'required',
             'region_id'=>'required',
             'nationality_id'=>'required',
             'city_id'=>'required',

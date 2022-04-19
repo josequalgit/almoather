@@ -37,6 +37,7 @@ class UpdateCustomerRequest extends FormRequest
             'region_id'=>'required',
             'nationality_id'=>'required',
             'city_id'=>'required',
+            'dial_code'=>'required',
             'gender'=>'required'
         ];
     }

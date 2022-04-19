@@ -42,6 +42,7 @@ class UpdatePersonalDataRequest extends FormRequest
             'is_vat'=>'required',
             'region_id'=>'required',
             'phone'=>'required',
+            'dial_code'=>'required',
         ];
     }
 

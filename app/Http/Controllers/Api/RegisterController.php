@@ -41,7 +41,7 @@ class RegisterController extends Controller
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
-        $commingRequest =  array_merge($request->only(['email','password','name','fcm_token','phone','country_code']),['password' => bcrypt($request->password)]);
+        $commingRequest =  array_merge($request->only(['email','password','dial_code','name','fcm_token','phone','country_code']),['password' => bcrypt($request->password)]);
         $data = User::create($commingRequest);
 
 
@@ -149,6 +149,7 @@ class RegisterController extends Controller
 
     public function registerCustomer(CustomerRequest $request)
     {
+        
         if($this->checkIfDataAvalibale($request))
         {
             return response()->json([
@@ -159,7 +160,7 @@ class RegisterController extends Controller
         $info =[
             'msg'=>$request->message,
         ];
-        $commingRequest =  array_merge($request->only(['email','password','name','fcm_token','phone','country_code']),['password'=>bcrypt($request->password)]);
+        $commingRequest =  array_merge($request->only(['email','password','dial_code','name','fcm_token','phone','country_code']),['password'=>bcrypt($request->password)]);
         $data = User::create($commingRequest);
         if($request->hasFile('image'))
         {
