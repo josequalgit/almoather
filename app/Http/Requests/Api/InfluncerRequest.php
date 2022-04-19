@@ -56,7 +56,7 @@ class InfluncerRequest extends FormRequest
             'social_media'=>'required',
            'bank_id'=>'required',
             // 'snap_chat_views'=>'required',
-            'snap_chat_video'=>'required',
+            // 'snap_chat_video'=>'required',
             'commercial_registration_no'=>'required',
             'tax_registration_number'=>'required',
             'rep_first_name'=>'required',

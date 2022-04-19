@@ -105,10 +105,10 @@ class RegisterController extends Controller
        $newInfluncer->addMedia($request->file('tax_registration_number_file'))
        ->toMediaCollection('tax_registration_number_file');
        
-       foreach ($request->snap_chat_video as $value) {
-           $data->addMedia($value)
-           ->toMediaCollection('snapchat_videos');
-       }
+    //    foreach ($request->snap_chat_video as $value) {
+    //        $data->addMedia($value)
+    //        ->toMediaCollection('snapchat_videos');
+    //    }
 
        foreach($request->categories as $item)
        {
