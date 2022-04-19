@@ -200,7 +200,7 @@ class UpdateDataController extends Controller
         $influncerData = $request->only([
             'full_name',
             'nick_name',
-            'bank_name',
+            // 'bank_name',
             'bank_account_number',
             'bio',
             'bank_account_first_name',
@@ -527,7 +527,7 @@ class UpdateDataController extends Controller
         ],config('global.WRONG_VALIDATION_STATUS'));
         
         $updateData = $inf->update([
-            'bank_name'=>$bank->name,
+            // 'bank_name'=>$bank->name,
             'bank_id'=>$request->bank_id,
             'bank_account_number'=>$request->bank_account_number,
             'ad_price'=>$request->ad_price,
