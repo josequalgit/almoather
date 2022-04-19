@@ -30,6 +30,7 @@ class UpdatePersonalDataRequest extends FormRequest
             'first_name'=>'required',
             'middle_name'=>'required',
             'last_name'=>'required',
+            'country_code'=>'required',
             'gender'=>'required',
             'country_id'=>'required',
             'birthday'=>'required',

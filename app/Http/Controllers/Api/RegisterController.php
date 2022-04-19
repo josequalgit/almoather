@@ -41,7 +41,7 @@ class RegisterController extends Controller
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
-        $commingRequest =  array_merge($request->only(['email','password','name','fcm_token','phone']),['password' => bcrypt($request->password)]);
+        $commingRequest =  array_merge($request->only(['email','password','name','fcm_token','phone','country_code']),['password' => bcrypt($request->password)]);
         $data = User::create($commingRequest);
 
 
@@ -103,21 +103,21 @@ class RegisterController extends Controller
        $newInfluncer->addMedia($request->file('tax_registration_number_file'))
        ->toMediaCollection('tax_registration_number_file');
        
-    //    foreach ($request->snap_chat_video as $value) {
-    //        $data->addMedia($value)
-    //        ->toMediaCollection('snapchat_videos');
-    //    }
+        //    foreach ($request->snap_chat_video as $value) {
+        //        $data->addMedia($value)
+        //        ->toMediaCollection('snapchat_videos');
+        //    }
 
        foreach($request->categories as $item)
        {
            $newInfluncer->InfluncerCategories()->attach($item);
        }
 
-       // removed
-    //    foreach($request->preferred_socialMedias as $item)
-    //    {
-    //        $newInfluncer->socialMedias()->attach($item);
-    //    }
+        // removed
+        //    foreach($request->preferred_socialMedias as $item)
+        //    {
+        //        $newInfluncer->socialMedias()->attach($item);
+        //    }
 
        foreach ($request->social_media as $item) {
             $obj = $item;
@@ -159,7 +159,7 @@ class RegisterController extends Controller
         $info =[
             'msg'=>$request->message,
         ];
-        $commingRequest =  array_merge($request->only(['email','password','name','fcm_token','phone']),['password'=>bcrypt($request->password)]);
+        $commingRequest =  array_merge($request->only(['email','password','name','fcm_token','phone','country_code']),['password'=>bcrypt($request->password)]);
         $data = User::create($commingRequest);
         if($request->hasFile('image'))
         {

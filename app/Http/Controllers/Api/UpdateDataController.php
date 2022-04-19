@@ -50,7 +50,7 @@ class UpdateDataController extends Controller
         $info =[
             'msg'=>$request->message,
         ];
-        $commingRequest =  array_merge($request->only(['email','password','name','phone']),['password'=>bcrypt($request->password)]);
+        $commingRequest =  array_merge($request->only(['email','password','name','phone','country_code']),['password'=>bcrypt($request->password)]);
         
         if(!$data->customers)
         {
@@ -60,6 +60,7 @@ class UpdateDataController extends Controller
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
         $updateData['phone'] = $request->phone;
+        $updateData['country_code'] = $request->country_code;
 
         // $updateUser = [];
         // if($request->password)
@@ -143,6 +144,7 @@ class UpdateDataController extends Controller
             $updateUser['password'] = bcrypt($request->password);
         }
         $updateData['phone'] = $request->phone;
+        $updateData['country_code'] = $request->country_code;
         // if($request->email !== $data->email)
         // {
         //     $checkEmail = User::where('email',$request->email)->first();
@@ -336,6 +338,7 @@ class UpdateDataController extends Controller
         $inf->city_id = $request->city_id;
         $inf->is_vat = $request->is_vat;
         $inf->region_id = $request->region_id;
+        $data->country_code = $request->country_code;
         $data->save();
         $inf->save();
 

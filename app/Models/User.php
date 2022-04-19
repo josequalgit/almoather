@@ -30,7 +30,8 @@ class User extends Authenticatable implements JWTSubject , HasMedia
         'password',
         'lang',
         'fcm_token',
-        'phone'
+        'phone',
+        'country_code'
     ];
 
     /**

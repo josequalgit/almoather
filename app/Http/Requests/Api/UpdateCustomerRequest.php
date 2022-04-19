@@ -30,6 +30,7 @@ class UpdateCustomerRequest extends FormRequest
             'first_name'=>'required',
             'middle_name'=>'required',
             'last_name'=>'required',
+            'country_code'=>'required',
             'phone'=>'required',
             'id_number',
             'country_id'=>'required',

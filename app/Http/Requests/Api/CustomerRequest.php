@@ -36,6 +36,7 @@ class CustomerRequest extends FormRequest
             'password_confirmation' => 'required',
             'email'=>'required|unique:users',
             'country_id'=>'required',
+            'country_code'=>'required',
             'region_id'=>'required',
             'nationality_id'=>'required',
             'city_id'=>'required',
