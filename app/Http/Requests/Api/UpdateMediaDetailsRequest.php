@@ -31,7 +31,7 @@ class UpdateMediaDetailsRequest extends FormRequest
             'bio'=>'required',
             'is_vat'=>'required',
             'ads_out_country'=>'required',
-            'snap_chat_views'=>'required',
+            // 'snap_chat_views'=>'required',
             'milestone'=>'required',
             'street'=>'required',
             'neighborhood'=>'required',

@@ -221,7 +221,7 @@ class UpdateDataController extends Controller
             'birthday',
             'address_id',
             'bank_id',
-            'snap_chat_views',
+            // 'snap_chat_views',
             'snap_chat_video'
         ]);
 
@@ -381,7 +381,7 @@ class UpdateDataController extends Controller
             'bio'=>$request->bio,
             'ads_out_country'=>$request->ads_out_country,
             'is_vat'=>$request->is_vat,
-            'snap_chat_views'=>$request->snap_chat_views,
+            // 'snap_chat_views'=>$request->snap_chat_views,
             'milestone'=>$request->milestone,
             'street'=>$request->street,
             'neighborhood'=>$request->neighborhood,
