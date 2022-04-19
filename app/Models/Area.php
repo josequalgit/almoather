@@ -23,4 +23,9 @@ class Area extends Model
     {
         return $this->hasMany(Ad::class,'area_id');
     }
+
+    public function storeLocations()
+    {
+        return $this->hasMany(Area::class,'area_id');
+    }
 }

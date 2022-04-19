@@ -60,15 +60,17 @@ trait UserResponse {
              'tax_registration_number'=>$info->tax_registration_number,
              'tax_registration_number_files'=>$info->taxFiles,
              'rep_full_name'=>$info->rep_full_name,
-             'rep_id_number_name'=>$info->rep_id_number_name,
              'rep_phone_number'=>$info->rep_phone_number,
-             'rep_email'=>$info->rep_email,
+             'rep_city'=>$info->rep_city,
+             'rep_area'=>$info->rep_area,
+             'rep_street'=>$info->rep_street,
              'bank_account_name'=>$info->bank_account_name,
              'gender'=>$info->gender,
              'social_media_profile'=>$info->socialMediaProfiles()->get()->map(function($item){
                  return[
                      'id'=>$item->social_media_id,
-                     'link'=>$item->link
+                     'link'=>$item->link,
+                     'views'=>$item->views
                  ];
              }),
              'ad_onsite_price_with_vat'=>$info->ad_onsite_price_with_vat,

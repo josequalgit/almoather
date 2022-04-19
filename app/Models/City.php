@@ -39,4 +39,9 @@ class City extends Model
     {
         return $this->belongs(Region::class,'region_id');
     } 
+
+    public function storeLocations()
+    {
+        return $this->hasMany(StoreLocation::class,'city_id');
+    }
 }

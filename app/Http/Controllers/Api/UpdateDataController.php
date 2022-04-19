@@ -473,9 +473,9 @@ class UpdateDataController extends Controller
             'commercial_registration_no'=>$request->commercial_registration_no,
             'tax_registration_number'=>$request->tax_registration_number,
             'rep_full_name'=>$request->rep_full_name,
-            'rep_id_number_name'=>$request->rep_id_number_name,
-            'rep_phone_number'=>$request->rep_phone_number,
-            'rep_email'=>$request->rep_email
+            'rep_city'=>$request->rep_city,
+            'rep_area'=>$request->rep_area,
+            'rep_street'=>$request->rep_street
         ]);
 
         // $user->clearMediaCollection('commercial_registration_no_file');

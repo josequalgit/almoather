@@ -123,6 +123,11 @@ class Ad extends Model implements HasMedia
         return $this->hasMany(AdsInfluencerMatch::class,'ad_id');
     }
 
+    public function storeLocations()
+    {
+        return $this->hasMany(StoreLocation::class,'ad_id');
+    }
+
     public function getImageAttribute() {
         $mediaItems = $this->getMedia('adImage');
         $publicFullUrl = [];
