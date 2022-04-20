@@ -464,14 +464,14 @@ class UpdateDataController extends Controller
         $updateData = $inf->update([
             'rep_full_name'=>$request->rep_full_name,
             'rep_phone_number'=>$request->rep_phone_number,
-            'milestone  '=>$request->milestone,
-            'rep_city  '=>$request->rep_city,
-            'rep_area  '=>$request->rep_area,
-            'street  '=>$request->street,
+            'milestone'=>$request->milestone,
+            'rep_city'=>$request->rep_city,
+            'rep_area'=>$request->rep_area,
+            'street'=>$request->street,
             'neighborhood'=>$request->neighborhood
         ]);
 
-
+   
         return response()->json([
             'msg'=>'data was update',
             'data'=>$this->userDataResponse($user,null,$user->id),
