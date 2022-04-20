@@ -40,7 +40,23 @@ class AdController extends Controller
             $data = Ad::get()->map(function($item){
                 return $this->adResponse($item);
             });
-            return $data;
+
+            $itemsPaginated =  Ad::paginate(10);
+            $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($status){
+                $data =  $this->adResponse($item);
+                $data['status']         = $status;
+                $data['contract_id']    = $item->id;
+                $data['contract_title'] = $item->title;
+                $data['contract_data']  = $item->content;
+                $data['contract_date']  = $item->date;    
+                return $data;
+            })->toArray();
+            
+            return response()->json([
+                'msg'=>'get all ads with the status',
+                'data'=>$this->formate($itemsTransformed , $itemsPaginated),
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
 
          /**
           *

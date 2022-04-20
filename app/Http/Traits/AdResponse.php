@@ -7,9 +7,9 @@ trait AdResponse {
 
     public function adResponse($ad)
     {
-        $info = $ad->influncers()->get()->map(function($item){
+        $info = $ad->influncers?$ad->influncers()->get()->map(function($item){
           return $this->userDataResponse([],null,$item->users->id);
-        });
+        }):null;
 
 		
       $basicResponse =  [
