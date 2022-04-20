@@ -7,7 +7,9 @@ trait AdResponse {
 
     public function adResponse($ad)
     {
-        $info = $ad->influncers;
+        $info = $ad->influncers()->get()->map(function($item){
+          return $this->userDataResponse([],null,$item->users->id);
+        });
 
 		
       $basicResponse =  [
@@ -34,7 +36,7 @@ trait AdResponse {
             'category'=>$ad->categories?$ad->categories->name:null,
             'scenario'=>$ad->scenario,
             'videos'=>$ad->videos,
-            'influencer'=> $info ? $this->userDataResponse($info->users,null,$info->users->id) : null,
+            'influencer'=> $info ? $info : null,
             'budget'=>$ad->budget,
             'type'=>$ad->ad_type,
             // 'nearest_location'=>$ad->nearest_location,

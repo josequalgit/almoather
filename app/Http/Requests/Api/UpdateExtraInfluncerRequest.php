@@ -28,14 +28,14 @@ class UpdateExtraInfluncerRequest extends FormRequest
     public function rules()
     {
         return [
-            'commercial_registration_no'=>'required',
-            'tax_registration_number'=>'required',
             'rep_full_name'=>'required',
-            'rep_area'=>'required',
+            'rep_phone_number'=>'required',
             'rep_city'=>'required',
-            'rep_street'=>'required',
-            // 'tax_registration_number_file'=>'required',
-            // 'commercial_registration_no_file'=>'required',
+            'rep_area'=>'required',
+            'milestone'=>'required',
+            'street'=>'required',
+            'neighborhood'=>'required',
+            'neighborhood'=>'required',
         ];
     }
 

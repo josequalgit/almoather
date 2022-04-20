@@ -27,19 +27,15 @@ class UpdateMediaDetailsRequest extends FormRequest
     public function rules()
     {
         return [
+            'ad_with_vat'=>'required',
+            'ad_onsite_price_with_vat'=>'required',
+            'ad_price'=>'required',
+            'ad_onsite_price'=>'required',
             'nick_name'=>'required',
             'bio'=>'required',
-            'is_vat'=>'required',
             'ads_out_country'=>'required',
-            // 'snap_chat_views'=>'required',
-            'milestone'=>'required',
-            'street'=>'required',
-            'neighborhood'=>'required',
-            'address'=>'required',
             'social_media'=>'required',
             'categories'=>'required',
-            'preferred_socialMedias'=>'required',
-            //'snap_chat_video'=>'required',
         ];
     }
 

@@ -29,11 +29,10 @@ class UpdatePriceInfluncerRequest extends FormRequest
         return [
             'bank_id'=>'required',
             'bank_account_number'=>'required',
-            'ad_price'=>'required',
-            'ad_onsite_price'=>'required',
-            'ad_with_vat'=>'required',
-            'ad_onsite_price_with_vat'=>'required',
             'bank_account_name'=>'required',
+            'commercial_registration_no'=>'required',
+            'tax_registration_number'=>'required',
+            'is_vat'=>'required',
 
         ];
     }

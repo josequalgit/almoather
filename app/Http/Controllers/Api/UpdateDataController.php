@@ -327,20 +327,20 @@ class UpdateDataController extends Controller
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
-        $data->phone = $request->phone;
         $inf = Influncer::find($data->influncers->id);
 
         $inf->first_name = $request->first_name;
         $inf->middle_name = $request->middle_name;
         $inf->last_name = $request->last_name;
-        $inf->gender = $request->gender;
         $inf->country_id = $request->country_id;
+        $inf->nationality_id = $request->nationality_id;
         $inf->id_number = $request->id_number;
         $inf->city_id = $request->city_id;
         $inf->is_vat = $request->is_vat;
         $inf->region_id = $request->region_id;
-        $data->country_code = $request->country_code;
+        $data->phone = $request->phone;
         $data->dial_code = $request->dial_code;
+        $data->country_code = $request->country_code;
 
         $data->save();
         $inf->save();
@@ -386,11 +386,10 @@ class UpdateDataController extends Controller
             'nick_name'=>$request->nick_name,
             'bio'=>$request->bio,
             'ads_out_country'=>$request->ads_out_country,
-            'is_vat'=>$request->is_vat,
-            // 'snap_chat_views'=>$request->snap_chat_views,
-            'milestone'=>$request->milestone,
-            'street'=>$request->street,
-            'neighborhood'=>$request->neighborhood,
+            'ad_with_vat'=>$request->ad_with_vat,
+            'ad_onsite_price_with_vat'=>$request->ad_onsite_price_with_vat,
+            'ad_price'=>$request->ad_price,
+            'ad_onsite_price'=>$request->ad_onsite_price
         ]);
         
 
@@ -422,25 +421,11 @@ class UpdateDataController extends Controller
         }
         $inf->socialMedias()->detach();
 
-        foreach ($request->preferred_socialMedias as $item) {
-             $inf->socialMedias()->attach($item);
-        }
+        // foreach ($request->preferred_socialMedias as $item) {
+        //      $inf->socialMedias()->attach($item);
+        // }
         
-        if($request->snap_chat_video)
-        {
-            if(!is_array($request->snap_chat_video))
-            return response()->json([
-                'msg'=>'videos must be in array',
-                'status'=>config('global.WRONG_VALIDATION_STATUS')
-            ],config('global.WRONG_VALIDATION_STATUS'));
-
-
-            $user->clearMediaCollection('snapchat_videos');
-            foreach ($request->snap_chat_video as $value) {
-                $user->addMedia($value)
-                ->toMediaCollection('snapchat_videos');
-            }
-        }
+      
 
        
 
@@ -476,23 +461,14 @@ class UpdateDataController extends Controller
         $inf = Influncer::find($user->influncers->id);
 
         $updateData = $inf->update([
-            'commercial_registration_no'=>$request->commercial_registration_no,
-            'tax_registration_number'=>$request->tax_registration_number,
             'rep_full_name'=>$request->rep_full_name,
-            'rep_city'=>$request->rep_city,
-            'rep_area'=>$request->rep_area,
-            'rep_street'=>$request->rep_street
+            'rep_phone_number'=>$request->rep_phone_number,
+            'milestone  '=>$request->milestone,
+            'rep_city  '=>$request->rep_city,
+            'rep_area  '=>$request->rep_area,
+            'street  '=>$request->street,
+            'neighborhood'=>$request->neighborhood
         ]);
-
-        // $user->clearMediaCollection('commercial_registration_no_file');
-
-        // $user->addMedia($request->file('commercial_registration_no_file'))
-        // ->toMediaCollection('commercial_registration_no_file');
-
-        // $user->clearMediaCollection('tax_registration_number_file');
-
-        // $user->addMedia($request->file('tax_registration_number_file'))
-        // ->toMediaCollection('tax_registration_number_file');
 
 
         return response()->json([
@@ -533,13 +509,12 @@ class UpdateDataController extends Controller
         ],config('global.WRONG_VALIDATION_STATUS'));
         
         $updateData = $inf->update([
-            // 'bank_name'=>$bank->name,
             'bank_id'=>$request->bank_id,
             'bank_account_number'=>$request->bank_account_number,
-            'ad_price'=>$request->ad_price,
-            'ad_onsite_price'=>$request->ad_onsite_price,
-            'ad_with_vat'=>$request->ad_with_vat,
             'bank_account_name'=>$request->bank_account_name,
+            'commercial_registration_no'=>$request->commercial_registration_no,
+            'tax_registration_number'=>$request->tax_registration_number,
+            'is_vat'=>$request->is_vat,
         ]);
 
         return response()->json([

@@ -30,19 +30,15 @@ class UpdatePersonalDataRequest extends FormRequest
             'first_name'=>'required',
             'middle_name'=>'required',
             'last_name'=>'required',
-            'country_code'=>'required',
-            'gender'=>'required',
             'country_id'=>'required',
-            'birthday'=>'required',
             'nationality_id'=>'required',
             'id_number'=>'required',
             'city_id'=>'required',
-            //'email'=>'required',
-            'name'=>'required',
             'is_vat'=>'required',
             'region_id'=>'required',
             'phone'=>'required',
             'dial_code'=>'required',
+            'country_code'=>'required'
         ];
     }
 
