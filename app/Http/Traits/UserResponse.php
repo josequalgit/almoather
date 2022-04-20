@@ -38,7 +38,6 @@ trait UserResponse {
              'influencer_category'=>$info->InfluncerCategories->pluck('id')->toArray(),
              'bio'=>$info->bio,
              'milestone'=>$info->milestone,
-             'street'=>$info->street,
              'neighborhood'=>$info->neighborhood,
              'ad_price'=>$info->ad_price,
              'ad_onsite_price'=>$info->ad_onsite_price,
@@ -65,7 +64,7 @@ trait UserResponse {
              'rep_phone_number'=>$info->rep_phone_number,
              'rep_city'=>$info->rep_city,
              'rep_area'=>$info->rep_area,
-             'rep_street'=>$info->rep_street,
+             'rep_street'=>$info->street,
              'bank_account_name'=>$info->bank_account_name,
              'gender'=>$info->gender,
              'social_media_profile'=>$info->socialMediaProfiles()->get()->map(function($item){

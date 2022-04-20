@@ -63,7 +63,7 @@ class InfluncerRequest extends FormRequest
             'bank_account_name'=>'required',
             'rep_city'=>'required',
             'rep_area'=>'required',
-            'rep_street'=>'required',
+            // 'rep_street'=>'required',
             'milestone'=>'required',
             'street'=>'required',
             'neighborhood'=>'required',
