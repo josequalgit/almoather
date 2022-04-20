@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\Influncer;
 use App\Models\Customer;
 use App\Models\Contract;
+use App\Models\StoreLocation;
 use App\Models\AdsInfluencerMatch;
 use Validator;
 use App\Http\Traits\UserResponse;
@@ -143,21 +144,21 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        if(count($request->prefered_media_id) > 0)
-        {
-            foreach ($request->prefered_media_id as $value) {
+        // if(count($request->prefered_media_id) > 0)
+        // {
+        //     foreach ($request->prefered_media_id as $value) {
 
-              //  DB::table('ads_media_id')->insert([
-                //    'ad_id'=>$data->id,
-              //      'social_media_id'=>$value['type']??$value->type,
-              //      'link'=>$value['link']??$value->type
-             //   ]);
-				$data->socialMediasAccount()->attach($value);
-				$data->save();
+        //       //  DB::table('ads_media_id')->insert([
+        //         //    'ad_id'=>$data->id,
+        //       //      'social_media_id'=>$value['type']??$value->type,
+        //       //      'link'=>$value['link']??$value->type
+        //      //   ]);
+		// 		$data->socialMediasAccount()->attach($value);
+		// 		$data->save();
 
 				
-            }
-        }
+        //     }
+        // }
 		 if(count($request->social_media) > 0)
         {
             foreach ($request->social_media as $value) {
@@ -171,21 +172,34 @@ class AdController extends Controller
 			//	$data->save();
             }
         }
-        if($request->video&&count($request->video) > 0)
+
+        if(count($request->storeLocations) > 0)
         {
-            foreach ($request->video as $value) {
-                $data->addMedia($value)
-                ->toMediaCollection('adVideos');
+            foreach ($request->storeLocations as $value) {
+
+                StoreLocation::create([
+                   'city_id'=>$value['city_id']??$value->city_id,
+                   'area_id'=>$value['area_id']??$value->area_id,
+                   'ad_id'=>$data->id,
+                ]);
             }
         }
 
-        if($request->video&&count($request->image) > 0)
-        {
-            foreach ($request->image as $value) {
-                $data->addMedia($value)
-            ->toMediaCollection('adImage');
-            }
-        }
+        // if($request->video&&count($request->video) > 0)
+        // {
+        //     foreach ($request->video as $value) {
+        //         $data->addMedia($value)
+        //         ->toMediaCollection('adVideos');
+        //     }
+        // }
+
+        // if($request->video&&count($request->image) > 0)
+        // {
+        //     foreach ($request->image as $value) {
+        //         $data->addMedia($value)
+        //     ->toMediaCollection('adImage');
+        //     }
+        // }
         if($request->hasFile('cr_image'))
         {
             $data->addMedia($request->file('cr_image'))
@@ -447,10 +461,10 @@ class AdController extends Controller
         {
             return 'Please add an offer';
         }
-		  elseif(!$request->prefered_media_id)
-        {
-            return 'Please add an prefered media id';
-        }
+		//   elseif(!$request->prefered_media_id)
+        // {
+        //     return 'Please add an prefered media id';
+        // }
 		  elseif($request->has_marouf_num == 1&&!$request->marouf_num)
         {
             return 'Please add marouf number';

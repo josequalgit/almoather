@@ -36,20 +36,20 @@ trait AdResponse {
             'type'=>$ad->ad_type,
             'nearest_location'=>$ad->nearest_location,
             'website_link'=>$ad->website_link,
-            'country'=>[
-              'id'=>$ad->countries->id,
-              'name'=>$ad->countries->name
-             ],
-            'city'=>[
-              'id'=>$ad->cities->id,
-              'name'=>$ad->cities->name
-            ],
-            'area'=>[
-              'id'=>$ad->areas->id,
-              'name'=>$ad->areas->name
-            ],
+            // 'country'=>[
+            //   'id'=>$ad->countries->id,
+            //   'name'=>$ad->countries->name
+            //  ],
+            // 'city'=>[
+            //   'id'=>$ad->cities->id,
+            //   'name'=>$ad->cities->name
+            // ],
+            // 'area'=>[
+            //   'id'=>$ad->areas->id,
+            //   'name'=>$ad->areas->name
+            // ],
             'customer_id'=>$ad->customer_id,
-            'category_id'=>$ad->category_id,
+            'isVat'=>$ad->is_vat,
             'discount_code'=>$ad->discount_code,
             'hasStore'=>$ad->has_hasStore?true:false,
             'is_onSite'=>$ad->onSite?'Online':'Site',
