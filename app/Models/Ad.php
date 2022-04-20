@@ -37,7 +37,8 @@ class Ad extends Model implements HasMedia
         'campaign_goals_id',
         'relation',
         'is_added_tax',
-        'is_vat'
+        'is_vat',
+        'about_product'
     ];
 
     protected $append = 

@@ -13,6 +13,7 @@ class StoreLocation extends Model
         'city_id',
         'area_id',
         'ad_id',
+        'country_id'
     ];
 
     public function areas()
@@ -28,5 +29,10 @@ class StoreLocation extends Model
     public function ads()
     {
         return $this->belongsTo(Ad::class,'ad_id');
+    }
+
+    public function countries()
+    {
+        return $this->belongsTo(Country::class,'country_id');
     }
 }

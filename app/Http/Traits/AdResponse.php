@@ -14,9 +14,12 @@ trait AdResponse {
             'id'=>$ad->id,
             'image'=>$ad->image,
             'videos'=>$ad->videos,
-            'documnet'=>$ad->documnet,
+            // 'documnet'=>$ad->documnet,
             'campaign_goal'=>$ad->campaignGoals->title,
             'logo'=>$ad->logo,
+            'locations'=>$ad->storeLocations()->get()->map(function($item){
+              return $item->cities->name.','.$item->areas->name.','.$item->countries->name;
+            }),
             'store_name'=>$ad->store,
             'marouf_num'=>$ad->marouf_num,
             'store_link'=>$ad->store_link,
@@ -34,8 +37,9 @@ trait AdResponse {
             'influencer'=> $info ? $this->userDataResponse($info->users,null,$info->users->id) : null,
             'budget'=>$ad->budget,
             'type'=>$ad->ad_type,
-            'nearest_location'=>$ad->nearest_location,
+            // 'nearest_location'=>$ad->nearest_location,
             'website_link'=>$ad->website_link,
+            'about_product'=>$ad->about_product,
             // 'country'=>[
             //   'id'=>$ad->countries->id,
             //   'name'=>$ad->countries->name

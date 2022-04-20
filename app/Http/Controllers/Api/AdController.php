@@ -143,6 +143,8 @@ class AdController extends Controller
             'err'=>'There is no contract in the system',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
+        $data->socialMediasAccount()->attach($request->prefered_media_id);
+		$data->save();
 
         // if(count($request->prefered_media_id) > 0)
         // {
@@ -164,7 +166,7 @@ class AdController extends Controller
             foreach ($request->social_media as $value) {
 
                 DB::table('social_media_id')->insert([
-                    'ad_id'=>$data->id,
+                   'ad_id'=>$data->id,
                    'social_media_id'=>$value['type']??$value->type,
                    'link'=>$value['link']??$value->type
                 ]);
@@ -179,6 +181,7 @@ class AdController extends Controller
 
                 StoreLocation::create([
                    'city_id'=>$value['city_id']??$value->city_id,
+                   'country_id'=>$value['country_id']??$value->country_id,
                    'area_id'=>$value['area_id']??$value->area_id,
                    'ad_id'=>$data->id,
                 ]);
@@ -461,10 +464,10 @@ class AdController extends Controller
         {
             return 'Please add an offer';
         }
-		//   elseif(!$request->prefered_media_id)
-        // {
-        //     return 'Please add an prefered media id';
-        // }
+		  elseif(!$request->prefered_media_id)
+        {
+            return 'Please add an prefered media id';
+        }
 		  elseif($request->has_marouf_num == 1&&!$request->marouf_num)
         {
             return 'Please add marouf number';

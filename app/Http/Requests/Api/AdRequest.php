@@ -32,6 +32,7 @@ class AdRequest extends FormRequest
             'budget'=>'required',
             'ad_type'=>'required',
             'about'=>'required',
+            'about_product'=>'required',
             // 'country_id'=>'required',
             // 'city_id'=>'required',
             'storeLocations'=>'required',
@@ -40,6 +41,7 @@ class AdRequest extends FormRequest
             'campaign_goals_id'=>'required',
             'social_media'=>'required',
             'relation'=>'required',
+            'prefered_media_id'=>'required',
             //'video'=>'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:100000',
             'cr_image'=>'mimes:jpg,bmp,png,pdf|max:2048',
 

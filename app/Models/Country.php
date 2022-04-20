@@ -44,4 +44,9 @@ class Country extends Model
         return $this->hasMany(Address::class,'country_id');
     }
 
+    public function storeLocations()
+    {
+        return $this->hasMany(Country::class,'country_id');
+    }
+
 }
