@@ -288,11 +288,11 @@
                 <input disabled value="{{ old('social_media_id')?old('social_media_id'):$data->socialMedias->name}}" name="social_media_id" type="text" class="form-control" id="inputAddress2" placeholder="social_media_id">
             </div> --}}
           
-            <div class="form-group">
+            {{-- <div class="form-group">
                 <label for="inputAddress2">Country</label>
                 <input disabled value="{{ old('country_id')?old('country_id'):$data->countries->name}}" name="country_id" type="text" class="form-control" id="inputAddress2" placeholder="country_id">
-            </div>
-            <div class="form-group">
+            </div> --}}
+            {{-- <div class="form-group">
                 <label for="inputAddress2">City</label>
                 <input disabled value="{{ old('city_id')?old('city_id'):$data->cities->name}}" name="city_id" type="text" class="form-control" id="inputAddress2" placeholder="city_id">
             </div>
@@ -300,7 +300,7 @@
             <div class="form-group">
                 <label for="inputAddress2">Area</label>
                 <input disabled value="{{ old('area_id')?old('area_id'):$data->areas?->name}}" name="area_id" type="text" class="form-control" id="inputAddress2" placeholder="area_id">
-            </div>
+            </div> --}}
 
             <div class="form-group">
                 <label for="inputAddress2">About</label>
