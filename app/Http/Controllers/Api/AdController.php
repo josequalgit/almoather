@@ -31,6 +31,24 @@ class AdController extends Controller
 
     public function index($status)
     {
+
+
+        /**
+         * Test
+         */
+
+            $data = Ad::get()->map(function($item){
+                return $this->adResponse($item);
+            });
+            return $data;
+
+         /**
+          *
+          * Test
+          */
+
+
+
         $user_id = Auth::guard('api')->user()->influncers ? Auth::guard('api')->user()->influncers->id :Auth::guard('api')->user()->customers->id;
 
         if(Auth::guard('api')->user()->influncers)

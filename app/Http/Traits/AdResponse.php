@@ -19,9 +19,9 @@ trait AdResponse {
             // 'documnet'=>$ad->documnet,
             'campaign_goal'=>$ad->campaignGoals->title,
             'logo'=>$ad->logo,
-            'locations'=>$ad->storeLocations()->get()->map(function($item){
+            'locations'=>$ad->storeLocation?$ad->storeLocations()->get()->map(function($item){
               return $item->cities->name.','.$item->areas->name.','.$item->countries->name;
-            }),
+            }):null,
             'store_name'=>$ad->store,
             'marouf_num'=>$ad->marouf_num,
             'store_link'=>$ad->store_link,
@@ -38,6 +38,7 @@ trait AdResponse {
             'videos'=>$ad->videos,
             'influencer'=> $info ? $info : null,
             'budget'=>$ad->budget,
+            'date'=>$ad->date,
             'type'=>$ad->ad_type,
             // 'nearest_location'=>$ad->nearest_location,
             'website_link'=>$ad->website_link,
