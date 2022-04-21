@@ -57,6 +57,13 @@ class MailController extends Controller
                 'status'=>200
             ],200);
          }
+         else
+         {
+            return response()->json([
+                'msg'=>'wrong code',
+                'status'=>200
+            ],200);
+         }
      }
 
      public function forgetPassword(Request $request)
