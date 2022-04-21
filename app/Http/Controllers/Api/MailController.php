@@ -10,7 +10,21 @@ use Mail;
 class MailController extends Controller
 {
     public function basic_email(Request $request) {
-        $data = array('email'=>$request->email,'name'=>'Qusai');
+
+       
+
+        $user = User::where('email',$request->email)->first();
+
+        if(!$user)
+        {
+           return response()->json([
+               'err'=>'user not found',
+               'status'=>404
+           ],404);
+        }
+        $user->code = mt_rand(100000,999999);
+        $user->save();
+        $data = array('email'=>$request->email,'code'=>$user->code);
      
         Mail::send(['text'=>'mail'], $data, function($message) use($data){
            $message->to($data['email'], 'Test Email')->subject
