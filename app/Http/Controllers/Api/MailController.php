@@ -9,7 +9,7 @@ use Mail;
 class MailController extends Controller
 {
     public function basic_email(Request $request) {
-        $data = array('email'=>$request->email);
+        $data = array('email'=>$request->email,'name'=>'Qusai');
      
         Mail::send(['text'=>'mail'], $data, function($message) use($data){
            $message->to($data['email'], 'Test Email')->subject
