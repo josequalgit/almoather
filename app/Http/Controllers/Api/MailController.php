@@ -26,12 +26,18 @@ class MailController extends Controller
 
          if(!$user)
          {
-             return 'user not found';
+            return response()->json([
+                'err'=>'user not found',
+                'status'=>404
+            ],404);
          }
          
          if($user->code == $request->code)
          {
-             return 'correct';
+            return response()->json([
+                'msg'=>'correct code',
+                'status'=>200
+            ],200);
          }
      }
 
