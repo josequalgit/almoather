@@ -8,13 +8,13 @@ use Mail;
 
 class MailController extends Controller
 {
-    public function basic_email() {
+    public function basic_email(Request $request) {
         $data = array('name'=>"Virat Gandhi");
      
         Mail::send(['text'=>'mail'], $data, function($message) {
-           $message->to('qusai@josequal.com', 'Tutorials Point')->subject
+           $message->to($request->email, 'Tutorials Point')->subject
               ('Laravel Basic Testing Mail');
-           $message->from('xyz@gmail.com','Virat Gandhi');
+           $message->from('qusai@josequal.com','Josequal');
         });
         echo "Basic Email Sent. Check your inbox.";
      }
