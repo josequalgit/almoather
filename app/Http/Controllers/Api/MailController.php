@@ -54,15 +54,15 @@ class MailController extends Controller
          {
             return response()->json([
                 'msg'=>'correct code',
-                'status'=>200
-            ],200);
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
          }
          else
          {
             return response()->json([
                 'msg'=>'wrong code',
-                'status'=>200
-            ],200);
+                'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
+            ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
          }
      }
 
