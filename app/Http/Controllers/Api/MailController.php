@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Requests\Api\ForgetPasswordRequest;
+use App\Http\Requests\Api\CheckCodeRequest;
+use App\Http\Requests\Api\SendEmailRequest;
 use Mail;
 
 class MailController extends Controller
 {
-    public function basic_email(Request $request) {
+    public function basic_email(SendEmailRequest $request) {
 
        
 
@@ -38,7 +41,7 @@ class MailController extends Controller
         ],200);
      }
 
-     public function checkCode(Request $request)
+     public function checkCode(CheckCodeRequest $request)
      {
          $user = User::where('email',$request->email)->first();
 
@@ -66,7 +69,7 @@ class MailController extends Controller
          }
      }
 
-     public function forgetPassword(Request $request)
+     public function forgetPassword(ForgetPasswordRequest $request)
      {
         $user = User::where('email',$request->email)->first();
 
