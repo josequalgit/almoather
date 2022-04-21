@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Mail;
 
 class MailController extends Controller
@@ -18,6 +19,23 @@ class MailController extends Controller
         });
         echo "Basic Email Sent. Check your inbox.";
      }
+
+     public function checkCode(Request $request)
+     {
+         $user = User::where('email',$request->email)->first();
+
+         if(!$user)
+         {
+             return 'user not found';
+         }
+         
+         if($user->code == $request->code)
+         {
+             return 'correct';
+         }
+     }
+
+
 
     
 }

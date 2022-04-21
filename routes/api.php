@@ -30,6 +30,7 @@ Route::group(['prefix'=>'auth'],function(){
     #SEND EMAIL ROUTE
     Route::controller(MailController::class)->prefix('mail')->group(function(){
         Route::post('send','basic_email');
+        Route::post('checkCode','checkCode');
     });
 
     #REGISTER ROUTES
