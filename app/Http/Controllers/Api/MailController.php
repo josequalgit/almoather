@@ -45,6 +45,27 @@ class MailController extends Controller
          }
      }
 
+     public function forgetPassword(Request $request)
+     {
+        $user = User::where('email',$request->email)->first();
+
+        if(!$user)
+        {
+           return response()->json([
+               'err'=>'user not found',
+               'status'=>404
+           ],404);
+        }
+
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return response()->json([
+            'msg'=>'password was changed',
+            'status'=>200
+        ],200);
+     }
+
 
 
     
