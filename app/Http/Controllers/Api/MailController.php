@@ -17,7 +17,11 @@ class MailController extends Controller
               ('Laravel Basic Testing Mail');
            $message->from('qusai@josequal.com','Josequal');
         });
-        echo "Basic Email Sent. Check your inbox.";
+       // echo "Basic Email Sent. Check your inbox.";
+        return response()->json([
+            'msg'=>'Email Sent',
+            'status'=>200
+        ],200);
      }
 
      public function checkCode(Request $request)
