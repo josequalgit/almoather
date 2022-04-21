@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use App\Models\SocialMedia;
+use DB;
 class Ad extends Model implements HasMedia
 {
     use HasFactory , InteractsWithMedia,SoftDeletes;
@@ -210,6 +211,24 @@ class Ad extends Model implements HasMedia
        return Contract::where(['influencer_id'=>$inf_id])
         ->where(['ad_id'=>$this->id])
         ->first();
+    }
+
+
+    public function getSocialMediaLinks()
+    {
+        $socialMedia = DB::table('social_media_id')->where('ad_id',$this->id)->get();
+        $data = [];
+        foreach ($socialMedia as $key => $value) {
+            $obj = (object) [];
+            $t = SocialMedia::find($value->social_media_id);
+            $obj->image = $t->image;
+            $obj->title = $t->title;
+            $obj->link = $value->link;
+            array_push($data,$obj);
+        }
+      //  dd($data);
+        return $data;
+
     }
    
 

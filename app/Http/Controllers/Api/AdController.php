@@ -144,6 +144,7 @@ class AdController extends Controller
             'err'=>'There is no contract in the system',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
+        
         $data->socialMediasAccount()->attach($request->prefered_media_id);
 		$data->save();
 

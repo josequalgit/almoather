@@ -21,10 +21,16 @@ use App\Http\Controllers\Api\BankController;
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\SlideController;
 use App\Http\Controllers\Api\CampaignGoalController;
+use App\Http\Controllers\Api\MailController;
 
 Route::group(['prefix'=>'auth'],function(){
     Route::post('login',[AuthController::class,'login']);
     Route::get('changeLanguage/{lang}',[AuthController::class,'changeLang']);
+
+    #SEND EMAIL ROUTE
+    Route::controller(MailController::class)->prefix('mail')->group(function(){
+        Route::post('send','basic_email');
+    });
 
     #REGISTER ROUTES
     Route::controller(RegisterController::class)->prefix('register')->group(function(){

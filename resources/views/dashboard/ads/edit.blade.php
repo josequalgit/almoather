@@ -208,7 +208,284 @@
         
         <form method="post" enctype="multipart/form-data">
            @csrf
-            <div class="form-row">
+
+           <div class="container">
+            <div class="main-body">
+                  <div class="row gutters-sm">
+                    <div class="col-md-4 mb-3">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="d-flex flex-column align-items-center text-center">
+                            <img src="{{ $data->customers->users->image?$data->customers->users->image['url']:null }}" alt="Admin" class="rounded-circle" width="150">
+                            <div class="mt-3">
+                              <h5>{{ $data->customers->first_name }} {{ $data->customers->middle_name }} {{ $data->customers->last_name }}</h5>
+                              <p class="text-secondary mb-1">Customer</p>
+                              {{-- <button class="btn btn-primary">Follow</button> --}}
+                              <a href="{{route('dashboard.customers.edit',$data->customers->id)}}" class="btn btn-outline-primary">Edit</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card mt-3">
+                      
+                        <ul class="list-group list-group-flush">
+                         
+                          <h6>Social Media</h6>
+
+                          @foreach ($data->getSocialMediaLinks() as $item)
+                         
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                              <h6 class="mb-0"><img style="width: 25px; height:25px;" src="{{ $item->image }}" />{{ $item->title }}</h6>
+                              <a target="_blank" href="{{ $item->link }}" class="text-secondary">Show</a>
+                            </li>                              
+                          @endforeach
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="col-md-8">
+                      <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                          <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Basic Info</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">About</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Locations</a>
+                        </li>
+                      </ul><!-- Tab panes -->
+                      <div class="tab-content">
+                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                          <div class="card mb-3">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <h6 class="mb-0">Name</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                  {{ $data->store }}
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <h6 class="mb-0">Certificate number</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                  {{ $data->cr_num }}
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <h6 class="mb-0">Vat</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                 {{ $data->is_vat ?'Yes':'No' }}
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <h6 class="mb-0">In Charge Of</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary text-uppercase">
+                                  {{ $data->relation }}
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <h6 class="mb-0">Marouf Number</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                 {{ $data->marouf_num }}
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <h6 class="mb-0">Type</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                 {{ $data->ad_type }}
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <h6 class="mb-0">Budget</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                 {{ $data->budget }}
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-12">
+                                  <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-2" role="tabpanel">
+                          <div class="card mb-3">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <h6 class="mb-0">Goal</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                  {{ $data->campaignGoals->title }}
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <h6 class="mb-0">About</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                  {{ $data->about }}
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <h6 class="mb-0">About Product</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                 {{ $data->about_product }}
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <h6 class="mb-0">Social Media</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary text-uppercase">
+                                  <img style="width: 20px; height:20px;" src="{{  $data->socialMediasAccount[0]->image }}" />
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <h6 class="mb-0">Link</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                 <a class="btn btn-secondary" target="_blank" href="{{ $data->store_link }}"><i class="bx bx-bullseye"></i></a> 
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-12">
+                                  <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-3" role="tabpanel">
+                          <div class="card mb-3">
+                            <div class="card-body">
+                              @foreach ($data->storeLocations as $key=>$item)
+                                <div class="row">
+                                  <div class="col-sm-3">
+                                    <h6 class="mb-0">{{ $key + 1 }}</h6>
+                                  </div>
+                                  <div class="col-sm-9 text-secondary">
+                                    {{ $item->countries->name }} {{ $item->cities->name }} {{ $item->areas->name }}
+                                  </div>
+                                </div>
+                                <hr>
+                              @endforeach
+                          
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                   
+        
+                      <div class="row gutters-sm">
+                        <div class="col-sm-6 mb-3">
+                          <div class="card h-100">
+                            <div class="card-body">
+                              <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Add</i>Images</h6>
+
+                              {{-- <small>Web Design</small> --}}
+                              @foreach ($data->image as $item)
+                                <div class="progress mb-3" style="height: 5px">
+                                  <img src="https://zqzhang.github.io/demo/support/image-src.png" />
+                                </div>  
+                              @endforeach
+                              <div class="row">
+                                <div class="col-2 mt-2">
+                                  <img style="width:50px;height:50px;" src="https://zqzhang.github.io/demo/support/image-src.png" />
+
+                                </div>
+                              </div>
+
+                
+                              {{-- <small>Website Markup</small>
+                              <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <small>One Page</small>
+                              <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <small>Mobile Template</small>
+                              <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <small>Backend API</small>
+                              <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div> --}}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                          <div class="card h-100">
+                            <div class="card-body">
+                              <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
+                              <small>Web Design</small>
+                              <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <small>Website Markup</small>
+                              <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <small>One Page</small>
+                              <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <small>Mobile Template</small>
+                              <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <small>Backend API</small>
+                              <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+        
+        
+        
+                    </div>
+                  </div>
+        
+                </div>
+            </div>
+
+
+
+
+            {{-- <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="inputEmail4">Type</label>
                 <input disabled value="{{ old('type')?old('type'):$data->type}}" name="type" type="full_name" class="form-control" id="inputtype4" placeholder="type">
@@ -224,12 +501,7 @@
               <label for="inputAddress2">Customer</label>
               <input disabled value="{{ $data->customers->first_name }} {{ $data->customers->middle_name }} {{ $data->customers->last_name }}" name="budget" type="text" class="form-control" id="inputAddress2" placeholder="Customer Name">
             </div>
-            {{-- @if ($data->influncers)
-            <div class="form-group">
-              <label for="inputAddress2">Influencer</label>
-              <input disabled value="{{ old('influncer_id')?old('influncer_id'):$data->influncers->first_name.' '.$data->customers->last_name}}" name="budget" type="text" class="form-control" id="inputAddress2" placeholder="budget">
-            </div>
-            @endif --}}
+           
             <div class="form-group">
               <label for="inputAddress2">Budget</label>
               <input disabled value="{{ old('budget')?old('budget'):$data->budget}}" name="budget" type="text" class="form-control" id="inputAddress2" placeholder="budget">
@@ -283,25 +555,6 @@
             </div>
             @endif
 
-            {{-- <div class="form-group">
-                <label for="inputAddress2">Social Media</label>
-                <input disabled value="{{ old('social_media_id')?old('social_media_id'):$data->socialMedias->name}}" name="social_media_id" type="text" class="form-control" id="inputAddress2" placeholder="social_media_id">
-            </div> --}}
-          
-            {{-- <div class="form-group">
-                <label for="inputAddress2">Country</label>
-                <input disabled value="{{ old('country_id')?old('country_id'):$data->countries->name}}" name="country_id" type="text" class="form-control" id="inputAddress2" placeholder="country_id">
-            </div> --}}
-            {{-- <div class="form-group">
-                <label for="inputAddress2">City</label>
-                <input disabled value="{{ old('city_id')?old('city_id'):$data->cities->name}}" name="city_id" type="text" class="form-control" id="inputAddress2" placeholder="city_id">
-            </div>
-          
-            <div class="form-group">
-                <label for="inputAddress2">Area</label>
-                <input disabled value="{{ old('area_id')?old('area_id'):$data->areas?->name}}" name="area_id" type="text" class="form-control" id="inputAddress2" placeholder="area_id">
-            </div> --}}
-
             <div class="form-group">
                 <label for="inputAddress2">About</label>
                 <textarea class="form-control" disabled rows="11">{{ $data->about }}</textarea>
@@ -326,15 +579,15 @@
                 <label for="inputAddress2">Scenario</label>
                 <textarea class="form-control" disabled rows="11">{{ $data->scenario }}</textarea>
             </div>
-            @endif
+            @endif --}}
 
-            <div class="form-group">
-              {{-- <label class="col mb-2" for="inputAddress2">Image</label>
+            {{-- <div class="form-group">
+              <label class="col mb-2" for="inputAddress2">Image</label>
               <a target="_blank" download href="{{ $data->image }}">
-              <img id="ad_image" src="{{ $data->image }}" /> --}}
+              <img id="ad_image" src="{{ $data->image }}" />
             </a>
               
-            </div>
+            </div> --}}
             @if ($data->document)
             <div class="form-group">
               <label class="col mb-2" for="inputAddress2">document</label>
@@ -358,17 +611,7 @@
             @endforeach
             @endif
 
-            {{-- <button type="button" class="btn btn-secondary mt-2 mb-2">
-              <i class="bx bx-show white" aria-hidden="true"></i>
-            </button> --}}
-            {{-- <div class="form-group">
-              <label class="col mb-2" for="inputAddress2">Matched</label>
-              <button  {{ $data->status != 'approve'?'disabled':''}} onclick="openModel()" id="myModal" type="button" class="btn btn-secondary mb-2" data-toggle="modal" data-target="#exampleModal">
-                <i class="bx bx-show white" aria-hidden="true"></i>
-              </button>
-              
-            </div> --}}
-           
+          
             
 
             <div class="form-group">
@@ -378,10 +621,7 @@
                 <option disabled {{ $data->status == 'pending'?'selected':'' }} value="pending">Pending</option>
                 <option {{ $data->status == 'rejected'?'selected':'' }} value="rejected">Rejecte</option>
                 <option {{ $data->status == 'approve'?'selected':'' }} value="approve">Approve</option>
-                {{-- <option disabled {{ $data->status == 'prepay'?'selected':'' }} value="prepay">Pre Pay</option>
-                <option disabled {{ $data->status == 'fullpayment'?'selected':'' }} value="fullpayment">Full Paymet</option>
-                <option disabled {{ $data->status == 'progress'?'selected':'' }} value="progress">Progress</option>
-                <option disabled {{ $data->status == 'complete'?'selected':'' }} value="complete">Complete</option> --}}
+               
               </select>
               @elseif($data->status == 'approve'||$data->status == 'prepay'||$data->status == 'fullpayment')
               <select id="status" class="form-control" id="exampleFormControlSelect1">
@@ -389,16 +629,12 @@
                 <option disabled {{ $data->status == 'rejected'?'selected':'' }} value="rejected">Rejecte</option>
                 <option disabled {{ $data->status == 'approve'?'selected':'' }} value="approve">Approve</option>
                 <option disabled {{ $data->status == 'prepay'?'selected':'' }} value="prepay">Pre Pay</option>
-                {{-- <option disabled {{ $data->status == 'fullpayment'?'selected':'' }} value="fullpayment">Full Paymet</option>
-                <option disabled {{ $data->status == 'progress'?'selected':'' }} value="progress">Progress</option>
-                <option disabled {{ $data->status == 'complete'?'selected':'' }} value="complete">Complete</option> --}}
+            
               </select>
               @else
              
               <select id="status" class="form-control" id="exampleFormControlSelect1">
-                {{-- <option disabled {{ $data->status == 'pending'?'selected':'' }} value="pending">Pending</option>
-                <option disabled {{ $data->status == 'rejected'?'selected':'' }} value="rejected">Rejecte</option>
-                <option disabled {{ $data->status == 'approve'?'selected':'' }} value="approve">Approve</option> --}}
+          
                 <option   {{ $data->status == 'prepay'?'selected':'' }} value="prepay">Pre Pay</option>
                 <option disabled {{ $data->status == 'fullpayment'?'selected':'' }} value="fullpayment">Full Paymet</option>
                 <option disabled {{ $data->status == 'progress'?'selected':'' }} value="progress">Progress</option>
@@ -709,6 +945,8 @@
         
 
         </section>
+
+        
 
       
 </div>
