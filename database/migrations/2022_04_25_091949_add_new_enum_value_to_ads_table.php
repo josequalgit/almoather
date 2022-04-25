@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        \DB::statement("ALTER TABLE `ads` CHANGE `relation` `relation` ENUM('owner','employee','advertising company', 'other') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'other';");
+        \DB::statement("ALTER TABLE `ads` CHANGE `status` `relation` ENUM('owner','employee','advertising company', 'other') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'other';");
     }
 
     /**
@@ -24,7 +24,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('ads', function (Blueprint $table) {
-            $table->enum('relation',['owner','employee','advertising company','other'])->default('owner');
+            
         });
     }
 };
