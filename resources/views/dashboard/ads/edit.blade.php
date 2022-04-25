@@ -287,7 +287,7 @@ i.bx.bx-trash {
           </div>
           @endif
         
-        <form method="post" enctype="multipart/form-data">
+        <form id="mainForm" method="post" enctype="multipart/form-data">
            @csrf
 
            <div class="container">
@@ -323,6 +323,7 @@ i.bx.bx-trash {
                           @endforeach
                         </ul>
                       </div>
+                      
                     </div>
                     <div class="col-md-8">
                       <ul class="nav nav-tabs" role="tablist">
@@ -390,10 +391,9 @@ i.bx.bx-trash {
                                   @if($editable)
                                   <select name="relation" class="form-control" aria-label="Default select example">
                                     <option {{ $data->relation == 'owner'?'selected':'' }} value="owner">Owner</option>
-                                    <option {{ !$data->relation == 'manager' ?'selected':'' }} value="manager">Manager</option>
-                                    <option {{ $data->relation == 'marketing' ?'selected':'' }} value="marketing">Marketing</option>
-                                    <option {{ !$data->relation == 'office' ?'selected':'' }} value="office">Office</option>
-                                    <option {{ !$data->relation == 'other' ?'selected':'' }} value="other">Other</option>
+                                    <option {{ $data->relation == 'employee' ?'selected':'' }} value="employee">Employee</option>
+                                    <option {{ $data->relation == 'advertising company' ?'selected':'' }} value="advertising company">Advertising company</option>
+                                    <option {{ $data->relation == 'other' ?'selected':'' }} value="other">Other</option>
                                   </select>
                                   @else
                                   {{ $data->relation }}
@@ -445,7 +445,11 @@ i.bx.bx-trash {
                               <hr>
                               <div class="row">
                                 <div class="col-sm-12">
-                                  <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                                  @if($editable)
+                                  <a class="btn btn-info " onclick="mainForm()" type="button">Update</a>
+                                  @else
+                                  <a class="btn btn-info "  href="{{ route('dashboard.ads.edit',[$data->id,'test']) }}">Edit</a>
+                                  @endif
                                 </div>
                               </div>
                             </div>
@@ -531,9 +535,9 @@ i.bx.bx-trash {
                               <div class="row">
                                 <div class="col-sm-12">
                                   @if($editable)
-                                  <button type="submit"  class="btn btn-outline-primary">Update</a>
+                                  <button type="button" onclick="mainForm()" class="btn btn-info">Update</a>
                                     @else
-                                    <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                                    <a class="btn btn-info "  href="{{ route('dashboard.ads.edit',[$data->id,'test']) }}">Edit</a>
                                   @endif
                                   {{-- <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a> --}}
 
@@ -630,16 +634,20 @@ i.bx.bx-trash {
                 </div>
             </div>
 
-            @if ($data->document)
+            {{-- @if ($data->document)
             <div class="form-group">
               <label class="col mb-2" for="inputAddress2">document</label>
-              <a target="_blank" download href="{{ $data->document }}">
-                <img src="{{ $data->document }}" />
+           
+              @foreach ($data->document as $item)
+              <a target="_blank" download href="{{ $item->url }}">
+                <img src="{{ $item->url }}" />
               </a>
+                  
+              @endforeach
              
             </div>
                 
-            @endif
+            @endif --}}
           
         
 
@@ -1263,6 +1271,10 @@ CKEDITOR.replace('contractContent', {
     });
   }
 
+  function mainForm()
+  {
+    $('#mainForm').submit();
+  }
 
 
 

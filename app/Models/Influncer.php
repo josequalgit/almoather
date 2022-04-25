@@ -142,18 +142,17 @@ class Influncer extends Model implements HasMedia
     {
        
         $mediaItems = $this->getMedia('snap_video');
-        $publicFullUrl = [];
+        $publicFullUrl = null;
         if(count($mediaItems) > 0)
         {
-			foreach($mediaItems as $item)
-			{
-                $obj = (object)[
-                    'id'=>$item->id,
-                    'url'=>$item->getFullUrl()
+		
+                $publicFullUrl = (object)[
+                    'id'=>$mediaItems[0]->id,
+                    'url'=>$mediaItems[0]->getFullUrl()
                 ];
 				// $publicFullUrl = $item->getFullUrl();
-				array_push($publicFullUrl,$obj);
-			}
+			
+			
            
         }
         return $publicFullUrl;
