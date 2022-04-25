@@ -458,7 +458,15 @@ i.bx.bx-trash {
                                   <h6 class="mb-0">Goal</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
+                                  
+                                  @if($editable)
+                                  <select name="is_vat" class="form-control" aria-label="Default select example">
+                                    <option {{ $data->is_vat?'selected':'' }} value="1">Yes</option>
+                                    <option {{ !$data->is_vat?'selected':'' }} value="0">No</option>
+                                  </select>
+                                  @else
                                   {{ $data->campaignGoals->title }}
+                                  @endif
                                 </div>
                               </div>
                               <hr>

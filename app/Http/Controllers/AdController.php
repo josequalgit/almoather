@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Ad;
 use App\Models\CustomerAdRating;
 use App\Models\Category;
+use App\Models\CampaignGoal;
 use App\Models\Contract;
 use App\Models\Influncer;
 use App\Models\User;
@@ -43,6 +44,7 @@ class AdController extends Controller
         $matches = $data->matches()->where('chosen',1)->get();
         $unMatched = $data->matches()->where('chosen',0)->get();
         $categories = Category::get();
+        $goals = CampaignGoal::select('name')->get();
         return view('dashboard.ads.edit',compact('data','matches','unMatched','categories','editable'));
     }
 
