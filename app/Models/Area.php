@@ -16,7 +16,7 @@ class Area extends Model
 
     public function cities()
     {
-        return $this->belongs(City::class,'city_id');
+        return $this->hasMany(City::class,'area_id');
     }
 
     public function ads()
@@ -26,6 +26,11 @@ class Area extends Model
 
     public function storeLocations()
     {
-        return $this->hasMany(Area::class,'area_id');
+        return $this->hasMany(StoreLocation::class,'area_id');
+    }
+
+    public function countries()
+    {
+        return $this->belongsTo(Country::class,'country_id');
     }
 }

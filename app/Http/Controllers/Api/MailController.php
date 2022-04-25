@@ -31,7 +31,7 @@ class MailController extends Controller
      
         Mail::send(['text'=>'mail'], $data, function($message) use($data){
            $message->to($data['email'], 'Test Email')->subject
-              ('Laravel Basic Testing Mail');
+              ('Password Reset');
            $message->from('qusai@josequal.com','Josequal');
         });
        // echo "Basic Email Sent. Check your inbox.";
@@ -63,7 +63,7 @@ class MailController extends Controller
          else
          {
             return response()->json([
-                'msg'=>'wrong code',
+                'err'=>'wrong code',
                 'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
             ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
          }

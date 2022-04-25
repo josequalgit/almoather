@@ -39,7 +39,8 @@ class Ad extends Model implements HasMedia
         'relation',
         'is_added_tax',
         'is_vat',
-        'about_product'
+        'about_product',
+        'tax_value'
     ];
 
     protected $append = 
@@ -138,10 +139,14 @@ class Ad extends Model implements HasMedia
         {
 			foreach($mediaItems as $item)
 			{
+                $obj = (object)[
+                    'id'=>$item->id,
+                    'url'=>$item->getFullUrl()
+                ];
 				// $publicFullUrl = $item->getFullUrl();
-				array_push($publicFullUrl,$item->getFullUrl());
+				array_push($publicFullUrl,$obj);
 			}
-			        }
+		}
         return $publicFullUrl;
    }
     public function getVideosAttribute() {
@@ -151,19 +156,32 @@ class Ad extends Model implements HasMedia
         {
 			foreach($mediaItems as $item)
 			{
+                $obj = (object)[
+                    'id'=>$item->id,
+                    'url'=>$item->getFullUrl()
+                ];
 				// $publicFullUrl = $item->getFullUrl();
-				array_push($publicFullUrl,$item->getFullUrl());
+				array_push($publicFullUrl,$obj);
 			}
            
         }
         return $publicFullUrl;
    }
     public function getDocumentAttribute() {
-        $mediaItems = $this->getMedia('documnet');
-        $publicFullUrl = null;
+        $mediaItems = $this->getMedia('commercial_docs');
+        $publicFullUrl = [];
         if(count($mediaItems) > 0)
         {
-            $publicFullUrl = $mediaItems[0]->getFullUrl();
+			foreach($mediaItems as $item)
+			{
+                $obj = (object)[
+                    'id'=>$item->id,
+                    'url'=>$item->getFullUrl()
+                ];
+				// $publicFullUrl = $item->getFullUrl();
+				array_push($publicFullUrl,$obj);
+			}
+           
         }
         return $publicFullUrl;
    }

@@ -16,7 +16,7 @@ trait AdResponse {
             'id'=>$ad->id,
             'image'=>$ad->image,
             'videos'=>$ad->videos,
-            // 'documnet'=>$ad->documnet,
+            'cr_certificate'=>$ad->document,
             'campaign_goal'=>$ad->campaignGoals->title,
             'logo'=>$ad->logo,
             'locations'=>$ad->storeLocation?$ad->storeLocations()->get()->map(function($item){
@@ -60,6 +60,7 @@ trait AdResponse {
             'discount_code'=>$ad->discount_code,
             'hasStore'=>$ad->has_hasStore?true:false,
             'is_onSite'=>$ad->onSite?'Online':'Site',
+            'tax_value'=>$ad->tax_value,
            
       ];
 

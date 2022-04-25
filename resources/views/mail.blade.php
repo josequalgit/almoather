@@ -1,5 +1,5 @@
-<h1>ResetPassword</h1>
+ResetPassword
 
-<p>Code: {{$code}}</p>
+Code: {{$code}}
 
-<p>Sending Mail from Laravel.</p>
+Sending Mail from Al Moather.

@@ -28,6 +28,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('main2/css/components.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('main2/css/themes/dark-layout.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('main2/css/themes/semi-dark-layout.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/videopopup.css') }}">
     <!-- END: Theme CSS-->
 
 
@@ -253,6 +254,7 @@
     </footer>
     <!-- END: Footer-->
 
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- BEGIN: Vendor JS-->
     <script src="{{ asset('main2/vendors/js/vendors.min.js') }}"></script>
@@ -289,6 +291,7 @@
     <script src="{{ asset('main2/js/scripts/modal-edit-user.js') }}"></script>
     <script src="{{ asset('main2/js/pages-account-settings-billing') }}"></script>
     <script src="{{ asset('main2/js/pages-account-settings-security') }}"></script> --}}
+    <script src="{{ asset('js/videopopup.js') }}"></script>
 
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

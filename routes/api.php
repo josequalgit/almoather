@@ -94,7 +94,7 @@ Route::group(['prefix'=>'auth'],function(){
 
     #GET AREAS
     Route::controller(AreaController::class)->prefix('areas')->group(function(){
-        Route::get('/{city_id}','index');
+        Route::get('/','index');
     });
 
     #GET REGIONS

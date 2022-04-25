@@ -10,7 +10,7 @@ use App\Models\Contract;
 use App\Models\Influncer;
 use App\Models\User;
 use App\Models\InfluncerCategory;
-use Auth,Alert;
+use Auth,Alert,DB;
 use Carbon\Carbon;
 use App\Models\InfluencerRateing;
 use App\Models\MarketingAdRating;
@@ -18,7 +18,9 @@ use App\Models\AdsInfluencerMatch;
 use App\Http\Requests\UpdateContractAds;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\AddInfluencer;
-
+use App\Http\Requests\UploadVideoRequest;
+use App\Http\Requests\UploadImageRequest;
+use Illuminate\Support\Facades\Storage;
 
 
 class AdController extends Controller
@@ -35,13 +37,13 @@ class AdController extends Controller
         return view('dashboard.ads.index',compact('data','counter'));
     }
 
-    public function edit($id)
+    public function edit($id , $editable = null)
     {
         $data = Ad::findOrFail($id);
         $matches = $data->matches()->where('chosen',1)->get();
         $unMatched = $data->matches()->where('chosen',0)->get();
         $categories = Category::get();
-        return view('dashboard.ads.edit',compact('data','matches','unMatched','categories'));
+        return view('dashboard.ads.edit',compact('data','matches','unMatched','categories','editable'));
     }
 
     public function update(Request $request , $id)
@@ -364,6 +366,61 @@ class AdController extends Controller
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
 
+    }
+
+
+    public function uploadVideo(UploadVideoRequest $request,$id)
+    {
+        $data = Ad::find($id);
+        if(!$data) return response()->json([
+            'msg'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $data->addMedia($request->file('file'))
+        ->toMediaCollection('adVideos');
+
+
+        return response()->json([
+            'msg'=>'video was added',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+    }
+
+    public function uploadImage(UploadImageRequest $request,$id)
+    {
+        $data = Ad::find($id);
+        if(!$data) return response()->json([
+            'msg'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $data->addMedia($request->file('file'))
+        ->toMediaCollection('adImage');
+
+
+        return response()->json([
+            'msg'=>'video was added',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+    }
+
+    public function deleteFile($file_id)
+    {
+        $media = DB::table('media')->where('id',$file_id)->first();
+        if(!$media)return response()->json([
+            'err'=>'file not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+        Storage::deleteDirectory(public_path('storage/'.$media->model_id.'/'.$media->file_name));
+        $model_type = $media->model_type;
+
+        $model = $model_type::find($media->model_id);
+        $model->deleteMedia($media->id);
+        return response()->json([
+            'msg'=>'file was deleted',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 
 

@@ -16,7 +16,6 @@ class AreaSeeder extends Seeder
     {
         Area::create([
             'name'=>'Tabok',
-            'city_id'=>1
         ]);
     }
 }

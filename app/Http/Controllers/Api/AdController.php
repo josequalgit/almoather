@@ -116,7 +116,7 @@ class AdController extends Controller
     public function store(AdRequest $request)
     {
         #CHECK REQUEST 
-        if(!$request->hasFile('cr_image')&&!$request->has_marouf_num)
+        if(!$request->hasFile('commercial_doc')&&!$request->has_marouf_num)
         {
             return response()->json([
                 'err'=>'please upload a document or add the authentication number',
@@ -209,6 +209,11 @@ class AdController extends Controller
         {
             $data->addMedia($request->file('cr_image'))
             ->toMediaCollection('document');
+        }
+        if($request->hasFile('commercial_doc'))
+        {
+            $data->addMedia($request->file('commercial_doc'))
+            ->toMediaCollection('commercial_docs');
         }
         if($request->hasFile('logo'))
         {

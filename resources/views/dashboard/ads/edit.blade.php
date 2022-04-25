@@ -190,6 +190,87 @@
   width: 150px;
   border-radius: 13px;
 }
+i.bx.bx-video {
+    font-size: 116px;
+}
+i.bx.bx-image {
+    font-size: 116px;
+}
+i.bx.bx-trash {
+    font-size: 116px;
+}
+#headerPopup{
+  width:75%;
+  margin:0 auto;
+}
+
+#headerPopup iframe{
+  width:100%;
+  margin:0 auto;
+}
+#fade {
+  display: none;
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 1001;
+  -moz-opacity: 0.8;
+  opacity: .80;
+  filter: alpha(opacity=80);
+}
+
+#light {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 600px;
+  max-height: 360px;
+  margin-left: -300px;
+  margin-top: -180px;
+  border: 2px solid #FFF;
+  background: #FFF;
+  z-index: 1002;
+  overflow: visible;
+}
+
+#boxclose {
+  float: right;
+  cursor: pointer;
+  color: #fff;
+  border: 1px solid #AEAEAE;
+  border-radius: 3px;
+  background: #222222;
+  font-size: 31px;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 0px;
+  padding: 11px 3px;
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  z-index: 1002;
+  opacity: 0.9;
+}
+
+.boxclose:before {
+  content: "×";
+}
+
+#fade:hover ~ #boxclose {
+  display:none;
+}
+
+.test:hover ~ .test2 {
+  display: none;
+}
+.deleteButton{
+    border: none;
+    background: none;
+}
 
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
@@ -263,7 +344,11 @@
                                   <h6 class="mb-0">Name</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
+                                  @if($editable)
+                                  <input class="form-control" name="store" value="{{ old('store')??$data->store }}" />
+                                  @else
                                   {{ $data->store }}
+                                  @endif
                                 </div>
                               </div>
                               <hr>
@@ -272,7 +357,11 @@
                                   <h6 class="mb-0">Certificate number</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
+                                  @if($editable)
+                                  <input class="form-control" name="cr_num" value="{{ old('cr_num')??$data->cr_num }}" />
+                                  @else
                                   {{ $data->cr_num }}
+                                  @endif
                                 </div>
                               </div>
                               <hr>
@@ -281,7 +370,14 @@
                                   <h6 class="mb-0">Vat</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                 {{ $data->is_vat ?'Yes':'No' }}
+                                  @if($editable)
+                                  <select name="is_vat" class="form-control" aria-label="Default select example">
+                                    <option {{ $data->is_vat?'selected':'' }} value="1">Yes</option>
+                                    <option {{ !$data->is_vat?'selected':'' }} value="0">No</option>
+                                  </select>
+                                  @else
+                                  {{ $data->is_vat ?'Yes':'No' }}
+                                  @endif
                                 </div>
                               </div>
                               <hr>
@@ -290,7 +386,17 @@
                                   <h6 class="mb-0">In Charge Of</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary text-uppercase">
+                                  @if($editable)
+                                  <select name="relation" class="form-control" aria-label="Default select example">
+                                    <option {{ $data->relation == 'owner'?'selected':'' }} value="owner">Owner</option>
+                                    <option {{ !$data->relation == 'manager' ?'selected':'' }} value="manager">Manager</option>
+                                    <option {{ $data->relation == 'marketing' ?'selected':'' }} value="marketing">Marketing</option>
+                                    <option {{ !$data->relation == 'office' ?'selected':'' }} value="office">Office</option>
+                                    <option {{ !$data->relation == 'other' ?'selected':'' }} value="other">Other</option>
+                                  </select>
+                                  @else
                                   {{ $data->relation }}
+                                  @endif
                                 </div>
                               </div>
                               <hr>
@@ -299,7 +405,11 @@
                                   <h6 class="mb-0">Marouf Number</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
+                                 @if($editable)
+                                 <input class="form-control" name="marouf_num" value="{{ old('marouf_num')??$data->marouf_num }}" />
+                                 @else
                                  {{ $data->marouf_num }}
+                                 @endif
                                 </div>
                               </div>
                               <hr>
@@ -308,7 +418,14 @@
                                   <h6 class="mb-0">Type</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
+                                 @if($editable)
+                                 <select name="is_vat" class="form-control" aria-label="Default select example">
+                                   <option {{ $data->ad_type == 'onsite'?'selected':'' }} value="onsite">Onsite</option>
+                                   <option {{ !$data->ad_type == 'online' ?'selected':'' }} value="online">Online</option>
+                                 </select>
+                                 @else
                                  {{ $data->ad_type }}
+                                 @endif
                                 </div>
                               </div>
                               <hr>
@@ -317,7 +434,11 @@
                                   <h6 class="mb-0">Budget</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
+                                  @if($editable)
+                                 <input class="form-control" name="budget" value="{{ old('budget')??$data->budget }}" />
+                                 @else
                                  {{ $data->budget }}
+                                 @endif
                                 </div>
                               </div>
                               <hr>
@@ -410,184 +531,68 @@
                         <div class="col-sm-6 mb-3">
                           <div class="card h-100">
                             <div class="card-body">
-                              <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Add</i>Images</h6>
-
-                              {{-- <small>Web Design</small> --}}
-                              @foreach ($data->image as $item)
-                                <div class="progress mb-3" style="height: 5px">
-                                  <img src="https://zqzhang.github.io/demo/support/image-src.png" />
-                                </div>  
-                              @endforeach
-                              <div class="row">
-                                <div class="col-2 mt-2">
-                                  <img style="width:50px;height:50px;" src="https://zqzhang.github.io/demo/support/image-src.png" />
-
-                                </div>
-                              </div>
-
+                              <h6 class="d-flex align-items-center mb-3"><button onclick="addVideoModal(1)" type="button" class="btn btn-info material-icons text-white mr-2">Add</button>Image</h6>
+                              <ul class="list-group text-white w-100">
+                                @foreach ($data->image as $key => $item)
+                                
+                                <li class="list-group-item d-flex justify-content-between align-content-center ">
+                                    <div class="d-flex flex-row"> <img src="{{ asset('img/icons/misc/jpg.png') }}" width="40" />
+                                        <div class="ml-2">
+                                            <h6 class="mb-0">Image #{{ $key+1 }}</h6>
+                                          
+                                            <div class="about"><button onclick="deleteFileModal( {{$item->id}})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
+                                        </div>
+                                    </div>
+                                    <div class="check"><a class="" target="_blank" href="{{ $item->url }}">Show</i></a></div>
+                                </li>
+                                @endforeach
+                          
+                            </ul>
                 
-                              {{-- <small>Website Markup</small>
-                              <div class="progress mb-3" style="height: 5px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-                              <small>One Page</small>
-                              <div class="progress mb-3" style="height: 5px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-                              <small>Mobile Template</small>
-                              <div class="progress mb-3" style="height: 5px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-                              <small>Backend API</small>
-                              <div class="progress mb-3" style="height: 5px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div> --}}
+                             
                             </div>
                           </div>
                         </div>
                         <div class="col-sm-6 mb-3">
                           <div class="card h-100">
                             <div class="card-body">
-                              <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
-                              <small>Web Design</small>
-                              <div class="progress mb-3" style="height: 5px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-                              <small>Website Markup</small>
-                              <div class="progress mb-3" style="height: 5px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-                              <small>One Page</small>
-                              <div class="progress mb-3" style="height: 5px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-                              <small>Mobile Template</small>
-                              <div class="progress mb-3" style="height: 5px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>
-                              <small>Backend API</small>
-                              <div class="progress mb-3" style="height: 5px">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                              <h6 class="d-flex align-items-center mb-3"><button onclick="addVideoModal()" type="button" class="btn btn-info material-icons text-white mr-2">Add</button>Videos</h6>
+                              <div class="row">
+                                <ul class="list-group text-white w-100">
+                                  @foreach ($data->videos as $key => $item)
+                               
+                                  <li class="list-group-item d-flex justify-content-between align-content-center ">
+                                      <div class="d-flex flex-row"> <img src="{{ asset('img/icons/misc/folderIcon.png') }}" width="40" />
+                                          <div class="ml-2">
+                                              <h6 class="mb-0">Video #{{ $key+1 }}</h6>
+                                              <div class="about"><button onclick="deleteFileModal( {{$item->id}})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
+                                              {{-- <div class="about"> <span>22 Files</span> <span>Jan 21, 2020</span> </div> --}}
+                                          </div>
+                                      </div>
+                                      <div class="check"> <a target="_blank" href="{{ $item->url }}">Show</a></div>
+                                  </li>
+                                  @endforeach
+                            
+                              </ul>
+                                {{-- <ul>
+                                  @foreach ($data->videos as $key => $item)
+                                  <li>
+                                    Video #{{ $key+1 }} (<a href="{{ $item }}" target="_blank">Show!</a>)
+                                  </li>
+                                  @endforeach
+                                  --}}
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-        
-        
-        
+
                     </div>
                   </div>
         
                 </div>
             </div>
 
-
-
-
-            {{-- <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="inputEmail4">Type</label>
-                <input disabled value="{{ old('type')?old('type'):$data->type}}" name="type" type="full_name" class="form-control" id="inputtype4" placeholder="type">
-              </div>
-              <div class="form-group col-md-6">
-                <label for="inputPassword4">Store</label>
-                <input disabled value="{{ old('store')?old('store'):$data->store}}" name="store" type="text" class="form-control" id="inputstore4" placeholder="store">
-              </div>
-            </div>
-           
-            <div class="form-group">
-            
-              <label for="inputAddress2">Customer</label>
-              <input disabled value="{{ $data->customers->first_name }} {{ $data->customers->middle_name }} {{ $data->customers->last_name }}" name="budget" type="text" class="form-control" id="inputAddress2" placeholder="Customer Name">
-            </div>
-           
-            <div class="form-group">
-              <label for="inputAddress2">Budget</label>
-              <input disabled value="{{ old('budget')?old('budget'):$data->budget}}" name="budget" type="text" class="form-control" id="inputAddress2" placeholder="budget">
-            </div>
-            @if($data->ad_script)
-            <div class="form-group">
-              <label for="inputAddress2">Ad Script</label>
-              <input disabled value="{{ old('ad_script')?old('ad_script'):$data->ad_script}}" name="ad_script" type="text" class="form-control" id="inputAddress2" placeholder="ad_script">
-            </div>
-            @endif
-            @if($data->cr_num)
-            <div class="form-group">
-              <label for="inputAddress2">Certificate number</label>
-              <input disabled value="{{ old('cr_num')?old('cr_num'):$data->cr_num}}" name="cr_num" type="text" class="form-control" id="inputAddress2" placeholder="cr_num">
-            </div>
-            @endif
-          
-            <div class="form-group">
-                <label for="inputAddress2">Is Onsite</label>
-                <input disabled value="{{ old('onSite')?old('onSite'):($data->onSite?'Yes':'No')}}" name="onSite" type="text" class="form-control" id="inputAddress2" placeholder="onSite">
-            </div>
-            <div class="form-group">
-                <label for="inputAddress2">Goal</label>
-                <input disabled value="{{ old('campaign_goals_id')?old('campaign_goals_id'):($data->campaignGoals->title)}}" name="campaign_goals_id" type="text" class="form-control" id="inputAddress2" placeholder="campaign_goals_id">
-            </div>
-            @if($data->store_link)
-            <div class="form-group">
-                <label for="inputAddress2">Store Link</label>
-                <input disabled value="{{ old('store_link')?old('store_link'):$data->store_link}}" name="store_link" type="text" class="form-control" id="inputAddress2" placeholder="store_link">
-            </div>
-            @endif
-
-            @if($data->marouf_num)
-            <div class="form-group">
-                <label for="inputAddress2">Marouf Number</label>
-                <input disabled value="{{ old('marouf_num')?old('marouf_num'):$data->marouf_num}}" name="marouf_num" type="text" class="form-control" id="inputAddress2" placeholder="marouf_num">
-            </div>
-            @endif
-
-            @if($data->discount_code)
-            <div class="form-group">
-                <label for="inputAddress2">Discount Code</label>
-                <input disabled value="{{ old('discount_code')?old('discount_code'):$data->discount_code}}" name="discount_code" type="text" class="form-control" id="inputAddress2" placeholder="discount_code">
-            </div>
-            @endif
-
-            @if($data->social_media_id)
-            <div class="form-group">
-                <label for="inputAddress2">Spcial Media</label>
-                <input disabled value="{{ old('social_media_id')?old('social_media_id'):$data->socialMedias->name}}" name="social_media_id" type="text" class="form-control" id="inputAddress2" placeholder="social_media_id">
-            </div>
-            @endif
-
-            <div class="form-group">
-                <label for="inputAddress2">About</label>
-                <textarea class="form-control" disabled rows="11">{{ $data->about }}</textarea>
-            </div>
-
-            @if($data->expense_type !== 'none')
-            <div class="form-group">
-                <label for="inputAddress2">Expense type</label>
-                <textarea class="form-control" disabled rows="11">{{ $data->expense_type }}</textarea>
-            </div>
-            @endif
-            
-            @if($data->reject_note)
-            <div class="form-group">
-                <label for="inputAddress2">Reject Note</label>
-                <textarea class="form-control" disabled rows="11">{{ $data->reject_note }}</textarea>
-            </div>
-            @endif
-
-            @if($data->scenario)
-            <div class="form-group">
-                <label for="inputAddress2">Scenario</label>
-                <textarea class="form-control" disabled rows="11">{{ $data->scenario }}</textarea>
-            </div>
-            @endif --}}
-
-            {{-- <div class="form-group">
-              <label class="col mb-2" for="inputAddress2">Image</label>
-              <a target="_blank" download href="{{ $data->image }}">
-              <img id="ad_image" src="{{ $data->image }}" />
-            </a>
-              
-            </div> --}}
             @if ($data->document)
             <div class="form-group">
               <label class="col mb-2" for="inputAddress2">document</label>
@@ -599,17 +604,7 @@
                 
             @endif
           
-            @if($data->videos&&count($data->videos))
-            @foreach ($data->videos as $item)
-              <div class="form-group">
-                <label class="col mb-2" for="inputAddress2">Videos</label>
-                <video class="col" width="320" height="240" controls>
-                  <source src="{{ $data->item }}" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-              </div>
-            @endforeach
-            @endif
+        
 
           
             
@@ -649,7 +644,7 @@
               @endcan
               
             </div>
-
+            @if(count($matches) > 0)
             <div class="table-responsive mt-2">
               <label class="col mb-2" for="inputAddress2">Matched</label>
               <table class="table zero-configuration">
@@ -668,15 +663,16 @@
                       @foreach ($matches as $item)
                               <tr>
                                 <td>
+                                 
                                   <div class="thumb">
-                                    {{-- <img  class="img-fluid inf-image" src="{{ $item->influencers->users->infulncerImage }}" alt=""> --}}
+                                    <img  class="img-fluid inf-image" src="{{ $item->influencers->users->infulncerImage?$item->influencers->users->infulncerImage['url']:null }}" alt="">
                                   </div>
                                 </td>
 
                                 {{-- @php
                                   dd($item->influencers->checkIfAccepted($data->id));    
                                 @endphp --}}
-                                  <td>{{  $item->influencers->full_name }}</td>
+                                  <td>{{  $item->influencers->first_name }} {{  $item->influencers->middle_name }} {{  $item->influencers->last_name }}</td>
                                   <td>{{ $item->match }}%</td>
                                   <td>{{ $item->chosen ? 'Yes':'No' }}</td>
                                   <td>
@@ -695,19 +691,6 @@
                                       <i class="bx bx-send"></i>
                                      </button> 
 
-                                     {{-- @if ($item->status == 'pending')
-                                     <button disabled  class="btn btn-secondary" href="{{ route('dashboard.ads.editContract',$item->id) }}">
-                                      <i class="bx bx-book-content"></i>
-                                     </button> 
-                                     @elseif($item->status == 'fullpayment'||$item->status == 'progress'||$item->status == 'influncer_complete'||$item->status == 'complete'||$item->status == 'incomplete'||$item->status == 'rejected')
-                                     <button  onclick="openModalSeeContract('{{ $item->contacts->content }}')" class="btn btn-secondary">
-                                      <i class="bx bx-book-content"></i>
-                                     </button> 
-                                         @else
-                                         <a  class="btn btn-secondary" href="{{ route('dashboard.ads.editContract',$item->id) }}">
-                                          <i class="bx bx-book-content"></i>
-                                         </a> 
-                                     @endif --}}
                                    
                                   </td>
                               </tr>
@@ -715,16 +698,16 @@
                   </tbody>
               </table>
           </div>
+            @endif
       </div>
-      {{-- @can('See Ads')
-      <div class="p-1">
-          {{ $data->links('pagination::bootstrap-5') }}
-      </div>
-      @endcan --}}
+    
            
 
           </form>
         </div>
+
+  
+          
         
         <div id="rejectedReson" class="modal" tabindex="-1" role="dialog">
           <div class="modal-dialog" role="document">
@@ -943,12 +926,52 @@
           </div>
         </div>
         
+        <div id="myInput" class="modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">File Section</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <h3 id="addFileIcon" class="text-center" ><i class="bx bx-video"></i></h3>
+                <h3 id="addFileModalTitle" class="text-center">Add Video</h3>
+                <p></p>
+                <input type="file" id="adVideo" />
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button onclick="addVideo()" type="button" class="btn btn-primary">Upload</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="deleteFile" class="modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Deleteing Files</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <h3 id="addFileIcon" class="text-center mt-4" ><i class="bx bx-trash"></i></h3>
+                <h3 id="addFileModalTitle" class="text-center">Delete</h3>
+                <p class="text-center">After Deleteing this file you will not be able to restore it</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button onclick="deleteFile()" type="button" class="btn btn-danger">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         </section>
-
-        
-
-      
 </div>
 
 
@@ -983,7 +1006,8 @@ CKEDITOR.replace('contractContent', {
       height: 220,
       removeButtons: 'PasteFromWord'
     });
-
+  let fileType = null;
+  let deletetedFileId = null;
   function changeStatus()
   {
     let statusValue = document.getElementById('status').value;
@@ -1096,7 +1120,7 @@ CKEDITOR.replace('contractContent', {
       type:'POST',
       success:(res)=>{
         document.getElementById('contractContent').value = '';
-        console.log('success: ',res);
+        location.reload();
         $('#seeContract').modal('toggle');
       },
       error:(err)=>{
@@ -1105,6 +1129,107 @@ CKEDITOR.replace('contractContent', {
     })
     
   }
+
+  function addVideoModal(type = null)
+  {
+    if(type)
+    {
+      fileType = type;
+      $('#addFileModalTitle').html('Add Images');
+      $('#addFileIcon').html('<i class="bx bx-image"></i>');
+    }
+    else
+    {
+      fileType = null;
+      $('#addFileModalTitle').html('Add Videos');
+      $('#addFileIcon').html('<i class="bx bx-video"></i>');
+    }
+    $('#myInput').modal('toggle');
+  }
+
+  function addVideo()
+  {
+    const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+    })
+
+    let video = document.getElementById("adVideo").files[0];
+    let formData = new FormData();
+    formData.append('file', video)
+    let url = '{{route("dashboard.ads.uploadVideo",":id")}}';
+    if(fileType) url = '{{route("dashboard.ads.uploadImage",":id")}}';
+    let addIdToURL = url.replace(':id','{{ $data->id }}');
+    $.ajax({
+      url:addIdToURL,
+      type:'POST',
+      contentType: false,
+      processData: false,
+      data:formData,
+      success:(res)=>{
+        if(res.status == 200)
+        {
+            location.reload();
+        }
+        else
+        {
+            Toast.fire({
+            icon: 'error',
+            title: 'server response :'+res.msg
+          })
+        }
+      },
+      error:(res)=>{
+        
+        let msg = res.responseJSON.err;
+        if(!msg) msg = 'Server Error!'
+
+        Toast.fire({
+          icon: 'error',
+          title: msg
+        })
+
+      }
+    });
+
+  }
+
+  function deleteFileModal(id)
+  {
+    deletetedFileId = id;
+
+    $('#deleteFile').modal('toggle');
+  }
+
+  function deleteFile()
+  {
+    let url = '{{ route("dashboard.ads.deleteFile",":id") }}';
+    let updateUrl = url.replace(':id',deletetedFileId);
+    $.ajax({
+      url:updateUrl,
+      type:'POST',
+      data:{},
+      success:(res)=>{
+        console.log('res: ',res);
+        location.reload();
+      },
+      error:(err)=>{
+        console.log('err: ',err);
+      }
+    });
+  }
+
+
+
+
+      
   
 
 </script>

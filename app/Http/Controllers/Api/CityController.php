@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Country;
+use App\Models\Area;
 
 class CityController extends Controller
 {
     public function index($id)
     {
-        $data = Country::find($id);
+        $data = Area::find($id);
         if(!$data) return response()->json([
-            'err'=>"Country dose't exist",
+            'err'=>"Area dose't exist",
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
