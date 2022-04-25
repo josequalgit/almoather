@@ -302,11 +302,8 @@ i.bx.bx-trash {
                               <h5>{{ $data->customers->first_name }} {{ $data->customers->middle_name }} {{ $data->customers->last_name }}</h5>
                               <p class="text-secondary mb-1">Customer</p>
                               {{-- <button class="btn btn-primary">Follow</button> --}}
-                              @if($editable)
-                              <a href="{{route('dashboard.customers.edit',$data->customers->id)}}" class="btn btn-outline-primary">Update</a>
-                              @else
+                            
                               <a href="{{route('dashboard.customers.edit',$data->customers->id)}}" class="btn btn-outline-primary">Edit</a>
-                              @endif
                             </div>
                           </div>
                         </div>
@@ -533,7 +530,14 @@ i.bx.bx-trash {
                               <hr>
                               <div class="row">
                                 <div class="col-sm-12">
-                                  <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                                  @if($editable)
+                                  <button type="submit"  class="btn btn-outline-primary">Update</a>
+                                    @else
+                                    <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                                  @endif
+                                  {{-- <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a> --}}
+
+                                  {{-- <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a> --}}
                                 </div>
                               </div>
                             </div>

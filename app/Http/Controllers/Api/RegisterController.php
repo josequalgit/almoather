@@ -96,6 +96,9 @@ class RegisterController extends Controller
 
        $data->addMedia($request->file('image'))
        ->toMediaCollection('influncers');
+       
+       $newInfluncer->addMedia($request->file('snap_video'))
+       ->toMediaCollection('snap_video');
 
        if($request->hasFile('cr_file'))
        {

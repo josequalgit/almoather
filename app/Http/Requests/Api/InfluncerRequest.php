@@ -57,7 +57,7 @@ class InfluncerRequest extends FormRequest
             'social_media'=>'required',
            'bank_id'=>'required',
             // 'snap_chat_views'=>'required',
-            // 'snap_chat_video'=>'required',
+            'snap_video'=>'required',
             'commercial_registration_no'=>'required',
             'tax_registration_number'=>'required',
             'bank_account_name'=>'required',
@@ -72,7 +72,7 @@ class InfluncerRequest extends FormRequest
             'cr_file'=>'required',
             'country_code'=>'required',
             
-           // 'snap_chat_video'=>'required|mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4',
+           // 'snap_video'=>'required|mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4',
         ];
     }
 

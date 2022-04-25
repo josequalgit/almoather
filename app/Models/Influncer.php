@@ -62,7 +62,8 @@ class Influncer extends Model implements HasMedia
         'video',
         'verify',
         'commercialFiles',
-        'taxFiles'
+        'taxFiles',
+        'snapVideos'
     ];
 
     public function users()
@@ -135,6 +136,28 @@ class Influncer extends Model implements HasMedia
     {
        
         return $this->users->email_verify_at ? true : false;
+    }
+    
+    public function getSnapVideosAttribute(Type $var = null)
+    {
+       
+        $mediaItems = $this->getMedia('snap_video');
+        $publicFullUrl = [];
+        if(count($mediaItems) > 0)
+        {
+			foreach($mediaItems as $item)
+			{
+                $obj = (object)[
+                    'id'=>$item->id,
+                    'url'=>$item->getFullUrl()
+                ];
+				// $publicFullUrl = $item->getFullUrl();
+				array_push($publicFullUrl,$obj);
+			}
+           
+        }
+        return $publicFullUrl;
+
     }
 
     public function checkIfAccepted($ad_id)
