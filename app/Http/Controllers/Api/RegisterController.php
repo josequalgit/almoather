@@ -97,8 +97,11 @@ class RegisterController extends Controller
        $data->addMedia($request->file('image'))
        ->toMediaCollection('influncers');
 
-       $newInfluncer->addMedia($request->file('commercial_registration_no_file'))
-       ->toMediaCollection('commercial_registration_no_file');
+       if($request->hasFile('commercial_registration_no_file'))
+       {
+           $newInfluncer->addMedia($request->file('commercial_registration_no_file'))
+           ->toMediaCollection('commercial_registration_no_file');
+       }
 
        $newInfluncer->addMedia($request->file('tax_registration_number_file'))
        ->toMediaCollection('tax_registration_number_file');
