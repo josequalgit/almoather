@@ -48,7 +48,7 @@ class AuthController extends Controller
         }
 
         $user = Auth::guard('api')->user();
-
+        //dd($user->email);
         if($user->customers)
         {
             if($request->fcm_token){

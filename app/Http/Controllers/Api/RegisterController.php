@@ -97,16 +97,16 @@ class RegisterController extends Controller
        $data->addMedia($request->file('image'))
        ->toMediaCollection('influncers');
 
-       if($request->hasFile('commercial_registration_no_file'))
+       if($request->hasFile('cr_file'))
        {
-           $newInfluncer->addMedia($request->file('commercial_registration_no_file'))
-           ->toMediaCollection('commercial_registration_no_file');
+           $newInfluncer->addMedia($request->file('cr_file'))
+           ->toMediaCollection('cr_file');
        }
-       if($request->hasFile('tax_registration_number_file'))
-       {
-           $newInfluncer->addMedia($request->file('tax_registration_number_file'))
-           ->toMediaCollection('tax_registration_number_file');
-       }
+    //    if($request->hasFile('tax_registration_number_file'))
+    //    {
+    //        $newInfluncer->addMedia($request->file('tax_registration_number_file'))
+    //        ->toMediaCollection('tax_registration_number_file');
+    //    }
 
        
         //    foreach ($request->snap_chat_video as $value) {
@@ -124,6 +124,7 @@ class RegisterController extends Controller
         //    {
         //        $newInfluncer->socialMedias()->attach($item);
         //    }
+
 
        foreach ($request->social_media as $item) {
             $obj = $item;
@@ -145,6 +146,8 @@ class RegisterController extends Controller
 
         $info = $data->influncers;
         $token = Auth::guard('api')->attempt(['email' => $request->email,'password' => $request->password]);
+        
+        //dd($info);
 
         return response()->json([
             'msg'       => 'Influncer was created',

@@ -57,7 +57,7 @@ trait UserResponse {
              'snap_chat_views'=>$info->snap_chat_views,
              'snap_chat_video'=>$user->snapChatVideo,
              'commercial_registration_no'=>$info->commercial_registration_no,
-             'commercial_registration_no_files'=>$info->commercialFiles,
+             'cr_file'=>$info->commercialFiles,
              'tax_registration_number'=>$info->tax_registration_number,
              'tax_registration_number_files'=>$info->taxFiles,
              'rep_full_name'=>$info->rep_full_name,

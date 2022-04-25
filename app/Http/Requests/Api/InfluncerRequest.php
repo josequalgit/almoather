@@ -69,7 +69,7 @@ class InfluncerRequest extends FormRequest
             'neighborhood'=>'required',
             'rep_full_name'=>'required',
             // 'tax_registration_number_file'=>'required',
-            // 'commercial_registration_no_file'=>'required',
+            'cr_file'=>'required',
             'country_code'=>'required',
             
            // 'snap_chat_video'=>'required|mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4',

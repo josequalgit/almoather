@@ -167,10 +167,10 @@ class Influncer extends Model implements HasMedia
 
     public function getCommercialFilesAttribute()
     {
-        $mediaItems = $this->getMedia('commercial_registration_no_file');
+        $mediaItems = $this->getMedia('cr_file');
         if(count($mediaItems) > 0)
         {
-            $mediaItems = $this->getMedia('commercial_registration_no_file')[0];
+            $mediaItems = $this->getMedia('cr_file')[0];
             $publicFullUrl = null;
             $array_of_links = [];
            
