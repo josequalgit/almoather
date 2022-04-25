@@ -68,7 +68,7 @@ class InfluncerRequest extends FormRequest
             'street'=>'required',
             'neighborhood'=>'required',
             'rep_full_name'=>'required',
-            'tax_registration_number_file'=>'required',
+            // 'tax_registration_number_file'=>'required',
             'commercial_registration_no_file'=>'required',
             'country_code'=>'required',
             
