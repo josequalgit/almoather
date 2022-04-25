@@ -620,7 +620,7 @@ class UpdateDataController extends Controller
         if($type == 4)
         {
             $file = $user->addMedia($request->file('file'))
-            ->toMediaCollection('snapchat_videos');
+            ->toMediaCollection('snap_video');
         }
 
 
