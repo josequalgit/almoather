@@ -210,10 +210,12 @@ class AdController extends Controller
             $data->addMedia($request->file('cr_image'))
             ->toMediaCollection('document');
         }
-        if($request->hasFile('commercial_doc'))
+        if(count($request->commercial_doc) > 0)
         {
-            $data->addMedia($request->file('commercial_doc'))
-            ->toMediaCollection('commercial_docs');
+            foreach ($request->commercial_doc as $key => $value) {
+                $data->addMedia($value)
+                ->toMediaCollection('commercial_docs');
+            }
         }
         if($request->hasFile('logo'))
         {

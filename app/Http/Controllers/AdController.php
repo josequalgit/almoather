@@ -44,7 +44,7 @@ class AdController extends Controller
         $matches = $data->matches()->where('chosen',1)->get();
         $unMatched = $data->matches()->where('chosen',0)->get();
         $categories = Category::get();
-        $goals = CampaignGoal::select('name')->get();
+        $goals = CampaignGoal::select('title')->get();
         return view('dashboard.ads.edit',compact('data','matches','unMatched','categories','editable'));
     }
 

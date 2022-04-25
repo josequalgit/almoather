@@ -479,7 +479,14 @@ i.bx.bx-trash {
                                   <h6 class="mb-0">About</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
+                                  @if($editable)
+                                  <textarea rows="7" class="form-control" name="about">
+                                    {{ $data->about }}
+                                  </textarea>
+                                  @else
                                   {{ $data->about }}
+                                  @endif
+                                  
                                 </div>
                               </div>
                               <hr>
@@ -488,7 +495,13 @@ i.bx.bx-trash {
                                   <h6 class="mb-0">About Product</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                 {{ $data->about_product }}
+                                 @if($editable)
+                                  <textarea rows="7" class="form-control" name="about_product">
+                                    {{ $data->about_product }}
+                                  </textarea>
+                                  @else
+                                  {{ $data->about_product }}
+                                  @endif
                                 </div>
                               </div>
                               <hr>
@@ -497,7 +510,9 @@ i.bx.bx-trash {
                                   <h6 class="mb-0">Social Media</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary text-uppercase">
-                                  <img style="width: 20px; height:20px;" src="{{  $data->socialMediasAccount[0]->image }}" />
+                             
+                                  <img style="width: 20px; height:20px;" src="{{ count($data->socialMediasAccount) > 0 ? $data->socialMediasAccount[0]->image:null }}" />
+                                
                                 </div>
                               </div>
                               <hr>
@@ -506,7 +521,13 @@ i.bx.bx-trash {
                                   <h6 class="mb-0">Link</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                 <a class="btn btn-secondary" target="_blank" href="{{ $data->store_link }}"><i class="bx bx-bullseye"></i></a> 
+                                  @if($editable)
+                                  <input class="form-control" name="store_link" value="{{ old('store_link')??$data->store_link }}" />
+
+                                  @else
+                                  <a class="btn btn-secondary" target="_blank" href="{{ $data->store_link }}"><i class="bx bx-bullseye"></i></a> 
+                                  @endif
+
                                 </div>
                               </div>
                               <hr>
