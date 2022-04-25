@@ -102,9 +102,12 @@ class RegisterController extends Controller
            $newInfluncer->addMedia($request->file('commercial_registration_no_file'))
            ->toMediaCollection('commercial_registration_no_file');
        }
+       if($request->hasFile('tax_registration_number_file'))
+       {
+           $newInfluncer->addMedia($request->file('tax_registration_number_file'))
+           ->toMediaCollection('tax_registration_number_file');
+       }
 
-       $newInfluncer->addMedia($request->file('tax_registration_number_file'))
-       ->toMediaCollection('tax_registration_number_file');
        
         //    foreach ($request->snap_chat_video as $value) {
         //        $data->addMedia($value)
