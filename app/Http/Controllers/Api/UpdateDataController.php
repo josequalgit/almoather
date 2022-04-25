@@ -619,7 +619,7 @@ class UpdateDataController extends Controller
         // }
         if($type == 4)
         {
-            $file = $user->addMedia($request->file('file'))
+            $file = $inf->addMedia($request->file('file'))
             ->toMediaCollection('snap_video');
         }
 
