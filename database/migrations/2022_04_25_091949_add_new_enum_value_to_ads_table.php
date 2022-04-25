@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        \DB::statement("ALTER TABLE `ads` CHANGE `relation` ENUM('owner','employee','advertising company','other') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'owner';");
+        \DB::statement("ALTER TABLE `ads` CHANGE `relation` `relation` ENUM('owner','employee','advertising company','other') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'owner';");
     }
 
     /**
