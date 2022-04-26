@@ -74,6 +74,7 @@ class RegisterController extends Controller
             'tax_registration_number',
           
             'rep_full_name',
+            'rep_email_name',
             'rep_phone_number',
             'rep_city',
             'rep_area',

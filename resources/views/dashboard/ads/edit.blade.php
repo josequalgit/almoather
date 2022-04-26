@@ -287,7 +287,7 @@ i.bx.bx-trash {
           </div>
           @endif
         
-        <form id="mainForm" method="post" enctype="multipart/form-data">
+        <form id="mainForm" action="{{ route('dashboard.ads.updateBasic',$data->id ) }}" method="post" enctype="multipart/form-data">
            @csrf
 
            <div class="container">

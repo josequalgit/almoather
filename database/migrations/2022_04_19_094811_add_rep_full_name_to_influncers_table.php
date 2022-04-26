@@ -18,10 +18,10 @@ return new class extends Migration
             $table->dropColumn('rep_first_name');
             $table->dropColumn('rep_middle_name');
             $table->dropColumn('rep_last_name');
-            $table->string('bank_account_name')->nullable();
-            $table->dropColumn('bank_account_first_name');
-            $table->dropColumn('bank_account_middle_name');
-            $table->dropColumn('bank_account_last_name');
+            // $table->string('bank_account_name')->nullable();
+            // $table->dropColumn('bank_account_first_name');
+            // $table->dropColumn('bank_account_middle_name');
+            // $table->dropColumn('bank_account_last_name');
 
             
         });

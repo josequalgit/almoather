@@ -23,7 +23,6 @@ class InfulencerSeeder extends Seeder
                 'middle_name'=>'Ahmed',
                 'last_name'=>'Ahmed',
                 'nick_name'=>'7modh',
-                'bank_name'=>'Al-at7ad',
                 'bank_account_number'=>'005648002564',
                 'bio'=>'This is my full bio',
                 'milestone'=>'milestone',
@@ -41,14 +40,11 @@ class InfulencerSeeder extends Seeder
                 'id_number'=>'00928989473',
                 'ad_with_vat'=>'12354',
                 'ad_onsite_price_with_vat'=>123,
-                'birthday'=>Carbon::now(),
-                'snap_chat_views'=>1,
                 'commercial_registration_no'=>'123123',
                 'tax_registration_number'=>'123123',
                 'rep_full_name'=>'this is a full name',
-                'rep_id_number_name'=>'123556',
                 'rep_phone_number'=>'123556',
-                'rep_email'=>'email@gmail.com',
+                'bank_id'=>1
             ],
             [
                 'first_name'=>'Ahmed',
@@ -58,7 +54,6 @@ class InfulencerSeeder extends Seeder
                 'milestone'=>'milestone',
                 'street'=>'street',
                 'neighborhood'=>'neighborhood',
-                'bank_name'=>'Al-at7ad',
                 'bank_account_number'=>'005648002564',
                 'bio'=>'This is my full bio',
                 'ads_out_country'=>1,
@@ -73,14 +68,11 @@ class InfulencerSeeder extends Seeder
                 'id_number'=>'00928989473',
                 'ad_with_vat'=>'12354',
                 'ad_onsite_price_with_vat'=>123,
-                'birthday'=>Carbon::now(),
-                'snap_chat_views'=>1,
                 'commercial_registration_no'=>'123123',
                 'tax_registration_number'=>'123123',
                 'rep_full_name'=>'this is a full name',
-                'rep_id_number_name'=>'123556',
                 'rep_phone_number'=>'123556',
-                'rep_email'=>'email@gmail.com',
+                'bank_id'=>1
             ],
             [
                 'first_name'=>'Ahmed',
@@ -90,7 +82,6 @@ class InfulencerSeeder extends Seeder
                 'milestone'=>'milestone',
                 'street'=>'street',
                 'neighborhood'=>'neighborhood',
-                'bank_name'=>'Al-at7ad',
                 'bank_account_number'=>'005648002564',
                 'bio'=>'This is my full bio',
                 'ads_out_country'=>1,
@@ -105,14 +96,11 @@ class InfulencerSeeder extends Seeder
                 'id_number'=>'00928989473',
                 'ad_with_vat'=>'12354',
                 'ad_onsite_price_with_vat'=>123,
-                'birthday'=>Carbon::now(),
-                'snap_chat_views'=>1,
                 'commercial_registration_no'=>'123123',
                 'tax_registration_number'=>'123123',
                 'rep_full_name'=>'this is a full name',
-                'rep_id_number_name'=>'123556',
                 'rep_phone_number'=>'123556',
-                'rep_email'=>'email@gmail.com'
+                'bank_id'=>1
             ]
         ];
         $users = [

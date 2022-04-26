@@ -113,6 +113,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::post('/ads/UploadVideo/{ad_id}','uploadVideo')->name('uploadVideo');
             Route::post('/ads/UploadImage/{ad_id}','uploadImage')->name('uploadImage');
             Route::post('/ads/DeleteFile/{file_id}','deleteFile')->name('deleteFile');
+            Route::post('/ads/updateBasic/{ad_id}','update_basic')->name('updateBasic');
             Route::post('/ads/update/{id}','update')->name('update')->middleware('permission:Edit Ads');
             Route::get('/ads/changeMatch/{ad_id}/{removed_inf}/{chosen_inf}','changeMatch')->name('changeMatch')->middleware('permission:Edit Ads');
             Route::get('/ads/seeMatched/{ad_id}','seeMatched')->name('seeMatched');

@@ -425,6 +425,11 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
+    public function update_basic(Request $request)
+    {
+        return $request;
+    }
+
 
   
 }
