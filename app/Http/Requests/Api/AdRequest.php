@@ -35,7 +35,7 @@ class AdRequest extends FormRequest
             'about_product'=>'required',
             'country_id'=>'required',
             'city_id'=>'required',
-            'storeLocations'=>'required',
+            // 'storeLocations'=>'required',
             'area_id'=>'required',
             // 'image'=>'required',
             'campaign_goals_id'=>'required',

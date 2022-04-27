@@ -222,6 +222,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
         ->name('reasons.')
         ->group(function(){
             Route::get('/','index')->name('index');
+            Route::post('/store','store')->name('store');
         });
         
         

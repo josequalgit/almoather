@@ -125,7 +125,7 @@
              <input id="reason" placeholder="enter reason" class="form-control" />
             </div>
             <div class="modal-footer">
-              <button onclick="deleteApi()" type="button" class="btn btn-primary">Add</button>
+              <button onclick="createReason()" type="button" class="btn btn-primary">Add</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
           </div>
@@ -138,6 +138,17 @@
 
 <script>
     let role_id = null;
+    const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+    })
 
     function openModal(id,name)
     {
@@ -150,6 +161,29 @@
     function openCreateModal()
     {
         $('#createModal').modal('toggle');
+    }
+
+    function createReason()
+    {
+        let route = '{{ route("dashboard.reasons.store") }}'
+        $.ajax({
+            url:route,
+            type:'POST',
+            data:{
+                _token:'{{csrf_token()}}',
+                text:document.getElementById('reason').value
+            },
+            success:(res)=>{
+                Toast.fire({
+                    icon: 'sucess',
+                    title: 'reason was added'
+                })
+                location.reload();
+            },
+            error:(res)=>{
+                console.log('error response...')
+            }
+        });
     }
 
     function deleteApi()
