@@ -66,15 +66,16 @@ trait AdResponse {
            
       ];
 
-      if(Auth::guard('api')->user()->customers)
+      if($ad->status !== 'WaitingPayment' && $ad->status !== 'pending' &&Auth::guard('api')->user()->customers)
       {
         $data =  Contract::select('content')->where([['customer_id',Auth::guard('api')->user()->customers->id],['ad_id',$ad->id]])->first();
-        $basicResponse['contract'] = $data->content;
+        $basicResponse['contract'] = $data?$data->content:null;
       }
 
       
 
       if(Auth::guard('api')->user()->customers){
+      
         $basicResponse['status']=$ad->status;
       }
 
