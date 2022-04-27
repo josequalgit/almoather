@@ -62,13 +62,13 @@
                                                             <td>{{ $item }}</td>
                                                             
                                                             <td>
-                                                                @can('Edit Reasons')
+                                                                {{-- @can('Edit Reasons')
                                                                     <a class="btn btn-secondary" href="{{ route('dashboard.roles.edit',$item->id) }}">
                                                                         <i class="bx bx-edit"></i>
                                                                     </a>
-                                                                @endcan
+                                                                @endcan --}}
                                                                 @can('Delete Reasons')
-                                                                    <button class="btn btn-danger" onclick="openModal('{{ $item->id }}','{{ $item->name }}')">
+                                                                    <button class="btn btn-danger" onclick="openModal('{{ $key }}','{{ $item }}')">
                                                                         <i class="bx bx-trash  deleteIcon"></i>
                                                                     </button>
                                                                 @endcan
@@ -188,7 +188,7 @@
 
     function deleteApi()
     {
-        let url = '{{ route("dashboard.roles.delete",":id") }}';
+        let url = '{{ route("dashboard.reasons.delete",":id") }}';
         let updatedUrl = url.replace(':id',role_id);
         $.ajax({
             type:'GET',

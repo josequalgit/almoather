@@ -223,6 +223,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
         ->group(function(){
             Route::get('/','index')->name('index');
             Route::post('/store','store')->name('store');
+            Route::get('/delete/{id}','delete')->name('delete');
         });
         
         

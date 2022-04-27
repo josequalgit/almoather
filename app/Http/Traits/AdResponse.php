@@ -2,6 +2,8 @@
 
 namespace App\Http\Traits;
 use Auth;
+use App\Models\Contract;
+
 trait AdResponse {
 
 
@@ -63,6 +65,12 @@ trait AdResponse {
             'tax_value'=>$ad->tax_value,
            
       ];
+
+      if(Auth::guard('api')->user()->customers)
+      {
+        $data =  Contract::select('content')->where([['customer_id',Auth::guard('api')->user()->customers->id],['ad_id',$ad->id]])->first();
+        $basicResponse['contract'] = $data->content;
+      }
 
       
 
