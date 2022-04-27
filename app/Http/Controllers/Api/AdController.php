@@ -599,7 +599,7 @@ class AdController extends Controller
 				'match'=> $data->matches()->where('chosen',1)->get()->map(function($item){
 					$inf = $item->influencers;
 					return [
-						'id'=>$inf->id,
+						'id'=>$inf->users->id,
 						'image'=>$inf->users->infulncerImage??'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80',
                         'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
 						'match'=>$item->match
@@ -729,7 +729,7 @@ class AdController extends Controller
     private function matchResponse($inf,$match,$eligible)
     {
         return [
-			'id'=>$inf->id,
+			'id'=>$inf->users->id,
             'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
             'image'=>$inf->users->infulncerImage ?? 'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80',
             'match'=>$match,
