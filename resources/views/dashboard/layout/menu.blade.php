@@ -853,7 +853,7 @@ input[type="radio"] .styled:checked + label::after {
                 </li>
                 @endcanany
 
-                @canany(['Edit Reasons','Create Reasons','See Reasons'])
+                {{-- @canany(['Edit Reasons','Create Reasons','See Reasons'])
                 <li class="menu-item
                 {{ ($name == 'dashboard.reasons.index'|| $name == 'dashboard.reasons.create'|| $name == 'dashboard.reasons.edit') ? 'active':''  }}
                 ">
@@ -861,7 +861,7 @@ input[type="radio"] .styled:checked + label::after {
                     <div data-i18n="List">Reasons</div>
                   </a>
                 </li>
-                @endcanany
+                @endcanany --}}
 
                 {{-- @canany(['Add Campaign Goal','Delete Campaign Goal','Edit Campaign Goal'])
                 <li class="menu-item
