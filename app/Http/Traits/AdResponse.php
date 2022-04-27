@@ -66,7 +66,7 @@ trait AdResponse {
            
       ];
 
-      if($ad->status !== 'WaitingPayment' && $ad->status !== 'pending' &&Auth::guard('api')->user()->customers)
+      if($ad->status !== 'approve'&&$ad->status !== 'prepay' && $ad->status !== 'pending' &&Auth::guard('api')->user()->customers)
       {
         $data =  Contract::select('content')->where([['customer_id',Auth::guard('api')->user()->customers->id],['ad_id',$ad->id]])->first();
         $basicResponse['contract'] = $data?$data->content:null;
