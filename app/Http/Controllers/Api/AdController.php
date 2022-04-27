@@ -210,7 +210,7 @@ class AdController extends Controller
             $data->addMedia($request->file('cr_image'))
             ->toMediaCollection('document');
         }
-        if(count($request->commercial_doc) > 0)
+        if(!$request->has_marouf_num&&count($request->commercial_doc) > 0)
         {
             foreach ($request->commercial_doc as $key => $value) {
                 $data->addMedia($value)

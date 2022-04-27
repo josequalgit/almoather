@@ -19,6 +19,9 @@ use App\Http\Controllers\ContractController;
 use App\Http\Controllers\SlideController;
 use App\Http\Controllers\CampaignGoalController;
 use App\Http\Controllers\BusinessManagerController;
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\ReasonsController;
 
 Route::redirect('/','/dashboard/admins')->name('home');
 
@@ -119,6 +122,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/ads/seeMatched/{ad_id}','seeMatched')->name('seeMatched');
             Route::get('/ads/contract/edit/{ad_id}','editContract')->name('editContract');
             Route::post('/ads/contract/update/{ad_id}','updateContract')->name('updateContract');
+            Route::post('/ads/UpdateAddress/{id}','updateAddress')->name('updateAddress');
             Route::post('/ads/contract/influencers/{ad_id}','sendContractToInfluencer')->name('sendContractToInfluncer');
             Route::post('/ads/contract/customers/{contract_id}','sendContractToCustomer')->name('sendContractToCustomer');
             Route::get('/ads/contract/customers/seeInfluncer/{contract_id}','seeContractInfluencer')->name('seeContractInfluencer');
@@ -197,6 +201,30 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/canceled','canceledContract')->name('canceledContract');
             Route::get('/rejectedAds','rejectedAds')->name('rejectedAds');
         });
+
+        Route::controller(CountryController::class)
+        ->prefix('countries')
+        ->name('countries.')
+        ->group(function(){
+            Route::get('/{id}','index')->name('index');
+        });
+
+        Route::controller(CityController::class)
+        ->prefix('cities')
+        ->name('cities.')
+        ->group(function(){
+            Route::get('/{id}','index')->name('index');
+        });
+
+        Route::controller(ReasonsController::class)
+        ->middleware('role_or_permission:superAdmin|Edit Reason|Update Reason|Show Reason|Create Reason')
+        ->prefix('reasons')
+        ->name('reasons.')
+        ->group(function(){
+            Route::get('/','index')->name('index');
+        });
+        
+        
 
 
         

@@ -553,16 +553,49 @@ i.bx.bx-trash {
                               @foreach ($data->storeLocations as $key=>$item)
                                 <div class="row">
                                   <div class="col-sm-3">
-                                    <h6 class="mb-0">{{ $key + 1 }}</h6>
+                                    <h6 class="mb-0">Info:</h6>
                                   </div>
-                                  <div class="col-sm-9 text-secondary">
+                                  <div class="col-sm-7 text-secondary">
                                     {{ $item->countries->name }} {{ $item->cities->name }} {{ $item->areas->name }}
+                                  </div>
+                                  <div class="col-sm-1 text-secondary">
+                                   <button class="btn btn-secondary" type="button" onclick="setEditValue()" class="btn btn-edit">Edit</button>
                                   </div>
                                 </div>
                                 <hr>
                               @endforeach
-                          
+                               
                             </div>
+
+                            <div id="addressSection">
+                              <h5>
+                                Change Address
+                              </h5>
+                              <hr/>
+                              <div class="row">
+                                <div class="col-4">
+                                  <select onchange="getAreas(event.target.value)" class="form-control" name="" id="selectCountryS">
+                                    @foreach ($countries as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                  </select>
+                                </div>
+                                <div id="selectArea" class="col-4">
+                                  <input disabled class="form-control" type="text"/>
+                                </div>
+                                <div id="selectCity" class="col-4">
+                                  <input disabled class="form-control" type="text"/>
+                                </div>
+                                <div class="col mt-2">
+                                  <button type="button" onclick="updateAddress('{{ $data->id }}')" class="btn btn-secondary float-right">Change</button>
+  
+                                </div>
+                                
+                              </div>
+
+                            </div>
+
                           </div>
                         </div>
                       </div>
@@ -1024,11 +1057,26 @@ i.bx.bx-trash {
 @endsection
 @section('scripts')
 <script>
+    $('#addressSection').hide();
+
+const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+    })
+
   var today = new Date();
 var dd = today.getDate();
 var mm = today.getMonth()+1; //January is 0 so need to add 1 to make it 1!
 var yyyy = today.getFullYear();
 let choosen_inf_id = 0;
+let showAddress = false;
 
 if(dd<10){
   dd='0'+dd
@@ -1194,18 +1242,6 @@ CKEDITOR.replace('contractContent', {
 
   function addVideo()
   {
-    const Toast = Swal.mixin({
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-          }
-    })
-
     let video = document.getElementById("adVideo").files[0];
     let formData = new FormData();
     formData.append('file', video)
@@ -1274,6 +1310,123 @@ CKEDITOR.replace('contractContent', {
   function mainForm()
   {
     $('#mainForm').submit();
+  }
+
+  function getAreas(id)
+  {
+    let route = '{{ route("dashboard.countries.index",":id") }}';
+    let urlWithUpdate = route.replace(':id',id);
+    $('#selectArea').empty();
+    $('#selectCity').empty();
+
+    $.ajax({
+      url:urlWithUpdate,
+      type:'GET',
+      success:(res)=>{
+        $('#selectArea').empty();
+        
+        let select = `<select id='selectAreasS' onchange="getCities(event.target.value)" class="form-control" name="" id=""></select>`
+        $('#selectArea').append(select);
+        for (let index = 0; index < res.data.length; index++) {
+          const element = res.data[index];
+          let option = `<option value="${element.id}" >${element.name}</option>`
+          $('#selectAreasS').append(option);
+          $('#selectAreasS').append(option);
+          
+        }
+      },
+      error:(err)=>{
+        Toast.fire({
+            icon: 'error',
+            title: 'server response'
+        })
+      }
+    })
+
+  }
+
+  function getCities(id)
+  {
+    let route = '{{ route("dashboard.cities.index",":id") }}';
+    let urlWithUpdate = route.replace(':id',id);
+
+    $.ajax({
+      url:urlWithUpdate,
+      type:'GET',
+      success:(res)=>{
+        $('#selectCity').empty();
+        
+        let select = `<select id='selectCityS' onchange="getCities(event.target.value)" class="form-control" name="" id=""></select>`
+        $('#selectCity').append(select);
+        for (let index = 0; index < res.data.length; index++) {
+          const element = res.data[index];
+          let option = `<option value="${element.id}" >${element.name}</option>`
+          $('#selectCityS').append(option);
+          $('#selectCityS').append(option);
+          
+        }
+      },
+      error:(err)=>{
+        Toast.fire({
+            icon: 'error',
+            title: 'server response'
+        })
+      }
+    })
+  }
+
+  function updateAddress(id)
+  {
+    if(!valdateAddress()) return;
+    let route = '{{route("dashboard.ads.updateAddress",":id")}}';
+    let url = route.replace(':id',id);
+    let data = {
+      country_id:document.getElementById('selectCountryS').value,
+      city_id:document.getElementById('selectCityS').value,
+      area_id:document.getElementById('selectAreasS').value
+    }
+    $.ajax({
+      url:url,
+      type:'POST',
+      data:data,
+      success:(res)=>{
+        $('#selectCity').empty();
+        $('#selectArea').empty();
+        showAddress = false;
+        Toast.fire({
+            icon: 'success',
+            title: 'Address was updated'
+        })
+        $('#addressSection').hide();
+
+      },
+      error:(err)=>{
+        alert('err')
+      }
+    })
+  }
+  function setEditValue()
+  {
+    if(!showAddress)
+    {
+      $('#addressSection').show();
+      showAddress = true;
+    }
+    else
+    {
+      $('#addressSection').hide();
+      showAddress = false;
+    }
+  }
+
+  function valdateAddress()
+  {
+    if(!document.getElementById('selectCountryS')||!document.getElementById('selectCityS')||!document.getElementById('selectAreasS'))
+    {
+      alert('Please fill all the data');
+      return false;
+    }
+    return true;
   }
 
 

@@ -8,6 +8,8 @@ use App\Models\CustomerAdRating;
 use App\Models\Category;
 use App\Models\CampaignGoal;
 use App\Models\Contract;
+use App\Models\StoreLocation;
+use App\Models\Country;
 use App\Models\Influncer;
 use App\Models\User;
 use App\Models\InfluncerCategory;
@@ -21,6 +23,7 @@ use Illuminate\Support\Facades\Notification;
 use App\Notifications\AddInfluencer;
 use App\Http\Requests\UploadVideoRequest;
 use App\Http\Requests\UploadImageRequest;
+use App\Http\Requests\UpdateBasicRequest;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -45,7 +48,8 @@ class AdController extends Controller
         $unMatched = $data->matches()->where('chosen',0)->get();
         $categories = Category::get();
         $goals = CampaignGoal::select('title')->get();
-        return view('dashboard.ads.edit',compact('data','matches','unMatched','categories','editable'));
+        $countries = Country::get();
+        return view('dashboard.ads.edit',compact('data','matches','unMatched','categories','editable','countries'));
     }
 
     public function update(Request $request , $id)
@@ -425,9 +429,43 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    public function update_basic(Request $request)
+    public function update_basic(UpdateBasicRequest $request , $id)
     {
-        return $request;
+        $data = Ad::findOrFail($id);
+        $data->store = $request->store;
+        $data->cr_num = $request->cr_num;
+        $data->is_vat = $request->is_vat;
+        $data->relation = $request->relation;
+        $data->marouf_num = $request->marouf_num;
+        $data->budget = $request->budget;
+        $data->about = $request->about;
+        $data->about_product = $request->about_product;
+        $data->store_link = $request->store_link;
+        $data->save();
+
+        Alert::toast('Add was updated', 'success');
+
+        return redirect()->route('dashboard.ads.edit',$id);
+    }
+
+    public function updateAddress(Request $request , $id)
+    {
+        $data = Ad::find($id);
+        if(!$data)return response()->json([
+            'err'=>'ad not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $storeLocation = StoreLocation::find($data->storeLocations[0]->id);
+        $storeLocation->city_id = $request->city_id;
+        $storeLocation->area_id = $request->area_id;
+        $storeLocation->country_id = $request->country_id;
+        $storeLocation->save();
+
+        return response()->json([
+            'msg'=>'ad was updated',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 
 
