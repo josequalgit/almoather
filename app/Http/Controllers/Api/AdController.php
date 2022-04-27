@@ -177,18 +177,18 @@ class AdController extends Controller
             }
         }
 
-        if(count($request->storeLocations) > 0)
-        {
-            foreach ($request->storeLocations as $value) {
+        // if(count($request->storeLocations) > 0)
+        // {
+        //     foreach ($request->storeLocations as $value) {
 
-                StoreLocation::create([
-                   'city_id'=>$value['city_id']??$value->city_id,
-                   'country_id'=>$value['country_id']??$value->country_id,
-                   'area_id'=>$value['area_id']??$value->area_id,
-                   'ad_id'=>$data->id,
-                ]);
-            }
-        }
+        //         StoreLocation::create([
+        //            'city_id'=>$value['city_id']??$value->city_id,
+        //            'country_id'=>$value['country_id']??$value->country_id,
+        //            'area_id'=>$value['area_id']??$value->area_id,
+        //            'ad_id'=>$data->id,
+        //         ]);
+        //     }
+        // }
 
         // if($request->video&&count($request->video) > 0)
         // {
