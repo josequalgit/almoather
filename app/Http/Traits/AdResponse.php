@@ -19,9 +19,9 @@ trait AdResponse {
             'cr_certificate'=>$ad->document,
             'campaign_goal'=>$ad->campaignGoals->title,
             'logo'=>$ad->logo,
-            'locations'=>$ad->storeLocation?$ad->storeLocations()->get()->map(function($item){
-              return $item->cities->name.','.$item->areas->name.','.$item->countries->name;
-            }):null,
+            // 'locations'=>$ad->storeLocation?$ad->storeLocations()->get()->map(function($item){
+            //   return $item->cities->name.','.$item->areas->name.','.$item->countries->name;
+            // }):null,
             'store_name'=>$ad->store,
             'marouf_num'=>$ad->marouf_num,
             'store_link'=>$ad->store_link,
@@ -43,18 +43,18 @@ trait AdResponse {
             // 'nearest_location'=>$ad->nearest_location,
             'website_link'=>$ad->website_link,
             'about_product'=>$ad->about_product,
-            // 'country'=>[
-            //   'id'=>$ad->countries->id,
-            //   'name'=>$ad->countries->name
-            //  ],
-            // 'city'=>[
-            //   'id'=>$ad->cities->id,
-            //   'name'=>$ad->cities->name
-            // ],
-            // 'area'=>[
-            //   'id'=>$ad->areas->id,
-            //   'name'=>$ad->areas->name
-            // ],
+            'country'=>[
+              'id'=>$ad->countries->id,
+              'name'=>$ad->countries->name
+             ],
+            'city'=>[
+              'id'=>$ad->cities->id,
+              'name'=>$ad->cities->name
+            ],
+            'area'=>[
+              'id'=>$ad->areas->id,
+              'name'=>$ad->areas->name
+            ],
             'customer_id'=>$ad->customer_id,
             'isVat'=>$ad->is_vat,
             'discount_code'=>$ad->discount_code,
