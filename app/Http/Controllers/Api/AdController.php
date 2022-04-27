@@ -730,7 +730,7 @@ class AdController extends Controller
     {
         return [
 			'id'=>$inf->id,
-            'name'=>$inf->full_name,
+            'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
             'image'=>$inf->users->infulncerImage ?? 'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80',
             'match'=>$match,
             'eligible'=>$eligible
