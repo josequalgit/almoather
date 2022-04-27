@@ -678,7 +678,7 @@ class AdController extends Controller
                 'budget'=>$data->budget,
                 'match'=> $data->matches()->where('chosen',1)->get()->map(function($item){
                         return [
-							'id'=>$item->influencers->id,
+							'id'=>$item->influencers->users->id,
                             'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
                             'image'=>$item->infulncerImage ?? 'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80',
                             'match'=>$item->match
