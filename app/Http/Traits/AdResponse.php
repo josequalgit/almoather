@@ -72,6 +72,17 @@ trait AdResponse {
         $basicResponse['contract'] = $data?$data->content:null;
       }
 
+      if(Auth::guard('api')->user()->customers&&$ad->status !== 'pending'&&$ad->status !== 'approve'&&$ad->status !== 'prepay'&&$ad->status !== 'rejected')
+      {
+        $basicResponse['matches'] = $ad->matches()->where('chosen',1)->get()->map(function($item){
+          return [
+            'id'=>$item->influencers->users->id,
+            'image'=>$item->influencers->users->infulncerImage,
+            'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
+            'match'=>$item->match
+          ];
+        });
+      }
       
 
       if(Auth::guard('api')->user()->customers){
