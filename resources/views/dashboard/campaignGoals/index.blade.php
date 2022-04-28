@@ -64,23 +64,25 @@
                                             <tbody>
                                                 @foreach ($data as $item)
                                                         <tr>
+                                                            @if($item->getTranslations('title'))
                                                             
-                                                            <td>{{  $item->getTranslations('title')['ar'] }}</td>
-                                                            <td>{{ $item->getTranslations('title')['en'] }}</td>
-                                                            
-                                                            <td>
-                                                                @can('Edit Campaign Goal')
-                                                                    <a class="btn btn-secondary" href="{{ route('dashboard.campaignGoals.edit',$item->id) }}">
-                                                                        <i class="bx bx-edit"></i>
-                                                                    </a>
-                                                                @endcan
-                                                                @can('Delete Campaign Goal')
-                                                                    <button class="btn btn-danger" onclick="openModal('{{ $item->id }}','{{ $item->en }}')">
-                                                                        <i class="bx bx-trash buttonIcon"></i>
-                                                                    </button>
-                                                                @endcan
-
-                                                            </td>
+                                                             <td>{{ $item->getTranslations('title')['ar'] }}</td>
+                                                             <td>{{ $item->getTranslations('title')['en'] }}</td>
+                                                             
+                                                             <td>
+                                                                 @can('Edit Campaign Goal')
+                                                                     <a class="btn btn-secondary" href="{{ route('dashboard.campaignGoals.edit',$item->id) }}">
+                                                                         <i class="bx bx-edit"></i>
+                                                                     </a>
+                                                                 @endcan
+                                                                 @can('Delete Campaign Goal')
+                                                                     <button class="btn btn-danger" onclick="openModal('{{ $item->id }}','{{ $item->en }}')">
+                                                                         <i class="bx bx-trash buttonIcon"></i>
+                                                                     </button>
+                                                                 @endcan
+ 
+                                                             </td>
+                                                            @endif
                                                         
                                                         </tr>
                                                 @endforeach

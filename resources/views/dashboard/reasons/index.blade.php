@@ -174,10 +174,6 @@
                 text:document.getElementById('reason').value
             },
             success:(res)=>{
-                Toast.fire({
-                    icon: 'sucess',
-                    title: 'reason was added'
-                })
                 location.reload();
             },
             error:(res)=>{

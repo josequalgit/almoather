@@ -409,11 +409,8 @@ $para = $checkStatus ? request()->route()->parameters['status'] : null;
 
     function seeMatched(ad_id)
     {
-
-
         let url = '{{ route("dashboard.ads.seeMatched",":id") }}';
         let updatedUrl = url.replace(':id',ad_id);
-
 
         $.ajax({
             type:'GET',
@@ -426,7 +423,7 @@ $para = $checkStatus ? request()->route()->parameters['status'] : null;
 
                     for (let index = 0; index < res.data.length; index++) {
                         const element = res.data[index];
-
+                            console.log(element)
                        let div = `<tr class="candidates-list bg-dnager">
                             <td class="title">
                               <div class="thumb">
@@ -446,8 +443,9 @@ $para = $checkStatus ? request()->route()->parameters['status'] : null;
                         `
 
                         $('#matchedTabel').append(div);
-                        $('#seeMatched').modal('toggle');
                     }
+                    $('#seeMatched').modal('toggle');
+
                 }
                 else
                 {

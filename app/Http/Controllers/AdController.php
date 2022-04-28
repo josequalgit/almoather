@@ -46,6 +46,7 @@ class AdController extends Controller
         $data = Ad::findOrFail($id);
         $matches = $data->matches()->where('chosen',1)->get();
         $unMatched = $data->matches()->where('chosen',0)->get();
+       // dd($unMatched);
         $categories = Category::get();
         $goals = CampaignGoal::select('title')->get();
         $countries = Country::get();
@@ -218,9 +219,9 @@ class AdController extends Controller
     public function changeMatch($ad_id,$removed_inf,$chosen_inf)
     {
         $ad = Ad::find($ad_id);
-
-        $chosenInf = $ad->onSite ? User::find($chosen_inf)->influncers->ad_onsite_price:User::find($chosen_inf)->influncers->ad_price;
-        $oldInf = $ad->onSite ? User::find($removed_inf)->influncers->ad_onsite_price:User::find($removed_inf)->influncers->ad_price;
+        
+        $chosenInf = $ad->onSite ? Influncer::find($chosen_inf)->ad_onsite_price:Influncer::find($chosen_inf)->ad_price;
+        $oldInf = $ad->onSite ? Influncer::find($removed_inf)->ad_onsite_price:Influncer::find($removed_inf)->ad_price;
         $newBud = $ad->budget + $chosenInf - $oldInf;
 
 
@@ -234,13 +235,13 @@ class AdController extends Controller
 
 
 
-        $changeOld = AdsInfluencerMatch::where([['ad_id',$ad->id],['influencer_id',User::find($removed_inf)->influncers->id]])->first();
+        $changeOld = AdsInfluencerMatch::where([['ad_id',$ad->id],['influencer_id',$removed_inf]])->first();
         $changeOld->chosen = 0;
         $changeOld->save();   
         
 
 
-        $changeNew = AdsInfluencerMatch::where([['ad_id',$ad->id],['influencer_id',User::find($chosen_inf)->influncers->id]])->first();
+        $changeNew = AdsInfluencerMatch::where([['ad_id',$ad->id],['influencer_id',$chosen_inf]])->first();
         $changeNew->chosen = 1;
         $changeNew->save();
 
@@ -260,8 +261,8 @@ class AdController extends Controller
         ],404);
         $matches = $data->matches()->where('chosen',1)->get()->map(function($item){
             return[
-                'image'=>$item->influencers->users->infulncerImage,
-                'name'=>$item->influencers->full_name,
+                'image'=>$item->influencers->users->infulncerImage?$item->influencers->users->infulncerImage['url']:null,
+                'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
                 'match'=>$item->match
             ];
         });

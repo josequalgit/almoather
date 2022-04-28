@@ -49,7 +49,6 @@ class ReasonsController extends Controller
         $setting = AppSetting::where('key','reasons')->first();
         $changeToArray = json_decode($setting->value);
         unset($changeToArray[$id]);
-        dd($changeToArray);
         $setting->value = json_encode($changeToArray);
      //   dd($setting);
 

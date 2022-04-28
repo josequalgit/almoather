@@ -722,6 +722,7 @@ i.bx.bx-trash {
               @endcan
               
             </div>
+          <hr/>
             @if(count($matches) > 0)
             <div class="table-responsive mt-2">
               <label class="col mb-2" for="inputAddress2">Matched</label>
@@ -767,6 +768,9 @@ i.bx.bx-trash {
                                     
                                     <button {{ $item->influencers->checkIfAccepted($data->id) == 1?'disabled':'' }} type="button" onclick="seeContract('{{$data->contacts->content}}','{{ $item->influencers->id }}')" class="btn btn-secondary">
                                       <i class="bx bx-send"></i>
+                                     </button> 
+                                    <button type="button" onclick="getUnchosenInfulncers('{{ $item->influencers->id }}')" class="btn btn-secondary">
+                                      <i class="bx bx-transfer"></i>
                                      </button> 
 
                                    
@@ -939,12 +943,18 @@ i.bx.bx-trash {
                                 <tr class="candidates-list bg-dnager">
                                   <td class="title">
                                     <div class="thumb">
-                                      <img class="img-fluid" src="{{ $item->influencers->users->infulncerImage }}" alt="">
+                                      {{-- @if ($item->influencers->users->infulncerImage)
+                                      @php
+                                          dd($item->influencers->users->infulncerImage['url']);
+                                      @endphp
+                                          
+                                      @endif --}}
+                                      <img class="img-fluid" src="{{ $item->influencers->users->infulncerImage?$item->influencers->users->infulncerImage['url']:null }}" alt="">
                                     </div>
                                     <div class="candidate-list-details">
                                       <div class="candidate-list-info">
                                         <div class="candidate-list-title">
-                                          <h5 class="mb-0">{{  $item->influencers->full_name }}</h5>
+                                          <h5 class="mb-0">{{  $item->influencers->first_name }} {{  $item->influencers->middle_name }} {{  $item->influencers->last_name }}</h5>
                                           <span style="font-size:12px;">{{ $item->match }}%</span><br/>
                                           {{-- <a href="#" class="text-info float-right" data-toggle="tooltip" title="" data-original-title="Edit"><i class="fas fa-pencil-alt"></i></a> --}}
                                         </div>
@@ -952,7 +962,7 @@ i.bx.bx-trash {
 
                                     </div>
                                     <div class="col">
-                                      <button style="background:none; border:none;" onclick="replaceInfluncer('{{ $item->influencers->users->id }}',)" class="float-right" href="http://" target="_blank" rel="noopener noreferrer">
+                                      <button style="background:none; border:none;" onclick="replaceInfluncer('{{ $item->influencers->id }}',)" class="float-right" href="http://" target="_blank" rel="noopener noreferrer">
                                         <h5 >chose</i></h5>
                                       </button>
                                     </div>
@@ -1159,9 +1169,9 @@ CKEDITOR.replace('contractContent', {
   function getUnchosenInfulncers(inf_id)
   {
       removed_inf = inf_id;
-      $('#inf').modal('toggle');
+     
 
-      return $('#unchosen_inf').modal('toggle');
+      return  $('#unchosen_inf').modal('toggle');
   }
 
   function replaceInfluncer(inf_id,)

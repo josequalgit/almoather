@@ -24,8 +24,8 @@ class CampaignGoalRequest extends FormRequest
     public function rules()
     {
         return [
-            'title_en'=>'required',
-            'title_ar'=>'required'
+            'campaing_goal_en'=>'required',
+            'campaing_goal_ar'=>'required'
         ];
     }
 }

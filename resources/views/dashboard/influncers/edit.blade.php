@@ -67,13 +67,13 @@
               <label for="inputAddress2">Bank Name</label>
               <input disabled value="{{ old('bank_name')?old('bank_name'):$data->bank_name}}" name="bank_name" type="text" class="form-control" id="inputAddress2" placeholder="bank_name">
             </div> --}}
-            <div class="form-group">
+            {{-- <div class="form-group">
               <label for="inputAddress2">Birth Day</label>
               <input disabled value="{{ old('birthday')?old('birthday'):$data->birthday}}" name="birthday" type="text" class="form-control" id="inputAddress2" placeholder="birthday">
-            </div>
+            </div> --}}
             <div class="form-group">
               <label for="inputAddress2">Phone</label>
-              <input disabled value="{{ old('phone')?old('phone'):$data->phone}}" name="phone" type="text" class="form-control" id="inputAddress2" placeholder="birthday">
+              <input disabled value="{{ old('phone')?old('phone'):$data->users->phone}}" name="phone" type="text" class="form-control" id="inputAddress2" placeholder="birthday">
             </div>
             <div class="form-group">
               <label for="inputAddress2">Id Number</label>
@@ -98,10 +98,10 @@
             </div>
            
             
-            <div class="form-group">
+            {{-- <div class="form-group">
               <label for="inputAddress2">Snap Chat Views</label>
               <input disabled value="{{ old('snap_chat_views')?old('snap_chat_views'):$data->snap_chat_views}}" name="snap_chat_views" type="text" class="form-control" id="inputAddress2" placeholder="ad_onsite_price_with_vat">
-            </div>
+            </div> --}}
           
            
          
@@ -238,7 +238,7 @@
         <section id="basic-input">
             <div class="form-group">
                 <label for="inputAddress2">Bank Name</label>
-                <input disabled value="{{ old('bank_name')?old('bank_name'):$data->bank_name}}" name="bank_name" type="text" class="form-control" id="inputAddress2" placeholder="bank_name">
+                <input disabled value="{{ old('bank_name')?old('bank_name'):$data->banks->name}}" name="bank_name" type="text" class="form-control" id="inputAddress2" placeholder="bank_name">
               </div>
               <div class="form-group">
                 <label for="inputAddress2">Bank Account Number</label>
@@ -297,23 +297,20 @@
         <section id="basic-input">
           <div class="form-group">
             @php
-            $repFullName = $data->rep_first_name .' '.$data->rep_middle_name.' '$data->rep_last_name;
+            $repFullName = $data->rep_full_name;
             @endphp
             <label for="inputAddress2">Full Name</label>
             <input disabled value="{{ old('rep_full_name')?old('rep_full_name'):$repFullName}}" name="rep_full_name" type="text" class="form-control" id="inputAddress2" placeholder="rep_full_name">
           </div>
           <div class="form-group">
-            <label for="inputAddress2">Id Number Name</label>
-            <input disabled value="{{ old('rep_id_number_name')?old('rep_id_number_name'):$data->rep_id_number_name}}" name="rep_id_number_name" type="text" class="form-control" id="inputAddress2" placeholder="rep_id_number_name">
+            <label for="inputAddress2">Location</label>
+            <input disabled value="{{ $data->rep_city.' '.$data->rep_area.' '.$data->rep_street}}" name="rep_id_number_name" type="text" class="form-control" id="inputAddress2" placeholder="rep_id_number_name">
           </div>
           <div class="form-group">
             <label for="inputAddress2">Phone Number</label>
             <input disabled value="{{ old('rep_phone_number')?old('rep_phone_number'):$data->rep_phone_number}}" name="rep_phone_number" type="text" class="form-control" id="inputAddress2" placeholder="rep_phone_number">
           </div>
-          <div class="form-group">
-            <label for="inputAddress2">Email</label>
-            <input disabled value="{{ old('rep_email')?old('rep_email'):$data->rep_email}}" name="rep_email" type="text" class="form-control" id="inputAddress2" placeholder="rep_email">
-          </div>
+         
             
         </section>
       </div>

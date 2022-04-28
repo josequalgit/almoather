@@ -77,12 +77,12 @@
                         <div class="row">
                             <div class="col-12">
                                 <fieldset class="form-group">
-                                    <label for="basicInput">En</label>
-                                    <input id="title_en" value="{{ old('title')?old('title'):$data->getTranslations('title')['en'] }}" type="text" class="form-control"  name="title_en" placeholder="Enter campaing goal" />
+                                    <label for="basicInput">Ar</label>
+                                    <input id="campaing_goal_ar" value="{{ old('campaing_goal_ar')?old('campaing_goal_ar'):$data->getTranslations('title')['ar'] }}" type="text" class="form-control"  name="campaing_goal_ar" placeholder="Enter campaing goal" />
                                 </fieldset>
                                 <fieldset class="form-group">
-                                    <label for="basicInput">Ar</label>
-                                    <input id="title_ar" value="{{ old('title')?old('title'):$data->getTranslations('title')['ar'] }}" type="text" class="form-control"  name="title_ar" placeholder="Enter campaing goal" />
+                                    <label for="basicInput">En</label>
+                                    <input id="campaing_goal_en" value="{{ old('campaing_goal_en')?old('campaing_goal_en'):$data->getTranslations('title')['en'] }}" type="text" class="form-control"  name="campaing_goal_en" placeholder="Enter campaing goal" />
                                 </fieldset>
                             
     
