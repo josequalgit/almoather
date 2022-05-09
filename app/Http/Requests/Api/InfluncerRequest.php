@@ -59,7 +59,7 @@ class InfluncerRequest extends FormRequest
             // 'snap_chat_views'=>'required',
             'snap_video'=>'required',
             'commercial_registration_no'=>'required',
-            'tax_registration_number'=>'required',
+            // 'tax_registration_number'=>'required',
             'bank_account_name'=>'required',
             'rep_city'=>'required',
             'rep_area'=>'required',

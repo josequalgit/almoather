@@ -93,6 +93,11 @@ class RegisterController extends Controller
            'en' => $request->full_name_en
        ]]);
 
+       if(!$request->tax_registration_number)
+       {
+        $addTranslate  = array_merge($addTranslate,['tax_registration_number'=>0]);
+       }
+
        $newInfluncer = Influncer::create($addTranslate);
 
        $data->addMedia($request->file('image'))
@@ -142,9 +147,9 @@ class RegisterController extends Controller
        }
 
         $users = [User::find(1)];
-
+       $fullName = $newInfluncer->first_name.' '.$newInfluncer->middle_name.' '.$newInfluncer->last_name;
         $info =[
-            'msg'=>'New Influncer "'.$newInfluncer->full_name.'" registered'
+            'msg'=>'New Influncer "'.$fullName.'" registered'
         ];
         Notification::send($users, new AddInfluencer($info));
 
@@ -260,6 +265,10 @@ class RegisterController extends Controller
             if(!$data) return 'city not found';
         }
         if((isset($request->categories)&&count($request->categories) < 3) || (isset($request->categories)&&count($request->categories) > 3))
+        {
+            return 'should be 3 categories for the influencer';
+        }
+        if(isset($request->isVat)&&!$request->tax_registration_number)
         {
             return 'should be 3 categories for the influencer';
         }
