@@ -111,10 +111,10 @@
               <input disabled value="{{ old('nationality_id')?old('nationality_id'):$data->nationalities->name}}" name="nationality_id" type="text" class="form-control" id="inputAddress2" placeholder="nationality_id">
             </div>
 
-            <div class="form-group">
+            {{-- <div class="form-group">
               <label for="inputAddress2">Category</label>
               <input disabled value="{{ old('nationality_id')?old('nationality_id'):$data->nationalities->name}}" name="nationality_id" type="text" class="form-control" id="inputAddress2" placeholder="nationality_id">
-            </div>
+            </div> --}}
 
 
             @if($data->users->snapChatVideo)
@@ -142,7 +142,7 @@
                 <div class="video">
                   <video  width="320" height="240" controls>
                     <source src="{{ $item ? $item :null }}" type="video/mp4">
-                  Your browser does not support the video tag.
+                      Your browser does not support the video tag.
                   </video>
 
                 </div>

@@ -10,7 +10,13 @@ class FaqController extends Controller
 {
     public function index()
     {
-        $data = FAQ::select(['question','answer'])->get();
+       
+        $data = FAQ::select(['question','answer'])->get()->map(function($item){
+            return [
+                'question'=>$item->question,
+                'answer'=>$item->answer,
+            ];
+        });
 
         return response()->json([
             'msg'=>"get all faq's",
