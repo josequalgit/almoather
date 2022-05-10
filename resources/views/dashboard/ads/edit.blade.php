@@ -312,7 +312,7 @@ i.bx.bx-trash {
                       
                         <ul class="list-group list-group-flush">
                          
-                          <h6>Social Media</h6>
+                          <h6>Social Media Accounts</h6>
 
                           @foreach ($data->getSocialMediaLinks() as $item)
                          

@@ -102,7 +102,7 @@ class AdController extends Controller
            $data = array_merge($chosen_inf,$value->influncers->pluck('id')->toArray());
         }
 
-        $influencers = Influncer::whereNotIn('id',$data)->get();
+        $influencers = Influncer::where('status','accepted')->whereNotIn('id',$data)->get();
 
         /** NEW WAY */
         $startDate = Carbon::now()->subDays(28);

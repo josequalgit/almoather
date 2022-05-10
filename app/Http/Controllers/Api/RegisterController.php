@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Api\InfluncerRequest;
 use App\Http\Requests\Api\CustomerRequest;
 use App\Http\Requests\Api\UpdateCustomerRequest;
+use App\Http\Requests\Api\CheckUniqeDataRequest;
 use App\Models\User;
 use App\Models\Influncer;
 use App\Models\Customer;
@@ -328,40 +329,34 @@ class RegisterController extends Controller
     }  
 
 
-    public function checkUniqueData($type,$data)
+    public function checkUniqueData(CheckUniqeDataRequest $request)
     {
-        if($type == 1)
-        {
-            $user = User::where('email',$data)->first();
-            if($user)
-            {
-                
-                return response()->json([
-                    'msg'=>'email already exist',
-                    'status'=>config('global.WRONG_VALIDATION_STATUS')
-                ],config('global.WRONG_VALIDATION_STATUS'));
-            }
+        $checkEmail = User::where('email',$request->email)->first();
+        $checkPhone = User::where('phone',$request->phone)->first();
 
-            return response()->json([
-                'msg'=>'email is available',
-                'status'=>config('global.OK_STATUS')
-            ],config('global.OK_STATUS'));
-        }
-        else
+        if($checkEmail)
         {
-            $user = User::where('phone',$data)->first();
-            if($user)
-            {
-                return response()->json([
-                    'msg'=>'phone number already exist',
-                    'status'=>config('global.WRONG_VALIDATION_STATUS')
-                ],config('global.WRONG_VALIDATION_STATUS'));
-            }
             return response()->json([
-                'msg'=>'phone is available',
-                'status'=>config('global.OK_STATUS')
-            ],config('global.OK_STATUS'));
+                'msg'=>'email already exist',
+                'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
         }
+        if($checkPhone)
+        {
+            return response()->json([
+                'msg'=>'phone number already exist',
+                'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
+        }
+
+
+        return response()->json([
+            'msg'=>'email and phone available',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+      
+
+       
     }
 
 
