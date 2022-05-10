@@ -40,6 +40,7 @@ Route::group(['prefix'=>'auth'],function(){
         Route::post('/customer','registerCustomer');
         Route::get('/verify','verify');
         Route::post('/customer/update/{id}',[RegisterController::class,'updateCustomer']);
+        Route::get('/check/{type}/{data}','checkUniqueData')->where('type','[1-2]');
     });
 
     #UPDATE ROUTES
