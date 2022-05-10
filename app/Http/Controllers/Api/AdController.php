@@ -525,6 +525,48 @@ class AdController extends Controller
             'err'=>'ad not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
+
+
+        if($removed_inf_id == -1)
+        {
+
+            $infData = $data->matches()->where('chosen',0)->get()->map(function($item) use($data , $info){
+			
+                $currentInf = Influncer::find($item->influencer_id);
+                $eligible = 0;
+                $currentBudget = 0;
+                $counter = 0;
+                $test = [];
+                
+              //  dd($item);
+                
+    
+                if($data->onSite)
+                {
+                    $currentBudget = ($currentInf->ad_onsite_price >= $item->influencers->ad_onsite_price)?1:0;
+                    
+                }
+                else
+                {
+    
+                    $currentBudget = ($currentInf->ad_price >= $item->influencers->ad_price)?1:0;
+                }
+                $counter = $counter +1;
+                
+    
+                return $this->matchResponse($item->influencers,$item->match,$counter == 2?:$currentBudget);
+                
+            });
+
+
+
+            return response()->json([
+                'msg'=>'all matched under budget influencer',
+                'data'=>$infData,
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
+        }
+
         if(!$info) return response()->json([
             'err'=>'user not found',
             'status'=>config('global.NOT_FOUND_STATUS')
@@ -534,6 +576,8 @@ class AdController extends Controller
             'err'=>'ad dosent have the right status',
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
+
+
 		
         $infData = $data->matches()->where('chosen',0)->get()->map(function($item) use($data , $info){
 			
@@ -726,15 +770,17 @@ class AdController extends Controller
     }
    
 
-    private function matchResponse($inf,$match,$eligible)
+    private function matchResponse($inf,$match,$eligible = null)
     {
-        return [
-			'id'=>$inf->users->id,
-            'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
-            'image'=>$inf->users->infulncerImage ?? null,
-            'match'=>$match,
-            'eligible'=>$eligible
-        ];
+        $response =  [
+                'id'=>$inf->users->id,
+                'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
+                'image'=>$inf->users->infulncerImage ?? null,
+                'match'=>$match,
+                
+            ];
+        if($eligible != null) $response['eligible'] = $eligible;
+        return $response;
     }
 
     public function full_payment($ad_id)
