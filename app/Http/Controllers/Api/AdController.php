@@ -799,10 +799,38 @@ class AdController extends Controller
     public function addMatch(Request $request)
     {
         $data = AdsInfluencerMatch::where([['ad_id',$request->ad_id],['influencer_id',$request->influncer_id]])->first();
+        $addInf = Influncer::find($request->influncer_id);
         if(!$data) return response()->json([
-            'err'=>'influencer was not found',
+            'err'=>'influencer match was not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
+
+        $ad = Ad::find($request->ad_id);
+        if(!$ad) return response()->json([
+            'err'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $budget = $ad->budget;
+        $matches = $ad->matches;
+        $allInfPrices = 0;
+
+        foreach ($matches as $value) {
+           $inf = Influncer::find($value->influencer_id);
+           if(!$inf) return response()->json([
+            'err'=>'one of the matches was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+            ],config('global.NOT_FOUND_STATUS'));
+
+            $price = $ad->type == 'onsite'?$inf->ad_onsite_price:$inf->ad_price;
+            $allInfPrices  = $allInfPrices + $price;
+        }
+        $chosenInfBudget = $ad->type == 'onsite'?$addInf->ad_onsite_price:$addInf->ad_price;
+        $allInfPrices = $allInfPrices + $chosenInfBudget;
+        if($allInfPrices > $budget) return response()->json([
+            'msg'=>'you have passed the budget',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
         $data->chosen = 1;
         $data->save();
         return response()->json([
@@ -810,6 +838,8 @@ class AdController extends Controller
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
+
+    
 
 
     
