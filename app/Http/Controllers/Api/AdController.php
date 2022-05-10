@@ -796,6 +796,21 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
+    public function addMatch(Request $request)
+    {
+        $data = AdsInfluencerMatch::where([['ad_id',$request->ad_id],['influencer_id',$request->influncer_id]])->first();
+        if(!$data) return response()->json([
+            'err'=>'influencer was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+        $data->chosen = 1;
+        $data->save();
+        return response()->json([
+            'msg'=>'influencer was added',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+    }
+
 
     
 
