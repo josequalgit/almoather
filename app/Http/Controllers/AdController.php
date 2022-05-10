@@ -31,11 +31,11 @@ class AdController extends Controller
 {
     public function index($status = null)
     {
-        $data = Ad::where('status',$status)->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
+        $data = Ad::where('status',$status)->orderBy('created_at','asc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
         $counter = Ad::where('status',$status)->count();
         if(!$status)
         {
-            $data = Ad::paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
+            $data = Ad::orderBy('created_at','desc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
             $counter = Ad::count();
         }
         return view('dashboard.ads.index',compact('data','counter'));

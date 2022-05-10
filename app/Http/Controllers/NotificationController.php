@@ -10,6 +10,7 @@ use App\Http\Requests\NotificationRequest;
 use DB;
 use Auth;
 use Alert;
+use Carbon\Carbon;
 
 class NotificationController extends Controller
 {
@@ -57,6 +58,12 @@ class NotificationController extends Controller
 
         Alert::toast('Notification was sent', 'success');
         return redirect()->route('dashboard.notifications.index');
+    }
+
+    public function read($id)
+    {
+        $data = DB::table('notifications')->where('id',$id)->update(['read_at'=>Carbon::now()]);
+        return back();
     }
 
 

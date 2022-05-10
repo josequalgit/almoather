@@ -33,9 +33,13 @@ Route::middleware('checkLogin')->controller(LoginController::class)->group(funct
 
 Route::middleware('auth')->prefix('dashboard')->group(function(){
 
+
+
     //Analysis Routes
     Route::name('dashboard.')->controller(HomeController::class)->group(function(){
         Route::get('/','index')->name('home');
+
+        Route::get('/notifications/readNotification/{id}',[NotificationController::class,'read'])->name('readNotification');
 
 
         Route::middleware('role_or_permission:superAdmin|Edit Admin|Create Admin|See Admin|Delete Admin')->name('admins.')->controller(AdminController::class)->group(function(){
