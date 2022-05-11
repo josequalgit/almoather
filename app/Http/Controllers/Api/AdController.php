@@ -776,7 +776,7 @@ class AdController extends Controller
     private function matchResponse($inf,$match,$eligible = null,$status)
     {
         $response =  [
-                'id'=>$inf->users->id,
+                'id'=>$inf->id,
                 'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
                 'image'=>$inf->users->infulncerImage ?? null,
                 'match'=>$match,
