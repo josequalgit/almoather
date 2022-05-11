@@ -155,6 +155,7 @@ Route::group(['prefix'=>'auth'],function(){
             Route::post('fullPayment/{ad_id}','full_payment');
             Route::get('completeAd/{ad_id}','completeAd');
             Route::post('addMatch','addMatch');
+            Route::post('changeMatchedStatus','changeMatchStatus');
         });
 
         #CATEGORIES ROUTES

@@ -631,6 +631,7 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
         $addToChosen->chosen = 1;
+        $addToChosen->status = 'not_basic';
         $addToChosen->save();
         $data = Ad::findOrFail($id);
 
@@ -881,9 +882,26 @@ class AdController extends Controller
             'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         $data->chosen = 1;
+        $data->status = 'not_basic';
         $data->save();
         return response()->json([
             'msg'=>'influencer was added',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+    }
+
+    public function changeMatchStatus(Request $request)
+    {
+        $data = AdsInfluencerMatch::where([['ad_id',$request->ad_id],['influencer_id',$request->influncer_id]])->first();
+        if(!$data) return response()->json([
+            'err'=>'influencer match was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+        $data->status = $request->status;
+        $data->save();
+
+        return response()->json([
+            'msg'=>'match status was change',
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
