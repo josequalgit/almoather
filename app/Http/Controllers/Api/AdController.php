@@ -892,7 +892,7 @@ class AdController extends Controller
 				'type'=>$ad->type,
 				'category'=>$ad->categories->name,
 				'budget'=>$ad->budget,
-				'match'=> $ad->matches()->where('status','!=','deleted')->get()->map(function($item){
+				'match'=> $ad->matches()->where('chosen',1)->where('status','!=','deleted')->get()->map(function($item){
 					$inf = $item->influencers;
 					return [
 						'id'=>$inf->id,
