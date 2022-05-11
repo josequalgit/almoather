@@ -642,10 +642,10 @@ class AdController extends Controller
 				'type'=>$data->type,
 				'category'=>$data->categories->name,
 				'budget'=>$data->budget,
-				'match'=> $data->matches()->where(['status','!=','deleted'])->get()->map(function($item){
+				'match'=> $data->matches()->where('chosen',1)->where(['status','!=','deleted'])->get()->map(function($item){
 					$inf = $item->influencers;
 					return [
-						'id'=>$inf->users->id,
+						'id'=>$inf->id,
 						'image'=>$inf->users->infulncerImage??null,
                         'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
 						'match'=>$item->match,
@@ -932,6 +932,7 @@ class AdController extends Controller
         return response()->json([
             'msg'=>'data was updated',
 			'data'=>[
+				'id'=>$ad->id,
 				'type'=>$ad->type,
 				'category'=>$ad->categories->name,
 				'budget'=>$ad->budget,
