@@ -554,7 +554,7 @@ class AdController extends Controller
                 $counter = $counter +1;
                 
     
-                return $this->matchResponse($item->influencers,$item->match,$counter == 2?:$currentBudget);
+                return $this->matchResponse($item->influencers,$item->match,$counter == 2?:$currentBudget,$item->status);
                 
             });
 
@@ -602,7 +602,7 @@ class AdController extends Controller
 			$counter = $counter +1;
 			
 
-            return $this->matchResponse($item->influencers,$item->match,$counter == 2?:$currentBudget);
+            return $this->matchResponse($item->influencers,$item->match,$counter == 2?:$currentBudget,$item->status);
             
         });
 
@@ -646,7 +646,8 @@ class AdController extends Controller
 						'id'=>$inf->users->id,
 						'image'=>$inf->users->infulncerImage??null,
                         'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
-						'match'=>$item->match
+						'match'=>$item->match,
+						'status'=>$item->status,
 					];
 				})
 			],
@@ -725,7 +726,8 @@ class AdController extends Controller
 							'id'=>$item->influencers->users->id,
                             'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
                             'image'=>$item->infulncerImage ?? null,
-                            'match'=>$item->match
+                            'match'=>$item->match,
+                            'status'=>$item->status
                         ];
                     })
             ],
@@ -770,13 +772,14 @@ class AdController extends Controller
     }
    
 
-    private function matchResponse($inf,$match,$eligible = null)
+    private function matchResponse($inf,$match,$eligible = null,$status)
     {
         $response =  [
                 'id'=>$inf->users->id,
                 'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
                 'image'=>$inf->users->infulncerImage ?? null,
                 'match'=>$match,
+                'status'=>$status
                 
             ];
         if($eligible != null) $response['eligible'] = $eligible;
