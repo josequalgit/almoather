@@ -884,10 +884,33 @@ class AdController extends Controller
         $data->chosen = 1;
         $data->status = 'not_basic';
         $data->save();
+
         return response()->json([
-            'msg'=>'influencer was added',
+            'msg'=>'data was updated',
+			'data'=>[
+				'type'=>$ad->type,
+				'category'=>$ad->categories->name,
+				'budget'=>$ad->budget,
+				'match'=> $ad->matches()->where('status','!=','deleted')->get()->map(function($item){
+					$inf = $item->influencers;
+					return [
+						'id'=>$inf->users->id,
+						'image'=>$inf->users->infulncerImage??null,
+                        'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
+						'match'=>$item->match,
+						'status'=>$item->status,
+					];
+				})
+			],
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
+
+
+
+        // return response()->json([
+        //     'msg'=>'influencer was added',
+        //     'status'=>config('global.OK_STATUS')
+        // ],config('global.OK_STATUS'));
     }
 
     public function changeMatchStatus(Request $request)
