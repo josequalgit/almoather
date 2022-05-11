@@ -894,7 +894,7 @@ class AdController extends Controller
 				'match'=> $ad->matches()->where('status','!=','deleted')->get()->map(function($item){
 					$inf = $item->influencers;
 					return [
-						'id'=>$inf->users->id,
+						'id'=>$inf->id,
 						'image'=>$inf->users->infulncerImage??null,
                         'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
 						'match'=>$item->match,
