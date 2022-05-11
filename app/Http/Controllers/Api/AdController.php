@@ -727,7 +727,7 @@ class AdController extends Controller
                         return [
 							'id'=>$item->influencers->id,
                             'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
-                            'image'=>$item->infulncerImage ?? null,
+                            'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage['url']:null,
                             'match'=>$item->match,
                             'status'=>$item->status
                         ];
