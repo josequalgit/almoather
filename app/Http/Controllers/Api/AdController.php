@@ -530,7 +530,7 @@ class AdController extends Controller
         if($removed_inf_id == -1)
         {
 
-            $infData = $data->matches()->where('chosen',0)->get()->map(function($item) use($data , $info){
+            $infData = $data->matches()->where([['chosen',0],['status','!=','deleted']])->get()->map(function($item) use($data , $info){
 			
                 $currentInf = Influncer::find($item->influencer_id);
                 $eligible = 0;
@@ -641,7 +641,7 @@ class AdController extends Controller
 				'type'=>$data->type,
 				'category'=>$data->categories->name,
 				'budget'=>$data->budget,
-				'match'=> $data->matches()->where('chosen',1)->get()->map(function($item){
+				'match'=> $data->matches()->where(['status','!=','deleted'])->get()->map(function($item){
 					$inf = $item->influencers;
 					return [
 						'id'=>$inf->users->id,
@@ -682,7 +682,7 @@ class AdController extends Controller
                 'category'=>$data->categories ? $data->categories->name : null,
                 'price'=>$cal,
                 'budget'=>$data->budget,
-                'matches'=>$data->matches()->get()->map(function($item){
+                'matches'=>$data->matches()->where(['status','!=','deleted'])->get()->map(function($item){
                     return $item->match;
                 })
             ],
@@ -722,7 +722,7 @@ class AdController extends Controller
                 'category'=>$data->categories?$data->categories->name:null,
                 'price'=>$data->budget - $cal,
                 'budget'=>$data->budget,
-                'match'=> $data->matches()->where('chosen',1)->get()->map(function($item){
+                'match'=> $data->matches()->where(['status','!=','deleted'])->where('chosen',1)->get()->map(function($item){
                         return [
 							'id'=>$item->influencers->users->id,
                             'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
@@ -753,7 +753,7 @@ class AdController extends Controller
 		
         $inf = $user->influncers;
 
-        $alldata = $data->matches()->where('chosen',0)->get()->map(function($item) use($inf,$data,$removed_inf){
+        $alldata = $data->matches()->where(['status','!=','deleted'])->where('chosen',0)->get()->map(function($item) use($inf,$data,$removed_inf){
             $chosenInf = $data->onSite ?$inf->ad_onsite_price:$inf->ad_price;
             $oldInf = $data->ad_type == 'onsite' ? User::find($removed_inf)->influncers->ad_onsite_price:User::find($removed_inf)->influncers->ad_price;
             $newBud = $data->budget + $chosenInf - $oldInf;

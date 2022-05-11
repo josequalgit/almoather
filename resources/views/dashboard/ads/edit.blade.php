@@ -272,6 +272,14 @@ i.bx.bx-trash {
     background: none;
 }
 
+.avatar {
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
 
@@ -343,6 +351,22 @@ i.bx.bx-trash {
                             <div class="card-body">
                               <div class="row">
                                 <div class="col-sm-3">
+                                  <h6 class="mb-0">Logo</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                  @if($editable)
+                                  <input class="form-control" name="cr_num" value="{{ old('cr_num')??$data->cr_num }}" />
+                                  @else
+                                  <a target="_blank" href="{{ $data->logo }}" download>
+                                    <img  src="{{ $data->logo }}" alt="Avatar" class="avatar">
+                                  </a>
+                                 
+                                  @endif
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-3">
                                   <h6 class="mb-0">Name</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
@@ -354,6 +378,7 @@ i.bx.bx-trash {
                                 </div>
                               </div>
                               <hr>
+                          
                               <div class="row">
                                 <div class="col-sm-3">
                                   <h6 class="mb-0">Certificate number</h6>

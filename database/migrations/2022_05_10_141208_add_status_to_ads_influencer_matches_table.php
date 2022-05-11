@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('ads_influencer_matches', function (Blueprint $table) {
-            $table->enum('status',['basic','not_basic','deleted'])->default('basic');
+            $table->enum('status',['basic','not_basic','deleted'])->default('not_basic');
         });
     }
 
