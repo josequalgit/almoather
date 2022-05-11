@@ -65,22 +65,22 @@ class AdController extends Controller
             'msg'=>'please add a status',
             'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
         ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
-        if(!$request->expense_type) return response()->json([
-            'msg'=>'please add a type',
-            'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
-        ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
+        // if(!$request->expense_type) return response()->json([
+        //     'msg'=>'please add a type',
+        //     'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
+        // ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
         if(!$request->category_id) return response()->json([
             'msg'=>'please choose a category',
             'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
         ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
-        if(!$request->ad_type) return response()->json([
-            'msg'=>'please choose a ad type',
-            'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
-        ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
-        if(!$request->date) return response()->json([
-            'msg'=>'please select an ad date',
-            'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
-        ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
+        // if(!$request->ad_type) return response()->json([
+        //     'msg'=>'please choose a ad type',
+        //     'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
+        // ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
+        // if(!$request->date) return response()->json([
+        //     'msg'=>'please select an ad date',
+        //     'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
+        // ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
 
        // return response()->json([$request->all()],500);
 
@@ -88,9 +88,9 @@ class AdController extends Controller
         $ad->status = $request->status;
         $ad->category_id = $request->category_id;
         $ad->reject_note = $request->note ?? null;
-        $ad->expense_type = $request->expense_type;
-        $ad->type = $request->ad_type;
-        $ad->date = $request->date;
+        // $ad->expense_type = $request->expense_type;
+        // $ad->type = $request->ad_type;
+       // $ad->date = $request->date;
         $ad->save();
 
         // STEP 1 - GET THE PROPERTY CATEGORIES
@@ -114,28 +114,8 @@ class AdController extends Controller
         $allMatchedInf = [];
         foreach ($influencers as $info) {
 
-            if($request->expense_type == 'pve')
-            {
-                $infAds = $info->ads()->where('expense_type','pve')->whereBetween('created_at',[$startDate,$endDate])->pluck('id')->toArray();
-            }
-            else
-            {
-                
-                $pvn = $info->ads()->where('expense_type','pvn')->whereBetween('created_at',[$startDate,$endDate])->sum('budget');
-                $pve = $info->ads()->where('expense_type','pve')->whereBetween('created_at',[$startDate,$endDate])->sum('budget');
-                if($pvn > $pve)
-                {
-                    $infAds = $info->ads()->where('expense_type','pvn')->whereBetween('created_at',[$startDate,$endDate])->pluck('id')->toArray();
-                }
-                elseif($pvn < $pve)
-                {
-                    $infAds = $info->ads()->where('expense_type','pve')->whereBetween('created_at',[$startDate,$endDate])->pluck('id')->toArray();
-                }
-                else
-                {
-                    $infAds = $info->ads()->where('expense_type','pvn')->whereBetween('created_at',[$startDate,$endDate])->pluck('id')->toArray();
-                }
-            }
+                $infAds = $info->ads()->whereBetween('created_at',[$startDate,$endDate])->pluck('id')->toArray();
+            
            
 
             /** INF RATTING */

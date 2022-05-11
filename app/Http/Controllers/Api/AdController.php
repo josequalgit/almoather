@@ -724,7 +724,7 @@ class AdController extends Controller
                 'budget'=>$data->budget,
                 'match'=> $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
                         return [
-							'id'=>$item->influencers->users->id,
+							'id'=>$item->influencers->id,
                             'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
                             'image'=>$item->infulncerImage ?? null,
                             'match'=>$item->match,

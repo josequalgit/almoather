@@ -845,13 +845,13 @@ i.bx.bx-trash {
                 </button>
               </div>
               <div class="modal-body">
-                <div class="form-group">
+                {{-- <div class="form-group">
                   <label for="exampleFormControlSelect1">Expence type</label>
                   <select class="form-control" id="expense_type">
                     <option value="pvn">PVN</option>
                     <option value="pve">PVE</option>
                   </select>
-                </div>
+                </div> --}}
                 <div class="form-group">
                   <label for="exampleFormControlSelect1">Ad type</label>
                   <select class="form-control" id="ad_type">
@@ -868,10 +868,10 @@ i.bx.bx-trash {
                   </select>
                 </div>
 
-                <div class="form-group">
+                {{-- <div class="form-group">
                   <label for="exampleFormControlSelect1">Date</label>
                   <input id="date" value="" name="website_link" type="date" class="form-control" id="inputAddress2" placeholder="date">
-                </div>
+                </div> --}}
               </div>
               <div class="modal-footer">
                 <button onclick="sendStatusRequest()" type="button" class="btn btn-primary">Save changes</button>
@@ -1168,11 +1168,11 @@ CKEDITOR.replace('contractContent', {
         status:document.getElementById('status').value,
         note:document.getElementById('rejectedNote').value,
         category_id:document.getElementById('category_id').value,
-        ad_type:document.getElementById('ad_type').value,
-        date:document.getElementById('date').value,
+        // ad_type:document.getElementById('ad_type').value,
         onSite:'{{ $data->onSite }}',
         adBudget:'{{ $data->budget }}',
-        expense_type:document.getElementById('expense_type').value
+        // expense_type:document.getElementById('expense_type').value,
+        _token:'{{csrf_token()}}'
       },
       success:(res)=>{
         let url = '{{ route("dashboard.ads.index") }}'
