@@ -74,7 +74,7 @@ trait AdResponse {
 
       if(Auth::guard('api')->user()->customers&&$ad->status !== 'pending'&&$ad->status !== 'approve'&&$ad->status !== 'prepay'&&$ad->status !== 'rejected')
       {
-        $basicResponse['matches'] = $ad->matches()->where('chosen',1)->get()->map(function($item){
+        $basicResponse['matches'] = $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
           return [
             'id'=>$item->influencers->users->id,
             'image'=>$item->influencers->users->infulncerImage,
