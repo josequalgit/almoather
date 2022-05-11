@@ -646,7 +646,7 @@ class AdController extends Controller
 					$inf = $item->influencers;
 					return [
 						'id'=>$inf->id,
-						'image'=>$inf->users->infulncerImage??null,
+						'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage['url']:null,
                         'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
 						'match'=>$item->match,
 						'status'=>$item->status,
@@ -683,7 +683,7 @@ class AdController extends Controller
                 'category'=>$data->categories ? $data->categories->name : null,
                 'price'=>$cal,
                 'budget'=>$data->budget,
-                'matches'=>$data->matches()->where(['status','!=','deleted'])->get()->map(function($item){
+                'matches'=>$data->matches()->where('status','!=','deleted')->get()->map(function($item){
                     return $item->match;
                 })
             ],
@@ -779,7 +779,7 @@ class AdController extends Controller
         $response =  [
                 'id'=>$inf->id,
                 'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
-                'image'=>$inf->users->infulncerImage ?? null,
+                'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage['url']:null,
                 'match'=>$match,
                 'status'=>$status
                 
@@ -897,7 +897,7 @@ class AdController extends Controller
 					$inf = $item->influencers;
 					return [
 						'id'=>$inf->id,
-						'image'=>$inf->users->infulncerImage??null,
+						'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage['url']:null,
                         'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
 						'match'=>$item->match,
 						'status'=>$item->status,
@@ -940,7 +940,7 @@ class AdController extends Controller
 					$inf = $item->influencers;
 					return [
 						'id'=>$inf->id,
-						'image'=>$inf->users->infulncerImage??null,
+						'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage['url']:null,
                         'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
 						'match'=>$item->match,
 						'status'=>$item->status,
