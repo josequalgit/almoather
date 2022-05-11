@@ -444,6 +444,14 @@ class AdController extends Controller
         $data->store_link = $request->store_link;
         $data->save();
 
+
+        if($request->hasFile('logo'))
+        {
+            $data->ClearMediaCollection('logos');
+            $data->addMedia($request->file('logo'))
+            ->toMediaCollection('logos');
+        }
+
         Alert::toast('Add was updated', 'success');
 
         return redirect()->route('dashboard.ads.edit',$id);

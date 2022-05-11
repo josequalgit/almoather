@@ -355,7 +355,7 @@ i.bx.bx-trash {
                                 </div>
                                 <div class="col-sm-9 text-secondary">
                                   @if($editable)
-                                  <input class="form-control" name="cr_num" value="{{ old('cr_num')??$data->cr_num }}" />
+                                    <input type="file" class="form-control" name="logo" />
                                   @else
                                   <a target="_blank" href="{{ $data->logo }}" download>
                                     <img  src="{{ $data->logo }}" alt="Avatar" class="avatar">

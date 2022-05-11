@@ -900,10 +900,41 @@ class AdController extends Controller
         $data->status = $request->status;
         $data->save();
 
+
+        $ad = Ad::findOrFail($request->ad_id);
+
         return response()->json([
-            'msg'=>'match status was change',
+            'msg'=>'data was updated',
+			'data'=>[
+				'type'=>$ad->type,
+				'category'=>$ad->categories->name,
+				'budget'=>$ad->budget,
+				'match'=> $ad->matches()->where('status','!=','deleted')->get()->map(function($item){
+					$inf = $item->influencers;
+					return [
+						'id'=>$inf->users->id,
+						'image'=>$inf->users->infulncerImage??null,
+                        'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
+						'match'=>$item->match,
+						'status'=>$item->status,
+					];
+				})
+			],
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
+
+
+
+
+
+
+
+
+
+        // return response()->json([
+        //     'msg'=>'match status was change',
+        //     'status'=>config('global.OK_STATUS')
+        // ],config('global.OK_STATUS'));
     }
 
     
