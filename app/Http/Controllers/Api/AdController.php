@@ -638,6 +638,7 @@ class AdController extends Controller
         return response()->json([
             'msg'=>'data was updated',
 			'data'=>[
+                'id'=>$data->id,
 				'type'=>$data->type,
 				'category'=>$data->categories->name,
 				'budget'=>$data->budget,
