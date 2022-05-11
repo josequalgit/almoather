@@ -646,7 +646,7 @@ class AdController extends Controller
 					$inf = $item->influencers;
 					return [
 						'id'=>$inf->id,
-						'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage['url']:null,
+						'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage:null,
                         'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
 						'match'=>$item->match,
 						'status'=>$item->status,
@@ -727,7 +727,7 @@ class AdController extends Controller
                         return [
 							'id'=>$item->influencers->id,
                             'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
-                            'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage['url']:null,
+                            'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage:null,
                             'match'=>$item->match,
                             'status'=>$item->status
                         ];
@@ -779,7 +779,7 @@ class AdController extends Controller
         $response =  [
                 'id'=>$inf->id,
                 'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
-                'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage['url']:null,
+                'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage:null,
                 'match'=>$match,
                 'status'=>$status
                 
@@ -897,7 +897,7 @@ class AdController extends Controller
 					$inf = $item->influencers;
 					return [
 						'id'=>$inf->id,
-						'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage['url']:null,
+						'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage:null,
                         'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
 						'match'=>$item->match,
 						'status'=>$item->status,
@@ -940,7 +940,7 @@ class AdController extends Controller
 					$inf = $item->influencers;
 					return [
 						'id'=>$inf->id,
-						'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage['url']:null,
+						'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage:null,
                         'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
 						'match'=>$item->match,
 						'status'=>$item->status,
