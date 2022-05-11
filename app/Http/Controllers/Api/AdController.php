@@ -892,7 +892,8 @@ class AdController extends Controller
 
     public function changeMatchStatus(Request $request)
     {
-        $data = AdsInfluencerMatch::where([['ad_id',$request->ad_id],['influencer_id',$request->influncer_id]])->first();
+        $user = User::find($request->influncer_id);
+        $data = AdsInfluencerMatch::where([['ad_id',$request->ad_id],['influencer_id',$user->influncers->id]])->first();
         if(!$data) return response()->json([
             'err'=>'influencer match was not found',
             'status'=>config('global.NOT_FOUND_STATUS')
