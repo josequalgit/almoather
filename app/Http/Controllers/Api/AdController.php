@@ -842,8 +842,8 @@ class AdController extends Controller
 
     public function completeAd($contract_id)
     {
+        dd($contract_id);
         $data = Contract::find($contract_id);
-         dd($data);
         $influencer = Influncer::find($data->influencer_id);
         $ad = Ad::find($data->ad_id);
         if(!$influencer&&!$ad) return response()->json([
