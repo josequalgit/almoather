@@ -598,6 +598,8 @@ class AdController extends Controller
     public function replace_matched_influencer($id , $removed_influencer , $chosen_influencer)
     {
         $removeFromChosen = AdsInfluencerMatch::where([['ad_id',$id],['influencer_id',$removed_influencer]])->first();
+
+        dd($removeFromChosen);
 		
         if(!$removeFromChosen) return response()->json([
             'err'=>'data not found',
@@ -799,6 +801,19 @@ class AdController extends Controller
 
         $ad->status = 'fullpayment';
         $ad->save();
+
+        $name = Auth::guard('api')->user()->customers->first_name.' '.Auth::guard('api')->user()->customers->middle_name.' '.Auth::guard('api')->user()->customers->last_name;
+        $info =[
+            'msg'=>'Customer "'.$name.'" payed full payment ('.$ad->budget.') for "'.$data->store.'" ',
+        ];
+      
+        $users = [
+            1,
+            2
+        ];
+        foreach ($users as $value) {
+            Notification::send(User::find($value), new AddInfluencer($info));
+        }
 
         return response()->json([
             'msg'=>'ad status was changed to '.$ad->status.'',

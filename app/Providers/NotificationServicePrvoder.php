@@ -23,9 +23,9 @@ class NotificationServicePrvoder extends ServiceProvider
      */
     public function boot()
     {
-        $data = auth()->user() ? auth()->user()->unreadNotifications()->get() : [];
-        //dd(auth()->user());
-        view()->composer('*', function($view) use($data) {
+        view()->composer('*', function($view)  {
+            $data = auth()->user() ? auth()->user()->unreadNotifications()->get() : [];
+
             $view->with('notifications', $data);
         });
 
