@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Ad;
 use App\Http\Requests\Api\AdRequest;
 use App\Http\Requests\Api\AcceptAdContractRequest;
-use Auth;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\AddInfluencer;
 use App\Models\User;
@@ -16,10 +15,11 @@ use App\Models\Customer;
 use App\Models\Contract;
 use App\Models\StoreLocation;
 use App\Models\AdsInfluencerMatch;
-use Validator;
 use App\Http\Traits\UserResponse;
 use App\Http\Traits\ApiPaginator;
 use App\Http\Traits\AdResponse;
+use Auth;
+use Validator;
 
 use DB;
 
@@ -172,21 +172,7 @@ class AdController extends Controller
         $data->socialMediasAccount()->attach($request->prefered_media_id);
 		$data->save();
 
-        // if(count($request->prefered_media_id) > 0)
-        // {
-        //     foreach ($request->prefered_media_id as $value) {
-
-        //       //  DB::table('ads_media_id')->insert([
-        //         //    'ad_id'=>$data->id,
-        //       //      'social_media_id'=>$value['type']??$value->type,
-        //       //      'link'=>$value['link']??$value->type
-        //      //   ]);
-		// 		$data->socialMediasAccount()->attach($value);
-		// 		$data->save();
-
-				
-        //     }
-        // }
+     
 		 if(count($request->social_media) > 0)
         {
             foreach ($request->social_media as $value) {
@@ -196,39 +182,11 @@ class AdController extends Controller
                    'social_media_id'=>$value['type']??$value->type,
                    'link'=>$value['link']??$value->type
                 ]);
-				//$data->socialMedias()->attach($value);
-			//	$data->save();
+			
             }
         }
 
-        // if(count($request->storeLocations) > 0)
-        // {
-        //     foreach ($request->storeLocations as $value) {
-
-        //         StoreLocation::create([
-        //            'city_id'=>$value['city_id']??$value->city_id,
-        //            'country_id'=>$value['country_id']??$value->country_id,
-        //            'area_id'=>$value['area_id']??$value->area_id,
-        //            'ad_id'=>$data->id,
-        //         ]);
-        //     }
-        // }
-
-        // if($request->video&&count($request->video) > 0)
-        // {
-        //     foreach ($request->video as $value) {
-        //         $data->addMedia($value)
-        //         ->toMediaCollection('adVideos');
-        //     }
-        // }
-
-        // if($request->video&&count($request->image) > 0)
-        // {
-        //     foreach ($request->image as $value) {
-        //         $data->addMedia($value)
-        //     ->toMediaCollection('adImage');
-        //     }
-        // }
+      
         if($request->hasFile('cr_image'))
         {
             $data->addMedia($request->file('cr_image'))
@@ -540,7 +498,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    public function getMatchedInfluencersNotChosen($id,$removed_inf_id)
+    public function getMatchedInfluencersNotChosen($id,$removed_inf_id,$replace_permission = null)
     {
         $data = Ad::find($id);
         $info = Influncer::find($removed_inf_id);
@@ -596,7 +554,7 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
       
-        if($data->status !== 'prepay') return response()->json([
+        if(!$replace_permission&&$data->status !== 'prepay') return response()->json([
             'err'=>'ad dosent have the right status',
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
@@ -699,6 +657,20 @@ class AdController extends Controller
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
+       // dd(Auth::user()->customers);
+        $name = Auth::guard('api')->user()->customers->first_name.' '.Auth::guard('api')->user()->customers->middle_name.' '.Auth::guard('api')->user()->customers->last_name;
+        $info =[
+            'msg'=>'Customer "'.$name.'" payed 5% ('.$cal.') for "'.$data->store.'" ',
+        ];
+      
+        $users = [
+            1,
+            2
+        ];
+        foreach ($users as $value) {
+            Notification::send(User::find($value), new AddInfluencer($info));
+        }
+        
 
         return response()->json([
             'msg'=>'all matches blurred',
