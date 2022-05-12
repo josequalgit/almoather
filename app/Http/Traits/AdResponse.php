@@ -82,7 +82,6 @@ trait AdResponse {
           if(isset($contract)&&$contract->is_accepted == 2)
           {
             $status == 'rejected';
-            dd($contract->is_accepted);
           }
           else if(isset($contract)&&$contract->is_accepted == 1)
           {
