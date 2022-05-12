@@ -95,6 +95,7 @@ trait AdResponse {
           }
           else
           {
+            dd('here');
             if(isset($contract)&&$contract->date)
             {
               $status = 'was sent';
