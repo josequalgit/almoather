@@ -78,11 +78,11 @@ trait AdResponse {
           $contract = Contract::where([['ad_id',$item->ad_id],['influencer_id',$item->influencer_id]])->first();
           dd($contract);
           $status = null;
-          if(isset($contract)&&$contract->status == 2)
+          if(isset($contract)&&$contract->is_accepted == 2)
           {
             $status == 'rejected';
           }
-          else if(isset($contract)&&$contract->status == 1)
+          else if(isset($contract)&&$contract->is_accepted == 1)
           {
             if($contract->is_completed == 1)
             {
