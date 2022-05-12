@@ -50,10 +50,20 @@ class AdController extends Controller
                 'Active'    => 1
             ];
 
-            $data = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',$statusCode[$status]);
+            $data = Auth::guard('api')->user()->influncers->contracts();
 
             if($status == 'Completed'){
-                $itemsPaginated =  $data->where('influencer_status',1)->paginate(10);
+                $itemsPaginated =  $data
+                ->where('influencer_status',1)
+                ->where('influencer_status',1)
+                ->paginate(10);
+            }
+            elseif($status == 'Active')
+            {
+                $itemsPaginated =  $data
+                ->where('influencer_status',0)
+                ->where('is_accepted',$statusCode[$status])
+                ->paginate(10);
             }
             else
             {
