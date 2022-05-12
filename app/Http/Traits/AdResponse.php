@@ -81,17 +81,17 @@ trait AdResponse {
          
           if(isset($contract)&&$contract->is_accepted == 2)
           {
-            $status == 'rejected';
+            $status = 'rejected';
           }
           else if(isset($contract)&&$contract->is_accepted == 1)
           {
             if($contract->is_completed == 1)
             {
-              $status == 'influencer completed';
+              $status = 'influencer completed';
             }
             else
             {
-              $status == 'progress';
+              $status = 'progress';
             }
           }
           else
@@ -105,7 +105,6 @@ trait AdResponse {
               $status = 'not sent';
             }
           }
-          dd($status);
           return [
             'id'=>$item->influencers->users->id,
             'image'=>$item->influencers->users->infulncerImage,
