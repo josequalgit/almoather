@@ -78,6 +78,7 @@ trait AdResponse {
           $contract = Contract::where([['ad_id',$item->ad_id],['influencer_id',$item->influencer_id]])->first();
 
           $status = null;
+          dd($contract->is_accepted);
           if(isset($contract)&&$contract->is_accepted == 2)
           {
             $status == 'rejected';
@@ -95,7 +96,6 @@ trait AdResponse {
           }
           else
           {
-            dd('here');
             if(isset($contract)&&$contract->date)
             {
               $status = 'was sent';
