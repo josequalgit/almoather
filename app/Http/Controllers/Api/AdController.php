@@ -324,8 +324,27 @@ class AdController extends Controller
         ],config('global.NOT_FOUND_STATUS'));
 
         $data->is_accepted = $request->status;
-        $data->rejectNote = $request->reject_note;
+        $data->rejectNote = $request->rejectNote;
         $data->save();
+
+        if($request->status == 0&&$request->rejectNote)
+        {
+            $influencer = Influncer::find($data->influencer_id);
+            $name = $influencer->first_name.' '.$influencer->middle_name.' '.$influencer->last_name;
+            
+            $info =[
+                'msg'=>'Influencer "'.$name.'" rejected the contract because of "'.$data->rejectNote.'" ad',
+            ];
+          
+            $users = [
+                1,
+                2
+            ];
+            foreach ($users as $value) {
+                Notification::send(User::find($value), new AddInfluencer($info));
+            }
+
+        }
 
         return response()->json([
             'msg'=>'data was updated',
@@ -803,7 +822,7 @@ class AdController extends Controller
 
         $name = Auth::guard('api')->user()->customers->first_name.' '.Auth::guard('api')->user()->customers->middle_name.' '.Auth::guard('api')->user()->customers->last_name;
         $info =[
-            'msg'=>'Customer "'.$name.'" payed full payment ('.$ad->budget.') for "'.$data->store.'" ',
+            'msg'=>'Customer "'.$name.'" payed full payment ('.$ad->budget.') for "'.$ad->store.'" ',
         ];
       
         $users = [
@@ -823,7 +842,27 @@ class AdController extends Controller
 
     public function completeAd($contract_id)
     {
-        $data = Contract::find($contract_id)->first();
+        $data = Contract::find($contract_id);
+        // dd($data);
+        $influencer = Influncer::find($data->influencer_id);
+        $ad = Ad::find($data->ad_id);
+        if(!$influencer&&!$ad) return response()->json([
+            'err'=>'something wrong',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $name = $influencer->first_name.' '.$influencer->middle_name.' '.$influencer->last_name;
+        $info =[
+            'msg'=>'Influencer "'.$name.'" completed "'.$ad->store.'" ad',
+        ];
+      
+        $users = [
+            1,
+            2
+        ];
+        foreach ($users as $value) {
+            Notification::send(User::find($value), new AddInfluencer($info));
+        }
 
         if(!$data) return response()->json([
             'err'=>'contract not found',
@@ -850,6 +889,9 @@ class AdController extends Controller
         $data->is_accepted = $request->status;
         $data->rejectNote = $request->rejectNote;
         $data->save();
+    
+       
+
 
         return response()->json([
             'msg'=>'data was updated',
