@@ -95,7 +95,14 @@ trait AdResponse {
           }
           else
           {
-            $status = 'not sent';
+            if(isset($contract)&&$contract->date)
+            {
+              $status = 'was sent';
+            }
+            else
+            {
+              $status = 'not sent';
+            }
           }
           return [
             'id'=>$item->influencers->users->id,
