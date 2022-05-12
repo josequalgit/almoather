@@ -76,7 +76,7 @@ trait AdResponse {
       {
         $basicResponse['matches'] = $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
           $contract = Contract::where([['ad_id',$item->ad_id],['influencer_id',$item->influencer_id]])->first();
-          dd($item->influencer_id);
+          dd($contract);
           $status = null;
           if(isset($contract)&&$contract->status == 2)
           {
