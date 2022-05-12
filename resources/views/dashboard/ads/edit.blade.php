@@ -5,9 +5,7 @@
     max-width: 100% !important;
     height: 200px !important;
   }
-  /* .modal{
-    display: block !important; /* I added this to see the modal, you don't need this */
-} */
+  
 
 /* Important part */
 .modal-dialog{
@@ -309,7 +307,6 @@ i.bx.bx-trash {
                             <div class="mt-3">
                               <h5>{{ $data->customers->first_name }} {{ $data->customers->middle_name }} {{ $data->customers->last_name }}</h5>
                               <p class="text-secondary mb-1">Customer</p>
-                              {{-- <button class="btn btn-primary">Follow</button> --}}
                             
                               <a href="{{route('dashboard.customers.edit',$data->customers->id)}}" class="btn btn-outline-primary">Edit</a>
                             </div>
@@ -564,9 +561,6 @@ i.bx.bx-trash {
                                     @else
                                     <a class="btn btn-info "  href="{{ route('dashboard.ads.edit',[$data->id,'test']) }}">Edit</a>
                                   @endif
-                                  {{-- <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a> --}}
-
-                                  {{-- <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a> --}}
                                 </div>
                               </div>
                             </div>
@@ -665,7 +659,6 @@ i.bx.bx-trash {
                                           <div class="ml-2">
                                               <h6 class="mb-0">Video #{{ $key+1 }}</h6>
                                               <div class="about"><button onclick="deleteFileModal( {{$item->id}})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
-                                              {{-- <div class="about"> <span>22 Files</span> <span>Jan 21, 2020</span> </div> --}}
                                           </div>
                                       </div>
                                       <div class="check"> <a target="_blank" href="{{ $item->url }}">Show</a></div>
@@ -673,13 +666,6 @@ i.bx.bx-trash {
                                   @endforeach
                             
                               </ul>
-                                {{-- <ul>
-                                  @foreach ($data->videos as $key => $item)
-                                  <li>
-                                    Video #{{ $key+1 }} (<a href="{{ $item }}" target="_blank">Show!</a>)
-                                  </li>
-                                  @endforeach
-                                  --}}
                               </div>
                             </div>
                           </div>
@@ -692,20 +678,7 @@ i.bx.bx-trash {
                 </div>
             </div>
 
-            {{-- @if ($data->document)
-            <div class="form-group">
-              <label class="col mb-2" for="inputAddress2">document</label>
            
-              @foreach ($data->document as $item)
-              <a target="_blank" download href="{{ $item->url }}">
-                <img src="{{ $item->url }}" />
-              </a>
-                  
-              @endforeach
-             
-            </div>
-                
-            @endif --}}
           
         
 
@@ -760,7 +733,6 @@ i.bx.bx-trash {
                           <th>Chosen</th>
                           <th>Accepted</th>
                           <th>Action</th>
-                          {{-- <th>Action</th> --}}
                       </tr>
                   </thead>
                   <tbody>
@@ -773,9 +745,6 @@ i.bx.bx-trash {
                                   </div>
                                 </td>
 
-                                {{-- @php
-                                  dd($item->influencers->checkIfAccepted($data->id));    
-                                @endphp --}}
                                   <td>{{  $item->influencers->first_name }} {{  $item->influencers->middle_name }} {{  $item->influencers->last_name }}</td>
                                   <td>{{ $item->match }}%</td>
                                   <td>{{ $item->chosen ? 'Yes':'No' }}</td>
@@ -846,13 +815,6 @@ i.bx.bx-trash {
               </div>
               <div class="modal-body">
                 <div class="form-group">
-                  <label for="exampleFormControlSelect1">Expence type</label>
-                  <select class="form-control" id="expense_type">
-                    <option value="pvn">PVN</option>
-                    <option value="pve">PVE</option>
-                  </select>
-                </div>
-                <div class="form-group">
                   <label for="exampleFormControlSelect1">Ad type</label>
                   <select class="form-control" id="ad_type">
                     <option value="product">Product</option>
@@ -868,10 +830,6 @@ i.bx.bx-trash {
                   </select>
                 </div>
 
-                <div class="form-group">
-                  <label for="exampleFormControlSelect1">Date</label>
-                  <input id="date" value="" name="website_link" type="date" class="form-control" id="inputAddress2" placeholder="date">
-                </div>
               </div>
               <div class="modal-footer">
                 <button onclick="sendStatusRequest()" type="button" class="btn btn-primary">Save changes</button>
@@ -894,26 +852,18 @@ i.bx.bx-trash {
                         <div class="col">
                           <div class="user-dashboard-info-box table-responsive mb-0 bg-white  shadow-sm">
                             <table class="table manage-candidates-top mb-0">
-                              {{-- <thead>
-                                <tr>
-                                  <th>Candidate Name</th>
-                                  <th class="text-center">Status</th>
-                                  <th class="action text-right">Action</th>
-                                </tr>
-                              </thead> --}}
+                              
                               <tbody>
                                 @foreach ($matches as $item)
                                 <tr class="candidates-list bg-dnager">
                                   <td class="title">
                                     <div class="thumb">
-                                      {{-- <img class="img-fluid" src="{{ $item->influencers->users->infulncerImage }}" alt=""> --}}
                                     </div>
                                     <div class="candidate-list-details">
                                       <div class="candidate-list-info">
                                         <div class="candidate-list-title">
                                           <h5 class="mb-0">{{  $item->influencers->full_name }}</h5>
                                           <span style="font-size:12px;">{{ $item->match }}%</span><br/>
-                                          {{-- <a href="#" class="text-info float-right" data-toggle="tooltip" title="" data-original-title="Edit"><i class="fas fa-pencil-alt"></i></a> --}}
                                         </div>
                                       </div>
 
@@ -936,7 +886,6 @@ i.bx.bx-trash {
                 
               </div>
               <div class="modal-footer">
-                {{-- <button onclick="sendStatusRequest()" type="button" class="btn btn-primary">Save changes</button> --}}
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               </div>
             </div>
@@ -956,24 +905,13 @@ i.bx.bx-trash {
                         <div class="col">
                           <div class="user-dashboard-info-box table-responsive mb-0 bg-white  shadow-sm">
                             <table class="table manage-candidates-top mb-0">
-                              {{-- <thead>
-                                <tr>
-                                  <th>Candidate Name</th>
-                                  <th class="text-center">Status</th>
-                                  <th class="action text-right">Action</th>
-                                </tr>
-                              </thead> --}}
+                              
                               <tbody>
                                 @foreach ($unMatched as $item)
                                 <tr class="candidates-list bg-dnager">
                                   <td class="title">
                                     <div class="thumb">
-                                      {{-- @if ($item->influencers->users->infulncerImage)
-                                      @php
-                                          dd($item->influencers->users->infulncerImage['url']);
-                                      @endphp
-                                          
-                                      @endif --}}
+                                     
                                       <img class="img-fluid" src="{{ $item->influencers->users->infulncerImage?$item->influencers->users->infulncerImage['url']:null }}" alt="">
                                     </div>
                                     <div class="candidate-list-details">
@@ -981,7 +919,6 @@ i.bx.bx-trash {
                                         <div class="candidate-list-title">
                                           <h5 class="mb-0">{{  $item->influencers->first_name }} {{  $item->influencers->middle_name }} {{  $item->influencers->last_name }}</h5>
                                           <span style="font-size:12px;">{{ $item->match }}%</span><br/>
-                                          {{-- <a href="#" class="text-info float-right" data-toggle="tooltip" title="" data-original-title="Edit"><i class="fas fa-pencil-alt"></i></a> --}}
                                         </div>
                                       </div>
 
@@ -1004,7 +941,6 @@ i.bx.bx-trash {
                 
               </div>
               <div class="modal-footer">
-                {{-- <button onclick="sendStatusRequest()" type="button" class="btn btn-primary">Save changes</button> --}}
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               </div>
             </div>
@@ -1021,14 +957,12 @@ i.bx.bx-trash {
                 </button>
               </div>
               <div class="modal-body">
-                  {{-- <p id="contractContent">
-  
-                  </p> --}}
                   <textarea name="content" id="contractContent" rows="10" cols="80"></textarea>  
                   <div class="form-group">
                     <label for="exampleFormControlSelect1">Date</label>
                     <input id="contractDate" value="" name="website_link" type="date" class="form-control" id="inputAddress2" placeholder="date">
-                  </div>              </div>
+                  </div>              
+                </div>
               <div class="modal-footer">
                   <button class="btn btn-secondary text-center align-middle" onclick="sendContract()">
                      Send
@@ -1090,6 +1024,7 @@ i.bx.bx-trash {
 
 
 @endsection
+
 @section('scripts')
 <script>
     $('#addressSection').hide();
@@ -1106,29 +1041,17 @@ const Toast = Swal.mixin({
           }
     })
 
-  var today = new Date();
-var dd = today.getDate();
-var mm = today.getMonth()+1; //January is 0 so need to add 1 to make it 1!
-var yyyy = today.getFullYear();
+ 
 let choosen_inf_id = 0;
 let showAddress = false;
 
-if(dd<10){
-  dd='0'+dd
-} 
-if(mm<10){
-  mm='0'+mm
-} 
-
-today = yyyy+'-'+mm+'-'+dd;
-document.getElementById("date").setAttribute("min", today);
   let removed_inf = 0;
 
   $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
-});
+  });
 CKEDITOR.replace('contractContent', {
       extraPlugins: 'placeholder',
       height: 220,

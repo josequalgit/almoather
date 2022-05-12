@@ -53,7 +53,7 @@ class AdController extends Controller
             $data = Auth::guard('api')->user()->influncers->contracts()->where('is_accepted',$statusCode[$status]);
 
             if($status == 'Completed'){
-                $itemsPaginated =  $data->where('is_completed',1)->paginate(10);
+                $itemsPaginated =  $data->where('influencer_status',1)->paginate(10);
             }
             else
             {
@@ -811,9 +811,9 @@ class AdController extends Controller
 
     }
 
-    public function completeAd($ad_id)
+    public function completeAd($contract_id)
     {
-        $data = Contract::where([['ad_id',$ad_id],['influencer_id',Auth::guard('api')->user()->influncers->id]])->first();
+        $data = Contract::find($contract_id)->first();
 
         if(!$data) return response()->json([
             'err'=>'contract not found',
