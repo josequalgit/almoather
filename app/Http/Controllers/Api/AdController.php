@@ -599,7 +599,6 @@ class AdController extends Controller
     {
         $removeFromChosen = AdsInfluencerMatch::where([['ad_id',$id],['influencer_id',$removed_influencer]])->first();
 
-        dd($removeFromChosen);
 		
         if(!$removeFromChosen) return response()->json([
             'err'=>'data not found',
