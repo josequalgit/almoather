@@ -55,10 +55,24 @@ class AdController extends Controller
             if($status == 'Completed'){
                 $itemsPaginated =  $data
                 ->where('influencer_status',1)
-                ->where('influencer_status',1)
+                ->where('is_accepted',$statusCode[$status])
                 ->paginate(10);
             }
             elseif($status == 'Active')
+            {
+                $itemsPaginated =  $data
+                ->where('influencer_status',0)
+                ->where('is_accepted',$statusCode[$status])
+                ->paginate(10);
+            }
+            elseif($status == 'Pending')
+            {
+                $itemsPaginated =  $data
+                ->where('influencer_status',0)
+                ->where('is_accepted',$statusCode[$status])
+                ->paginate(10);
+            }
+            elseif($status == 'Rejected')
             {
                 $itemsPaginated =  $data
                 ->where('influencer_status',0)
