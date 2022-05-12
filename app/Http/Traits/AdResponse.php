@@ -106,7 +106,7 @@ trait AdResponse {
             }
           }
           return [
-            'id'=>$item->influencers->users->id,
+            'id'=>$item->influencers->id,
             'image'=>$item->influencers->users->infulncerImage,
             'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
             'match'=>$item->match,
