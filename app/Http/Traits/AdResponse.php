@@ -85,9 +85,9 @@ trait AdResponse {
           }
           else if(isset($contract)&&$contract->is_accepted == 1)
           {
-            if($contract->is_completed == 1)
+            if($contract->influencer_status == 1&&$contract->is_completed == 1)
             {
-              $status = 'influencer completed';
+              $status = 'completed';
             }
             else
             {
