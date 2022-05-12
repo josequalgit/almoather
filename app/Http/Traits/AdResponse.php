@@ -105,6 +105,7 @@ trait AdResponse {
               $status = 'not sent';
             }
           }
+          dd($status);
           return [
             'id'=>$item->influencers->users->id,
             'image'=>$item->influencers->users->infulncerImage,
