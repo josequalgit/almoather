@@ -75,11 +75,33 @@ trait AdResponse {
       if(Auth::guard('api')->user()->customers&&$ad->status !== 'pending'&&$ad->status !== 'approve'&&$ad->status !== 'prepay'&&$ad->status !== 'rejected')
       {
         $basicResponse['matches'] = $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
+          $contract = Contract::where([['ad_id',$item->ad_id],['influencer_id',$item->influencer_id]])->first();
+          $status = null;
+          if($contract->status == 2)
+          {
+            $status == 'rejected';
+          }
+          else if($contract->status == 1)
+          {
+            if($contract->is_completed == 1)
+            {
+              $status == 'influencer completed';
+            }
+            else
+            {
+              $status == 'progress';
+            }
+          }
+          else
+          {
+            $status = 'not sent';
+          }
           return [
             'id'=>$item->influencers->users->id,
             'image'=>$item->influencers->users->infulncerImage,
             'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
-            'match'=>$item->match
+            'match'=>$item->match,
+            'status'=>$status
           ];
         });
       }
