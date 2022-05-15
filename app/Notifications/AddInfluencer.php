@@ -56,7 +56,9 @@ class AddInfluencer extends Notification
     public function toDatabase ($notifiable)
     {
         return [
-            'msg'=> $this->influncerData['msg'],
+            'msg'=>$this->influncerData['msg'],
+            'type'=>$this->influncerData['type'],
+            'id'=>$this->influncerData['id']
         ];
     }
 }

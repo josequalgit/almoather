@@ -102,7 +102,10 @@ class UpdateDataController extends Controller
 
         $users = [User::find(1)];
         $info =[
-            'msg'=>'Customer "'.$newCustomer->first_name.'" was updated'
+            'msg'=>'Customer "'.$newCustomer->first_name.'" was updated',
+            'id'=>$data->id,
+            'type'=>'Customer'
+            
         ];
         Notification::send($users, new AddInfluencer($info));
         $info = $data->customers;

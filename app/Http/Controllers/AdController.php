@@ -306,6 +306,8 @@ class AdController extends Controller
             
             $info =[
                 'msg'=>'New Contract for ad "'.$ad->store.'"',
+                'type'=>'Ad',
+                'id'=>$ad->id
             ];
           
            
@@ -331,7 +333,9 @@ class AdController extends Controller
 
         $users = [User::find(1),User::find($data->customers->users->id)];
         $info =[
-            'msg'=>'The contract for ad "'.$data->ads->store.''
+            'msg'=>'The contract for ad "'.$data->ads->store.'',
+            'type'=>'Ad',
+            'id'=>$data->ads->id
         ];
         Notification::send($users, new AddInfluencer($info));
 

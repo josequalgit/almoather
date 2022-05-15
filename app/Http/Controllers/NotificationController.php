@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
-use App\Models\User;
 use App\Notifications\AddInfluencer;
 use App\Http\Requests\NotificationRequest;
+use App\Models\User;
+use App\Models\Ad;
 use DB;
 use Auth;
 use Alert;
@@ -40,6 +41,8 @@ class NotificationController extends Controller
     {
         $info =[
             'msg'=>$request->message,
+            'type'=>'User',
+            'id'=>0
         ];
         if($request->users == 'all')
         {
@@ -62,8 +65,49 @@ class NotificationController extends Controller
 
     public function read($id)
     {
-        $data = DB::table('notifications')->where('id',$id)->update(['read_at'=>Carbon::now()]);
-        return back();
+        $data = DB::table('notifications')->where('id',$id)->first();
+        if(!$data)  return response()->json([
+            'err'=>'wrong notification id',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+        $UpdateData = DB::table('notifications')->where('id',$id)->update([
+            'read_at'=>Carbon::now()
+        ]);
+        $notificationData = json_decode($data->data);
+        if($notificationData->type == 'Ad')
+        {
+            $ad = Ad::find($notificationData->id);
+            if(!$ad)
+            {
+                Alert::toast('Notification was not found', 'error');
+                return back();
+            }
+            else
+            {
+                return redirect()->route('dashboard.ads.edit',$ad->id);
+            }
+
+        }
+        else
+        {
+            $user = User::find($notificationData->id);
+            if(!$user)
+            {
+                Alert::toast('User was not found', 'error');
+                return back();
+            }
+            else
+            {
+                if($user->influncers)
+                {
+                    return redirect()->route('dashboard.influncers.edit',$user->influncers->id);
+                }
+                else
+                {
+                    return redirect()->route('dashboard.customers.edit',$user->customers->id);
+                }
+            }
+        }
     }
 
 

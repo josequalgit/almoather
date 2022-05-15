@@ -208,7 +208,9 @@ class AdController extends Controller
 
         $users = [User::find(1)];
         $info =[
-            'msg'=>'Customer "'.Auth::guard('api')->user()->customers->first_name.'" added new ad'
+            'msg'=>'Customer "'.Auth::guard('api')->user()->customers->first_name.'" added new ad',
+            'id'=>$data->id,
+            'type'=>'Ad'
         ];
         Notification::send($users, new AddInfluencer($info));
 
@@ -334,6 +336,8 @@ class AdController extends Controller
             
             $info =[
                 'msg'=>'Influencer "'.$name.'" rejected the contract because of "'.$data->rejectNote.'" ad',
+                'id'=>$influencer->users->id,
+                'type'=>'Influencer'
             ];
           
             $users = [
@@ -681,6 +685,8 @@ class AdController extends Controller
         $name = Auth::guard('api')->user()->customers->first_name.' '.Auth::guard('api')->user()->customers->middle_name.' '.Auth::guard('api')->user()->customers->last_name;
         $info =[
             'msg'=>'Customer "'.$name.'" payed 5% ('.$cal.') for "'.$data->store.'" ',
+            'id'=>$data->id,
+            'type'=>'Ad'
         ];
       
         $users = [
@@ -823,6 +829,8 @@ class AdController extends Controller
         $name = Auth::guard('api')->user()->customers->first_name.' '.Auth::guard('api')->user()->customers->middle_name.' '.Auth::guard('api')->user()->customers->last_name;
         $info =[
             'msg'=>'Customer "'.$name.'" payed full payment ('.$ad->budget.') for "'.$ad->store.'" ',
+            'id'=>$ad->id,
+            'type'=>'Ad'
         ];
       
         $users = [
@@ -854,6 +862,8 @@ class AdController extends Controller
         $name = $influencer->first_name.' '.$influencer->middle_name.' '.$influencer->last_name;
         $info =[
             'msg'=>'Influencer "'.$name.'" completed "'.$ad->store.'" ad',
+            'id'=>$ad->id,
+            'type'=>'Ad'
         ];
       
         $users = [
@@ -1015,6 +1025,8 @@ class AdController extends Controller
         //     'status'=>config('global.OK_STATUS')
         // ],config('global.OK_STATUS'));
     }
+
+
 
     
 

@@ -150,7 +150,9 @@ class RegisterController extends Controller
         $users = [User::find(1)];
        $fullName = $newInfluncer->first_name.' '.$newInfluncer->middle_name.' '.$newInfluncer->last_name;
         $info =[
-            'msg'=>'New Influncer "'.$fullName.'" registered'
+            'msg'=>'New Influencer "'.$fullName.'" registered',
+            'id'=>$data->id,
+            'type'=>'Influencer'
         ];
         Notification::send($users, new AddInfluencer($info));
 
@@ -205,7 +207,9 @@ class RegisterController extends Controller
 
         $users = [User::find(1)];
         $info =[
-            'msg'=>'New Customer "'.$newCustomer->first_name.'" registered'
+            'msg'=>'New Customer "'.$newCustomer->first_name.'" registered',
+            'id'=>$data->id,
+            'type'=>'Customer'
         ];
         Notification::send($users, new AddInfluencer($info));
         $info = $data->customers;

@@ -57,19 +57,27 @@ class CheckAdsCommand extends Command
                 {
                     $info =[
                         'en'=>[
-                            'msg'=>'Please add a payment for "'."$item->store".'" ad or it will be canceled'
+                            'msg'=>'Please add a payment for "'."$item->store".'" ad or it will be canceled',
+                            'type'=>'Ad',
+                            'id'=>$item->id
                         ],
                         'ar'=>[
-                            'msg'=>'الرجاء اضافة طريق الدفع "'."$item->store".'" لعدم الالغاء'
+                            'msg'=>'الرجاء اضافة طريق الدفع "'."$item->store".'" لعدم الالغاء',
+                            'type'=>'Ad',
+                            'id'=>$item->id
                         ],
                     ];
 
                     $adminMessage =[
                         'en'=>[
-                            'msg'=>'Notification was sent to "'.$item->customers->first_name.' '.$item->customers->last_name.'" about canceling "'.$item->store.'" ad'
+                            'msg'=>'Notification was sent to "'.$item->customers->first_name.' '.$item->customers->last_name.'" about canceling "'.$item->store.'" ad',
+                            'type'=>'Ad',
+                            'id'=>$item->id
                         ],
                         'ar'=>[
-                            'msg'=>'تم ارسال الاشعار الى "'.$item->customers->first_name.' '.$item->customers->last_name.'" حول الغاء دعاية "'.$item->store.'"'
+                            'msg'=>'تم ارسال الاشعار الى "'.$item->customers->first_name.' '.$item->customers->last_name.'" حول الغاء دعاية "'.$item->store.'"',
+                            'type'=>'Ad',
+                            'id'=>$item->id
                         ]
                     ];
                     #SEND NOTIFICATION TO CUSTOMER ABOUT THE AD

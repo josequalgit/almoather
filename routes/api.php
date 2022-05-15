@@ -170,6 +170,8 @@ Route::group(['prefix'=>'auth'],function(){
 
         #GET NOTIFICATION
         Route::controller(NotificationController::class)->prefix('notifications')->group(function(){
+          //  dd('here');
+            Route::post('markAsRead/{id}','readNotification');
             Route::get('/{type}','index');
         });
 
