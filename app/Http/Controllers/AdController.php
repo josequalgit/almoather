@@ -183,11 +183,7 @@ class AdController extends Controller
 
        /** END WAY */
 
-<<<<<<< Updated upstream
        $allInfluencer = $this->calculateNonProfitableAds($request,$ad,$data);
-=======
-      
->>>>>>> Stashed changes
 
 
        /** GET THE LOW ENGAGEMENT INFLUENCER*/
@@ -204,11 +200,7 @@ class AdController extends Controller
         ],500);
     }
 
-<<<<<<< Updated upstream
     private function calculateNonProfitableAds($request,$ad,$data){
-=======
-    private function calculateNonProfitableAds($ad,$data){
->>>>>>> Stashed changes
 
          /**  BUDGET PERCENTAGE CALCULATION */
         $appPercentage = 0.15 * $ad->budget;
