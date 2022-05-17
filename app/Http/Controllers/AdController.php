@@ -123,9 +123,32 @@ class AdController extends Controller
         }
 
         $allInfluencer = $allInfluencer->get()->map(function($influencer){
-            $getLastMonthAds = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->sum('af');
-            $getLastMonthAdsCount = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->count();
+            $influencerContractsRevenue = 0;
+            $influencerContractsRevenue += $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->map(function($query){
+                return $query->ad->budget ? $query->revenue / $query->ad->budget : 0;
+            });
+
+            $influencerContractsCount = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->count();
+
+            $influencer->revenue = $influencerContractsCount ? $influencerContractsRevenue / $influencerContractsCount : 0;
+            return $influencer;
+
         });
+
+        $allInfluencer = collect($allInfluencer)->sortByDesc('revenue');
+        #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
+        $budgetSum = 0;
+        $chosenInfluencer = [];
+        foreach ($allSmallInfluencer as $key => $influencer) {
+            $budgetSum += $price;
+            if ($budgetSum <= $budgetAfterCutPercentage) {
+                array_push($chosenInfluencer, $influencer);
+            } else {
+                break;
+            }
+        }
+
+        return $chosenInfluencer;
     }
 
     private function calculateNonProfitableAds($request, $ad, $data)
