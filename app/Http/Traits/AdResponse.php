@@ -3,6 +3,8 @@
 namespace App\Http\Traits;
 use Auth;
 use App\Models\Contract;
+use App\Models\CampaignContract;
+use App\Models\InfluencerContract;
 
 trait AdResponse {
 
@@ -75,7 +77,7 @@ trait AdResponse {
       if(Auth::guard('api')->user()->customers&&$ad->status !== 'pending'&&$ad->status !== 'approve'&&$ad->status !== 'prepay'&&$ad->status !== 'rejected')
       {
         $basicResponse['matches'] = $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
-          $contract = Contract::where([['ad_id',$item->ad_id],['influencer_id',$item->influencer_id]])->first();
+          $contract = InfluencerContract::where('influencer_id',$item->influencer_id)->first();
 
           $status = null;
          
@@ -85,7 +87,7 @@ trait AdResponse {
           }
           else if(isset($contract)&&$contract->is_accepted == 1)
           {
-            if($contract->influencer_status == 1&&$contract->is_completed == 1)
+            if($contract->status == 1&&$contract->admin_status == 1)
             {
               $status = 'completed';
             }

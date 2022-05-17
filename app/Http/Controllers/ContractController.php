@@ -4,21 +4,36 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Contract;
+use App\Models\AppSetting;
 use App\Http\Requests\UpdateContractRequest;
 
 class ContractController extends Controller
 {
     public function edit()
     {
-        $data = Contract::find(1);
-        $data2 = Contract::find(2);
+        $data = AppSetting::where('key','Customer Contract')->first();
+        $data2 = AppSetting::where('key','Influencer Contract')->first();
 
         return view('dashboard.contract.edit',compact('data','data2'));
     }
 
     public function update(UpdateContractRequest $request , $type)
     {
-        $data = Contract::find($type)->update($request->all());
+      
+        if($type == 1)
+        {
+            $data = AppSetting::where('key','Customer Contract')->first();
+            $data->value = json_encode($request->content);
+            $data->save();
+        }
+        else
+        {
+            $data = AppSetting::where('key','Influencer Contract')->first();
+            $data->value = json_encode($request->content);
+            $data->save();
+        }
+
+      
         return back();
     }
 

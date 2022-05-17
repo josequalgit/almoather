@@ -57,4 +57,10 @@ class Customer extends Model
         return $this->hasMany(Contract::class,'customer_id');
     }
 
+    public function campaignContract()
+    {
+        return $this->hasMany(CampaignContract::class,'customer_id');
+    }
+
+
 }

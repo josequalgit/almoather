@@ -31,5 +31,14 @@ class SettingSeeder extends Seeder
             'key'=>'Campaign Goal',
             'value'=>json_encode($array)
         ]);
+        AppSetting::create([
+            'key'=>'Customer Contract',
+            'value'=>json_encode('This contract content it just for a test if to show you how it will look like in the mobile')
+        ]);
+
+        AppSetting::create([
+            'key'=>'Influencer Contract',
+            'value'=>json_encode('This contract content it just for a test if to show you how it will look like in the mobile')
+        ]);
     }
 }

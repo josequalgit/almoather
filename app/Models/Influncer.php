@@ -8,6 +8,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
 use App\Models\Contract;
+use App\Models\InfluencerContract;
 
 class Influncer extends Model implements HasMedia
 {
@@ -95,9 +96,13 @@ class Influncer extends Model implements HasMedia
         return $this->hasMany(Ad::class,'influncer_id');
     }
 
+    // public function contracts()
+    // {
+    //     return $this->hasMany(Contract::class,'influencer_id');
+    // }
     public function contracts()
     {
-        return $this->hasMany(Contract::class,'influencer_id');
+        return $this->hasMany(InfluencerContract::class,'influencer_id');
     }
 
     public function address()
@@ -166,7 +171,7 @@ class Influncer extends Model implements HasMedia
          *  1 => is accepted
          *  2 => no Contract avalibale
          */
-        $contract = Contract::where(['influencer_id'=>$this->id])
+        $contract = InfluencerContract::where(['influencer_id'=>$this->id])
         ->where(['ad_id'=>$ad_id])
         ->first();
         

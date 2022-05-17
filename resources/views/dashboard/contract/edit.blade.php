@@ -73,7 +73,7 @@
                             @endforeach
                         </div>
                         @endif
-                    
+                       
                         <div class="row">
                             <div class="col-12">
                              
@@ -83,7 +83,7 @@
                                 <fieldset class="form-group">
                                     <label for="basicInput">Data</label>
                                     <textarea name="content" id="editor1" rows="10" cols="80">
-                                        {{ $data->content }}
+                                        {{ json_decode($data->value) }}
                                     </textarea>                        
                                 </fieldset>
                             </div>
@@ -125,7 +125,7 @@
                                 <fieldset class="form-group">
                                     <label for="basicInput">Data</label>
                                     <textarea name="content" id="editor2" rows="10" cols="80">
-                                        {{ $data2->content }}
+                                        {{ json_decode($data2->value) }}
                                     </textarea>                        
                                 </fieldset>
                             </div>

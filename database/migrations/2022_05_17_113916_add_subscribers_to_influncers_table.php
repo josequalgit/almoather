@@ -13,11 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('campaign_goals', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->boolean('profitable')->default(0);
-            $table->timestamps();
+        Schema::table('influncers', function (Blueprint $table) {
+            $table->bigInteger('subscribers')->default(0);
         });
     }
 
@@ -28,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('campaign_goals');
+        Schema::table('influncers', function (Blueprint $table) {
+            $table->dropColumn('subscribers');
+        });
     }
 };

@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\UserResponse;
 use App\Models\User;
+use App\Models\Influncer;
+use App\Models\Customer;
 use App;
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\ChangePasswordRequest;
@@ -133,13 +135,16 @@ class AuthController extends Controller
         ],200);
     }
 
-    public function details($id = null)
+    public function details($id = null , $type = null)
     {
         
-        if($id)
+        if($type)
         {
-            $data = User::find($id);
-            if(!$data || (!$data->influncers && !$data->customers)) return response()->json([
+            if($type == 'customer')  $data = Customer::find($id);
+            else $data = Influncer::find($id);
+           
+
+            if(!$data) return response()->json([
                 'err'=>'user not found',
                 'status'=>config('global.NOT_FOUND_STATUS')
             ],config('global.NOT_FOUND_STATUS'));
@@ -154,7 +159,7 @@ class AuthController extends Controller
 
         return response()->json([
             'msg'=>'user data',
-            'data'=>$this->userDataResponse($data,null,$data->id),
+            'data'=>$this->userDataResponse($data->users,null,$data->users->id),
             'type'=>$data->customers?'customer':'Influencer',
             'status'=>config('global.NOT_FOUND_STATUS')
 

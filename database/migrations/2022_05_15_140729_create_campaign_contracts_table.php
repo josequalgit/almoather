@@ -13,10 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('campaign_goals', function (Blueprint $table) {
+        Schema::create('campaign_contracts', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->boolean('profitable')->default(0);
+            $table->text('content');
+            $table->boolean('is_accepted');
+            $table->bigInteger('ad_id')->unsigned();
+            $table->foreign('ad_id')->references('id')->on('ads')->onDelete('cascade');
+            $table->longText('rejectNote')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('campaign_goals');
+        Schema::dropIfExists('campaign_contracts');
     }
 };
