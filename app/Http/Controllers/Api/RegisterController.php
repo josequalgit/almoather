@@ -33,7 +33,8 @@ class RegisterController extends Controller
             'msg'=>$request->message,
         ];
 
-        $available = $this->checkIfDataAvalibale($request);
+        $available = $this->checkIfDataAvailable($request);
+
         if($available)
         {
             return response()->json([
@@ -42,11 +43,15 @@ class RegisterController extends Controller
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
-        $commingRequest =  array_merge($request->only(['email','password','dial_code','name','fcm_token','phone','country_code']),['password' => bcrypt($request->password)]);
-        $data = User::create($commingRequest);
+        $comingRequest =  array_merge(
+            $request->only(['email','password','dial_code','name','fcm_token','phone','country_code']),
+            ['password' => bcrypt($request->password)]
+        );
+
+        $data = User::create($comingRequest);
 
 
-        $influncerData = $request->only([
+        $influencerData = $request->only([
             'first_name',
             'middle_name',
             'last_name',
@@ -88,7 +93,7 @@ class RegisterController extends Controller
         ]);
         
 
-       $addUserId =  array_merge($influncerData,['user_id'=>$data->id]);
+       $addUserId =  array_merge($influencerData,['user_id' => $data->id]);
        $addTranslate =  array_merge($addUserId,['full_name'=>[
            'ar' => $request->full_name_ar,
            'en' => $request->full_name_en
@@ -112,29 +117,11 @@ class RegisterController extends Controller
            $newInfluncer->addMedia($request->file('cr_file'))
            ->toMediaCollection('cr_file');
        }
-    //    if($request->hasFile('tax_registration_number_file'))
-    //    {
-    //        $newInfluncer->addMedia($request->file('tax_registration_number_file'))
-    //        ->toMediaCollection('tax_registration_number_file');
-    //    }
-
-       
-        //    foreach ($request->snap_chat_video as $value) {
-        //        $data->addMedia($value)
-        //        ->toMediaCollection('snapchat_videos');
-        //    }
 
        foreach($request->categories as $item)
        {
            $newInfluncer->InfluncerCategories()->attach($item);
        }
-
-        // removed
-        //    foreach($request->preferred_socialMedias as $item)
-        //    {
-        //        $newInfluncer->socialMedias()->attach($item);
-        //    }
-
 
        foreach ($request->social_media as $item) {
             $obj = $item;
@@ -158,8 +145,6 @@ class RegisterController extends Controller
 
         $info = $data->influncers;
         $token = Auth::guard('api')->attempt(['email' => $request->email,'password' => $request->password]);
-        
-        //dd($info);
 
         return response()->json([
             'msg'       => 'Influncer was created',
@@ -170,19 +155,24 @@ class RegisterController extends Controller
 
     public function registerCustomer(CustomerRequest $request)
     {
-        
-        if($this->checkIfDataAvalibale($request))
+        $available = $this->checkIfDataAvailable($request);
+        if($available)
         {
             return response()->json([
-                'msg'=>$this->checkIfDataAvalibale($request),
+                'msg'=> $available,
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
         $info =[
             'msg'=>$request->message,
         ];
-        $commingRequest =  array_merge($request->only(['email','password','dial_code','name','fcm_token','phone','country_code']),['password'=>bcrypt($request->password)]);
-        $data = User::create($commingRequest);
+        
+        $comingRequest =  array_merge(
+            $request->only(['email','password','dial_code','name','fcm_token','phone','country_code']),
+            ['password'=>bcrypt($request->password)]
+        );
+
+        $data = User::create($comingRequest);
         if($request->hasFile('image'))
         {
             $data->addMedia($request->file('image'))
@@ -252,7 +242,7 @@ class RegisterController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    private function checkIfDataAvalibale($request)
+    private function checkIfDataAvailable($request)
     {
         if($request->country_id||$request->nationality_id)
         {
@@ -275,7 +265,7 @@ class RegisterController extends Controller
         }
         if(isset($request->isVat)&&!$request->tax_registration_number)
         {
-            return 'should be 3 categories for the influencer';
+            return 'Tax registration number is required';
         }
 
         return null;
@@ -283,19 +273,20 @@ class RegisterController extends Controller
 
     public function updateCustomer(UpdateCustomerRequest $request , $id)
     {
-        if($this->checkIfDataAvalibale($request))
+        $available = $this->checkIfDataAvailable($request);
+        if($available)
         {
             return response()->json([
-                'msg'=>$this->checkIfDataAvalibale($request),
-                'status'=>config('global.WRONG_VALIDATION_STATUS')
+                'msg'=> $available,
+                'status'=> config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
         $info =[
             'msg'=>$request->message,
         ];
-        $commingRequest =  array_merge($request->only(['email','password','name']),['password'=>bcrypt($request->password)]);
+        $comingRequest =  array_merge($request->only(['email','password','name']),['password'=>bcrypt($request->password)]);
         $data = User::find($id);
-        $data->update($commingRequest);
+        $data->update($comingRequest);
         if($request->hasFile('image')){
             $data->clearCollection('customers')
             ->addMedia($request->file('image'))
