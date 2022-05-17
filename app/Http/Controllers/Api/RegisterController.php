@@ -209,7 +209,7 @@ class RegisterController extends Controller
         $info =[
             'msg'=>'New Customer "'.$newCustomer->first_name.'" registered',
             'id'=>$data->id,
-            'type'=>'Customer'
+            'type'=>'Influencer'
         ];
         Notification::send($users, new AddInfluencer($info));
         $info = $data->customers;

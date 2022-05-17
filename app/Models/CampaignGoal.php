@@ -14,7 +14,7 @@ class CampaignGoal extends Model
 
     protected $fillable = [
         'title',
-        'customer_can_review'
+        'profitable'
     ];
 
     public function ads()

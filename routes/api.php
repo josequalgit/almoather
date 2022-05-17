@@ -125,7 +125,7 @@ Route::group(['prefix'=>'auth'],function(){
 
         
         #USER DETAILS
-        Route::get('users/details/{id?}',[AuthController::class,'details']);
+        Route::get('users/details/{id?}/{type?}',[AuthController::class,'details'])->where('type', 'customer|influencer');
         # AUTH ROUTES
         Route::controller(AuthController::class)->group(function(){
             Route::post('logout','logout');

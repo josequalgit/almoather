@@ -830,6 +830,13 @@ i.bx.bx-trash {
                   </select>
                 </div>
 
+                @if (!$data->campaignGoals->profitable)
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">Engagement rate</label>
+                  <input id="engagement_rate" class="form-control" type="number" min='0' max='100' />
+                </div>
+                @endif
+
               </div>
               <div class="modal-footer">
                 <button onclick="sendStatusRequest()" type="button" class="btn btn-primary">Save changes</button>
@@ -1082,8 +1089,14 @@ CKEDITOR.replace('contractContent', {
 
   function sendStatusRequest()
   {
+    let rate = '{{ $data->campaignGoals->profitable }}';
     let url  = '{{ route("dashboard.ads.update",":id") }}';
     let urlWithId = url.replace(':id','{{ $data->id }}');
+    let initValue = document.getElementById('engagement_rate')?document.getElementById('engagement_rate').value:null;
+    if((rate&&initValue > 100) || (rate&&initValue < 0))
+    {
+      return alert('please add correct amout of rate')
+    }
     $.ajax({
       url:urlWithId,
       type:'POST',
@@ -1091,6 +1104,7 @@ CKEDITOR.replace('contractContent', {
         status:document.getElementById('status').value,
         note:document.getElementById('rejectedNote').value,
         category_id:document.getElementById('category_id').value,
+        engagement_rate:initValue,
         // ad_type:document.getElementById('ad_type').value,
         onSite:'{{ $data->onSite }}',
         adBudget:'{{ $data->budget }}',

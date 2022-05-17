@@ -12,6 +12,8 @@ use App\Models\StoreLocation;
 use App\Models\Country;
 use App\Models\Influncer;
 use App\Models\User;
+use App\Models\CampaignContract;
+use App\Models\InfluencerContract;
 use App\Models\InfluncerCategory;
 use Auth,Alert,DB;
 use Carbon\Carbon;
@@ -55,8 +57,10 @@ class AdController extends Controller
 
     public function update(Request $request , $id)
     {
+       
         /** VALIDATIONS */
         $ad = Ad::find($id);
+      
         if(!$ad) return response()->json([
             'msg'=>'ad not found',
             'status'=>config('global.OK_STATUS')
@@ -65,124 +69,111 @@ class AdController extends Controller
             'msg'=>'please add a status',
             'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
         ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
-        // if(!$request->expense_type) return response()->json([
-        //     'msg'=>'please add a type',
-        //     'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
-        // ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
         if(!$request->category_id) return response()->json([
             'msg'=>'please choose a category',
             'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
         ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
-        // if(!$request->ad_type) return response()->json([
-        //     'msg'=>'please choose a ad type',
-        //     'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
-        // ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
-        // if(!$request->date) return response()->json([
-        //     'msg'=>'please select an ad date',
-        //     'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
-        // ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
 
-       // return response()->json([$request->all()],500);
 
         /** SAVE THE DATA */
-        $ad->status = $request->status;
-        $ad->category_id = $request->category_id;
-        $ad->reject_note = $request->note ?? null;
-        // $ad->expense_type = $request->expense_type;
-        // $ad->type = $request->ad_type;
-       // $ad->date = $request->date;
-        $ad->save();
+        // $ad->status = $request->status;
+        // $ad->category_id = $request->category_id;
+        // $ad->reject_note = $request->note ?? null;
+        // $ad->save();
 
         // STEP 1 - GET THE PROPERTY CATEGORIES
         $category = Category::find($request->category_id)->excludeCategories;
         
-        $chosen_inf = [];
+         $chosen_inf = [];
         $data = [];
         foreach ($category as $value) {
            $data = array_merge($chosen_inf,$value->influncers->pluck('id')->toArray());
         }
 
-        $influencers = Influncer::where('status','accepted')->whereNotIn('id',$data)->get();
+        // $influencers = Influncer::where('status','accepted')->whereNotIn('id',$data)->get();
+        //Remove this line and return the comment for production
+      //  $influencers = Influncer::where('status','accepted')->get();
+
 
         /** NEW WAY */
-        $startDate = Carbon::now()->subDays(28);
-        $endDate = Carbon::now();
-        $allAds28DaysSum = InfluencerRateing::whereBetween('created_at',[$startDate,$endDate])->sum('rate');
-        $allInfMarketingRatting28DaysAgoSum = MarketingAdRating::whereBetween('created_at',[$startDate,$endDate])->sum('rate');
-        $allCustomerMarketingRatting28DaysAgoSum = MarketingAdRating::whereBetween('created_at',[$startDate,$endDate])->sum('rate');
-        $allRate = [];
-        $allMatchedInf = [];
-        foreach ($influencers as $info) {
+        // $startDate = Carbon::now()->subDays(28);
+        // $endDate = Carbon::now();
+        // $allAds28DaysSum = InfluencerRateing::whereBetween('created_at',[$startDate,$endDate])->sum('rate');
+        // $allInfMarketingRatting28DaysAgoSum = MarketingAdRating::whereBetween('created_at',[$startDate,$endDate])->sum('rate');
+        // $allCustomerMarketingRatting28DaysAgoSum = MarketingAdRating::whereBetween('created_at',[$startDate,$endDate])->sum('rate');
+        // $allRate = [];
+        // $allMatchedInf = [];
+        // foreach ($influencers as $info) {
 
-                $infAds = $info->ads()->whereBetween('created_at',[$startDate,$endDate])->pluck('id')->toArray();
+        //         $infAds = $info->ads()->whereBetween('created_at',[$startDate,$endDate])->pluck('id')->toArray();
             
            
 
-            /** INF RATTING */
-            $infoRatting28DaysAgo =InfluencerRateing::whereIn('ad_id',$infAds)->whereBetween('created_at',[$startDate,$endDate])->get();
-            $sumRatting28DaysAgoInf =InfluencerRateing::whereIn('ad_id',$infAds)->whereBetween('created_at',[$startDate,$endDate])->sum('rate');
+        //     /** INF RATTING */
+        //     $infoRatting28DaysAgo =InfluencerRateing::whereIn('ad_id',$infAds)->whereBetween('created_at',[$startDate,$endDate])->get();
+        //     $sumRatting28DaysAgoInf =InfluencerRateing::whereIn('ad_id',$infAds)->whereBetween('created_at',[$startDate,$endDate])->sum('rate');
 
-            /** MARKETING RATTING */
-            $infMarketingRatting28DaysAgo = MarketingAdRating::whereIn('ad_id',$infAds)->get();
-            $sumInfMarketingRatting28DaysAgo = MarketingAdRating::whereIn('ad_id',$infAds)->sum('rate');
+        //     /** MARKETING RATTING */
+        //     $infMarketingRatting28DaysAgo = MarketingAdRating::whereIn('ad_id',$infAds)->get();
+        //     $sumInfMarketingRatting28DaysAgo = MarketingAdRating::whereIn('ad_id',$infAds)->sum('rate');
 
-            /** CUSTOMER RATTING */
-            $customerMarketingRatting28DaysAgo = CustomerAdRating::whereIn('ad_id',$infAds)->get();
-            $sumCustomerMarketingRatting28DaysAgo = CustomerAdRating::whereIn('ad_id',$infAds)->sum('rate');
+        //     /** CUSTOMER RATTING */
+        //     $customerMarketingRatting28DaysAgo = CustomerAdRating::whereIn('ad_id',$infAds)->get();
+        //     $sumCustomerMarketingRatting28DaysAgo = CustomerAdRating::whereIn('ad_id',$infAds)->sum('rate');
 
-            /** GET ALL SUCCEED ADS */
-            $countCustomerMarketingRatting28DaysAgo = CustomerAdRating::whereIn('ad_id',$infAds)->where('rate','>', 0)->count('rate');
+        //     /** GET ALL SUCCEED ADS */
+        //     $countCustomerMarketingRatting28DaysAgo = CustomerAdRating::whereIn('ad_id',$infAds)->where('rate','>', 0)->count('rate');
 
-            /** cal's */
+        //     /** cal's */
 
-            /** Influencer ratting */
-            $infRatting = ($sumRatting28DaysAgoInf != 0 && $allAds28DaysSum != 0)?$sumRatting28DaysAgoInf*100/$allAds28DaysSum:0;
-            /** Marketing ratting */
-            $infMarketing = ($sumInfMarketingRatting28DaysAgo != 0)?$sumInfMarketingRatting28DaysAgo*100/$allInfMarketingRatting28DaysAgoSum:0;
-            /** Customer ratting */
-            $customerMarketing = ($sumCustomerMarketingRatting28DaysAgo != 0)?$sumCustomerMarketingRatting28DaysAgo*100/$allCustomerMarketingRatting28DaysAgoSum:0;
-            /** Sum all ratting's*/
-            $sumAllNumbers = $infRatting + $infMarketing + $customerMarketing + $countCustomerMarketingRatting28DaysAgo;
+        //     /** Influencer ratting */
+        //     $infRatting = ($sumRatting28DaysAgoInf != 0 && $allAds28DaysSum != 0)?$sumRatting28DaysAgoInf*100/$allAds28DaysSum:0;
+        //     /** Marketing ratting */
+        //     $infMarketing = ($sumInfMarketingRatting28DaysAgo != 0)?$sumInfMarketingRatting28DaysAgo*100/$allInfMarketingRatting28DaysAgoSum:0;
+        //     /** Customer ratting */
+        //     $customerMarketing = ($sumCustomerMarketingRatting28DaysAgo != 0)?$sumCustomerMarketingRatting28DaysAgo*100/$allCustomerMarketingRatting28DaysAgoSum:0;
+        //     /** Sum all ratting's*/
+        //     $sumAllNumbers = $infRatting + $infMarketing + $customerMarketing + $countCustomerMarketingRatting28DaysAgo;
 
-            /** Push the influencer with the match percentage  */
-            $obj = [
-                'match'=>$sumAllNumbers/4,
-                'id'=>$info->id,
-                'ad_id'=>$id,
-                'price'=>($request->onSite == '1') ? $info->ad_onsite_price:$info->ad_price,
-            ];
+        //     /** Push the influencer with the match percentage  */
+        //     $obj = [
+        //         'match'=>$sumAllNumbers/4,
+        //         'id'=>$info->id,
+        //         'ad_id'=>$id,
+        //         'price'=>($request->onSite == '1') ? $info->ad_onsite_price:$info->ad_price,
+        //     ];
             
-            array_push($allMatchedInf,$obj);
-        }
+        //     array_push($allMatchedInf,$obj);
+        // }
 
-         usort($allMatchedInf, fn($a, $b) => strcmp($b['match'],$a['match']));
+        //  usort($allMatchedInf, fn($a, $b) => strcmp($b['match'],$a['match']));
 
 
-         $adBudget = $request->adBudget;
+        //  $adBudget = $request->adBudget;
              
-         foreach ($allMatchedInf as $key => $value) {
-            $count_budget = 0;
-            if($count_budget <= $adBudget )
-            {
+        //  foreach ($allMatchedInf as $key => $value) {
+        //     $count_budget = 0;
+        //     if($count_budget <= $adBudget )
+        //     {
            
-                AdsInfluencerMatch::create([
-                    'ad_id'=>$value['ad_id'],
-                    'influencer_id'=>$value['id'],
-                    'match'=>$value['match'],
-                    'chosen'=>1
-                ]);
-                $count_budget = $count_budget + $value['price'];
-            }
-            else
-            {
-                AdsInfluencerMatch::create([
-                    'ad_id'=>$value['ad_id'],
-                    'influencer_id'=>$value['id'],
-                    'match'=>$value['match'],
-                    'chosen'=>0
-                ]);
-            }
-         }
+        //         AdsInfluencerMatch::create([
+        //             'ad_id'=>$value['ad_id'],
+        //             'influencer_id'=>$value['id'],
+        //             'match'=>$value['match'],
+        //             'chosen'=>1
+        //         ]);
+        //         $count_budget = $count_budget + $value['price'];
+        //     }
+        //     else
+        //     {
+        //         AdsInfluencerMatch::create([
+        //             'ad_id'=>$value['ad_id'],
+        //             'influencer_id'=>$value['id'],
+        //             'match'=>$value['match'],
+        //             'chosen'=>0
+        //         ]);
+        //     }
+        //  }
 
    
         /** NEW WAY */
@@ -190,10 +181,118 @@ class AdController extends Controller
         Alert::toast('Add was updated', 'success');
 
 
+       /** END WAY */
+
+       $allInfluencer = $this->calculateNonProfitableAds($request,$ad,$data);
+
+
+       /** GET THE LOW ENGAGEMENT INFLUENCER*/
+ 
+       
+      
+
+      
+
+
         return response()->json([
-            'msg'=>'data was updated',
-            'status'=>201
-        ],201);
+            'msg'=>$allInfluencer,
+            'status'=>500
+        ],500);
+    }
+
+    private function calculateNonProfitableAds($request,$ad,$data){
+
+         /**  BUDGET PERCENTAGE CALCULATION */
+        $appPercentage = 0.15 * $ad->budget;
+        $percentForBigInf = 100 - $request->engagement_rate;
+        $budgetAfterCutPercentage = $ad->budget - $appPercentage;
+        $budgetForSmallInfluencer = $request->engagement_rate / 100 * $budgetAfterCutPercentage;
+    
+        $budgeForBigInfluencer = $percentForBigInf / 100 * $budgetAfterCutPercentage;
+
+        $chosenLowBudgetSubscribers = [];
+        $chosenBigBudgetSubscribers = [];
+        $isOverBudgetArray = [];
+        $allSmallInfluencer = Influncer::where('status','accepted')->whereNotIn('id',$data)->where('subscribers','<',500000)->where('subscribers','>',0);
+        if($ad->ad_type == 'onsite'){
+            $allSmallInfluencer = $allSmallInfluencer->where(function($query)use($ad){
+                $query->where('ads_out_country',1)
+                ->orWhere('city_id',$ad->city_id);
+            });
+        }
+        $allSmallInfluencer = $allSmallInfluencer->get();
+ 
+        foreach ($allSmallInfluencer as $key => $influencer) {
+            $price = $ad->ad_type == 'online'?$influencer->ad_price:$influencer->ad_onsite_price;
+ 
+ 
+            $getLastMonthAds = $influencer->contracts()->orderBy('created_at','desc')->take(30)->sum('af');
+            $getLastMonthAdsCount = $influencer->contracts()->orderBy('created_at','desc')->take(30)->count();
+ 
+            $AOAF = $getLastMonthAdsCount ? $getLastMonthAds/$getLastMonthAdsCount:0;
+ 
+            $eng_rate = $AOAF/$influencer->subscribers;
+             $allSmallInfluencer[$key]->eng_rate =  $eng_rate;
+        }
+      
+        $allSmallInfluencer = collect($allSmallInfluencer)->sortByDesc('eng_rate');
+        #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
+        foreach ($allSmallInfluencer as $key => $influencer) {
+            if(array_sum($isOverBudgetArray) + $price <= $budgetForSmallInfluencer)
+             {
+                 array_push($chosenLowBudgetSubscribers , $influencer);
+                 array_push($isOverBudgetArray , $price);
+             }
+             else
+             {
+                 $isOverBudgetArray = [];
+                 break;
+             }
+        }
+ 
+        
+        /** GET BIG INFLUENCERS */
+        $allBigInfluencer =  Influncer::where('status','accepted')->whereNotIn('id',$data)->where('subscribers','>=',500000);
+ 
+        if($ad->ad_type == 'onsite'){
+            $allBigInfluencer = $allBigInfluencer->where(function($query)use($ad){
+                $query->where('ads_out_country',1)
+                ->orWhere('city_id',$ad->city_id);
+            });
+        }
+        $allBigInfluencer = $allBigInfluencer->get();
+ 
+        foreach ($allBigInfluencer as $key => $influencer) {
+             $price = $ad->ad_type == 'online'?$influencer->ad_price:$influencer->ad_onsite_price;
+ 
+ 
+             $getLastMonthAds = $influencer->contracts()->orderBy('created_at','desc')->take(30)->sum('af');
+             $getLastMonthAdsCount = $influencer->contracts()->orderBy('created_at','desc')->take(30)->count();
+ 
+             $AOAF = $getLastMonthAdsCount ? $getLastMonthAds/$getLastMonthAdsCount:0;
+ 
+             $allBigInfluencer[$key]->AOAF =  $AOAF;
+         }
+ 
+         $allBigInfluencer = collect($allBigInfluencer)->sortByDesc('AOAF');
+        #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
+        foreach ($allBigInfluencer as $key => $influencer) {
+            if(array_sum($isOverBudgetArray) + $price <= $budgetForSmallInfluencer)
+             {
+                 array_push($chosenLowBudgetSubscribers , $influencer);
+                 array_push($isOverBudgetArray , $price);
+             }
+             else
+             {
+                 $isOverBudgetArray = [];
+                 break;
+             }
+        }
+ 
+        
+ 
+        /** MERGE THE TOW THE BIG AND THE SMALL INFLUENCER */
+        return array_merge($chosenLowBudgetSubscribers,$chosenBigBudgetSubscribers);
     }
 
     public function changeMatch($ad_id,$removed_inf,$chosen_inf)
@@ -272,14 +371,16 @@ class AdController extends Controller
 
     public function editContract ($ad_id)
     {
+        // dd('here');
         $data = Ad::findOrFail($ad_id)->contacts;
+        // return $data;
         return view('dashboard.ads.editContract',compact('data'));
     }
 
     public function updateContract(UpdateContractAds $request,$ad_id)
     {
         $contract_id = Ad::findOrFail($ad_id)->contacts->id;
-        $contract = Contract::findOrFail($contract_id)->update($request->all());
+        $contract = CampaignContract::findOrFail($contract_id)->update($request->all());
         return redirect()->route('dashboard.ads.index');
     }
 
@@ -292,11 +393,11 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
         
-        $data = new Contract;
-        $data->title = $contract->title;
+        $data = new InfluencerContract;
         $data->content = $contract->content;
         $data->influencer_id =$request->influncers_id;
         $data->date = $request->date;
+        $data->is_accepted = 0;
         $data->ad_id = $ad_id;
         $data->save();
         

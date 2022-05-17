@@ -67,7 +67,7 @@ class NotificationController extends Controller
     {
         $data = DB::table('notifications')->where('id',$id)->first();
         if(!$data)  return response()->json([
-            'err'=>'wrong notification id',
+            'err'=>'wrong notification',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
         $UpdateData = DB::table('notifications')->where('id',$id)->update([

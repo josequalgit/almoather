@@ -49,15 +49,7 @@ class CategoryController extends Controller
        $data->addMedia($request->file('image'))
        ->toMediaCollection('categories');
 
-    //    foreach ($request->preferred_categories as $value) {
-    //     $data->preferredCategories()->attach($value);
-    //     }   
-    //    foreach ($request->influncer_category_id as $value) {
-    //       $data->influncerCategories()->attach($value);
-    //    }    
-       foreach ($request->exclude_categories as $value) {
-          $data->excludeCategories()->attach($value);
-       }    
+       $data->excludeCategories()->sync($request->exclude_categories);
 
         activity()->log('Admin "'.Auth::user()->name.'" Added '. $data->name .' category');
         Alert::toast('Category was added', 'success');
@@ -76,18 +68,10 @@ class CategoryController extends Controller
         ];
         $data = Category::find($id);
         $data->update($addTranslate); 
-      //  $data->influncerCategories()->detach();
-        // $data->preferredCategories()->detach();
-        $data->excludeCategories()->detach();
-        // foreach ($request->influncer_category_id as $value) {
-        //    $data->influncerCategories()->attach($value);
-        // }    
-        // foreach ($request->preferred_categories as $value) {
-        //    $data->preferredCategories()->attach($value);
-        // }    
-        foreach ($request->exclude_categories as $value) {
-            $data->excludeCategories()->attach($value);
-        }    
+    
+        
+        $data->excludeCategories()->sync($request->exclude_categories);
+           
         if($request->hasFile('image'))
         {
             $data

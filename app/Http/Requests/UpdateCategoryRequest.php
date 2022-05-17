@@ -26,9 +26,6 @@ class UpdateCategoryRequest extends FormRequest
         return [
             'name_en'=>'required',
             'name_ar'=>'required',
-          //  'influncer_category_id'=>'required',
-            // 'preferred_categories'=>'required',
-            'exclude_categories'=>'required',
 
         ];
     }

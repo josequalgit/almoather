@@ -13,6 +13,8 @@ use App\Models\User;
 use App\Models\Influncer;
 use App\Models\Customer;
 use App\Models\Contract;
+use App\Models\CampaignContract;
+use App\Models\InfluencerContract;
 use App\Models\StoreLocation;
 use App\Models\AdsInfluencerMatch;
 use App\Http\Traits\UserResponse;
@@ -20,6 +22,7 @@ use App\Http\Traits\ApiPaginator;
 use App\Http\Traits\AdResponse;
 use Auth;
 use Validator;
+use App\Models\AppSetting;
 
 use DB;
 
@@ -54,28 +57,28 @@ class AdController extends Controller
 
             if($status == 'Completed'){
                 $itemsPaginated =  $data
-                ->where('influencer_status',1)
+                ->where('status',1)
                 ->where('is_accepted',$statusCode[$status])
                 ->paginate(10);
             }
             elseif($status == 'Active')
             {
                 $itemsPaginated =  $data
-                ->where('influencer_status',0)
+                ->where('status',0)
                 ->where('is_accepted',$statusCode[$status])
                 ->paginate(10);
             }
             elseif($status == 'Pending')
             {
                 $itemsPaginated =  $data
-                ->where('influencer_status',0)
+                ->where('status',0)
                 ->where('is_accepted',$statusCode[$status])
                 ->paginate(10);
             }
             elseif($status == 'Rejected')
             {
                 $itemsPaginated =  $data
-                ->where('influencer_status',0)
+                ->where('status',0)
                 ->where('is_accepted',$statusCode[$status])
                 ->paginate(10);
             }
@@ -86,6 +89,7 @@ class AdController extends Controller
           
 
             $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($status){
+              //  dd($item->id);
                 $data =  $this->adResponse($item->ads);
                 $data['status']         = $status;
                 $data['contract_id']    = $item->id;
@@ -265,23 +269,20 @@ class AdController extends Controller
     }
     private function create_customer_contract($ad_id = null , $customer)
     {
-        $contractData = Contract::find(2);
+        $contractData = AppSetting::where('key','Customer Contract')->first();
+       
+
+        if(!$contractData) return false;
         
-        if(!$contractData)
-        {
-            return false;
-        }
+         $replace = str_replace("[[Name]]",$customer->first_name.' '.$customer->last_name,json_decode($contractData->value));
 
-         $replace = str_replace("[[Name]]",$customer->first_name.' '.$customer->last_name,$contractData->content);
-
-
+        
         if($contractData)
         {
-            return Contract::create([
-                'title'=>$contractData->title,
+            return CampaignContract::create([
                 'content'=>$replace,
                 'ad_id'=>$ad_id,
-                'customer_id'=>$customer->id
+                'is_accepted'=>0
             ]);
         }
         else
@@ -303,7 +304,7 @@ class AdController extends Controller
             'err'=>'there is no contract for the ad because ad status is '.$ad->status,
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
-        $data = Contract::select(['title','content'])->find($ad->contacts->id);
+        $data = CampaignContract::select(['content'])->find($ad->contacts->id);
         if(!$data) return response()->json([
             'err'=>'contract not found',
             'status'=>config('global.NOT_FOUND_STATUS')
@@ -317,18 +318,23 @@ class AdController extends Controller
 
     public function accept_ad_contract(AcceptAdContractRequest $request,$contract_id)
     {
+        $data = InfluencerContract::find($contract_id);
+        // return response()->json([
+        //     'err'=>$request->all(),
+        //     'status'=>config('global.NOT_FOUND_STATUS')
+        // ],config('global.NOT_FOUND_STATUS'));
 
-        $data = Contract::find($contract_id);
 
         if(!$data) return response()->json([
             'err'=>'contract not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        $data->is_accepted = $request->status;
-        $data->rejectNote = $request->rejectNote;
+        
+        $data->is_accepted = $request->status == 0?2:$request->status;
+        $data->rejectNote = $request->reject_note;
         $data->save();
-
+       
         if($request->status == 0&&$request->rejectNote)
         {
             $influencer = Influncer::find($data->influencer_id);
@@ -850,9 +856,13 @@ class AdController extends Controller
 
     public function completeAd($contract_id)
     {
-      //  dd($contract_id);
-        $data = Contract::find($contract_id);
+        $data = InfluencerContract::find($contract_id);
+        // return response()->json([
+        //     'err'=>$contract_id,
+        //     'status'=>config('global.NOT_FOUND_STATUS')
+        // ],config('global.NOT_FOUND_STATUS'));
         $influencer = Influncer::find($data->influencer_id);
+        
         $ad = Ad::find($data->ad_id);
         if(!$influencer&&!$ad) return response()->json([
             'err'=>'something wrong',
@@ -879,7 +889,7 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        $data->influencer_status = 1;
+        $data->status = 1;
         $data->save();
 
         return response()->json([
@@ -890,19 +900,20 @@ class AdController extends Controller
 
     public function accept_customer_ad_contract(Request $request , $contract_id)
     {
-        $data = Contract::find($contract_id);
+        $data = CampaignContract::find($contract_id);
         if(!$data) return response()->json([
             'err'=>'contract not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
+        if($request->status == 0&&!$request->rejectNote) return response()->json([
+            'err'=>'please add reject note',
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
 
         $data->is_accepted = $request->status;
-        $data->rejectNote = $request->rejectNote;
+        $data->rejectNote = $request->status == 0?$request->rejectNote:null;
         $data->save();
     
-       
-
-
         return response()->json([
             'msg'=>'data was updated',
             'status'=>config('global.OK_STATUS'),
@@ -981,12 +992,12 @@ class AdController extends Controller
     {
         $user = Influncer::find($request->influncer_id);
         $data = AdsInfluencerMatch::where([['ad_id',$request->ad_id],['influencer_id',$request->influncer_id]])->first();
-        if(!$data) return response()->json([
-            'err'=>'influencer match was not found',
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
+
+       
         $data->status = $request->status;
+
         $data->save();
+      
 
 
         $ad = Ad::findOrFail($request->ad_id);
