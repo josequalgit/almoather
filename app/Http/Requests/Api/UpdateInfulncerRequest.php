@@ -48,7 +48,7 @@ class UpdateInfulncerRequest extends FormRequest
             'ad_onsite_price'=>'required',
             'categories'=>'required',
             'region_id'=>'required',
-            'phone'=>'required',
+            'phone'=>'required|unique:users,phone,' . Auth::guard('api')->user()->id,
             'ad_with_vat'=>'required',
             'ad_onsite_price_with_vat'=>'required',
             'social_media'=>'required',
