@@ -139,16 +139,17 @@ class AdController extends Controller
         #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
         $budgetSum = 0;
         $chosenInfluencer = [];
+        $notChosenInfluencer = [];
         foreach ($allSmallInfluencer as $key => $influencer) {
             $budgetSum += $price;
             if ($budgetSum <= $budgetAfterCutPercentage) {
                 array_push($chosenInfluencer, $influencer);
             } else {
-                break;
+                array_push($notChosenInfluencer, $influencer);
             }
         }
 
-        return $chosenInfluencer;
+        return ['chosenInfluencer' => $chosenInfluencer,'notChosenInfluencer' => $notChosenInfluencer];
     }
 
     private function calculateNonProfitableAds($request, $ad, $data)
@@ -162,9 +163,8 @@ class AdController extends Controller
 
         $budgeForBigInfluencer = $percentForBigInf / 100 * $budgetAfterCutPercentage;
 
-        $chosenLowBudgetSubscribers = [];
-        $chosenBigBudgetSubscribers = [];
-        $isOverBudgetArray = [];
+        $chosenSubscribers = [];
+        $notChosenInfluencer = [];
         $allSmallInfluencer = Influncer::where('status', 'accepted')->whereNotIn('id', $data)->where('subscribers', '<', 500000)->where('subscribers', '>', 0);
         if ($ad->ad_type == 'onsite') {
             $allSmallInfluencer = $allSmallInfluencer->where(function ($query) use ($ad) {
@@ -187,14 +187,15 @@ class AdController extends Controller
         }
 
         $allSmallInfluencer = collect($allSmallInfluencer)->sortByDesc('eng_rate');
+
+        $isOverBudge = 0;
         #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
         foreach ($allSmallInfluencer as $key => $influencer) {
-            if (array_sum($isOverBudgetArray) + $price <= $budgetForSmallInfluencer) {
-                array_push($chosenLowBudgetSubscribers, $influencer);
-                array_push($isOverBudgetArray, $price);
+            $isOverBudge += $price;
+            if ($isOverBudge <= $budgetForSmallInfluencer) {
+                array_push($chosenSubscribers, $influencer);
             } else {
-                $isOverBudgetArray = [];
-                break;
+                array_push($notChosenInfluencer, $influencer);
             }
         }
 
@@ -222,18 +223,18 @@ class AdController extends Controller
 
         $allBigInfluencer = collect($allBigInfluencer)->sortByDesc('AOAF');
         #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
+        $isOverBudge = 0;
         foreach ($allBigInfluencer as $key => $influencer) {
-            if (array_sum($isOverBudgetArray) + $price <= $budgetForSmallInfluencer) {
-                array_push($chosenLowBudgetSubscribers, $influencer);
-                array_push($isOverBudgetArray, $price);
+            $isOverBudge += $price;
+            if ($isOverBudge <= $budgetForSmallInfluencer) {
+                array_push($chosenSubscribers, $influencer);
             } else {
-                $isOverBudgetArray = [];
-                break;
+                array_push($notChosenInfluencer, $influencer);
             }
         }
 
         /** MERGE THE TOW THE BIG AND THE SMALL INFLUENCER */
-        return array_merge($chosenLowBudgetSubscribers, $chosenBigBudgetSubscribers);
+        return ['chosenInfluencer' => $chosenSubscribers,'notChosenInfluencer' => $notChosenInfluencer];
     }
 
     public function changeMatch($ad_id, $removed_inf, $chosen_inf)

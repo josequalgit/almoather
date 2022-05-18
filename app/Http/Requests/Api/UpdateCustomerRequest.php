@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Auth;
 
 class UpdateCustomerRequest extends FormRequest
 {
@@ -31,7 +32,7 @@ class UpdateCustomerRequest extends FormRequest
             'middle_name'=>'required',
             'last_name'=>'required',
             'country_code'=>'required',
-            'phone'=>'required',
+            'phone'=> 'required|unique:users,phone,' . Auth::guard('api')->user()->id,
             'id_number',
             'country_id'=>'required',
             'region_id'=>'required',
