@@ -90,9 +90,10 @@ class AdController extends Controller
 
 
             $tokens = [$ad->customers->users->fcm_token];
+            $msg = $request->note?"Your Ad {$ad->store} has been rejected":"Your Ad {$ad->store} has been accepted";
             $data = [
                 "title" => "Ads " . $ad->store . " Accepted",
-                "body" => "Your Ad {$ad->store} has been accepted",
+                "body" => $msg,
                 "type" => 'Ad',
                 'id' => $ad->id            
             ];
@@ -101,7 +102,7 @@ class AdController extends Controller
             activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
            $this->sendNotifications($tokens,$data);
 
-            $users = [Auth::user()];
+            $users = [Auth::guard('api')->user()];
             $info =[
                 'msg'=>'Your Ad "'.$ad->store.'" has been accepted',
                 'id'=>$data['id'],
