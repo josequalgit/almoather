@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Traits;
+use Illuminate\Support\Facades\Log;
 
 trait SendNotification {
     function sendNotifications($tokens,$data,$topic = false){
