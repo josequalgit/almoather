@@ -46,7 +46,7 @@ class AuthController extends Controller
         }
         else
         {
-            return response()->json(['msg' => 'Unauthorized'], config('global.UNAUTHORIZED_VALIDATION_STATUS'));
+            return response()->json(['msg' => 'wrong email/password'], config('global.UNAUTHORIZED_VALIDATION_STATUS'));
         }
 
         $user = Auth::guard('api')->user();
