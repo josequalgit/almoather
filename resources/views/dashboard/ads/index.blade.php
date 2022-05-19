@@ -248,7 +248,7 @@ $para = $checkStatus ? request()->route()->parameters['status'] : null;
                                                             <i class="bx bx-book-content"></i>
                                                            </button> 
                                                            @elseif($item->status == 'fullpayment'||$item->status == 'progress'||$item->status == 'influncer_complete'||$item->status == 'complete'||$item->status == 'incomplete'||$item->status == 'rejected')
-                                                           <button  onclick="openModalSeeContract('{{ $item->contacts->content }}')" class="btn btn-secondary">
+                                                           <button  onclick="openModalSeeContract('{{ $item->contacts?$item->contacts->content:'No data avalibale' }}')" class="btn btn-secondary">
                                                             <i class="bx bx-book-content"></i>
                                                            </button> 
                                                                @else
