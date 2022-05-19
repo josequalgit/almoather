@@ -6,7 +6,7 @@ trait SendNotification {
     function sendNotifications($tokens,$data,$topic = false){
         $apiKey = "AAAANfr15q4:APA91bFO9lO-XRcSI1lgJVdT2taopCIE27kHWp6k0--nQLCyAmIOXhX5RupGsZTnIC1CwMrRBcyFzvc6ZIqWgenj4aFsUgkUm6q_jyt9JVgJfnP16vfqzuZCMg8BD-b2BiyMqY8LpTZd";
 
-        $url = 'https://android.googleapis.com/gcm/send';
+        $url = 'https://fcm.googleapis.com/fcm/send';
 
         $data['sound'] = 'default';
         $data['icon'] = 'ic_launcher';
@@ -37,12 +37,12 @@ trait SendNotification {
         curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode( $fields));
-
+		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         // Execute post
         $result = curl_exec($ch);
         curl_close($ch);
-
-        if ($result === FALSE) {
+        if ($httpcode != 200) {
+			Log::error('result fcm: ' . $result);
             Log::error('Curl failed: ' . curl_error($ch));
         }
         
