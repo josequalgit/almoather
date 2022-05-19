@@ -121,6 +121,10 @@ class AdController extends Controller
 
         /** NEW WAY */
         activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
+        $users = [Auth::user()];
+
+        Notification::send($users, new AddInfluencer($info));
+
         Alert::toast('Add was updated', 'success');
 
 
