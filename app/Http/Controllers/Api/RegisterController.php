@@ -90,6 +90,7 @@ class RegisterController extends Controller
             'street',
             'neighborhood',
             'bank_account_name',
+            'fcm_token'
         ]);
         
 
@@ -189,7 +190,8 @@ class RegisterController extends Controller
             'region_id',
             'user_id',
             'city_id',
-            'gender'
+            'gender',
+            'fcm_token'
         ]);
         $addUserId =  array_merge($customerData,['user_id'=>$data->id]);
         $newCustomer = Customer::create($addUserId);

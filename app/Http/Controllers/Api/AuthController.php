@@ -65,6 +65,7 @@ class AuthController extends Controller
         }
         if($user->influncers)
         {
+            $user->update(['fcm_token' => $request->fcm_token]);
 			 return response()->json([
                 'msg' => "user data",
 				 'data' => $this->userDataResponse($user,$token, $user->id),
