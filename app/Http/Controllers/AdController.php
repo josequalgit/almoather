@@ -95,14 +95,14 @@ class AdController extends Controller
                 "title" => "Ads " . $ad->store . " Accepted",
                 "body" => $msg,
                 "type" => 'Ad',
-                'id' => $ad->id            
+                'target_id' =>$ad->id            
             ];
     
 
             activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
            $this->sendNotifications($tokens,$data);
 
-            $users = [Auth::guard('api')->user()];
+            $users = [Auth::guard('api')->user()->id];
             $info =[
                 'msg'=>'Your Ad "'.$ad->store.'" has been accepted',
                 'id'=>$data['id'],
