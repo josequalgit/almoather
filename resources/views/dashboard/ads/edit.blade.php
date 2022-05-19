@@ -7,275 +7,280 @@
   }
   
 
-/* Important part */
-.modal-dialog{
-    overflow-y: initial !important
-}
-.modal-body{
-    height: 50vh;
-    overflow-y: auto;
-}
+    /* Important part */
+  .modal-dialog{
+      overflow-y: initial !important
+  }
+  .modal-body{
+      height: 50vh;
+      overflow-y: auto;
+  }
 
-.shadow-sm {
-    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
-}    
+  .shadow-sm {
+      box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+  }    
 
-/* user-dashboard-info-box */
-.user-dashboard-info-box .candidates-list .thumb {
-    margin-right: 20px;
-}
-.user-dashboard-info-box .candidates-list .thumb img {
-    width: 80px;
-    height: 80px;
-    -o-object-fit: cover;
-    object-fit: cover;
-    overflow: hidden;
-    border-radius: 50%;
-}
+  /* user-dashboard-info-box */
+  .user-dashboard-info-box .candidates-list .thumb {
+      margin-right: 20px;
+  }
+  .user-dashboard-info-box .candidates-list .thumb img {
+      width: 80px;
+      height: 80px;
+      -o-object-fit: cover;
+      object-fit: cover;
+      overflow: hidden;
+      border-radius: 50%;
+  }
 
-.user-dashboard-info-box .title {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    padding: 30px 0;
-}
+  .user-dashboard-info-box .title {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      padding: 30px 0;
+  }
 
-.user-dashboard-info-box .candidates-list td {
-    vertical-align: middle;
-}
+  .user-dashboard-info-box .candidates-list td {
+      vertical-align: middle;
+  }
 
-.user-dashboard-info-box td li {
-    margin: 0 4px;
-}
+  .user-dashboard-info-box td li {
+      margin: 0 4px;
+  }
 
-.user-dashboard-info-box .table thead th {
-    border-bottom: none;
-}
+  .user-dashboard-info-box .table thead th {
+      border-bottom: none;
+  }
 
-.table.manage-candidates-top th {
-    border: 0;
-}
+  .table.manage-candidates-top th {
+      border: 0;
+  }
 
-.user-dashboard-info-box .candidate-list-favourite-time .candidate-list-favourite {
-    margin-bottom: 10px;
-}
+  .user-dashboard-info-box .candidate-list-favourite-time .candidate-list-favourite {
+      margin-bottom: 10px;
+  }
 
-.table.manage-candidates-top {
-    /* min-width: 650px; */
-}
+  .table.manage-candidates-top {
+      /* min-width: 650px; */
+  }
 
-.user-dashboard-info-box .candidate-list-details ul {
-    color: #969696;
-}
+  .user-dashboard-info-box .candidate-list-details ul {
+      color: #969696;
+  }
 
-/* Candidate List */
-.candidate-list {
-    background: #ffffff;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    border-bottom: 1px solid #eeeeee;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    padding: 20px;
-    -webkit-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
-}
-.candidate-list:hover {
-    -webkit-box-shadow: 0px 0px 34px 4px rgba(33, 37, 41, 0.06);
-    box-shadow: 0px 0px 34px 4px rgba(33, 37, 41, 0.06);
-    position: relative;
-    z-index: 99;
-}
-.candidate-list:hover a.candidate-list-favourite {
-    color: #e74c3c;
-    -webkit-box-shadow: -1px 4px 10px 1px rgba(24, 111, 201, 0.1);
-    box-shadow: -1px 4px 10px 1px rgba(24, 111, 201, 0.1);
-}
+  /* Candidate List */
+  .candidate-list {
+      background: #ffffff;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      border-bottom: 1px solid #eeeeee;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      padding: 20px;
+      -webkit-transition: all 0.3s ease-in-out;
+      transition: all 0.3s ease-in-out;
+  }
+  .candidate-list:hover {
+      -webkit-box-shadow: 0px 0px 34px 4px rgba(33, 37, 41, 0.06);
+      box-shadow: 0px 0px 34px 4px rgba(33, 37, 41, 0.06);
+      position: relative;
+      z-index: 99;
+  }
+  .candidate-list:hover a.candidate-list-favourite {
+      color: #e74c3c;
+      -webkit-box-shadow: -1px 4px 10px 1px rgba(24, 111, 201, 0.1);
+      box-shadow: -1px 4px 10px 1px rgba(24, 111, 201, 0.1);
+  }
 
-.candidate-list .candidate-list-image {
-    margin-right: 25px;
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 80px;
-    flex: 0 0 80px;
-    border: none;
-}
-.candidate-list .candidate-list-image img {
-    width: 80px;
-    height: 80px;
-    -o-object-fit: cover;
-    object-fit: cover;
-}
+  .candidate-list .candidate-list-image {
+      margin-right: 25px;
+      -webkit-box-flex: 0;
+      -ms-flex: 0 0 80px;
+      flex: 0 0 80px;
+      border: none;
+  }
+  .candidate-list .candidate-list-image img {
+      width: 80px;
+      height: 80px;
+      -o-object-fit: cover;
+      object-fit: cover;
+  }
 
-.candidate-list-title {
-    margin-bottom: 5px;
-}
+  .candidate-list-title {
+      margin-bottom: 5px;
+  }
 
-.candidate-list-details ul {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    margin-bottom: 0px;
-}
-.candidate-list-details ul li {
-    margin: 5px 10px 5px 0px;
-    font-size: 13px;
-}
+  .candidate-list-details ul {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      margin-bottom: 0px;
+  }
+  .candidate-list-details ul li {
+      margin: 5px 10px 5px 0px;
+      font-size: 13px;
+  }
 
-.candidate-list .candidate-list-favourite-time {
-    margin-left: auto;
-    text-align: center;
-    font-size: 13px;
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 90px;
-    flex: 0 0 90px;
-}
-.candidate-list .candidate-list-favourite-time span {
-    display: block;
-    margin: 0 auto;
-}
-.candidate-list .candidate-list-favourite-time .candidate-list-favourite {
+  .candidate-list .candidate-list-favourite-time {
+      margin-left: auto;
+      text-align: center;
+      font-size: 13px;
+      -webkit-box-flex: 0;
+      -ms-flex: 0 0 90px;
+      flex: 0 0 90px;
+  }
+  .candidate-list .candidate-list-favourite-time span {
+      display: block;
+      margin: 0 auto;
+  }
+  .candidate-list .candidate-list-favourite-time .candidate-list-favourite {
+      display: inline-block;
+      position: relative;
+      height: 40px;
+      width: 40px;
+      line-height: 40px;
+      border: 1px solid #eeeeee;
+      border-radius: 100%;
+      text-align: center;
+      -webkit-transition: all 0.3s ease-in-out;
+      transition: all 0.3s ease-in-out;
+      margin-bottom: 20px;
+      font-size: 16px;
+      color: #646f79;
+  }
+  .candidate-list .candidate-list-favourite-time .candidate-list-favourite:hover {
+      background: #ffffff;
+      color: #e74c3c;
+  }
+
+  .candidate-banner .candidate-list:hover {
+      position: inherit;
+      -webkit-box-shadow: inherit;
+      box-shadow: inherit;
+      z-index: inherit;
+  }
+
+  .bg-white {
+      background-color: #ffffff !important;
+  }
+  .p-4 {
+      padding: 1.5rem!important;
+  }
+  .mb-0, .my-0 {
+      margin-bottom: 0!important;
+  }
+  .shadow-sm {
+      box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+  }
+
+  .user-dashboard-info-box .candidates-list .thumb {
+      margin-right: 20px;
+  }
+
+  .inf-image{
+    width: 150px;
+    border-radius: 13px;
+  }
+  i.bx.bx-video {
+      font-size: 116px;
+  }
+  i.bx.bx-image {
+      font-size: 116px;
+  }
+  i.bx.bx-trash {
+      font-size: 116px;
+  }
+  #headerPopup{
+    width:75%;
+    margin:0 auto;
+  }
+
+  #headerPopup iframe{
+    width:100%;
+    margin:0 auto;
+  }
+  #fade {
+    display: none;
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 1001;
+    -moz-opacity: 0.8;
+    opacity: .80;
+    filter: alpha(opacity=80);
+  }
+
+  #light {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    max-width: 600px;
+    max-height: 360px;
+    margin-left: -300px;
+    margin-top: -180px;
+    border: 2px solid #FFF;
+    background: #FFF;
+    z-index: 1002;
+    overflow: visible;
+  }
+
+  #boxclose {
+    float: right;
+    cursor: pointer;
+    color: #fff;
+    border: 1px solid #AEAEAE;
+    border-radius: 3px;
+    background: #222222;
+    font-size: 31px;
+    font-weight: bold;
     display: inline-block;
-    position: relative;
-    height: 40px;
-    width: 40px;
-    line-height: 40px;
-    border: 1px solid #eeeeee;
-    border-radius: 100%;
-    text-align: center;
-    -webkit-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
-    margin-bottom: 20px;
-    font-size: 16px;
-    color: #646f79;
-}
-.candidate-list .candidate-list-favourite-time .candidate-list-favourite:hover {
-    background: #ffffff;
-    color: #e74c3c;
-}
+    line-height: 0px;
+    padding: 11px 3px;
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    z-index: 1002;
+    opacity: 0.9;
+  }
 
-.candidate-banner .candidate-list:hover {
-    position: inherit;
-    -webkit-box-shadow: inherit;
-    box-shadow: inherit;
-    z-index: inherit;
-}
+  .boxclose:before {
+    content: "×";
+  }
 
-.bg-white {
-    background-color: #ffffff !important;
-}
-.p-4 {
-    padding: 1.5rem!important;
-}
-.mb-0, .my-0 {
-    margin-bottom: 0!important;
-}
-.shadow-sm {
-    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
-}
+  #fade:hover ~ #boxclose {
+    display:none;
+  }
 
-.user-dashboard-info-box .candidates-list .thumb {
-    margin-right: 20px;
-}
+  .test:hover ~ .test2 {
+    display: none;
+  }
+  .deleteButton{
+      border: none;
+      background: none;
+  }
 
-.inf-image{
-  width: 150px;
-  border-radius: 13px;
-}
-i.bx.bx-video {
-    font-size: 116px;
-}
-i.bx.bx-image {
-    font-size: 116px;
-}
-i.bx.bx-trash {
-    font-size: 116px;
-}
-#headerPopup{
-  width:75%;
-  margin:0 auto;
-}
+  .avatar {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
 
-#headerPopup iframe{
-  width:100%;
-  margin:0 auto;
-}
-#fade {
-  display: none;
-  position: fixed;
-  top: 0%;
-  left: 0%;
-  width: 100%;
-  height: 100%;
-  background-color: black;
-  z-index: 1001;
-  -moz-opacity: 0.8;
-  opacity: .80;
-  filter: alpha(opacity=80);
-}
+  .status{
+    text-transform: uppercase;
 
-#light {
-  display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  max-width: 600px;
-  max-height: 360px;
-  margin-left: -300px;
-  margin-top: -180px;
-  border: 2px solid #FFF;
-  background: #FFF;
-  z-index: 1002;
-  overflow: visible;
-}
-
-#boxclose {
-  float: right;
-  cursor: pointer;
-  color: #fff;
-  border: 1px solid #AEAEAE;
-  border-radius: 3px;
-  background: #222222;
-  font-size: 31px;
-  font-weight: bold;
-  display: inline-block;
-  line-height: 0px;
-  padding: 11px 3px;
-  position: absolute;
-  right: 2px;
-  top: 2px;
-  z-index: 1002;
-  opacity: 0.9;
-}
-
-.boxclose:before {
-  content: "×";
-}
-
-#fade:hover ~ #boxclose {
-  display:none;
-}
-
-.test:hover ~ .test2 {
-  display: none;
-}
-.deleteButton{
-    border: none;
-    background: none;
-}
-
-.avatar {
-  vertical-align: middle;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-}
+  }
 
 
 </style>
@@ -303,7 +308,8 @@ i.bx.bx-trash {
                       <div class="card">
                         <div class="card-body">
                           <div class="d-flex flex-column align-items-center text-center">
-                            <img src="{{ $data->customers->users->image?$data->customers->users->image['url']:null }}" alt="Admin" class="rounded-circle" width="150">
+                          
+                            <img src="{{ $data->customers->users->image?$data->customers->users->image['url']:null }}" alt="customer image not found" class="rounded-circle" width="150">
                             <div class="mt-3">
                               <h5>{{ $data->customers->first_name }} {{ $data->customers->middle_name }} {{ $data->customers->last_name }}</h5>
                               <p class="text-secondary mb-1">Customer</p>
@@ -328,6 +334,50 @@ i.bx.bx-trash {
                           @endforeach
                         </ul>
                       </div>
+
+                      <h6 class="status">
+                       
+                      </h6>
+                      @if($data->status == 'rejected')
+                      <div class="alert alert-danger" role="alert">
+                        Status:<span class="status"> {{ $data->status }}</span>
+                        <br/>
+                        {{ $data->reject_note}}
+                      </div>
+                      @else
+                      <div class="alert alert-info mb-2" role="alert">
+                        Status:<span class="status"> {{ $data->status }}</span>
+                      </div>
+                      @endif
+                      @if(count($matches) == 0&&$data->status !== 'rejected'&&$data->status !== 'approve')
+                      <label for="">
+                        <h6 class="mb-2">
+                          Actions:
+                        </h6>
+                    </label>
+                      
+                      <button onclick="openCategoryModel('change')" type="button" class="btn btn-info  col mb-2">
+                        Show Influncer
+                      </button>
+                      <button onclick="sendStatusRequest('rejected')" type="button" class="btn btn-danger col mb-2">
+                        Reject
+                      </button>
+                      @elseif(count($matches) > 0 &&$data->status !== 'rejected'&&$data->status !== 'approve')
+                      <label for="">
+                        <h6 class="mb-2">
+                          Actions:
+                        </h6>
+                    </label>
+                      <button onclick="sendStatusRequest('Confirm')" type="button" class="btn btn-success col mb-2">
+                        Confirm
+                      </button>
+                      <button onclick="openCategoryModel('change')" type="button" class="btn btn-info  col mb-2">
+                        Change Category
+                      </button>
+                      <button onclick="sendStatusRequest('rejected')" type="button" class="btn btn-danger col mb-2">
+                        Reject
+                      </button>
+                      @endif
                       
                     </div>
                     <div class="col-md-8">
@@ -678,14 +728,29 @@ i.bx.bx-trash {
                 </div>
             </div>
 
-           
+            {{-- @if(count($matches) > 0&&$data->status !== 'rejected')
+              <div class="row mb-2">
+                <button onclick="sendStatusRequest('rejected')" type="button" class="btn btn-success mr-4">Confirm</button>
+                <button onclick="openCategoryModel('change')" type="button" class="btn btn-info ">Change Category</button>
+                <button onclick="sendStatusRequest('rejected')" type="button" class="btn btn-danger ml-4">Reject</button>
+              </div>
+            @else
+              <div class="row mb-2">
+                  @if ($data->status !== 'rejected')
+                  <button onclick="sendStatusRequest('rejected')" type="button" class="btn btn-danger mr-4">Reject</button>
+                  <button onclick="openCategoryModel()" type="button" class="btn btn-info ">Show Influncer</button>
+                    @else
+                  
+                  @endif
+              </div>
+            @endif --}}
           
-        
+           
 
           
             
 
-            <div class="form-group">
+            {{-- <div class="form-group">
               <label for="inputAddress2">Status</label>
               @if($data->status == 'pending'||$data->status == 'rejected')
               <select id="status" class="form-control" id="exampleFormControlSelect1">
@@ -719,7 +784,7 @@ i.bx.bx-trash {
                 @endif 
               @endcan
               
-            </div>
+            </div> --}}
           <hr/>
             @if(count($matches) > 0)
             <div class="table-responsive mt-2">
@@ -731,6 +796,7 @@ i.bx.bx-trash {
                           <th>Full name</th>
                           <th>Match</th>
                           <th>Chosen</th>
+                          <th>Status</th>
                           <th>Accepted</th>
                           <th>Action</th>
                       </tr>
@@ -748,6 +814,7 @@ i.bx.bx-trash {
                                   <td>{{  $item->influencers->first_name }} {{  $item->influencers->middle_name }} {{  $item->influencers->last_name }}</td>
                                   <td>{{ $item->match }}%</td>
                                   <td>{{ $item->chosen ? 'Yes':'No' }}</td>
+                                  <td>{{ $item->status  }}</td>
                                   <td>
                                   @if ($item->influencers->checkIfAccepted($data->id) == 1)
                                       Yes
@@ -759,13 +826,16 @@ i.bx.bx-trash {
                                 </td>
                                   <td>
                                     
-                                    
-                                    <button {{ $item->influencers->checkIfAccepted($data->id) == 1?'disabled':'' }} type="button" onclick="seeContract('{{$data->contacts->content}}','{{ $item->influencers->id }}')" class="btn btn-secondary">
+                                    @if ($data->status == 'approve')
+                                    <button  {{ $item->influencers->checkIfAccepted($data->id) == 1?'disabled':'' }} type="button" onclick="seeContract('{{$data->contacts->content}}','{{ $item->influencers->id }}')" class="btn btn-secondary mb-2">
                                       <i class="bx bx-send"></i>
                                      </button> 
+                                     @endif
+
                                     <button type="button" onclick="getUnchosenInfulncers('{{ $item->influencers->id }}')" class="btn btn-secondary">
                                       <i class="bx bx-transfer"></i>
                                      </button> 
+                                        
 
                                    
                                   </td>
@@ -817,15 +887,15 @@ i.bx.bx-trash {
                 <div class="form-group">
                   <label for="exampleFormControlSelect1">Ad type</label>
                   <select class="form-control" id="ad_type">
-                    <option value="product">Product</option>
-                    <option value="service">Service</option>
+                    <option {{ $data->type == 'product'?'selected':''}} value="product">Product</option>
+                    <option {{ $data->type == 'service'?'selected':'' }} value="service">Service</option>
                   </select>
                 </div>
                 <div class="form-group">
                   <label for="exampleFormControlSelect1">Category</label>
                   <select class="form-control" id="category_id">
                     @foreach ($categories as $item)
-                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                    <option {{ $data->category_id == $item->id ? 'selected':'' }} value="{{ $item->id }}">{{ $item->name }}</option>
                     @endforeach
                   </select>
                 </div>
@@ -1035,6 +1105,19 @@ i.bx.bx-trash {
 @section('scripts')
 <script>
     $('#addressSection').hide();
+    let ad_id = '{{ $data->id }}';
+
+  let getLocalData = localStorage.getItem('rateData');
+  if(getLocalData)
+  {
+    getLocalData = JSON.parse(getLocalData);
+    let getRate = getLocalData[ad_id];
+    if(getRate)
+    {
+      document.getElementById('engagement_rate').value = getRate;
+    }
+  }
+
 
 const Toast = Swal.mixin({
           toast: true,
@@ -1051,6 +1134,8 @@ const Toast = Swal.mixin({
  
 let choosen_inf_id = 0;
 let showAddress = false;
+let isConfirm = false;
+let notChange = null;
 
   let removed_inf = 0;
 
@@ -1087,24 +1172,71 @@ CKEDITOR.replace('contractContent', {
     
   }
 
-  function sendStatusRequest()
+  function sendStatusRequest(status = null)
   {
+    
+    if(status == 'rejected')
+    {
+        $('#rejectedReson').modal('toggle');
+        return;
+    }
+    if(status == 'Confirm')
+    {
+      
+      let localData = JSON.parse(localStorage.getItem('rateData'));
+      localData.splice(ad_id,1);
+      localStorage.setItem('rateData',JSON.stringify(localData));
+      isConfirm = true;
+    }
+    
+    // SAVE DATA TO LOCAL
+    let localData = localStorage.getItem('rateData');
+
+    // IF THE LOCAL STORAGE HAVE DATA GET IT AND MAKE IT AN ARRAY
+    if(localData&&status != 'Confirm') 
+    {
+      localData = JSON.parse(localStorage.getItem('rateData'))
+      localData[ad_id] = document.getElementById('engagement_rate').value;
+      localStorage.setItem('rateData',JSON.stringify(localData));
+    }
+    else
+    {
+      let array = [];
+      array[ad_id] = document.getElementById('engagement_rate').value;
+      localStorage.setItem('rateData',JSON.stringify(array));
+    };
+    
+
+    
+   
     let rate = '{{ $data->campaignGoals->profitable }}';
     let url  = '{{ route("dashboard.ads.update",":id") }}';
-    let urlWithId = url.replace(':id','{{ $data->id }}');
+    let fullUrl = url.replace(':id','{{ $data->id }}');
     let initValue = document.getElementById('engagement_rate')?document.getElementById('engagement_rate').value:null;
     if((rate&&initValue > 100) || (rate&&initValue < 0))
     {
       return alert('please add correct amout of rate')
     }
+    if(isConfirm)
+    {
+      url  = '{{ route("dashboard.ads.update",[":id",":confirm"]) }}';
+      urlWithId = url.replace(':id','{{ $data->id }}');
+      fullUrl = urlWithId.replace(':confirm',1);
+    }
+     status = 'approve';
+    if(document.getElementById('rejectedNote').value)
+    {
+      status = 'rejected';
+    }
     $.ajax({
-      url:urlWithId,
+      url:fullUrl,
       type:'POST',
       data:{
-        status:document.getElementById('status').value,
+        status:status,
         note:document.getElementById('rejectedNote').value,
         category_id:document.getElementById('category_id').value,
         engagement_rate:initValue,
+        change:notChange,
         // ad_type:document.getElementById('ad_type').value,
         onSite:'{{ $data->onSite }}',
         adBudget:'{{ $data->budget }}',
@@ -1113,8 +1245,9 @@ CKEDITOR.replace('contractContent', {
       },
       success:(res)=>{
         let url = '{{ route("dashboard.ads.index") }}'
+        location.reload();
         // uncomment this
-       window.location.href = url;
+       //window.location.href = url;
       },
       error:(err)=>{
         console.log("updateding error: ",err);
@@ -1126,6 +1259,14 @@ CKEDITOR.replace('contractContent', {
   function openModel()
   {
     $('#inf').modal('toggle');
+  }
+
+  function openCategoryModel(change = null)
+  {
+      isConfirm = false;
+      notChange = true
+      console.log(notChange)
+    $('#expensiveType').modal('toggle');
   }
 
   function getUnchosenInfulncers(inf_id)

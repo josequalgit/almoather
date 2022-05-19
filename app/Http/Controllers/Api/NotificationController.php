@@ -103,7 +103,7 @@ class NotificationController extends Controller
                     return response()->json([
                         'msg'=>'data was found',
                        'data'=>[
-                        'type'=>'Ad',
+                        'type'=>'Influencers',
                         'id'=>$user->influncers->id,
                        ],
                         'status'=>config('global.OK_STATUS')
@@ -115,7 +115,7 @@ class NotificationController extends Controller
                     return response()->json([
                         'msg'=>'data was found',
                         'data'=>[
-                            'type'=>'Ad',
+                            'type'=>'Customer',
                         'id'=>$user->customers->id,
                         ],
                         'status'=>config('global.OK_STATUS')
