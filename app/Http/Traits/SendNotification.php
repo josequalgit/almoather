@@ -1,4 +1,6 @@
 <?php
+namespace App\Http\Traits;
+
 trait SendNotification {
     function sendNotifications($tokens,$data,$topic = false){
         $apiKey = "AAAANfr15q4:APA91bFO9lO-XRcSI1lgJVdT2taopCIE27kHWp6k0--nQLCyAmIOXhX5RupGsZTnIC1CwMrRBcyFzvc6ZIqWgenj4aFsUgkUm6q_jyt9JVgJfnP16vfqzuZCMg8BD-b2BiyMqY8LpTZd";
