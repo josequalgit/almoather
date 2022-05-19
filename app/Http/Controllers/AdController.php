@@ -124,7 +124,7 @@ class AdController extends Controller
         Alert::toast('Add was updated', 'success');
 
 
-        $tokens = [$ad->customers->users->token];
+        $tokens = [$ad->customers->users->fcm_token];
         $data = [
             "title" => "Ads " . $ad->store . " Accepted",
             "body" => "Your Ad {$ad->store} has been accepted",
