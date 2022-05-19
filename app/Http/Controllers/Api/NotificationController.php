@@ -69,10 +69,10 @@ class NotificationController extends Controller
             }
             else
             {
-               // $data->read_at = Carbon::now();
-                $data->update([
-                    'read_at'=>Carbon::now()
-                ]);
+                $data->read_at = Carbon::now();
+                // $data->update([
+                //     'read_at'=>Carbon::now()
+                // ]);
                 return response()->json([
                     'msg'=>'data was found',
                     'type'=>'Ad',
