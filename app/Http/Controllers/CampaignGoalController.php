@@ -31,7 +31,7 @@ class CampaignGoalController extends Controller
                 'ar'=>$request->campaing_goal_ar,
                 'en'=>$request->campaing_goal_en
             ],
-            'customer_can_review'=>$request->customer_can_review ?? 0
+            'profitable'=>$request->profitable ?? 0
         ]);
         
 
@@ -50,12 +50,13 @@ class CampaignGoalController extends Controller
 
     public function update(CampaignGoalRequest $request , $id)
     {
+        return $request;
         $data = CampaignGoal::find($id);
         $data->title = [
-            'en'=>$request->title_en,
-            'ar'=>$request->title_ar,
+            'en'=>$request->campaing_goal_en,
+            'ar'=>$request->campaing_goal_ar,
         ];
-        $data->customer_can_review = $request->customer_can_review??0;
+        $data->profitable = $request->profitable??0;
         $data->save();
 
 

@@ -87,8 +87,8 @@
                             
     
                                 <fieldset class="form-group row p-2">
-                                    <label for="basicInput">Can Customer Review</label>
-                                    <input id="customer_can_review" value="{{ old('customer_can_review')?old('customer_can_review'):$data->customer_can_review }}" type="checkbox" class="form-control w-25"  name="customer_can_review" placeholder="Enter campaing goal" />
+                                    <label for="basicInput">Profitable</label>
+                                    <input id="customer_can_review" value="{{ old('profitable')?old('profitable'):$data->profitable }}" type="checkbox" class="form-control w-25"  name="profitable" placeholder="Enter campaing goal" />
                                 </fieldset>
     
                             </div>
