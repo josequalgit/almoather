@@ -88,6 +88,17 @@ class AdController extends Controller
             $ad->reject_note = $request->note ?? null;
             $ad->save();
 
+            activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
+            
+            $users = [Auth::user()];
+            $info =[
+                'msg'=>'Your Ad "'.$ad->store.'" has been accepted',
+                'id'=>$data->id,
+                'type'=>'Ad'
+            ];
+    
+            Notification::send($users, new AddInfluencer($info));
+
             return response()->json([
                 'msg' => 'status was changed',
                 'status' => 200,
@@ -120,10 +131,7 @@ class AdController extends Controller
         }
 
         /** NEW WAY */
-        activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
-        $users = [Auth::user()];
-
-        Notification::send($users, new AddInfluencer($info));
+      
 
         Alert::toast('Add was updated', 'success');
 
