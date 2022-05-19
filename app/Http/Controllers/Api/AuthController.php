@@ -154,9 +154,17 @@ class AuthController extends Controller
         else
         {
             $data = Auth::guard('api')->user();
+            return response()->json([
+                'msg'=>'user data',
+                'data'=>$this->userDataResponse($data,null,$data->id),
+                'type'=>$data->customers?'customer':'Influencer',
+                'status'=>config('global.NOT_FOUND_STATUS')
+    
+            ],200);
         }
 
 
+        
 
         return response()->json([
             'msg'=>'user data',
