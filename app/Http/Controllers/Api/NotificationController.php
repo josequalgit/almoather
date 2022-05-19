@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use App\Models\User;
+use App\Models\Ad;
 use Carbon\Carbon;
 use Auth , DB;
 
@@ -45,6 +46,7 @@ class NotificationController extends Controller
     {
   
         $data = DB::table('notifications')->where('id',$id)->first();
+
         if(!$data)  return response()->json([
              'err'=>'wrong notification id',
             'status'=>config('global.NOT_FOUND_STATUS')
