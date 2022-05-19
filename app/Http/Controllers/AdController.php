@@ -89,7 +89,8 @@ class AdController extends Controller
             $ad->save();
 
             activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
-            
+            $this->sendNotifications($tokens,$data);
+
             $users = [Auth::user()];
             $info =[
                 'msg'=>'Your Ad "'.$ad->store.'" has been accepted',
@@ -144,7 +145,6 @@ class AdController extends Controller
             'id' => $ad->id            
         ];
 
-        $this->sendNotifications($tokens,$data);
 
         /** END WAY */
         if (!$ad->campaignGoals->profitable) {
