@@ -105,7 +105,7 @@ class AdController extends Controller
             $users = [Auth::user()->id];
             $info =[
                 'msg'=>'Your Ad "'.$ad->store.'" has been accepted',
-                'id'=>$data->id,
+                'id'=>$ad->id ,
                 'type'=>'Ad'
             ];
     
