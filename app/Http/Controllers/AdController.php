@@ -100,12 +100,12 @@ class AdController extends Controller
     
 
             activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
-           $this->sendNotifications($tokens,$data);
+        //    $this->sendNotifications($tokens,$data);
 
             $users = [Auth::user()->id];
             $info =[
                 'msg'=>'Your Ad "'.$ad->store.'" has been accepted',
-                'id'=>$data['id'],
+                'id'=>$data->id,
                 'type'=>'Ad'
             ];
     
