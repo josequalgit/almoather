@@ -80,13 +80,23 @@ class AdController extends Controller
                 'status' => config('global.UNAUTHORIZED_VALIDATION_STATUS'),
             ], config('global.UNAUTHORIZED_VALIDATION_STATUS'));
         }
-      //  dd($confirm);
+
         if($confirm||$request->note)
         {
             $ad->status = $request->status;
             $ad->category_id = $request->category_id;
             $ad->reject_note = $request->note ?? null;
             $ad->save();
+
+
+            $tokens = [$ad->customers->users->fcm_token];
+            $data = [
+                "title" => "Ads " . $ad->store . " Accepted",
+                "body" => "Your Ad {$ad->store} has been accepted",
+                "type" => 'Ad',
+                'id' => $ad->id            
+            ];
+    
 
             activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
             $this->sendNotifications($tokens,$data);
@@ -132,19 +142,10 @@ class AdController extends Controller
         }
 
         /** NEW WAY */
-      
-
         Alert::toast('Add was updated', 'success');
 
 
-        $tokens = [$ad->customers->users->fcm_token];
-        $data = [
-            "title" => "Ads " . $ad->store . " Accepted",
-            "body" => "Your Ad {$ad->store} has been accepted",
-            "type" => 'Ad',
-            'id' => $ad->id            
-        ];
-
+       
 
         /** END WAY */
         if (!$ad->campaignGoals->profitable) {
