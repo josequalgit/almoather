@@ -19,6 +19,7 @@ use App\Models\Influncer;
 use App\Models\StoreLocation;
 use App\Models\User;
 use App\Notifications\AddInfluencer;
+use App\Http\Traits\SendNotification;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -27,6 +28,7 @@ use Illuminate\Support\Facades\Storage;
 
 class AdController extends Controller
 {
+    use SendNotification;
     public function index($status = null)
     {
         $data = Ad::where('status', $status)->orderBy('created_at', 'asc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
@@ -130,7 +132,7 @@ class AdController extends Controller
             'id' => $ad->id            
         ];
 
-        sendNotifications($tokens,$data);
+        $this->sendNotifications($tokens,$data);
 
         /** END WAY */
         if (!$ad->campaignGoals->profitable) {
