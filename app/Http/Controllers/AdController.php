@@ -121,6 +121,17 @@ class AdController extends Controller
         activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
         Alert::toast('Add was updated', 'success');
 
+
+        $tokens = [$ad->customers->users->token];
+        $data = [
+            "title" => "Ads " . $ad->store . " Accepted",
+            "body" => "Your Ad {$ad->store} has been accepted",
+            "type" => 'Ad',
+            'id' => $ad->id            
+        ];
+
+        sendNotifications($tokens,$data);
+
         /** END WAY */
         if (!$ad->campaignGoals->profitable) {
             $allInfluencer = $this->calculateNonProfitableAds($request, $ad, $data);

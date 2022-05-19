@@ -8,6 +8,7 @@ if(!function_exists('sendNotifications')){
         $url = 'https://android.googleapis.com/gcm/send';
 
         $data['sound'] = 'default';
+        $data['icon'] = 'ic_launcher';
 
         $fields = array(
             'notification' => $data,
