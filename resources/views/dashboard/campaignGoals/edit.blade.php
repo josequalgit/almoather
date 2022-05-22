@@ -85,10 +85,9 @@
                                     <input id="campaing_goal_en" value="{{ old('campaing_goal_en')?old('campaing_goal_en'):$data->getTranslations('title')['en'] }}" type="text" class="form-control"  name="campaing_goal_en" placeholder="Enter campaing goal" />
                                 </fieldset>
                             
-    
                                 <fieldset class="form-group row p-2">
                                     <label for="basicInput">Profitable</label>
-                                    <input id="customer_can_review" value="{{ old('profitable')?old('profitable'):$data->profitable }}" type="checkbox" class="form-control w-25"  name="profitable" placeholder="Enter campaing goal" />
+                                    <input id="customer_can_review" {{ $data->profitable == 1?'checked':0 }} type="checkbox" class="form-control w-25"  name="profitable" placeholder="Enter campaing goal" />
                                 </fieldset>
     
                             </div>

@@ -87,7 +87,7 @@
 
                                 <fieldset class="form-group row p-2">
                                     <label for="basicInput">Can Customer Review</label>
-                                    <input id="customer_can_review" value="{{ old('customer_can_review') }}" type="checkbox" class="form-control w-25"  name="customer_can_review" placeholder="Enter campaing goal" />
+                                    <input id="customer_can_review"  value="1" type="checkbox" class="form-control w-25"  name="profitable" placeholder="Enter campaing goal" />
                                 </fieldset>
                             
     

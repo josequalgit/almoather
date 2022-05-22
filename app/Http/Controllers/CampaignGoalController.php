@@ -25,13 +25,13 @@ class CampaignGoalController extends Controller
 
     public function store(CampaignGoalRequest $request)
     {
-        //$data = AppSetting::where('key','Campaign Goal')->first();
+     
         $data = CampaignGoal::create([
             'title'=>[
                 'ar'=>$request->campaing_goal_ar,
                 'en'=>$request->campaing_goal_en
             ],
-            'profitable'=>$request->profitable ?? 0
+            'profitable'=>$request->profitable == '1'?1:0
         ]);
         
 
@@ -43,20 +43,18 @@ class CampaignGoalController extends Controller
     public function edit($id)
     {   
         $data = CampaignGoal::find($id);
-        // return $data;
-       // return $data;
+      
         return view('dashboard.campaignGoals.edit',compact('data'));
     }
 
     public function update(CampaignGoalRequest $request , $id)
     {
-        return $request;
         $data = CampaignGoal::find($id);
         $data->title = [
             'en'=>$request->campaing_goal_en,
             'ar'=>$request->campaing_goal_ar,
         ];
-        $data->profitable = $request->profitable??0;
+        $data->profitable = !$request->profitable?0:1;
         $data->save();
 
 
