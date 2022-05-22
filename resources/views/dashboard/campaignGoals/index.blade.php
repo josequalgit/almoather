@@ -13,6 +13,9 @@
         height:100px !important;
         max-width:100px !important;
     }
+    .money-icon{
+            font-size: 24px;
+    }
 </style>
 <div class="app-content content">
     <div class="content-overlay"></div>
@@ -58,6 +61,7 @@
                                                 <tr>
                                                     <th>Text Ar</th>
                                                     <th>Text En</th>
+                                                    <th>Profitable</th>
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
@@ -68,6 +72,9 @@
                                                             
                                                              <td>{{ $item->getTranslations('title')['ar'] }}</td>
                                                              <td>{{ $item->getTranslations('title')['en'] }}</td>
+                                                             <td>
+                                                                <i class="money-icon bx bx-{{ $item->profitable?'money':'donate-heart' }}" data-icon="desktop"></i>
+                                                            </td>
                                                              
                                                              <td>
                                                                  @can('Edit Campaign Goal')

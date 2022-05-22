@@ -2,6 +2,27 @@
 <html class="loading" lang="en" data-textdirection="ltr">
 <!-- BEGIN: Head-->
 
+<style>
+    .bottom-right {
+        background: red;
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 29px;
+    right: 24px;
+    background-color: #25d366;
+    color: #fff;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 100;
+    top: '72%';
+    border: none
+}
+
+</style>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,7 +49,9 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('main2/css/components.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('main2/css/themes/dark-layout.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('main2/css/themes/semi-dark-layout.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('main2/css/pages/app-chat.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/videopopup.css') }}">
+
     <!-- END: Theme CSS-->
 
 
@@ -44,9 +67,12 @@
 <!-- END: Head-->
 
 <!-- BEGIN: Body-->
+    <button class="bottom-right">
+       <a href="{{ route('dashboard.chat.index') }}"><i class="menu-icon tf-icons bx bx-chat"></i></a> 
+    </button>
 
 <body class="vertical-layout vertical-menu-modern 2-columns  navbar-sticky footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
-
+    
     <style>
         .table-longText{
             overflow: hidden;

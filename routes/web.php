@@ -22,6 +22,7 @@ use App\Http\Controllers\BusinessManagerController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\ReasonsController;
+use App\Http\Controllers\ChatController;
 
 Route::redirect('/','/dashboard/admins')->name('home');
 
@@ -228,6 +229,13 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/','index')->name('index');
             Route::post('/store','store')->name('store');
             Route::get('/delete/{id}','delete')->name('delete');
+        });
+
+        Route::controller(ChatController::class)
+        ->prefix('chat')
+        ->name('chat.')
+        ->group(function(){
+            Route::get('/','index')->name('index');
         });
         
         
