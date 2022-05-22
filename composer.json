@@ -12,6 +12,7 @@
         "laravel/sanctum": "^2.14",
         "laravel/tinker": "^2.7",
         "php-open-source-saver/jwt-auth": "^1.4",
+        "predis/predis": "^1.1",
         "realrashid/sweet-alert": "^5.0",
         "spatie/laravel-activitylog": "^4.4",
         "spatie/laravel-medialibrary": "^10.0.0",

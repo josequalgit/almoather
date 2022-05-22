@@ -236,6 +236,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
         ->name('chat.')
         ->group(function(){
             Route::get('/','index')->name('index');
+            Route::get('/send','sendMessage')->name('send');
         });
         
         
