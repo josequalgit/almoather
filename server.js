@@ -1,30 +1,32 @@
-var app = require('express')();
-var server = require('http').Server(app);
+var server = require('http').Server();
+
+var Redis = require('ioredis');
+var redis = new Redis();
+
+// Create a new Socket.io instance
 var io = require('socket.io')(server, {
     cors: {
       origin: "http://127.0.0.1:8000",
       methods: ["GET", "POST"]
     }
 });
-var redis = require('redis');
- 
-server.listen(8890, '127.0.0.1', function() {
-    console.log('Listening on your port');
+
+
+
+server.listen(3000, () => {
+    console.log('listening on port 3000');
 });
 
-io.on('connection', function (socket) {
- 
-    console.log("client connected");
-    var redisClient = redis.createClient();
-    redisClient.subscribe('message');
- 
-    redisClient.on("message", function(channel, data) {
-        console.log(channel);
-        console.log(data);
-        socket.emit(channel, data);
+io.on("connect", (socket) => {
+    redis.psubscribe('*',() => {
+        console.log('hellllllll')
     });
- 
-    socket.on('disconnect', function() {
-        redisClient.quit();
+    
+    redis.on('pmessage', function (pattern, channel, message) {
+        console.log(pattern);
+        console.log(channel);
+        console.log(message);
+        message = JSON.parse(message);
+        io.emit(channel, message);
     });
 });
