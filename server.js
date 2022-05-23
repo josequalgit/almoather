@@ -6,7 +6,7 @@ var redis = new Redis();
 // Create a new Socket.io instance
 var io = require('socket.io')(server, {
     cors: {
-        origin: "http://127.0.0.1:8000",
+        origin: "http://192.168.1.143:8000",
         methods: ["GET", "POST"]
     }
 });

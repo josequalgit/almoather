@@ -1,5 +1,13 @@
 @extends('dashboard.layout.index')
 @section('content')
+
+<style>
+    .user-item {
+    background: none;
+    border: none;
+}
+</style>
+
 <div class="app-content content chat-application">
     <div class="content-area-wrapper">
         <div class="sidebar-left">
@@ -13,7 +21,7 @@
                         <div class="d-flex align-items-center">
                             <div class="chat-sidebar-profile-toggle">
                                 <div class="avatar">
-                                    <img src="../../../app-assets/images/portrait/small/avatar-s-11.jpg" alt="user_avatar" height="36" width="36">
+                                    <img onerror="this.onerror=null;this.src='https://timesaver247.com/wp-content/uploads/2020/10/default-user-image.png';" src="../../../app-assets/images/portrait/small/avatar-s-11.jpg" alt="user_avatar" height="36" width="36">
                                 </div>
                             </div>
                             <fieldset class="form-group position-relative has-icon-left mx-75 mb-0">
@@ -27,16 +35,20 @@
                     <div class="chat-sidebar-list-wrapper">
                         <h6 class="px-2 pt-1 pb-25 mb-0">CHATS</h6>
                         <ul class="chat-sidebar-list">
-                            <li>
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar m-0 mr-50"><img src="../../../app-assets/images/portrait/small/avatar-s-26.jpg" height="36" width="36" alt="sidebar user image">
-                                        <span class="avatar-status-busy"></span>
+                                @foreach ($users as $item)
+                                <li>
+                                <button onclick="get_active_user_messages('{{ $item->id }}')" class="d-flex align-items-center user-item">
+                                    <div class="avatar m-0 mr-50"><img onerror="this.onerror=null;this.src='https://timesaver247.com/wp-content/uploads/2020/10/default-user-image.png';"
+                                        src="{{ $item->image }}" height="36" width="36" alt="sidebar user image">
+                                        {{-- <span class="avatar-status-busy"></span> --}}
                                     </div>
                                     <div class="chat-sidebar-name">
-                                        <h6 class="mb-0">Elizabeth Elliott</h6><span class="text-muted">Cake pie</span>
+                                        <h6 class="mb-0">{{ $item->name }}</h6><span class="text-muted">{{ $item->type }}</span>
                                     </div>
-                                </div>
+                                </button>
                             </li>
+
+                                @endforeach
                         </ul>
                     </div>
                 </div>
@@ -65,31 +77,20 @@
                                         <div class="chat-sidebar-toggle d-block d-lg-none mr-1"><i class="bx bx-menu font-large-1 cursor-pointer"></i>
                                         </div>
                                         <div class="avatar chat-profile-toggle m-0 mr-1">
-                                            <img src="../../../app-assets/images/portrait/small/avatar-s-26.jpg" alt="avatar" height="36" width="36" />
+                                            <img id="active_user_image" src="../../../app-assets/images/portrait/small/avatar-s-26.jpg" alt="avatar" height="36" width="36" />
                                             <span class="avatar-status-busy"></span>
                                         </div>
-                                        <h6 class="mb-0">Elizabeth Elliott</h6>
+                                        <h6 id="active_user_chat" class="mb-0">user name</h6>
                                     </div>
                                     <div class="chat-header-icons">
-                                        <span class="chat-icon-favorite">
-                                            <i class="bx bx-star font-medium-5 cursor-pointer"></i>
-                                        </span>
-                                        <span class="dropdown">
-                                            <i class="bx bx-dots-vertical-rounded font-medium-4 ml-25 cursor-pointer dropdown-toggle nav-hide-arrow cursor-pointer" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
-                                            </i>
-                                            <span class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="JavaScript:void(0);"><i class="bx bx-pin mr-25"></i> Pin to top</a>
-                                                <a class="dropdown-item" href="JavaScript:void(0);"><i class="bx bx-trash mr-25"></i> Delete chat</a>
-                                                <a class="dropdown-item" href="JavaScript:void(0);"><i class="bx bx-block mr-25"></i> Block</a>
-                                            </span>
-                                        </span>
+                                      
                                     </div>
                                 </header>
                             </div>
                             <!-- chat card start -->
-                            <div class="card chat-wrapper shadow-none">
-                                <div class="card-body chat-container">
-                                    <div class="chat-content">
+                            <div id="chat_body" class="card chat-wrapper shadow-none">
+                                <div id="messagesContainer" class="card-body chat-container">
+                                    <div id="chat_messages"  class="chat-content">
                                         <div class="chat">
                                             <div class="chat-avatar">
                                                 <a class="avatar m-0">
@@ -121,7 +122,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="badge badge-pill badge-light-secondary my-1">Yesterday</div>
+                                        {{-- <div class="badge badge-pill badge-light-secondary my-1">Yesterday</div> --}}
                                         <div class="chat">
                                             <div class="chat-avatar">
                                                 <a class="avatar m-0">
@@ -213,8 +214,8 @@
                                     <form class="d-flex align-items-center" onsubmit="chatMessagesSend();" action="javascript:void(0);">
                                         <i class="bx bx-face cursor-pointer"></i>
                                         <i class="bx bx-paperclip ml-1 cursor-pointer"></i>
-                                        <input type="text" class="form-control chat-message-send mx-1" placeholder="Type your message here...">
-                                        <button type="submit" class="btn btn-primary glow send d-lg-flex"><i class="bx bx-paper-plane"></i>
+                                        <input id="message" type="text" class="form-control chat-message-send mx-1" placeholder="Type your message here...">
+                                        <button  type="submit" class="btn btn-primary glow send d-lg-flex"><i class="bx bx-paper-plane"></i>
                                             <span class="d-none d-lg-block ml-1">Send</span></button>
                                     </form>
                                 </div>
@@ -231,19 +232,19 @@
                             </span>
                             <div class="my-2">
                                 <div class="avatar">
-                                    <img src="../../../app-assets/images/portrait/small/avatar-s-26.jpg" alt="chat avatar" height="100" width="100">
+                                    <img onerror="this.onerror=null;this.src='https://timesaver247.com/wp-content/uploads/2020/10/default-user-image.png';" id="active_user_image_profile"   src="../../../app-assets/images/portrait/small/avatar-s-26.jpg" alt="chat avatar" height="100" width="100">
                                 </div>
-                                <h5 class="app-chat-user-name mb-0">Elizabeth Elliott</h5>
-                                <span>Devloper</span>
+                                <h5 id="active_user_name" class="app-chat-user-name mb-0">Elizabeth Elliott</h5>
+                                <span id="active_user_role" >Devloper</span>
                             </div>
                         </header>
                         <div class="chat-profile-content p-2">
-                            <h6 class="mt-1">ABOUT</h6>
-                            <p>It is a long established fact that a reader will be distracted by the readable content.</p>
+                            <h6  class="mt-1">ABOUT</h6>
+                            <p id="active_user_bio">It is a long established fact that a reader will be distracted by the readable content.</p>
                             <h6 class="mt-2">PERSONAL INFORMATION</h6>
                             <ul class="list-unstyled">
-                                <li class="mb-25">email@gmail.com</li>
-                                <li>+1(789) 950-7654</li>
+                                <li id="active_user_email" class="mb-25">email@gmail.com</li>
+                                <li id="active_user_phone">+1(789) 950-7654</li>
                             </ul>
                         </div>
                     </section>
@@ -269,12 +270,12 @@
         // });
 
 
-        let ip_address = '127.0.0.1';
-        let socket_port = '8890';
-        io('127.0.0.1' + ':' + '8890')
-        let socket = io(ip_address + ':' + socket_port);
-        socket.on('connection')
-        socket.emit('message','hi man');
+        // let ip_address = '127.0.0.1';
+        // let socket_port = '8890';
+        // io('127.0.0.1' + ':' + '8890')
+        // let socket = io(ip_address + ':' + socket_port);
+        // socket.on('connection')
+        // socket.emit('message','hi man');
 
     
         // socket.on('message', function (data) {
@@ -309,15 +310,138 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
 <script src="{{asset('main2/js/scripts/pages/app-chat.js')}}"></script>
 <script>
-    var socket = io.connect('http://127.0.0.1:3000');
-    socket.on('message.user-1', function (data) {
-        console.log(data);
+    var socket = io.connect('http://192.168.1.143:3000');
+    
+    socket.on('connect', function (err) {
+        console.log('connected');
     });
 
+    socket.on('moather_database_message.user-5', function (data) {
+        console.log(data)
+        if(data.receiver_id == 5){
+            var html = `<div class="chat-message"><p>${data.message}</p><div class="chat-time">${data.date}</div></div>`;
+            $(".chat-wrapper .chat:last-child .chat-body").append(html);
+        }
+    });
 
     socket.on('error', function (err) {
         console.log('error');
         console.log(err);
     });
+
+    let current_user_id = '{{ auth()->user()->id }}';
+    let senToUser = 0;
+    let oldUserId = 0;
+
+    function get_active_user_messages(user_id)
+    {
+        senToUser = user_id;
+        let url = '{{ route("dashboard.chat.get_messages","user_id:") }}';
+        let add_id = url.replace('user_id:',user_id);
+        $.ajax({
+            url:add_id,
+            type:'get',
+            success :(res)=>{
+                let user_info = res.data.user
+                if(res.status == 200)
+                {
+                    $("#active_user_name").empty();
+                    $("#active_user_role").empty();
+                    $("#active_user_bio").empty();
+                    $("#active_user_phone").empty();
+                    $("#active_user_image_profile").attr("src",user_info.image);
+
+                    // $("#active_user_image").append(user_info.image);
+                    $("#active_user_name").append(user_info.name);
+                    $("#active_user_role").append(user_info.type);
+                    $("#active_user_bio").append(user_info.email);
+                    $("#active_user_phone").append(user_info.phone);
+                    $("#chat_messages").empty();
+
+                    for(element in res.data.messages) {
+                        console.log(element);
+                        if(element.sender_id == current_user_id){
+                            let senderDiv = `<div class="chat">
+                                                <div class="chat-avatar">
+                                                    <a class="avatar m-0">
+                                                    <img src="${user_info.image}" alt="avatar" height="36" width="36" />
+                                                    </a>
+                                                </div>
+                                                <div class="chat-body">
+                                                <div class="chat-message">
+                                                    <p>${element.text}</p>
+                                                        <span class="chat-time">${element.time}</span>
+                                                </div>
+                                                </div>
+                                            </div>`;
+                           $("#chat_messages").append(senderDiv);
+                        }else{
+                            let reciverDiv = `<div class="chat chat-left">
+                                                <div class="chat-avatar">
+                                                    <a class="avatar m-0">
+                                                        <img src="${element.image}" alt="avatar" height="36" width="36" />
+                                                    </a>
+                                                </div>
+                                                <div class="chat-body">
+                                                    <div class="chat-message">
+                                                        <p>${element.text}</p>
+                                                        <span class="chat-time">${element.time}</span>
+                                                    </div>
+                                                
+                                                </div>
+                                            </div>`;
+                           $("#chat_messages").append(reciverDiv);
+                        }
+                    }
+                }else{
+                    alert('some thing wrong');
+                }
+            },
+            error:(err)=>{
+                console.log(err)
+            }
+        });
+
+        //socket.removeListener('message.user-'+oldUserId);
+        
+
+        oldUserId = user_id;
+
+        $('#chat_body').show();
+    }
+
+    function send_message()
+    {
+        
+    }
+
+    // Add message to chat
+    function chatMessagesSend(source) {
+        let chatMessageSend = $(".chat-message-send");
+        var message = chatMessageSend.val();
+        var d = new Date();
+        let time = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+
+        if (message != "") {
+            var html = `<div class="chat-message"><p>${message}</p><div class="chat-time">${time}</div></div>`;
+            $(".chat-wrapper .chat:last-child .chat-body").append(html);
+            chatMessageSend.val("");
+            chatContainer.scrollTop($(".chat-container > .chat-content").height());
+        }
+
+        $.ajax({
+            url:'{{ route("dashboard.chat.send") }}',
+            type:'post',
+            data:{ 
+                _token:'{{csrf_token()}}',
+                receiver_id:senToUser,
+                messages:document.getElementById('message').value
+            },
+            success:(res)=>{},
+            error:(res)=>{}
+
+        })
+    }
+
 </script>
 @endsection

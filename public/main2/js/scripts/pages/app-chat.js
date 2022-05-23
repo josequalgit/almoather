@@ -19,8 +19,7 @@ var chatSidebarListWrapper = $(".chat-sidebar-list-wrapper"),
   chatSidebar = $(".chat-sidebar"),
   chatArea = $(".chat-area"),
   chatStart = $(".chat-start"),
-  chatSidebarToggle = $(".chat-sidebar-toggle"),
-  chatMessageSend = $(".chat-message-send");
+  chatSidebarToggle = $(".chat-sidebar-toggle");
 
 $(document).ready(function () {
   "use strict";
@@ -141,13 +140,4 @@ $(document).ready(function () {
     }
   });
 });
-// Add message to chat
-function chatMessagesSend(source) {
-  var message = chatMessageSend.val();
-  if (message != "") {
-    var html = '<div class="chat-message">' + "<p>" + message + "</p>" + "<div class=" + "chat-time" + ">3:35 AM</div></div>";
-    $(".chat-wrapper .chat:last-child .chat-body").append(html);
-    chatMessageSend.val("");
-    chatContainer.scrollTop($(".chat-container > .chat-content").height());
-  }
-}
+

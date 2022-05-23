@@ -25,6 +25,7 @@ use App\Http\Controllers\ReasonsController;
 use App\Http\Controllers\ChatController;
 
 Route::redirect('/','/dashboard/admins')->name('home');
+Route::get('/test-msg',[ChatController::class,'sendMessageTo'])->name('test');
 
 
 Route::middleware('checkLogin')->controller(LoginController::class)->group(function(){
@@ -236,7 +237,8 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
         ->name('chat.')
         ->group(function(){
             Route::get('/','index')->name('index');
-            Route::get('/send','sendMessage')->name('send');
+            Route::post('/send','sendMessage')->name('send');
+            Route::get('/get_messages/{user_id}','get_messages')->name('get_messages');
         });
         
         

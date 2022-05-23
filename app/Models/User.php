@@ -91,6 +91,15 @@ class User extends Authenticatable implements JWTSubject , HasMedia
         return $this->hasOne(Influncer::class,'user_id');
     }
 
+    public function senders_messages()
+    {
+        return $this->hasMany(Message::class,'sender_id');
+    }
+    public function receivers_messages()
+    {
+        return $this->hasMany(Message::class,'receiver_id');
+    }
+
     public function getImageAttribute() {
         $mediaItems = $this->getMedia('customers');
         $publicFullUrl = null;
