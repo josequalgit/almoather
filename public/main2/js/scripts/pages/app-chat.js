@@ -11,7 +11,6 @@
 var chatSidebarListWrapper = $(".chat-sidebar-list-wrapper"),
   chatOverlay = $(".chat-overlay"),
   chatContainer = $(".chat-container"),
-  chatSidebarProfileToggle = $(".chat-sidebar-profile-toggle"),
   chatProfileToggle = $(".chat-profile-toggle"),
   chatSidebarClose = $(".chat-sidebar-close"),
   chatProfile = $(".chat-profile"),
@@ -40,11 +39,6 @@ $(document).ready(function () {
   if ($(".chat-profile-content").length > 0) {
     var chat_profile_content = new PerfectScrollbar(".chat-profile-content");
   }
-  // user profile sidebar toggle
-  chatSidebarProfileToggle.on("click", function () {
-    chatUserProfile.addClass("show");
-    chatOverlay.addClass("show");
-  });
   // user profile sidebar toggle
   chatProfileToggle.on("click", function () {
     chatProfile.addClass("show");
