@@ -412,5 +412,53 @@
 @section('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+
+<script>
+    $(function(){
+
+        // var socket = io.connect('http://127.0.0.1:6379');
+        // socket.on('connect', function() {
+        //     console.log('check 2', socket.connected);
+        // });
+
+
+        let ip_address = '127.0.0.1';
+        let socket_port = '8890';
+        io('127.0.0.1' + ':' + '8890')
+        let socket = io(ip_address + ':' + socket_port);
+        socket.on('connection')
+        socket.emit('message','hi man');
+
+    
+        // socket.on('message', function (data) {
+        //     data = jQuery.parseJSON(data);
+        //     console.log('here the data')
+        // });
+        // if (socket.connected){
+        //     console.log('socket.io is connected.')
+        // }
+    
+        // $("#send-message").click(function(e){
+        //     e.preventDefault();
+        //     var _token = $("input[name='_token']").val();
+        //     var user = $("input[name='user']").val();
+        //     var message = $(".message").val();
+        //     if(message != ''){
+        //         $.ajax({
+        //             type: "POST",
+        //             url: '{!! URL::to("sendmessage") !!}',
+        //             dataType: "json",
+        //             data: {'_token':_token, 'message':message, 'user':user},
+        //             success:function(data) {
+        //                 $(".message").val('');
+        //             }
+        //         });
+        //     }
+        // })
+        // console.log('here')
+    })
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
 <script src="{{asset('main2/js/scripts/pages/app-chat.js')}}"></script>
 @endsection

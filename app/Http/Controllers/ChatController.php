@@ -21,7 +21,7 @@ class ChatController extends Controller
         $data = ['message' => 'test'];
         $prefix = config('database.redis.options.prefix');
  
-        $redis->publish('almuaather_database_.message', json_encode($data));
+        $redis->publish('message', json_encode($data));
         
         return response()->json(['success' => true]);
     }
