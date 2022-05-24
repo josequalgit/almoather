@@ -11,46 +11,16 @@ class ChatController extends Controller
 {
     public function index()
     {        
-        
         $usersMessages = Message::where('type','support')->groupBy('sender_id')->pluck('sender_id');
         $usersMessagesTo = Message::where('type','support')->groupBy('receiver_id')->pluck('receiver_id');
         $userMessages = $usersMessages->merge($usersMessagesTo);
-        // dd($userMessages);
 
         $users = User::whereIn('id',$userMessages)->where(function($query){
             $query->whereHas('customers')
             ->OrWhereHas('influncers');
-        })->get()->map(function($item){
-          
-           
-
-            return $item;
-            
-               
-        
-            
-        });
-
-        // REMOVE THE DUPLICATED USERS FROM THE ARRAY
-        // $users =  $this->remove_duplicated_objects_in_array($usersMessages->toArray());
-
-        // dd($users);
+        })->get();
        
         return view('dashboard.chat.index',compact('users'));
-    }
-
-    
-    private function remove_duplicated_objects_in_array($array)
-    {
-        foreach ($array as $key => $value) {
-           foreach ($array as $key2 => $value2) {
-                if(array_key_exists($key,$array)&&$key !== $key2&&$array[$key]->id == $array[$key2]->id) unset($array[$key2]);
-
-
-           }
-        }
-
-        return $array;
     }
 
     public function get_messages($user_id)
@@ -113,12 +83,12 @@ class ChatController extends Controller
         ]);
 
      
-        Redis::publish('message.user-5', json_encode([
-            "message" => $request->messages,
-            "date" => $message->created_at->format('d/m/Y h:i'),
-            'sender_id' => Auth::user()->id,
-            'receiver_id'=> $request->receiver_id,
-        ]));
+        // Redis::publish('message.user-5', json_encode([
+        //     "message" => $request->messages,
+        //     "date" => $message->created_at->format('d/m/Y h:i'),
+        //     'sender_id' => Auth::user()->id,
+        //     'receiver_id'=> $request->receiver_id,
+        // ]));
 
         return response()->json([
             'msg'=>'msg was created',
