@@ -104,16 +104,17 @@ class ChatController extends Controller
 
     public function sendMessage(Request $request)
     {
-        $message = $request->messages;
-        Message::create([
+     
+       $message =  Message::create([
             'sender_id'=>Auth::user()->id,
             'receiver_id'=>$request->receiver_id,
-            'text'=>$message,
+            'text'=>$request->messages,
             'type'=>'support'
         ]);
 
-        Redis::publish('message.user-' . $request->receiver_id, json_encode([
-            "message" => $request->message,
+     
+        Redis::publish('message.user-5', json_encode([
+            "message" => $request->messages,
             "date" => $message->created_at->format('d/m/Y h:i'),
             'sender_id' => Auth::user()->id,
             'receiver_id'=> $request->receiver_id,

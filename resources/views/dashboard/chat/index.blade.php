@@ -258,66 +258,20 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
-
-<script>
-    $(function(){
-
-        // var socket = io.connect('http://127.0.0.1:6379');
-        // socket.on('connect', function() {
-        //     console.log('check 2', socket.connected);
-        // });
-
-
-        // let ip_address = '127.0.0.1';
-        // let socket_port = '8890';
-        // io('127.0.0.1' + ':' + '8890')
-        // let socket = io(ip_address + ':' + socket_port);
-        // socket.on('connection')
-        // socket.emit('message','hi man');
-
-    
-        // socket.on('message', function (data) {
-        //     data = jQuery.parseJSON(data);
-        //     console.log('here the data')
-        // });
-        // if (socket.connected){
-        //     console.log('socket.io is connected.')
-        // }
-    
-        // $("#send-message").click(function(e){
-        //     e.preventDefault();
-        //     var _token = $("input[name='_token']").val();
-        //     var user = $("input[name='user']").val();
-        //     var message = $(".message").val();
-        //     if(message != ''){
-        //         $.ajax({
-        //             type: "POST",
-        //             url: '{!! URL::to("sendmessage") !!}',
-        //             dataType: "json",
-        //             data: {'_token':_token, 'message':message, 'user':user},
-        //             success:function(data) {
-        //                 $(".message").val('');
-        //             }
-        //         });
-        //     }
-        // })
-        // console.log('here')
-    })
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+<script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
 <script src="{{asset('main2/js/scripts/pages/app-chat.js')}}"></script>
 <script>
-    var socket = io.connect('http://192.168.1.143:3000');
-    
+    var socket = io.connect('ws://192.168.1.143:3000',{secure: false,transports: ['websocket'],upgrade: false,query: {token: 'xxx'}});
+        
     socket.on('connect', function (err) {
         console.log('connected');
+       // io.disconnect();
     });
+    socket.on('disconnect',function(res){
+    })
 
-    socket.on('moather_database_message.user-5', function (data) {
-        console.log(data)
+    socket.on('message.user-5', function (data) {
+        console.log('after connection: ',data)
         if(data.receiver_id == 5){
             var html = `<div class="chat-message"><p>${data.message}</p><div class="chat-time">${data.date}</div></div>`;
             $(".chat-wrapper .chat:last-child .chat-body").append(html);
@@ -358,23 +312,23 @@
                     $("#active_user_phone").append(user_info.phone);
                     $("#chat_messages").empty();
 
-                    for(element in res.data.messages) {
-                        console.log(element);
+                    for(let i =0; i < res.data.messages.length; i++) {
+                        let element = res.data.messages[i]
                         if(element.sender_id == current_user_id){
-                            let senderDiv = `<div class="chat">
-                                                <div class="chat-avatar">
-                                                    <a class="avatar m-0">
-                                                    <img src="${user_info.image}" alt="avatar" height="36" width="36" />
-                                                    </a>
-                                                </div>
-                                                <div class="chat-body">
-                                                <div class="chat-message">
-                                                    <p>${element.text}</p>
-                                                        <span class="chat-time">${element.time}</span>
-                                                </div>
-                                                </div>
-                                            </div>`;
-                           $("#chat_messages").append(senderDiv);
+                        //     let senderDiv = `<div class="chat">
+                        //                         <div class="chat-avatar">
+                        //                             <a class="avatar m-0">
+                        //                             <img src="${user_info.image}" alt="avatar" height="36" width="36" />
+                        //                             </a>
+                        //                         </div>
+                        //                         <div class="chat-body">
+                        //                         <div class="chat-message">
+                        //                             <p>${element.text}</p>
+                        //                                 <span class="chat-time">${element.time}</span>
+                        //                         </div>
+                        //                         </div>
+                        //                     </div>`;
+                        //    $("#chat_messages").append(senderDiv);
                         }else{
                             let reciverDiv = `<div class="chat chat-left">
                                                 <div class="chat-avatar">
@@ -429,13 +383,14 @@
             chatContainer.scrollTop($(".chat-container > .chat-content").height());
         }
 
+
         $.ajax({
             url:'{{ route("dashboard.chat.send") }}',
             type:'post',
             data:{ 
                 _token:'{{csrf_token()}}',
                 receiver_id:senToUser,
-                messages:document.getElementById('message').value
+                messages:message
             },
             success:(res)=>{},
             error:(res)=>{}

@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\SlideController;
 use App\Http\Controllers\Api\CampaignGoalController;
 use App\Http\Controllers\Api\MailController;
+use App\Http\Controllers\Api\ChatController;
 
 Route::group(['prefix'=>'auth'],function(){
     Route::post('login',[AuthController::class,'login']);
@@ -172,6 +173,11 @@ Route::group(['prefix'=>'auth'],function(){
         Route::controller(NotificationController::class)->prefix('notifications')->group(function(){
             Route::get('/','index');
             Route::post('markAsRead/{id}','readNotification');
+        });
+
+        #GET CHAT MESSAGES
+        Route::controller(ChatController::class)->prefix('chats')->group(function(){
+            Route::get('/{id}/{type}','index')->where('type','support|app');
         });
 
        
