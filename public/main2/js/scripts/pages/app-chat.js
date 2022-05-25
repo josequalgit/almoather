@@ -32,9 +32,7 @@ $(document).ready(function () {
     var profile_sidebar_scroll = new PerfectScrollbar(".chat-user-profile-scroll");
   }
   // chat area perfect scrollbar initialization
-  if (chatContainer.length > 0) {
-    var chat_user_user = new PerfectScrollbar(".chat-container");
-  }
+
   if ($(".chat-profile-content").length > 0) {
     var chat_profile_content = new PerfectScrollbar(".chat-profile-content");
   }

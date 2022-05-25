@@ -151,6 +151,7 @@ class AdController extends Controller
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
+        
         $data = array_merge($request->all(),['customer_id'=>Auth::guard('api')->user()->customers->id]);
 
         if($request->ad_type == 'onsite')

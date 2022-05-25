@@ -59,7 +59,7 @@ trait AdResponse {
               'id'=>$ad->areas->id,
               'name'=>$ad->areas->name
             ],
-            'customer_id'=>$ad->customer_id,
+            'customer_id'=>$ad->customers->id,
             'isVat'=>$ad->is_vat,
             'discount_code'=>$ad->discount_code,
             'hasStore'=>$ad->has_hasStore?true:false,

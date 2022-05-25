@@ -50,6 +50,7 @@ class ChatController extends Controller
             $userData->email = $user->email;
             $userData->phone = $user->phone;
             $userData->time = $user->phone;
+         //   $userData->user_id = Auth::guard('api')->user()->id;
         }
         else
         {
@@ -57,6 +58,7 @@ class ChatController extends Controller
             $userData->type = 'customer';
             $userData->email = $user->email;
             $userData->phone = $user->phone;
+           // $userData->user_id = Auth::guard('api')->user()->id;
         }
 
         return response()->json([

@@ -9,7 +9,7 @@
     font-size: 40px;
     box-shadow: 2px 2px 3px #999;
     z-index: 100;
-    bottom:  50px;
+    bottom: 50px;
     border: none
 }
 
@@ -17,10 +17,15 @@
     color: #fff;
 }
 
-.bottom-right a i{
+.bottom-right a i {
     font-size: 30px;
 }
 
-.add-person-chat{
+.add-person-chat {
     cursor: pointer;
+}
+
+.chat-content {
+    overflow: auto;
+    height: 100%;
 }

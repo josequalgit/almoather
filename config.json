@@ -1,12 +1,12 @@
 {
     "server": {
-        "origin": "127.0.0.1:8000",
+        "origin": "192.168.1.143:8000",
         "port": 3000
     },
     "db": {
-        "host"     : "localhost",
-        "user"     : "root",
-        "password" : "root",
-        "database" : "almuaather"
+        "host": "localhost",
+        "user": "root",
+        "password": "",
+        "database": "moather"
     }
 }

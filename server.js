@@ -4,12 +4,12 @@ const server = require('http').Server();
 const Redis = require('ioredis');
 const redis = new Redis();
 
-const mysql      = require('mysql');
+const mysql = require('mysql');
 const connection = mysql.createConnection({
-    host     : config.db.host,
-    user     : config.db.user,
-    password : config.db.password,
-    database : config.db.database,
+    host: config.db.host,
+    user: config.db.user,
+    password: config.db.password,
+    database: config.db.database,
 });
 
 // Create a new Socket.io instance
@@ -35,10 +35,11 @@ io.on("connect", (socket) => {
     const clientsInRoom = io.in('support').allSockets()
     io.emit("get.online.users", clientsInRoom);
 
+
     var onevent = socket.onevent;
     socket.onevent = function (packet) {
         var args = packet.data || [];
-        onevent.call (this, packet);
+        onevent.call(this, packet);
         packet.data = ["*"].concat(args);
         onevent.call(this, packet);
     };
@@ -50,33 +51,39 @@ io.on("connect", (socket) => {
         io.emit("user.offline", socket.userId);
     });
 
-    socket.on('*', function(event,data){
-
-        if(event == 'user.online.save'){
+    socket.on('*', function (event, data) {
+        console.log('event: ' + event.includes('support'))
+        if (event == 'user.online.save') {
             console.log('a user ' + data.userId + ' connected');
             socket.userId = data.userId;
             socket.join('support');
             io.emit("user.online", socket.user_id);
-        }else if(event.includes('support')){
-            var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
+
+        } else {
+            var CURRENT_TIMESTAMP = { toSqlString: function () { return 'CURRENT_TIMESTAMP()'; } };
 
             let messageData = {
                 text: data.message,
                 sender_id: data.sender_id,
                 receiver_id: data.receiver_id,
-                type: 'support',
+                type: event.includes('support') ? 'support' : 'app',
                 created_at: CURRENT_TIMESTAMP,
                 updated_at: CURRENT_TIMESTAMP,
             };
-    
+
+
+
+
+
             connection.query('INSERT INTO messages SET ?', messageData, function (error, results, fields) {
                 if (error) throw error;
             });
-        }
-        console.log(event);
-        console.log(data);
 
-        
+            io.emit(event, data);
+        }
+
+
+
     });
 });
 io.on('error', function (err) {

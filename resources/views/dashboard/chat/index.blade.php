@@ -81,8 +81,8 @@
                             </div>
                             <!-- chat card start -->
                             <div id="chat_body" class="card chat-wrapper shadow-none">
-                                <div id="messagesContainer" class="card-body chat-container">
-                                    <div id="chat_messages"  class="chat-content"></div>
+                                <div id="messagesContainer" class="card-body chat-container p-0">
+                                    <div id="chat_messages"  class="chat-content p-2"></div>
                                 </div>
                                 <div class="card-footer chat-footer border-top px-2 pt-1 pb-0 mb-1">
                                     <form class="d-flex align-items-center" onsubmit="chatMessagesSend();" action="javascript:void(0);">
@@ -149,6 +149,12 @@
     socket.on('error', function (err) {
         console.log('error',err);
     });
+
+    // socket.on('test', function (data) {
+    //         console.log('after connection: ',data);
+    //         data.image = boxItem.find('img').attr('src');
+    //         setMessageData(data,true);
+    //     });
 
     socket.on('get.online.users', (users) => {
         console.log(users);
@@ -233,7 +239,10 @@
                            $("#chat_messages").append(reciverDiv);
                         }
                     }
-                    chatContainer.animate({ scrollTop: chatContainer[0].scrollHeight }, 400);
+                    // new PerfectScrollbar(".chat-container");
+                    var objDiv = document.getElementById("chat_messages");
+                    chatContainer.find('.chat-content').animate({ scrollTop: objDiv.scrollHeight }, 400);
+                    
                 }else{
                     alert('some thing wrong');
                 }
@@ -246,12 +255,13 @@
         socket.removeAllListeners("message.user-"+oldUserId);
         oldUserId = user_id;
         channel = 'support.user-' + senToUser;
+        //console.log('c: ',channel)
         socket.on(channel, function (data) {
             console.log('after connection: ',data);
             data.image = boxItem.find('img').attr('src');
-            setMessageData(data,true);
+            setMessageData(data,data.sender_id != 1);
         });
-
+        
         $('#chat_body').show();
     }
 
@@ -264,23 +274,19 @@
 
         if (message != "") {
             let adminAvatar = $('.admin-avatar').attr('src');
-            setMessageData({
-                image: adminAvatar,
-                message: message,
-                time: time
-            },false);
+            
             chatMessageSend.val("");
         }
 
-        console.log(channel)
         socket.emit(channel, {
             message: message,
-            sender_id: current_user_id,
+            sender_id: 1,
             receiver_id: senToUser,
         });
     }
 
     function setMessageData(data,left = false){
+
         let html = `<div class="chat ${ left ? 'chat-left' : '' }">
                             <div class="chat-avatar">
                                 <a class="avatar m-0">

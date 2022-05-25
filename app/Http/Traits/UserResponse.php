@@ -19,6 +19,7 @@ trait UserResponse {
 
            $formate = [
              'id'=>$info->id,
+             'chat_id'=>$user->id,
              'first_name' =>$info->first_name,
              'middle_name' =>$info->middle_name,
              'last_name' =>$info->last_name,
@@ -94,6 +95,7 @@ trait UserResponse {
        {
            $formate = [
                 'id'=>$user->id,
+                'chat_id'=>$user->id,
                 'image'=>$user->image,
                 'first_name' =>$info->first_name,
                 'middle_name' =>$info->middle_name,
