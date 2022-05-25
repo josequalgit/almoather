@@ -20,3 +20,7 @@
 .bottom-right a i{
     font-size: 30px;
 }
+
+.add-person-chat{
+    cursor: pointer;
+}

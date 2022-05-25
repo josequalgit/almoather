@@ -48,7 +48,8 @@ class User extends Authenticatable implements JWTSubject , HasMedia
     protected $append = [
         'image',
         'infulncerImage',
-        'snapChatVideo'
+        'snapChatVideo',
+        'adminImage'
     ];
 
 
@@ -119,9 +120,32 @@ class User extends Authenticatable implements JWTSubject , HasMedia
    }
 
     public function getInfulncerImageAttribute() {
-        $mediaItems = $this->getMedia('influncers');
-        $publicFullUrl = null;
-        if(count($mediaItems) > 0)
+        $mediaItems = $this->getMedia('influncers')->first();
+
+        $publicFullUrl = [
+            'id' => 0,
+            'url' => 'https://cdn5.vectorstock.com/i/1000x1000/51/99/icon-of-user-avatar-for-web-site-or-mobile-app-vector-3125199.jpg'
+        ];
+
+        if($mediaItems)
+        {
+            $publicFullUrl = [
+                'id' => $mediaItems->id,
+                'url' => $mediaItems->getFullUrl()
+            ];
+        }
+        return $publicFullUrl;
+   }
+
+   public function getAdminImageAttribute() {
+        $mediaItems = $this->getMedia('admin')->first();
+
+        $publicFullUrl = [
+            'id' => 0,
+            'url' => 'https://cdn5.vectorstock.com/i/1000x1000/51/99/icon-of-user-avatar-for-web-site-or-mobile-app-vector-3125199.jpg'
+        ];
+        
+        if($mediaItems)
         {
             $publicFullUrl = [
                 'id'=>$mediaItems[0]->id,
@@ -129,7 +153,7 @@ class User extends Authenticatable implements JWTSubject , HasMedia
             ];
         }
         return $publicFullUrl;
-   }
+    }
 
     public function getSnapChatVideoAttribute() {
         $mediaItems = $this->getMedia('snapchat_videos');

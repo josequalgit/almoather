@@ -18,7 +18,10 @@ class ChatController extends Controller
         $users = User::whereIn('id',$userMessages)->where(function($query){
             $query->whereHas('customers')
             ->OrWhereHas('influncers');
-        })->get();
+        })->get()->map(function($item){
+            $item->type = $item->influncers ? 'Influencer' : 'Customer';
+            return $item;
+        });
        
         return view('dashboard.chat.index',compact('users'));
     }
@@ -29,23 +32,17 @@ class ChatController extends Controller
         $data = Message::where([['receiver_id',$user_id],['type','support']])
         ->orWhere([['sender_id',$user_id],['type','support','updated_at']])->get()->map(function($item){
             return [
-                'text'=>$item->text,
-                'sender_id'=>$item->sender_id,
-                'receiver_id'=>$item->receiver_id,
-                'time'=>$item->created_at->format('Y-m-d')
+                'text' => $item->text,
+                'sender_id' => $item->sender_id,
+                'receiver_id' => $item->receiver_id,
+                'time' => $item->created_at->format('Y-m-d h:i')
             ];
         });
-        $inf = $user->influncers??$user->customers;
+        $inf = $user->influncers ?? $user->customers;
 
         $userData = (object)[];
-        if($inf == null)
-        {
-            $userData->name = 'Support';
-        }
-        else
-        {
-            $userData->name = $inf->first_name.' '.$inf->middle_name.' '.$inf->last_name;
-        }
+        $userData->name = $inf->first_name.' '.$inf->middle_name.' '.$inf->last_name;
+
         if($user->influncers)
         {
             $userData->image = $user->infulncerImage['url'];
