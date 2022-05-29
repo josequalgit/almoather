@@ -5,7 +5,7 @@ const Redis = require('ioredis');
 
 // const redis = new Redis();
 //var sub = Redis.createClient();
-var sub = new Redis('6379', '192.168.1.143');
+var sub = new Redis(config.redis.port, config.redis.url);
 
 const mysql = require('mysql');
 const connection = mysql.createConnection({
