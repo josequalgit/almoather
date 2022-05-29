@@ -151,30 +151,6 @@
         console.log('error',err);
     });
 
-    // socket.on('test', function (data) {
-    //         console.log('after connection: ',data);
-    //         data.image = boxItem.find('img').attr('src');
-    //         setMessageData(data,true);
-    //     });
-
-    socket.on('get.online.users', (users) => {
-        console.log(users);
-        for (var key in users) {
-            $('.user-item[data-id="'+users[key]+'"]').find('.avatar-status').removeClass('avatar-status-busy').addClass('avatar-status-online');
-        }
-    });
-
-    socket.on('user.online', (userId) => {
-        console.log(userId);
-        $('.user-item[data-id="'+userId+'"]').find('.avatar-status').removeClass('avatar-status-busy').addClass('avatar-status-online');
-    });
-
-
-    socket.on('user.offline', (userId) => {
-        console.log(userId);
-        $('.user-item[data-id="'+userId+'"]').find('.avatar-status').removeClass('avatar-status-online').addClass('avatar-status-busy');
-    });
-
 
     let current_user_id = '{{ auth()->user()->id }}';
     let senToUser = 0;
