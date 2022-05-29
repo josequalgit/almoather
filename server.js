@@ -2,7 +2,10 @@ const config = require('./config');
 const server = require('http').Server();
 
 const Redis = require('ioredis');
-const redis = new Redis();
+
+// const redis = new Redis();
+//var sub = Redis.createClient();
+var sub = new Redis('6379', '192.168.1.143');
 
 const mysql = require('mysql');
 const connection = mysql.createConnection({
@@ -11,6 +14,8 @@ const connection = mysql.createConnection({
     password: config.db.password,
     database: config.db.database,
 });
+
+
 
 // Create a new Socket.io instance
 const io = require('socket.io')(server, {
@@ -21,6 +26,19 @@ const io = require('socket.io')(server, {
     transports: ['websocket'],
     upgrade: false
 });
+
+sub.psubscribe('*', function (data) {
+    console.log('redis connected');
+});
+
+sub.on('pmessage', function (channel, message) {
+    console.log(channel);
+    console.log(message);
+    io.emit(channel, message);
+
+
+});
+
 
 server.listen(config.server.port, () => {
     console.log('listening on port 3000');
@@ -53,6 +71,8 @@ io.on("connect", (socket) => {
 
     socket.on('*', function (event, data) {
         console.log('event: ' + event.includes('support'))
+        console.log('channel: ', event);
+
         if (event == 'user.online.save') {
             console.log('a user ' + data.userId + ' connected');
             socket.userId = data.userId;

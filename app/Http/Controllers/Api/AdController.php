@@ -7,12 +7,14 @@ use Illuminate\Http\Request;
 use App\Models\Ad;
 use App\Http\Requests\Api\AdRequest;
 use App\Http\Requests\Api\AcceptAdContractRequest;
+use App\Http\Requests\Api\CheckPaymentRequest;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\AddInfluencer;
 use App\Models\User;
 use App\Models\Influncer;
 use App\Models\Customer;
 use App\Models\Contract;
+use App\Models\Payment;
 use App\Models\CampaignContract;
 use App\Models\InfluencerContract;
 use App\Models\StoreLocation;
@@ -20,9 +22,12 @@ use App\Models\AdsInfluencerMatch;
 use App\Http\Traits\UserResponse;
 use App\Http\Traits\ApiPaginator;
 use App\Http\Traits\AdResponse;
+use App\Http\Traits\SendNotification;
 use Auth;
 use Validator;
 use App\Models\AppSetting;
+use Illuminate\Support\Facades\Redis;
+use Carbon\Carbon;
 
 use DB;
 
@@ -30,7 +35,7 @@ class AdController extends Controller
 {
     protected $guard = 'api';
 
-    use ApiPaginator , UserResponse , AdResponse;
+    use ApiPaginator , UserResponse , AdResponse , SendNotification;
 
     public function index($status)
     {
@@ -151,7 +156,7 @@ class AdController extends Controller
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
-        
+
         $data = array_merge($request->all(),['customer_id'=>Auth::guard('api')->user()->customers->id]);
 
         if($request->ad_type == 'onsite')
@@ -217,7 +222,21 @@ class AdController extends Controller
             'id'=>$data->id,
             'type'=>'Ad'
         ];
-        Notification::send($users, new AddInfluencer($info));
+        $this->sendAdminNotification('super_admin_notification',$info);
+
+
+        // Redis::publish('super_admin_notification', json_encode([
+        //     "message" => $info['msg'],
+        //     "date" => Carbon::now(),
+        // ]));
+        $c_not = Notification::send($users, new AddInfluencer($info));
+
+
+        Redis::publish('contract_manager_notification', json_encode([
+            "message" => $info['msg'],
+            "date" => Carbon::now(),
+        ]));
+
 
         return response()->json([
             'msg'=>'ad was created',
@@ -351,6 +370,15 @@ class AdController extends Controller
                 1,
                 2
             ];
+            Redis::publish('super_admin_notification', json_encode([
+                "message" => $info['msg'],
+                "date" => Carbon::now(),
+            ]));
+            Redis::publish('contract_manager_notification', json_encode([
+                "message" => $info['msg'],
+                "date" => Carbon::now(),
+            ]));
+    
             foreach ($users as $value) {
                 Notification::send(User::find($value), new AddInfluencer($info));
             }
@@ -695,6 +723,16 @@ class AdController extends Controller
             'id'=>$data->id,
             'type'=>'Ad'
         ];
+
+        Redis::publish('super_admin_notification', json_encode([
+            "message" => $info['msg'],
+            "date" => Carbon::now(),
+        ]));
+        Redis::publish('contract_manager_notification', json_encode([
+            "message" => $info['msg'],
+            "date" => Carbon::now(),
+        ]));
+
       
         $users = [
             1,
@@ -844,6 +882,16 @@ class AdController extends Controller
             1,
             2
         ];
+        Redis::publish('super_admin_notification', json_encode([
+            "message" => $info['msg'],
+            "date" => Carbon::now(),
+        ]));
+
+        Redis::publish('contract_manager_notification', json_encode([
+            "message" => $info['msg'],
+            "date" => Carbon::now(),
+        ]));
+
         foreach ($users as $value) {
             Notification::send(User::find($value), new AddInfluencer($info));
         }
@@ -881,6 +929,16 @@ class AdController extends Controller
             1,
             2
         ];
+        
+        Redis::publish('super_admin_notification', json_encode([
+            "message" => $info['msg'],
+            "date" => Carbon::now(),
+        ]));
+        Redis::publish('contract_manager_notification', json_encode([
+            "message" => $info['msg'],
+            "date" => Carbon::now(),
+        ]));
+
         foreach ($users as $value) {
             Notification::send(User::find($value), new AddInfluencer($info));
         }
@@ -1036,6 +1094,105 @@ class AdController extends Controller
         //     'msg'=>'match status was change',
         //     'status'=>config('global.OK_STATUS')
         // ],config('global.OK_STATUS'));
+    }
+
+    public function check_payment(CheckPaymentRequest $request ,$ad_id)
+    {
+        $data = Ad::find($ad_id);
+        if(!$data) return response()->json([
+            'err'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        if($request->result != 'Successful' && $request->ResponseCode !== 000)
+        {
+            /**
+         * 
+             * Save in the database
+             * 
+             * */
+            Payment::create([
+                'ad_id'=>$ad_id,
+                'trans_id'=>$request->TranId,
+                'amount'=>$request->amount,
+                'status'=>$request->result,
+                'status_code'=>$request->ResponseCode,
+                'type'=>$request->type,
+            ]);
+
+
+             return response()->json([
+                'err'=>'payment failed',
+                'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
+        }
+
+       
+
+        $terminalId = "almuu";
+        $password = "almuu@123";
+        $key = "almuu";
+        $requestHash = "" . $request->TranId . "|" . $key . "|" . $request->ResponseCode . "|" . $request->amount . "";
+        $txn_details1 = "" . $ad_id . "|" . $terminalId . "|" . $password . "|" . $key . "|" . $request->amount . "|SAR";
+	
+    
+        $hash = hash('sha256', $requestHash);
+        
+        
+        $txn_details1 = "" . $ad_id . "|" . $terminalId . "|" . $password . "|" . $key . "|" . $request->amount . "|SAR";
+
+        //Secure check
+        $requestHash1 = hash('sha256', $txn_details1);
+        $apiFields    = array(
+            'trackid' => $ad_id,
+            'terminalId' => $terminalId,
+            'action' => '10',
+            'merchantIp' => "",
+            'password' => $password,
+            'currency' => "SAR",
+             'transid' => "",
+			'transid' => $request->TranId,
+            'amount' => $request->amount,
+            'udf5' => "",
+            'udf3' => "",
+            'udf4' => "",
+            'udf1' => "",
+            'udf2' => "",
+            'requestHash' => $requestHash1
+        );
+        
+        
+            $apiFieldsString = json_encode($apiFields);
+            
+            $url = "https://payments-dev.urway-tech.com/URWAYPGService/transaction/jsonProcess/JSONrequest";
+            $ch  = curl_init($url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $apiFieldsString);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($apiFieldsString)
+            ));
+            curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+            
+            //execute post
+            $apiResult = curl_exec($ch);
+
+
+            Payment::create([
+                'ad_id'=>$ad->id,
+                'trans_id'=>$request->TranId,
+                'amount'=>$request->amount,
+                'status'=>$request->result,
+                'status_code'=>$request->ResponseCode,
+                'type'=>$request->type,
+            ]);
+
+            dd(json_decode($apiResult));
+        
+            
+
     }
 
 

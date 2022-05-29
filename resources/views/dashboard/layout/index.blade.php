@@ -72,6 +72,10 @@
 }
     </style>
 
+    @php
+
+    @endphp
+
     <!-- BEGIN: Header-->
     <div class="header-navbar-shadow"></div>
     <nav class="header-navbar main-header-navbar navbar-expand-lg navbar navbar-with-menu fixed-top ">
@@ -111,13 +115,13 @@
                                 <ul class="search-list"></ul>
                             </div>
                         </li> --}}
-                        <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" href="javascript:void(0);" data-toggle="dropdown"><i class="ficon bx bx-bell bx-tada bx-flip-horizontal"></i><span class="badge badge-pill badge-danger badge-up">{{ count($notifications) }}</span></a>
+                        <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" href="javascript:void(0);" data-toggle="dropdown"><i class="ficon bx bx-bell bx-tada bx-flip-horizontal"></i><span id="notification_counter1" class="badge badge-pill badge-danger badge-up">{{ count($notifications) }}</span></a>
                             <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                                 <li class="dropdown-menu-header">
                                     {{-- <div class="dropdown-header px-1 py-75 d-flex justify-content-between"><span class="notification-title">{{ count($notifications) }} new Notification</span><span class="text-bold-400 cursor-pointer">Mark all as read</span></div> --}}
-                                    <div class="dropdown-header px-1 py-75 d-flex justify-content-between"><span class="notification-title">{{ count($notifications) }} new Notification</span></div>
+                                    <div class="dropdown-header px-1 py-75 d-flex justify-content-between"><span id="notification_counter2" class="notification-title">{{ count($notifications) }} new Notification</span></div>
                                 </li>
-                                <li class="scrollable-container media-list"><a class="d-flex justify-content-between" href="javascript:void(0);">
+                                <li id="notification_list" class="scrollable-container media-list"><a class="d-flex justify-content-between" href="javascript:void(0);">
                                       
                                   
                                  
@@ -224,6 +228,71 @@
 
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+@php
+$role = Auth::user()->roles[0]->name
+@endphp
+
+@if ($role == 'superAdmin'||$role == 'Contracts Manager')
+<script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
+<script>
+    let item = {id:12381263,msg:'Qusai is here',date:'15 min ago'};
+
+    var socket = io.connect('{{env("SOCKET_URL")}}',{secure: false,transports: ['websocket'],upgrade: false,query: {token: 'xxx'}});
+    socket.on('connect', function (err) {
+        console.log('connected');
+    });
+
+    socket.on('disconnect',function(res){
+        console.log('disconnect');
+    });
+
+    socket.on('error', function (err) {
+        console.log('error',err);
+    });
+
+    socket.on('super_admin_notification', (data) => {
+        console.log('super admin notification',data);
+        incress_notification(data)
+
+    });
+    socket.on('contract_manager_notification', (data) => {
+        console.log('contract manager notification');
+        incress_notification(data)
+
+    });
+
+
+    function incress_notification(data)
+    {
+        /**  inccress the notification counter **/
+        let notification_number = '{{auth()->user()->unreadNotifications()->count()}}';
+       $('#notification_counter1').empty();
+       $('#notification_counter2').empty();
+       $('#notification_counter1').append(notification_number);
+       $('#notification_counter2').append(`${notification_number} new Notification`);
+        let route = "{{ route('dashboard.readNotification','id:') }}";
+        let replaceId = route.replace('id:',data.not_id);
+        console.log('data object: ',data)
+        /** prepend the notification item **/
+        let div = `</a><a href="${replaceId}" class="d-flex justify-content-between cursor-pointer" href="javascript:void(0);">
+                <div class="media d-flex align-items-center">
+                        <div class="media-left pr-0">
+                        <div class="avatar bg-rgba-danger m-0 mr-1 p-25">
+                         <div class="avatar-content"><i class="bx bx-detail text-danger"></i></div>
+                 </div>
+            </div>
+            <div class="media-body">
+              <h6 class="media-heading"><span class="text-bold-500">`+
+                data.message+`</span></h6><small class="notification-text">`${data.date}`</small>
+            </div>
+        </div>`
+
+        $('#notification_list').prepend(div);
+
+    }
+
+</script>
+@endif
 
 @yield('scripts')
 

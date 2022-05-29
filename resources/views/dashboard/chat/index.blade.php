@@ -136,7 +136,8 @@
 <script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
 <script src="{{asset('main2/js/scripts/pages/app-chat.js')}}"></script>
 <script>
-    var socket = io.connect('{{env("SOCKET_URL")}}',{secure: false,transports: ['websocket'],upgrade: false,query: {token: 'xxx'}});
+    let token = '{{csrf_token()}}';
+    var socket = io.connect('{{env("SOCKET_URL")}}',{secure: false,transports: ['websocket'],upgrade: false,query: {token: token}});
         
     socket.on('connect', function (err) {
         console.log('connected');

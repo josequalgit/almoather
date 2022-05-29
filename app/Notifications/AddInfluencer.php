@@ -58,7 +58,8 @@ class AddInfluencer extends Notification
         return [
             'msg'=>$this->influncerData['msg'],
             'type'=>$this->influncerData['type'],
-            'id'=>$this->influncerData['id']
+            'id'=>$this->influncerData['id'],
+            'not_id'=>$this->id
         ];
     }
 }
