@@ -133,24 +133,10 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
+
 <script src="{{asset('main2/js/scripts/pages/app-chat.js')}}"></script>
 <script>
     let token = '{{csrf_token()}}';
-    var socket = io.connect('{{env("SOCKET_URL")}}',{secure: false,transports: ['websocket'],upgrade: false,query: {token: token}});
-        
-    socket.on('connect', function (err) {
-        console.log('connected');
-    });
-
-    socket.on('disconnect',function(res){
-        console.log('disconnect');
-    });
-
-    socket.on('error', function (err) {
-        console.log('error',err);
-    });
-
 
     let current_user_id = '{{ auth()->user()->id }}';
     let senToUser = 0;
@@ -164,6 +150,7 @@
         senToUser = user_id;
         let url = '{{ route("dashboard.chat.get_messages","user_id:") }}';
         let add_id = url.replace('user_id:',user_id);
+        let adminAvatar = $('.admin-avatar').attr('src');
         
         $.ajax({
             url:add_id,
@@ -187,7 +174,7 @@
                             let senderDiv = `<div class="chat">
                                                 <div class="chat-avatar">
                                                     <a class="avatar m-0">
-                                                    <img src="${user_info.image}" alt="avatar" height="36" width="36" />
+                                                    <img src="${adminAvatar}" alt="avatar" height="36" width="36" />
                                                     </a>
                                                 </div>
                                                 <div class="chat-body">
@@ -235,7 +222,7 @@
         //console.log('c: ',channel)
         socket.on(channel, function (data) {
             console.log('after connection: ',data);
-            data.image = boxItem.find('img').attr('src');
+            data.image = data.sender_id == 1 ? adminAvatar : user_info.image;
             setMessageData(data,data.sender_id != 1);
         });
         
@@ -246,20 +233,21 @@
     function chatMessagesSend(source) {
         let chatMessageSend = $(".chat-message-send");
         var message = chatMessageSend.val();
+       
         var d = new Date();
         let time = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-
         if (message != "") {
-            let adminAvatar = $('.admin-avatar').attr('src');
-            
             chatMessageSend.val("");
-        }
+            var objDiv = document.getElementById("chat_messages");
+            chatContainer.find('.chat-content').animate({ scrollTop: objDiv.scrollHeight }, 400);
 
-        socket.emit(channel, {
-            message: message,
-            sender_id: 1,
-            receiver_id: senToUser,
-        });
+            socket.emit(channel, {
+                message: message,
+                sender_id: 1,
+                receiver_id: senToUser,
+                time: time
+            });
+        }
     }
 
     function setMessageData(data,left = false){
