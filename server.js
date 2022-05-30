@@ -1,11 +1,26 @@
 const config = require('./config');
-const server = require('http').Server();
+if(config.environment == "https"){
+    const https = require('https');
+    const fs = require('fs');
+    
+    const options = {
+      key: fs.readFileSync('/usr/local/psa/var/certificates/scfgAIOSS'),
+      cert: fs.readFileSync('/usr/local/psa/var/certificates/scfgAIOSS'),  
+    };
+
+    const server = https.createServer(options).listen(config.server.port, () => {
+        console.log('listening on port ' + config.server.port);
+    });
+}else{
+    const server = require('http').Server();
+    server.listen(config.server.port, () => {
+        console.log('listening on port ' + config.server.port);
+    });
+}
 
 const Redis = require('ioredis');
 
-// const redis = new Redis();
-//var sub = Redis.createClient();
-var sub = new Redis('6379', '192.168.1.143');
+var sub = new Redis(config.redis.port, config.redis.url);
 
 const mysql = require('mysql');
 const connection = mysql.createConnection({
@@ -14,8 +29,6 @@ const connection = mysql.createConnection({
     password: config.db.password,
     database: config.db.database,
 });
-
-
 
 // Create a new Socket.io instance
 const io = require('socket.io')(server, {
@@ -35,15 +48,7 @@ sub.on('pmessage', function (channel, message) {
     console.log(channel);
     console.log(message);
     io.emit(channel, message);
-
-
 });
-
-
-server.listen(config.server.port, () => {
-    console.log('listening on port 3000');
-});
-
 
 io.on("connect", (socket) => {
     console.log('connected');
