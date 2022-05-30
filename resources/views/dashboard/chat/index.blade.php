@@ -215,14 +215,16 @@
                 console.log(err)
             }
         });
-
         socket.removeAllListeners("message.user-"+oldUserId);
         oldUserId = user_id;
+        console.log('sent user id: ',senToUser)
+
         channel = 'support.user-' + senToUser;
         //console.log('c: ',channel)
         socket.on(channel, function (data) {
             console.log('after connection: ',data);
-            data.image = data.sender_id == 1 ? adminAvatar : user_info.image;
+         //   data.image = data.sender_id == 1 ? adminAvatar : user_info.image;
+            data.image = data.sender_id == 1 ? adminAvatar : null;
             setMessageData(data,data.sender_id != 1);
         });
         

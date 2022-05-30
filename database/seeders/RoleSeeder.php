@@ -17,12 +17,11 @@ class RoleSeeder extends Seeder
     public function run()
     {
         $roles = [
-            'Super Admin',
+            'superAdmin',
             'Contracts Manager',
             'Business Manager'
         ];
         $permissions = Permission::get();
-        
         $contractManagerPermissions = [
             'See Contracts',
             'Edit Contracts',

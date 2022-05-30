@@ -43,6 +43,7 @@ class ChatController extends Controller
         else
         {
             //$user = Auth::guard('api')->user()->influncers;
+            $receiver_id = Auth::guard('api')->user()->influncers?Auth::guard('api')->user()->influncers->users->id:Auth::guard('api')->user()->customers->users->id;
             $data = Message::where([['receiver_id',Auth::guard('api')->user()->id],['type',$type]])
             ->orWhere([['sender_id',Auth::guard('api')->user()->id],['type',$type,'updated_at']])->get()->map(function($item){
                 return [
@@ -58,8 +59,8 @@ class ChatController extends Controller
             'data'=>$data,
             'status'=>config('global.OK_STATUS'),
             'msg'=>'data was return',
-            'receiver_id'=>$receiver_id,
-            'sender_id'=>$sender_id,
+            'receiver_id'=>1,
+            'sender_id'=>$receiver_id,
         ];
         if($type == 'app')
         {

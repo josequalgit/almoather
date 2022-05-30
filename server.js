@@ -68,8 +68,9 @@ io.on("connect", (socket) => {
         console.log('disconnect');
     });
 
-    socket.on('*', function (event, data) {
+    socket.on('*', async function (event, data) {
         console.log('event: ' + event.includes('support'));
+        console.log('event2: ' + event);
         if (event.includes('support')) {
             var CURRENT_TIMESTAMP = { toSqlString: function () { return 'CURRENT_TIMESTAMP()'; } };
 
@@ -86,8 +87,12 @@ io.on("connect", (socket) => {
                 if (error) throw error;
             });
         }
-
-        io.emit(event, data);
+        let numberOfMessages = 0;
+        connection.query("SELECT COUNT(id) As number FROM messages WHERE is_read = 0 and type='support';", function (err, result) {
+            numberOfMessages = result[0].number;
+            io.emit('supportMessages', numberOfMessages);
+            io.emit(event, data);
+        });
 
     });
 });

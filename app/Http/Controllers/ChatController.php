@@ -22,7 +22,7 @@ class ChatController extends Controller
             $item->type = $item->influncers ? 'Influencer' : 'Customer';
             return $item;
         });
-       
+       $this->read_unread_messages();
         return view('dashboard.chat.index',compact('users'));
     }
 
@@ -104,5 +104,10 @@ class ChatController extends Controller
             'sender_id' => 5,
             'receiver_id'=> Auth::user()->id,
         ]));
+    }
+
+    private function read_unread_messages()
+    {
+        return Message::where([['type','support'],['is_read','0']])->update(['is_read'=>'1']);
     }
 }

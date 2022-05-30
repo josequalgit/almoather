@@ -7,7 +7,7 @@
         "host": "localhost",
         "user": "root",
         "password": "",
-        "database": "almuaather"
+        "database": "moather"
     },
     "redis": {
         "url": "192.168.1.143",
