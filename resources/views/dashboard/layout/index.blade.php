@@ -235,9 +235,8 @@ $role = Auth::user()->roles[0]->name
 
 <script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
 <script>
-    let item = {id:12381263,msg:'Qusai is here',date:'15 min ago'};
 
-    var socket = io.connect('{{env("SOCKET_URL")}}',{secure: false,transports: ['websocket'],upgrade: false});
+    var socket = io.connect('{{env("SOCKET_URL")}}',{transports: ['websocket'],upgrade: false});
     socket.on('connect', function (err) {
         console.log('connected');
     });
