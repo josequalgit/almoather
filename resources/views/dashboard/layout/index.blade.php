@@ -86,39 +86,13 @@
                         <ul class="nav navbar-nav">
                             <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="javascript:void(0);"><i class="ficon bx bx-menu"></i></a></li>
                         </ul>
-                        {{-- <ul class="nav navbar-nav bookmark-icons">
-                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-email.html" data-toggle="tooltip" data-placement="top" title="Email"><i class="ficon bx bx-envelope"></i></a></li>
-                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-chat.html" data-toggle="tooltip" data-placement="top" title="Chat"><i class="ficon bx bx-chat"></i></a></li>
-                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-todo.html" data-toggle="tooltip" data-placement="top" title="Todo"><i class="ficon bx bx-check-circle"></i></a></li>
-                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-calendar.html" data-toggle="tooltip" data-placement="top" title="Calendar"><i class="ficon bx bx-calendar-alt"></i></a></li>
-                        </ul>
-                        <ul class="nav navbar-nav">
-                            <li class="nav-item d-none d-lg-block"><a class="nav-link bookmark-star"><i class="ficon bx bx-star warning"></i></a>
-                                <div class="bookmark-input search-input">
-                                    <div class="bookmark-input-icon"><i class="bx bx-search primary"></i></div>
-                                    <input class="form-control input" type="text" placeholder="Explore Frest..." tabindex="0" data-search="template-search">
-                                    <ul class="search-list"></ul>
-                                </div>
-                            </li>
-                        </ul> --}}
+                       
                     </div>
                     <ul class="nav navbar-nav float-right">
-                        {{-- <li class="dropdown dropdown-language nav-item"><a class="dropdown-toggle nav-link" id="dropdown-flag" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="flag-icon flag-icon-us"></i><span class="selected-language">English</span></a>
-                            <div class="dropdown-menu" aria-labelledby="dropdown-flag"><a class="dropdown-item" href="javascript:void(0);" data-language="en"><i class="flag-icon flag-icon-us mr-50"></i> English</a><a class="dropdown-item" href="javascript:void(0);" data-language="fr"><i class="flag-icon flag-icon-fr mr-50"></i> French</a><a class="dropdown-item" href="javascript:void(0);" data-language="de"><i class="flag-icon flag-icon-de mr-50"></i> German</a><a class="dropdown-item" href="javascript:void(0);" data-language="pt"><i class="flag-icon flag-icon-pt mr-50"></i> Portuguese</a></div>
-                        </li> --}}
-                        {{-- <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-expand"><i class="ficon bx bx-fullscreen"></i></a></li>
-                        <li class="nav-item nav-search"><a class="nav-link nav-link-search"><i class="ficon bx bx-search"></i></a>
-                            <div class="search-input">
-                                <div class="search-input-icon"><i class="bx bx-search primary"></i></div>
-                                <input class="input" type="text" placeholder="Explore Frest..." tabindex="-1" data-search="template-search">
-                                <div class="search-input-close"><i class="bx bx-x"></i></div>
-                                <ul class="search-list"></ul>
-                            </div>
-                        </li> --}}
+                    
                         <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" href="javascript:void(0);" data-toggle="dropdown"><i class="ficon bx bx-bell bx-tada bx-flip-horizontal"></i><span id="notification_counter1" class="badge badge-pill badge-danger badge-up">{{ count($notifications) }}</span></a>
                             <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                                 <li class="dropdown-menu-header">
-                                    {{-- <div class="dropdown-header px-1 py-75 d-flex justify-content-between"><span class="notification-title">{{ count($notifications) }} new Notification</span><span class="text-bold-400 cursor-pointer">Mark all as read</span></div> --}}
                                     <div class="dropdown-header px-1 py-75 d-flex justify-content-between"><span id="notification_counter2" class="notification-title">{{ count($notifications) }} new Notification</span></div>
                                 </li>
                                 <li id="notification_list" class="scrollable-container media-list"><a class="d-flex justify-content-between" href="javascript:void(0);">
@@ -219,23 +193,30 @@
     <script src="{{ asset('main2/vendors/js/pickers/pickadate/legacy.js') }}"></script>
     <script src="{{ asset('main2/vendors/js/extensions/moment.min.js') }}"></script>
     <script src="{{ asset('main2/vendors/js/pickers/daterange/daterangepicker.js') }}"></script>
-    {{-- <script src="{{ asset('main2/js/scripts/app-user-view.js') }}"></script>
-    <script src="{{ asset('main2/js/scripts/app-user-view-account.js') }}"></script>
-    <script src="{{ asset('main2/js/scripts/modal-edit-user.js') }}"></script>
-    <script src="{{ asset('main2/js/pages-account-settings-billing') }}"></script>
-    <script src="{{ asset('main2/js/pages-account-settings-security') }}"></script> --}}
     <script src="{{ asset('js/videopopup.js') }}"></script>
 
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @php
-$role = Auth::user()->roles[0]->name
+$role = Auth::user()->roles[0]->name;
 @endphp
 
 
 <script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
-<script>
 
+@yield('scripts')
+
+@include('sweetalert::alert')
+
+<script>
+const Toast = Swal.mixin({
+            toast: true,
+            position: 'bottom-end',
+            showConfirmButton: false,
+            timer: 7000,
+            timerProgressBar: true,
+           
+        })
     var socket = io.connect('{{env("SOCKET_URL")}}',{transports: ['websocket'],upgrade: false});
     socket.on('connect', function (err) {
         console.log('connected');
@@ -263,15 +244,18 @@ $role = Auth::user()->roles[0]->name
 
         function incress_notification(data)
         {
+            data = JSON.parse(data);
+            
             /**  inccress the notification counter **/
-            let notification_number = '{{auth()->user()->unreadNotifications()->count()}}';
+        let notification_number = Number('{{auth()->user()->unreadNotifications()->count()}}')+1;
+        console.log(notification_number)
         $('#notification_counter1').empty();
         $('#notification_counter2').empty();
         $('#notification_counter1').append(notification_number);
         $('#notification_counter2').append(`${notification_number} new Notification`);
             let route = "{{ route('dashboard.readNotification','id:') }}";
             let replaceId = route.replace('id:',data.not_id);
-            console.log('data object: ',data)
+            
             /** prepend the notification item **/
             let div = `</a><a href="${replaceId}" class="d-flex justify-content-between cursor-pointer" href="javascript:void(0);">
                     <div class="media d-flex align-items-center">
@@ -286,16 +270,15 @@ $role = Auth::user()->roles[0]->name
                 </div>
             </div>`
 
-            $('#notification_list').prepend(div);
-
+         $('#notification_list').prepend(div);
+            Toast.fire({
+                icon: 'info',
+                title: 'New Notification',
+                text: data.message,
+            })
         }
     @endif
 </script>
-
-
-@yield('scripts')
-
-@include('sweetalert::alert')
 
 
 </body>

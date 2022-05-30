@@ -222,20 +222,15 @@ class AdController extends Controller
             'id'=>$data->id,
             'type'=>'Ad'
         ];
-        $this->sendAdminNotification('super_admin_notification',$info);
+
+       // $this->sendAdminNotification('contract_manager_notification',$info);
 
 
-        // Redis::publish('super_admin_notification', json_encode([
-        //     "message" => $info['msg'],
-        //     "date" => Carbon::now(),
-        // ]));
+       
         $c_not = Notification::send($users, new AddInfluencer($info));
 
 
-        Redis::publish('contract_manager_notification', json_encode([
-            "message" => $info['msg'],
-            "date" => Carbon::now(),
-        ]));
+        
 
 
         return response()->json([
@@ -370,14 +365,10 @@ class AdController extends Controller
                 1,
                 2
             ];
-            Redis::publish('super_admin_notification', json_encode([
-                "message" => $info['msg'],
-                "date" => Carbon::now(),
-            ]));
-            Redis::publish('contract_manager_notification', json_encode([
-                "message" => $info['msg'],
-                "date" => Carbon::now(),
-            ]));
+         
+            $this->sendAdminNotification('contract_manager_notification',$info);
+            
+            //$getContactManagers = 
     
             foreach ($users as $value) {
                 Notification::send(User::find($value), new AddInfluencer($info));

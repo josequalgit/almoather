@@ -1,18 +1,20 @@
 const config = require('./config');
-if(config.environment == "https"){
+let server = null;
+if (config.environment == "https") {
     const https = require('https');
     const fs = require('fs');
-    
+
     const options = {
-      key: fs.readFileSync('/usr/local/psa/var/certificates/scfgAIOSS'),
-      cert: fs.readFileSync('/usr/local/psa/var/certificates/scfgAIOSS'),  
+        key: fs.readFileSync('/usr/local/psa/var/certificates/scfgAIOSS'),
+        cert: fs.readFileSync('/usr/local/psa/var/certificates/scfgAIOSS'),
     };
 
-    const server = https.createServer(options).listen(config.server.port, () => {
+    server = https.createServer(options).listen(config.server.port, () => {
         console.log('listening on port ' + config.server.port);
     });
-}else{
-    const server = require('http').Server();
+} else {
+    server = require('http').Server();
+
     server.listen(config.server.port, () => {
         console.log('listening on port ' + config.server.port);
     });
@@ -44,9 +46,10 @@ sub.psubscribe('*', function (data) {
     console.log('redis connected');
 });
 
-sub.on('pmessage', function (channel, message) {
-    console.log(channel);
-    console.log(message);
+sub.on('pmessage', function (event, channel, message) {
+    console.log('channel: ' + channel);
+    console.log('message: ' + message);
+
     io.emit(channel, message);
 });
 
@@ -67,7 +70,7 @@ io.on("connect", (socket) => {
 
     socket.on('*', function (event, data) {
         console.log('event: ' + event.includes('support'));
-        if(event.includes('support')) {
+        if (event.includes('support')) {
             var CURRENT_TIMESTAMP = { toSqlString: function () { return 'CURRENT_TIMESTAMP()'; } };
 
             let messageData = {

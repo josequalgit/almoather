@@ -3,6 +3,7 @@ namespace App\Http\Traits;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
+use Auth;
 
 trait SendNotification {
     function sendNotifications($tokens,$data,$topic = false){
@@ -53,13 +54,12 @@ trait SendNotification {
     function sendAdminNotification($channel,$data)
     {
         $data = (object) $data;
-        
-        if($data->id == null || $data->msg == null) throw new \Exception('Error Adding Data To Admin Notification function Please Check The Data object');
+        if($data->id == null || $data->msg == null) throw new \Exception('Error Adding Data To Admin Notification function. Please Check The Data object');
 
         Redis::publish($channel, json_encode([
+            'id'=> $data->id,
             "message" => $data->msg,
-            "date" => Carbon::now(),
-            'id'=> $data->id
+            "date" => Carbon::now()->diffForHumans(),
         ]));
     }
 }
