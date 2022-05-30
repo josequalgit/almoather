@@ -14,7 +14,11 @@ return [
     'LANGS'=>['en','ar'],
     'CUSTOMER_ADS_STATUS'=>['Active','WaitingPayment','Pending','Finished','Rejected'],
     'INFLUENCER_ADS_STATUS'=>['Pending','Active','Completed','Rejected'],
-    'SOCKET_URL' => 'ws://127.0.0.1:3000'
+    'SOCKET_URL' => 'ws://127.0.0.1:3000',
+    'PAYMENT_USERNAME'=>'almuu',
+    'PAYMENT_PASSWORD'=>'almuu@123',
+    'PAYMENT_KEY'=>'almuu',
+
 ]
 
 ?>

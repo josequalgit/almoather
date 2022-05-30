@@ -1099,6 +1099,7 @@ class AdController extends Controller
     public function check_payment(CheckPaymentRequest $request ,$ad_id)
     {
         $data = Ad::find($ad_id);
+        
         if(!$data) return response()->json([
             'err'=>'ad was not found',
             'status'=>config('global.NOT_FOUND_STATUS')
@@ -1129,9 +1130,9 @@ class AdController extends Controller
 
        
 
-        $terminalId = "almuu";
-        $password = "almuu@123";
-        $key = "almuu";
+        $terminalId = config('global.PAYMENT_USERNAME');
+        $password = config('global.PAYMENT_PASSWORD');
+        $key = config('global.PAYMENT_KEY');
         $requestHash = "" . $request->TranId . "|" . $key . "|" . $request->ResponseCode . "|" . $request->amount . "";
         $txn_details1 = "" . $ad_id . "|" . $terminalId . "|" . $password . "|" . $key . "|" . $request->amount . "|SAR";
 	
