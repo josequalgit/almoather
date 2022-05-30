@@ -1,5 +1,5 @@
 const config = require('./config');
-if(enviroment == "https"){
+if(config.environment == "https"){
     const https = require('https');
     const fs = require('fs');
     
