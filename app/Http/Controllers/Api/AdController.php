@@ -744,7 +744,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    private function pay_now($id)
+    public function pay_now($id)
     { 
         $data = Ad::find($id);
         if(!$data) return response()->json([
@@ -758,15 +758,6 @@ class AdController extends Controller
         ],config('global.WRONG_VALIDATION_STATUS'));
         
         $cal = $data->budget*5.5/100;
-
-        if($data->status == 'approve')
-        {
-            $data->status = 'prepay';
-            $data->save();
-        }
-
-        
-      
 
         return response()->json([
             'msg'=>'all matches',
