@@ -5,9 +5,15 @@
     },
     "db": {
         "host": "localhost",
+<<<<<<< HEAD
         "user": "almuaathir",
         "password": "%L0wri53",
         "database": "almuaathir"
+=======
+        "user": "root",
+        "password": "",
+        "database": "moather"
+>>>>>>> e1a2d3c3ec0140965fbc27cb8c099b59c1a479df
     },
     "redis": {
         "url": "almuaathir.josequal.net",

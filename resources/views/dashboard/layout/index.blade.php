@@ -46,6 +46,11 @@
 
 <!-- BEGIN: Body-->
     <button class="bottom-right">
+            {{-- <i class="ficon bx bx-bell bx-tada bx-flip-horizontal"></i> --}}
+           
+            @if(\Request::route()->getName() != 'dashboard.chat.index' && $count_unread_messages != 0)
+                <span id="message_counter" class="badge badge-pill badge-danger badge-up">{{ $count_unread_messages }}</span>
+            @endif
        <a href="{{ route('dashboard.chat.index') }}"><i class="menu-icon tf-icons bx bx-chat"></i></a> 
     </button>
 
@@ -229,7 +234,10 @@ const Toast = Swal.mixin({
     socket.on('error', function (err) {
         console.log('error',err);
     });
+
     @if ($role == 'superAdmin' || $role == 'Contracts Manager')
+
+        @if($role == 'superAdmin')
         socket.on('super_admin_notification', (data) => {
             console.log('super admin notification',data);
             incress_notification(data)
@@ -240,6 +248,21 @@ const Toast = Swal.mixin({
             incress_notification(data)
 
         });
+        socket.on('supportMessages',(data)=>{
+            console.log('support message: ',data);
+            $('#message_counter').empty();
+            $('#message_counter').append(data);
+        })
+        @else
+        socket.on('contract_manager_notification', (data) => {
+            console.log('contract manager notification');
+            incress_notification(data)
+
+        });
+
+
+
+        @endif
 
 
         function incress_notification(data)

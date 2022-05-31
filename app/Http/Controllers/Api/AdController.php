@@ -217,17 +217,21 @@ class AdController extends Controller
 
 
         $users = [User::find(1)];
+        $getAdmin = User::whereHas('roles',function($q){
+            $q->where('name','superAdmin');
+        })->get();
+
         $info =[
             'msg'=>'Customer "'.Auth::guard('api')->user()->customers->first_name.'" added new ad',
             'id'=>$data->id,
             'type'=>'Ad'
         ];
 
-       // $this->sendAdminNotification('contract_manager_notification',$info);
+        $this->sendAdminNotification('contract_manager_notification',$info);
 
 
        
-        $c_not = Notification::send($users, new AddInfluencer($info));
+        $c_not = Notification::send($getAdmin, new AddInfluencer($info));
 
 
         
@@ -361,18 +365,17 @@ class AdController extends Controller
                 'type'=>'Influencer'
             ];
           
-            $users = [
-                1,
-                2
-            ];
+           
          
             $this->sendAdminNotification('contract_manager_notification',$info);
             
-            //$getContactManagers = 
+            $getContactManagers = User::whereHas('roles',function($q){
+                $q->where('name','Contracts Manager')
+                ->orWhere('name','superAdmin');
+            })->get();
     
-            foreach ($users as $value) {
-                Notification::send(User::find($value), new AddInfluencer($info));
-            }
+            Notification::send($getContactManagers, new AddInfluencer($info));
+            
 
         }
 
@@ -715,23 +718,15 @@ class AdController extends Controller
             'type'=>'Ad'
         ];
 
-        Redis::publish('super_admin_notification', json_encode([
-            "message" => $info['msg'],
-            "date" => Carbon::now(),
-        ]));
-        Redis::publish('contract_manager_notification', json_encode([
-            "message" => $info['msg'],
-            "date" => Carbon::now(),
-        ]));
+        $this->sendAdminNotification('contract_manager_notification',$info);
 
-      
-        $users = [
-            1,
-            2
-        ];
-        foreach ($users as $value) {
-            Notification::send(User::find($value), new AddInfluencer($info));
-        }
+        $getContactManagers = User::whereHas('roles',function($q){
+            $q->where('name','Contracts Manager')
+            ->orWhere('name','superAdmin');
+        })->get();
+
+        Notification::send($getContactManagers, new AddInfluencer($info));
+        
         
 
         return response()->json([
@@ -868,24 +863,16 @@ class AdController extends Controller
             'id'=>$ad->id,
             'type'=>'Ad'
         ];
-      
-        $users = [
-            1,
-            2
-        ];
-        Redis::publish('super_admin_notification', json_encode([
-            "message" => $info['msg'],
-            "date" => Carbon::now(),
-        ]));
 
-        Redis::publish('contract_manager_notification', json_encode([
-            "message" => $info['msg'],
-            "date" => Carbon::now(),
-        ]));
+        $this->sendAdminNotification('contract_manager_notification',$info);
 
-        foreach ($users as $value) {
-            Notification::send(User::find($value), new AddInfluencer($info));
-        }
+        $getContactManagers = User::whereHas('roles',function($q){
+            $q->where('name','Contracts Manager')
+            ->orWhere('name','superAdmin');
+        })->get();
+
+        Notification::send($getContactManagers, new AddInfluencer($info));
+        
 
         return response()->json([
             'msg'=>'ad status was changed to '.$ad->status.'',
@@ -916,23 +903,16 @@ class AdController extends Controller
             'type'=>'Ad'
         ];
       
-        $users = [
-            1,
-            2
-        ];
+        $getContactManagers = User::whereHas('roles',function($q){
+            $q->where('name','Contracts Manager')
+            ->orWhere('name','superAdmin');
+        })->get();
         
-        Redis::publish('super_admin_notification', json_encode([
-            "message" => $info['msg'],
-            "date" => Carbon::now(),
-        ]));
-        Redis::publish('contract_manager_notification', json_encode([
-            "message" => $info['msg'],
-            "date" => Carbon::now(),
-        ]));
+       
+        $this->sendAdminNotification('contract_manager_notification',$info);
 
-        foreach ($users as $value) {
-            Notification::send(User::find($value), new AddInfluencer($info));
-        }
+        Notification::send($getContactManagers, new AddInfluencer($info));
+        
 
         if(!$data) return response()->json([
             'err'=>'contract not found',
@@ -1095,14 +1075,15 @@ class AdController extends Controller
             'err'=>'ad was not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
-
-        if($request->result != 'Successful' && $request->ResponseCode !== 000)
+       // return dd('here');
+        if((string)$request->ResponseCode !== '000')
         {
             /**
          * 
              * Save in the database
              * 
              * */
+
             Payment::create([
                 'ad_id'=>$ad_id,
                 'trans_id'=>$request->TranId,
@@ -1173,7 +1154,7 @@ class AdController extends Controller
 
 
             Payment::create([
-                'ad_id'=>$ad->id,
+                'ad_id'=>$ad_id,
                 'trans_id'=>$request->TranId,
                 'amount'=>$request->amount,
                 'status'=>$request->result,
@@ -1181,7 +1162,9 @@ class AdController extends Controller
                 'type'=>$request->type,
             ]);
 
-            dd(json_decode($apiResult));
+            return response()->json(
+				json_decode($apiResult)
+			);
         
             
 
