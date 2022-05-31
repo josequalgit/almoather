@@ -28,7 +28,7 @@ use Validator;
 use App\Models\AppSetting;
 use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
-
+use Log;
 use DB;
 
 class AdController extends Controller
@@ -1090,7 +1090,7 @@ class AdController extends Controller
     public function check_payment(CheckPaymentRequest $request ,$ad_id)
     {
         $data = Ad::find($ad_id);
-        
+        Log::error(json_encode($request->all(), true));
         if(!$data) return response()->json([
             'err'=>'ad was not found',
             'status'=>config('global.NOT_FOUND_STATUS')
