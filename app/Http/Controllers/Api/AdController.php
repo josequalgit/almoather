@@ -1162,14 +1162,8 @@ class AdController extends Controller
                 'type'=>$request->type,
             ]);
 
-<<<<<<< HEAD
-            return response()->json(
-				json_decode($apiResult)
-			);
-=======
-
+         
             return $this->pay_now($ad_id);
->>>>>>> d8a80723cf6cc339d2523856e78a55c8e8c82412
         
             
 
