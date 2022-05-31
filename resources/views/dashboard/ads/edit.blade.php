@@ -396,6 +396,9 @@
                         <li class="nav-item">
                           <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Locations</a>
                         </li>
+                        <li class="nav-item">
+                          <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">Payments</a>
+                        </li>
                       </ul><!-- Tab panes -->
                       <div class="tab-content">
                         <div class="tab-pane active" id="tabs-1" role="tabpanel">
@@ -669,6 +672,30 @@
                               </div>
 
                             </div>
+
+                          </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-4" role="tabpanel">
+                          <div class="card mb-3">
+                            <div class="card-body">
+                              <div class="list-group">
+                                @foreach ($data->payments as $item)
+                                <a href="{{ route('dashboard.payments.details',$item->id) }}" class="list-group-item list-group-item-action flex-column align-items-start active">
+                                  <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">#{{ $item->trans_id }}</h5>
+                                    <small>{{ $item->created_at->diffForHumans() }}</small>
+                                  </div>
+                                  {{-- <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p> --}}
+                                  <small style="text-transform: uppercase;">Type: {{  str_replace('_',' ',$item->type) }}</small>
+                                </a>
+                              @endforeach
+                              
+                              </div>
+                            
+                               
+                            </div>
+
+                          
 
                           </div>
                         </div>

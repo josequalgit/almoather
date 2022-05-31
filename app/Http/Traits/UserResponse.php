@@ -57,7 +57,7 @@ trait UserResponse {
              'ads_out_country'=>$info->ads_out_country,
              'ad_with_vat'=>$info->ad_with_vat,
              'snap_chat_views'=>$info->snap_chat_views,
-             'snap_chat_video'=>$info->snapVideos,
+             //'snap_chat_video'=>$info->snapVideos,
              'commercial_registration_no'=>$info->commercial_registration_no,
              'cr_file'=>$info->commercialFiles,
              'tax_registration_number'=>$info->tax_registration_number,

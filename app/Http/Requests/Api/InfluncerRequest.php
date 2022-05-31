@@ -53,7 +53,7 @@ class InfluncerRequest extends FormRequest
             'ad_onsite_price_with_vat'=>'required',
             'social_media'=>'required',
             'bank_id'=>'required',
-            'snap_video'=>'required',
+           // 'snap_video'=>'required',
             'commercial_registration_no'=>'required',
             'bank_account_name'=>'required',
             'rep_city'=>'required',

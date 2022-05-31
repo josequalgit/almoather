@@ -593,13 +593,8 @@ input[type="radio"] .styled:checked + label::after {
                   </a>
                 </li>
                 @endcanany
-            
               </ul>
             </li>
-
-
-
-
             @endcanany
 
             @canany(['Edit Influncer','Create Influncer','See Influncer','Delete Influncer','Edit Customer','Create Customer','See Customer','Delete Customer'])
@@ -641,18 +636,7 @@ input[type="radio"] .styled:checked + label::after {
 
 
             @endcanany
-            {{-- @canany(['Edit Influncer','Create Influncer','See Influncer','Delete Influncer'])
-            <li class="{{ ($name == 'dashboard.influncers.index'|| $name == 'dashboard.influncers.create'|| $name == 'dashboard.influncers.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.influncers.index') }}"><i class="bx bx-user-pin"></i><span class="menu-title text-truncate" data-i18n="influncers">Influncers</span></a>
-            </li>
-            @endcanany --}}
-            {{-- @canany(['Edit Customer','Create Customer','See Customer','Delete Customer'])
-            <li class="{{ ($name == 'dashboard.customers.index'|| $name == 'dashboard.customers.create'|| $name == 'dashboard.customers.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.customers.index') }}"><i class="bx bx-user-circle"></i><span class="menu-title text-truncate" data-i18n="influncers">Customers</span></a>
-            </li>
-            @endcanany --}}
-            {{-- @canany(['Edit Role','Create Role','See Role','Delete Role'])
-            <li class="{{ ($name == 'dashboard.roles.index'|| $name == 'dashboard.roles.create'|| $name == 'dashboard.roles.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.roles.index') }}"><i class="bx bx-lock"></i><span class="menu-title text-truncate" data-i18n="roles">Roles</span></a>
-            </li>
-            @endcanany --}}
+        
             @canany(['Edit Notification','Create Notification','See Notification','Delete Notification'])
             <li class="{{ ($name == 'dashboard.notifications.index'|| $name == 'dashboard.notifications.create'|| $name == 'dashboard.notifications.edit') ? 'active':''  }} nav-item"><a href="{{ route('dashboard.notifications.index') }}"><i class="bx bx-bell"></i><span class="menu-title text-truncate" data-i18n="notifications">Notifications</span></a>
             </li>
@@ -748,7 +732,14 @@ input[type="radio"] .styled:checked + label::after {
               </ul>
             </li>
             @endcanany
-         
+
+            @canany(['Edit Ads',])
+            <li class="menue-item {{ ($name == 'dashboard.payments.index'|| $name == 'dashboard.payments.create'|| $name == 'dashboard.payments.edit') ? 'open active':''  }}">
+              <a href="{{ route('dashboard.payments.index') }}"><i class="bx bx-credit-card"></i><span class="menu-title text-truncate" data-i18n="notifications">Payment</span></a>
+            </li>
+            @endcan
+
+
             @canany(['Edit Category','Create Category','See Category','Delete Category','Edit Influencer Category','Create Influencer Category','See Influencer Category','Delete Influencer Category'])
 
             <li class="menu-item  {{ ($name == 'dashboard.categories.index'|| $name == 'dashboard.categories.create'|| $name == 'dashboard.categories.edit'||$name == 'dashboard.influencerCategories.index'||$name == 'dashboard.influencerCategories.edit'||$name == 'dashboard.influencerCategories.create') ? 'open active':''  }} ">

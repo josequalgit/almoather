@@ -57,6 +57,8 @@ class Influncer extends Model implements HasMedia
         'rejected_note',
         'bank_id',
         'bank_account_name',
+        'subscribers',
+        'subscribers_update',
     ];
 
     protected $append = [
