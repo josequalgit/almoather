@@ -745,7 +745,7 @@ class AdController extends Controller
     }
 
     private function pay_now($id)
-    {
+    { 
         $data = Ad::find($id);
         if(!$data) return response()->json([
             'err'=>'ad was not found',
