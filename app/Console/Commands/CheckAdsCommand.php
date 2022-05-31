@@ -8,6 +8,9 @@ use Carbon\Carbon;
 use App\Models\Ad;
 use App\Models\User;
 use App\Models\Contract;
+use App\Models\Influncer;
+use App\Http\Traits\SendNotification;
+
 use Illuminate\Support\Facades\Notification;
 
 class CheckAdsCommand extends Command
@@ -41,15 +44,18 @@ class CheckAdsCommand extends Command
      *
      * @return int
      */
+
+    use SendNotification;
+
     public function handle()
     {   
             $ads = Ad::get();
             $canceledDaysPeriod = config('global.CANCELED_DAYS_PERIOD');
             $warningDaysPeriod = config('global.WARNING_DAYS_PERIOD');
-           
+            $cDate = Carbon::parse()->now();
+
             foreach($ads as $item)
             {
-                $cDate = Carbon::parse()->now();
                 $countDiffDays = $item->updated_at->diffInDays($cDate);
 
                 /** SEND NOTIFICATION FOR THE CUSTOMER HOW'S ADS WILL BE CANCELED SOON */
@@ -83,6 +89,15 @@ class CheckAdsCommand extends Command
                     #SEND NOTIFICATION TO CUSTOMER ABOUT THE AD
                     $sendTo = User::where('id',[$item->customers->users->id])->get();
                     $lang = $item->customers->users->lang;
+                    $data = [
+                        "title" => "Ads " . $ad->store . " Reminder",
+                        "body" => $info[$lang],
+                        "type" => 'Ad',
+                        'target_id' =>$ad->id            
+                    ];
+                    $tokens = [$ad->customers->users->fcm_token];
+
+                    $this->sendNotifications($tokens,$data);
                     Notification::send($sendTo, new AddInfluencer($adminMessage[$lang??'en']));    
                     
                     #SEND NOTIFICATION TO ADMIN ABOUT THE AD
@@ -98,7 +113,7 @@ class CheckAdsCommand extends Command
                
             }
 
-            // check the not responded contracts
+            // check if there is no response for the contracts
             $contracts = Contract::get();
           
             foreach ($contracts as $item) {
@@ -130,6 +145,29 @@ class CheckAdsCommand extends Command
                     }
                 }
             }
+
+            // CHECK WHEN THE LAST TIME THE USER UPDATED HE'S SUBSCRIBERS
+            $influencers = Influncer::get();
+            $checkSubscription =[
+                'en'=>[
+                    'msg'=>'Please Update You Subscription Number'
+                ],
+                'ar'=>[
+                    'msg'=>'الرجاء تحديث عدد متابعينك'
+                ]
+                ];
+            foreach ($influencers as $value) 
+            {
+                $countDiffDays = Carbon::parse($value->subscribers_update)->diffInDays($cDate);
+                if($countDiffDays == $canceledDaysPeriod || $countDiffDays > $canceledDaysPeriod)
+                {
+                    $sendTo = User::find($value->users->id);
+                    $lang = $item->customers->users->lang;
+                    Notification::send($sendTo, new AddInfluencer($checkSubscription[$lang??'en']));    
+                }
+            }
+
+
     }
 
 

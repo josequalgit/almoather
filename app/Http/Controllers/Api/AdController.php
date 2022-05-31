@@ -1079,7 +1079,7 @@ class AdController extends Controller
         if((string)$request->ResponseCode !== '000')
         {
             /**
-         * 
+            * 
              * Save in the database
              * 
              * */

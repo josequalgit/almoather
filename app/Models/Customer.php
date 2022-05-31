@@ -23,6 +23,10 @@ class Customer extends Model
         'id_number'
     ];
 
+    protected $append = [
+        'full_name'
+    ];
+
     public function users()
     {
         return $this->belongsTo(User::class,'user_id');
@@ -60,6 +64,11 @@ class Customer extends Model
     public function campaignContract()
     {
         return $this->hasMany(CampaignContract::class,'customer_id');
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->first_name.' '.$this->middle_name.' '.$this->last_name;
     }
 
 

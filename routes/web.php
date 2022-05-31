@@ -23,6 +23,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\ReasonsController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\PaymentController;
 
 Route::redirect('/','/dashboard/admins')->name('home');
 Route::get('/test-msg',[ChatController::class,'sendMessageTo'])->name('test');
@@ -239,6 +240,14 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/','index')->name('index');
             Route::post('/send','sendMessage')->name('send');
             Route::get('/get_messages/{user_id}','get_messages')->name('get_messages');
+        });
+
+        Route::controller(PaymentController::class)
+        ->prefix('payments')
+        ->name('payments.')
+        ->group(function(){
+            Route::get('/','index')->name('index');
+            Route::get('/details/{id}','details')->name('details');
         });
         
         

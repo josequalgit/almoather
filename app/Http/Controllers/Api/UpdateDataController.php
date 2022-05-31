@@ -10,6 +10,7 @@ use App\Http\Requests\Api\UpdatePersonalDataRequest;
 use App\Http\Requests\Api\UpdateMediaDetailsRequest;
 use App\Http\Requests\Api\UpdatePriceInfluncerRequest;
 use App\Http\Requests\Api\UpdateExtraInfluncerRequest;
+use App\Http\Requests\Api\UpdateSubscribersRequest;
 use App\Models\User;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Notification;
@@ -25,6 +26,7 @@ use App\Models\SocialMediaProfile;
 //use Spatie\MediaLibrary\Models\Media;
 use Illuminate\Support\Facades\Storage;
 use DB;
+use Carbon\Carbon;
 
 
 class UpdateDataController extends Controller
@@ -620,11 +622,11 @@ class UpdateDataController extends Controller
         //     $file = $inf->addMedia($request->file('file'))
         //     ->toMediaCollection('tax_registration_number_file');
         // }
-        if($type == 4)
-        {
-            $file = $inf->addMedia($request->file('file'))
-            ->toMediaCollection('snap_video');
-        }
+        // if($type == 4)
+        // {
+        //     $file = $inf->addMedia($request->file('file'))
+        //     ->toMediaCollection('snap_video');
+        // }
 
 
         return response()->json([
@@ -636,6 +638,28 @@ class UpdateDataController extends Controller
             ],
         ],config('global.OK_STATUS'));
 
+    }
+
+    public function updateSubscribers(UpdateSubscribersRequest $request)
+    {
+        $data = [
+            'subscribers'=>  $request->subscribers,
+            'subscribers_update'=>Carbon::now(),
+        ];
+        $inf = Auth::guard('api')->user()->influncers;
+        
+
+        if(!$inf) return response()->json([
+            'msg'=>'user is not an influencer',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $inf->update($data);
+
+        return response()->json([
+            'msg'=>'data was updated',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
     
     
