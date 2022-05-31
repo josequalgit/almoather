@@ -744,7 +744,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    public function pay_now($id)
+    private function pay_now($id)
     {
         $data = Ad::find($id);
         if(!$data) return response()->json([
@@ -1162,9 +1162,14 @@ class AdController extends Controller
                 'type'=>$request->type,
             ]);
 
+<<<<<<< HEAD
             return response()->json(
 				json_decode($apiResult)
 			);
+=======
+
+            return $this->pay_now($ad_id);
+>>>>>>> d8a80723cf6cc339d2523856e78a55c8e8c82412
         
             
 
