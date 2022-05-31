@@ -38,4 +38,14 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    public function render($request, Throwable $exception)
+    {
+        if (env('APP_DEBUG', false)) {
+            return response()->view("errors.500error");
+        } else {
+            return parent::render($request, $exception);
+        }
+    }
+
 }

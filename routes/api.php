@@ -151,7 +151,7 @@ Route::group(['prefix'=>'auth'],function(){
             Route::get('matched/not_chosen_inf/{id}/{removed_inf_id}/{replace_permission?}','getMatchedInfluencersNotChosen');
             Route::get('matched/replace_influencer/{id}/{removed_influencer}/{chosen_influencer}','replace_matched_influencer');
             Route::get('before_payment/{id}','before_payment');
-            Route::post('pay_now/{id}','pay_now');
+            Route::get('completePay/{id}','pay_now');
             Route::get('back_up_influencers/{id}/{removed_inf}','back_up_influencers');
             Route::get('/ads/contract/{ad_id}','get_ad_contract');
             Route::post('fullPayment/{ad_id}','full_payment');
