@@ -65,7 +65,7 @@
                                             <tr>
                                               
                                                 <td>
-                                                    <a href="{{ route('dashboard.payments.details',$item->id) }}">#{{ $item }}</a>
+                                                    <a href="{{ route('dashboard.payments.details',$item->id) }}">#{{ $item->trans_id }}</a>
                                                 </td>
                                                 <td><span class="invoice-amount">${{ $item->amount }}</span></td>
                                                 <td><small class="text-muted">{{ $item->created_at->format('d-m-y') }}</small></td>
