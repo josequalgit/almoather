@@ -10,7 +10,7 @@ use App\Models\Influncer;
 use App\Models\Customer;
 use Auth;
 use App\Http\Traits\UploadFiles;
-use App\Http\Requests\UploadFileRequest;
+use App\Http\Requests\Api\UploadFileRequest;
 class ChatController extends Controller
 {
     use UploadFiles;
