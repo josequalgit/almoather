@@ -87,7 +87,7 @@
                                 <div class="card-footer chat-footer border-top px-2 pt-1 pb-0 mb-1">
                                     <form class="d-flex align-items-center" onsubmit="chatMessagesSend();" action="javascript:void(0);">
                                         <i class="bx bx-face cursor-pointer"></i>
-                                        <i class="bx bx-paperclip ml-1 cursor-pointer"></i>
+                                        <i class="uploadFileTrigger bx bx-paperclip ml-1 cursor-pointer"></i>
                                         <input id="message" type="text" class="form-control chat-message-send mx-1" placeholder="Type your message here...">
                                         <button  type="submit" class="btn btn-primary glow send d-lg-flex"><i class="bx bx-paper-plane"></i>
                                             <span class="d-none d-lg-block ml-1">Send</span></button>
@@ -123,7 +123,32 @@
                         </div>
                     </section>
                     <!-- app chat profile right sidebar ends -->
-
+                    <div id="uploadFileModal" class="modal" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            
+                            <div class="modal-body text-center">
+                                <i  class="uploadIcon menu-icon tf-icons bx bx-upload"></i>
+                                <h4>
+                                    Upload File
+                                </h4>
+                              <p>Note: When click Uplaod File it will send the file directly</p>
+                              <div class="mt-3 mb-3">
+                                  <form id="fileForm" enctype="multipart/form-data" method="post">
+                                    @csrf
+                                      <input  name="chatFile" id="chatFile" onchange="readURL(this);" class="form-control pb-2" type="file" />
+                                  </form>
+                            </div>
+                            <img id="fileChat" src="http://placehold.it/180" alt="Image" />
+                            <div class="modal-footer">
+                              <button onclick="sendFile()" type="button" class="btn btn-info">Send</button>
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      
                 </div>
             </div>
         </div>
@@ -230,7 +255,6 @@
         
         $('#chat_body').show();
     }
-
     // Add message to chat
     function chatMessagesSend(source) {
         let chatMessageSend = $(".chat-message-send");
@@ -270,5 +294,79 @@
         $("#chat_messages").append(html);
         chatContainer.animate({ scrollTop: chatContainer[0].scrollHeight }, 400);
     }
+
+    $('.uploadFileTrigger').click(()=>{
+        openUploadFileModal();
+    })
+
+    function openUploadFileModal()
+    {
+        return $('#uploadFileModal').modal('toggle');
+    }
+//    $('#uploadFileModal').modal('toggle')
+    var fileTypes = ['jpg', 'jpeg', 'png'];
+    var videoTypes = ['mp4', 'avi', 'wmv'];
+
+    function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+                let extension = input.files[0].name.split('.').pop().toLowerCase();  
+              
+
+                $('#fileChat').show();
+
+                reader.onload = function (e) {
+                    console.log('file info: ',e)
+                    let  isImage = fileTypes.indexOf(extension) > -1;
+                    let  isVideo = videoTypes.indexOf(extension) > -1;
+                    if(!isImage)
+                    {
+                        if(isVideo)
+                        {
+                            $('#fileChat')
+                         .attr('src', 'https://cdn-icons-png.flaticon.com/512/187/187326.png');
+                        return;
+                        }
+
+                        $('#fileChat')
+                        .attr('src', 'https://media.istockphoto.com/vectors/file-folder-in-flat-on-white-background-vector-id1175215972?k=20&m=1175215972&s=612x612&w=0&h=feHYQZBtaj92l-rpFivkPFAHupJz3vEOWqkZ6DXPDNw=');
+                        return;
+                    }
+                    $('#fileChat')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+    }
+
+    function sendFile()
+    {
+        let url = '{{ route("dashboard.chat.uploadFiles") }}';
+        var files = $('#chatFile');
+        console.log('files: ',files[0])
+        let formData = new FormData(document.getElementById("fileForm"));
+      //  formData.append("chatFile", files[0] );
+            
+            $.ajax({
+            type: "POST",
+            url: url,
+            data: formData,
+          
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                console.log('success: ',data)
+            },
+            error: function (error) {
+                console.log('error: ',error)
+
+            },
+        })
+    }
+       
+
 </script>
 @endsection

@@ -7,12 +7,14 @@ use App\Models\Category;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\InfluncerCategory;
+use App\Http\Traits\UploadFiles;
 
-use Alert;
-use Auth;
+use Auth , Alert;
 
 class CategoryController extends Controller
 {
+    use UploadFiles;
+
     public function index()
     {
         $data = Category::paginate(10);

@@ -57,7 +57,7 @@
                                 <img src="{{ asset('main2/images/pages/500.png') }}" class="img-fluid my-3" alt="branding logo">
                                 <h1 class="error-title mt-1">Internal Server Error!</h1>
                                 <p class="p-2">Restart the browser after clearing the cache and deleting the cookies. <br> Issues triggered by wrong file and directory permissions.</p>
-                                <a href="index.html" class="btn btn-primary round glow">BACK TO HOME</a>
+                                <a href="{{ url('/') }}" class="btn btn-primary round glow">BACK TO HOME</a>
                             </div>
                         </div>
                     </div>

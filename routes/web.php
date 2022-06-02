@@ -240,6 +240,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/','index')->name('index');
             Route::post('/send','sendMessage')->name('send');
             Route::get('/get_messages/{user_id}','get_messages')->name('get_messages');
+            Route::post('/UploadFiles','uploadFiles')->name('uploadFiles');
         });
 
         Route::controller(PaymentController::class)

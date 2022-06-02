@@ -494,6 +494,15 @@ input[type="radio"] .styled:checked + label::after {
   color:#ffff;
 }
 
+.uploadIcon{
+  font-size: 100px;
+}
+#fileChat {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 5%;
+    object-fit: contain;
+}
 
 
 </style>

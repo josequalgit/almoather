@@ -9,9 +9,12 @@ use App\Models\Message;
 use App\Models\Influncer;
 use App\Models\Customer;
 use Auth;
+use App\Http\Traits\UploadFiles;
 
 class ChatController extends Controller
 {
+    use UploadFiles;
+    
     public function index($user_id,$type)
     {
         if($type == 'app')
@@ -70,5 +73,15 @@ class ChatController extends Controller
         }
 
         return response()->json($response,config('global.OK_STATUS'));
+    }
+
+    public function uploadFiles(Request $request)
+    {
+       
+        $file = $this->uploadFile('chat_files',$request->file('file'));
+        return response()->json([
+            'status'=>config('global.OK_STATUS'),
+            'data'=>$file,
+        ],config('global.OK_STATUS'));
     }
 }

@@ -7,8 +7,11 @@ use Illuminate\Support\Facades\Redis;
 use App\Models\Message;
 use App\Models\User;
 use Auth;
+use App\Http\Traits\UploadFiles;
+
 class ChatController extends Controller
 {
+    use UploadFiles;
     public function index()
     {        
         $usersMessages = Message::where('type','support')->groupBy('sender_id')->pluck('sender_id');
@@ -104,6 +107,12 @@ class ChatController extends Controller
             'sender_id' => 5,
             'receiver_id'=> Auth::user()->id,
         ]));
+    }
+
+    public function uploadFiles(Request $request)
+    {
+        //  dd($request->file('chatFile'));
+        return $this->uploadFile('chatFile',$request->file('chatFile'));
     }
 
     private function read_unread_messages()

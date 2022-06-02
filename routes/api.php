@@ -180,6 +180,7 @@ Route::group(['prefix'=>'auth'],function(){
         #GET CHAT MESSAGES
         Route::controller(ChatController::class)->prefix('chats')->group(function(){
             Route::get('/{id}/{type}','index')->where('type','support|app');
+            Route::post('/upload','uploadFiles');
         });
 
        
