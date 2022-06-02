@@ -75,7 +75,7 @@ class ChatController extends Controller
         return response()->json($response,config('global.OK_STATUS'));
     }
 
-    public function uploadFiles(UploadFilesRequests $request)
+    public function uploadFiles(UploadFilesRequest $request)
     {
        
         $file = $this->uploadFile('chat_files',$request->file('file'));
