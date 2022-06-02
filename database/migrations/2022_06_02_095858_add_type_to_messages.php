@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('messages', function (Blueprint $table) {
-            $table->enum('contentType',['text','file'])->default('message');
+            $table->enum('contentType',['text','file'])->default('text');
         });
     }
 
