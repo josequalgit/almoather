@@ -1166,8 +1166,8 @@ const Toast = Swal.mixin({
  
 let choosen_inf_id = 0;
 let showAddress = false;
-let isConfirm = false;
-let notChange = null;
+var isConfirm = false;
+var notChange = null;
 
   let removed_inf = 0;
 
@@ -1228,13 +1228,13 @@ CKEDITOR.replace('contractContent', {
     if(localData&&status != 'Confirm') 
     {
       localData = JSON.parse(localStorage.getItem('rateData'))
-      localData[ad_id] = document.getElementById('engagement_rate').value;
+      localData[ad_id] = document.getElementById('engagement_rate') ? document.getElementById('engagement_rate').value : 0;
       localStorage.setItem('rateData',JSON.stringify(localData));
     }
     else
     {
       let array = [];
-      array[ad_id] = document.getElementById('engagement_rate').value;
+      array[ad_id] = document.getElementById('engagement_rate') ? document.getElementById('engagement_rate').value : 0;
       localStorage.setItem('rateData',JSON.stringify(array));
     };
     
@@ -1244,7 +1244,7 @@ CKEDITOR.replace('contractContent', {
     let rate = '{{ $data->campaignGoals->profitable }}';
     let url  = '{{ route("dashboard.ads.update",":id") }}';
     let fullUrl = url.replace(':id','{{ $data->id }}');
-    let initValue = document.getElementById('engagement_rate')?document.getElementById('engagement_rate').value:null;
+    let initValue = document.getElementById('engagement_rate')?document.getElementById('engagement_rate').value:0;
     if((rate&&initValue > 100) || (rate&&initValue < 0))
     {
       return alert('please add correct amout of rate')

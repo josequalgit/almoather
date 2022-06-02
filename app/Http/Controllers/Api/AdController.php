@@ -28,7 +28,7 @@ use Validator;
 use App\Models\AppSetting;
 use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
-
+use Log;
 use DB;
 
 class AdController extends Controller
@@ -1183,12 +1183,4 @@ class AdController extends Controller
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
     }
-
-
-
-    
-
-
-    
-
 }

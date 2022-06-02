@@ -10,7 +10,7 @@ use App\Models\Influncer;
 use App\Models\Customer;
 use Auth;
 use App\Http\Traits\UploadFiles;
-
+use App\Http\Requests\UploadFilesRequests;
 class ChatController extends Controller
 {
     use UploadFiles;
@@ -75,7 +75,7 @@ class ChatController extends Controller
         return response()->json($response,config('global.OK_STATUS'));
     }
 
-    public function uploadFiles(Request $request)
+    public function uploadFiles(UploadFilesRequests $request)
     {
        
         $file = $this->uploadFile('chat_files',$request->file('file'));
