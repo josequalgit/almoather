@@ -31,8 +31,7 @@ class AdController extends Controller
     use SendNotification;
     public function index($status = null)
     {
-        $asdasd;
-        asd
+       
         $data = Ad::where('status', $status)->orderBy('created_at', 'asc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
         $counter = Ad::where('status', $status)->count();
         if (!$status) {

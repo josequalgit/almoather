@@ -1061,7 +1061,6 @@ class AdController extends Controller
     public function check_payment(CheckPaymentRequest $request ,$ad_id)
     {
         $data = Ad::find($ad_id);
-        Log::error(json_encode($request->all(), true));
         if(!$data) return response()->json([
             'err'=>'ad was not found',
             'status'=>config('global.NOT_FOUND_STATUS')
@@ -1083,26 +1082,21 @@ class AdController extends Controller
                 'status_code'=>$request->ResponseCode,
                 'type'=>$request->type,
             ]);
-
-
+			
              return response()->json([
                 'err'=>'payment failed',
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
-       
-
         $terminalId = config('global.PAYMENT_USERNAME');
         $password = config('global.PAYMENT_PASSWORD');
         $key = config('global.PAYMENT_KEY');
         $requestHash = "" . $request->TranId . "|" . $key . "|" . $request->ResponseCode . "|" . $request->amount . "";
         $txn_details1 = "" . $ad_id . "|" . $terminalId . "|" . $password . "|" . $key . "|" . $request->amount . "|SAR";
-	
-    
+		
         $hash = hash('sha256', $requestHash);
-        
-        
+       
         $txn_details1 = "" . $ad_id . "|" . $terminalId . "|" . $password . "|" . $key . "|" . $request->amount . "|SAR";
 
         //Secure check
@@ -1142,29 +1136,51 @@ class AdController extends Controller
             
             //execute post
             $apiResult = curl_exec($ch);
+		
+			$apiResult = json_decode($apiResult);
 
-
-            Payment::create([
-                'ad_id'=>$ad_id,
-                'trans_id'=>$request->TranId,
-                'amount'=>$request->amount,
-                'status'=>$request->result,
-                'status_code'=>$request->ResponseCode,
-                'type'=>$request->type,
-            ]);
-
-         
-            return $this->pay_now($ad_id);
-        
-            
-
+			if($apiResult->result == 'Successful' || $apiResult->responseCode == '000'){
+				
+				if($request->type == 'sub_payment'){
+					$data->update(['status' => 'prepay']);
+				}else if($request->type == 'full_payment'){
+					$data->update(['status' => 'fullpayment']);
+				}
+				
+				Payment::create([
+					'ad_id' => $ad_id,
+					'trans_id' => $request->TranId,
+					'amount' => $request->amount,
+					'status' => $request->result,
+					'status_code' => $request->ResponseCode,
+					'type' => $request->type,
+            	]);
+				 $cal = $data->budget * 5.5/100;
+				return response()->json([
+					'msg'=>'all matches',
+					'data'=>[
+						'id'=>$data->id,
+						'type'=>$data->type,
+						'category'=>$data->categories?$data->categories->name:null,
+						'price'=>$data->budget - $cal,
+						'budget'=>$data->budget,
+						'match'=> $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
+								return [
+									'id'=>$item->influencers->id,
+									'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
+									'image'=>$item->influencers->users->InfulncerImage?$item->influencers->users->InfulncerImage:null,
+									'match'=>$item->match,
+									'status'=>$item->status
+								];
+							})
+					],
+					'status'=>config('global.OK_STATUS')
+				],config('global.OK_STATUS'));
+			}
+		
+			return response()->json([
+                'err'=>'payment failed',
+                'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
     }
-
-
-
-    
-
-
-    
-
 }
