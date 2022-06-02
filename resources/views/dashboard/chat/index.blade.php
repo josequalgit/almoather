@@ -359,6 +359,7 @@
             contentType: false,
             success: function (data) {
                 console.log('success: ',data)
+                chatMessagesSend(data);
             },
             error: function (error) {
                 console.log('error: ',error)

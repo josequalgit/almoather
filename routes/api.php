@@ -159,6 +159,8 @@ Route::group(['prefix'=>'auth'],function(){
             Route::post('addMatch','addMatch');
             Route::post('changeMatchedStatus','changeMatchStatus');
             Route::post('check_payment/{ad_id}','check_payment');
+            Route::get('get_influencer_customer_chose/{ad_id}','get_influencer_customer_chose');
+            Route::get('wait_for_influencer_response/{ad_id}','wait_for_influencer_response');
         });
 
         #CATEGORIES ROUTES

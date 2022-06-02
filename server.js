@@ -79,9 +79,12 @@ io.on("connect", (socket) => {
                 sender_id: data.sender_id,
                 receiver_id: data.receiver_id,
                 type: event.includes('support') ? 'support' : 'app',
+                contentType: data.contentType || 'message',
                 created_at: CURRENT_TIMESTAMP,
                 updated_at: CURRENT_TIMESTAMP,
             };
+
+            console.log(messageData);
 
             connection.query('INSERT INTO messages SET ?', messageData, function (error, results, fields) {
                 if (error) throw error;

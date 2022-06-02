@@ -156,6 +156,7 @@ class AdController extends Controller
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
+     
 
         $data = array_merge($request->all(),['customer_id'=>Auth::guard('api')->user()->customers->id]);
 
@@ -182,7 +183,6 @@ class AdController extends Controller
         $data->socialMediasAccount()->attach($request->prefered_media_id);
 		$data->save();
 
-     
 		 if(count($request->social_media) > 0)
         {
             foreach ($request->social_media as $value) {
@@ -195,6 +195,8 @@ class AdController extends Controller
 			
             }
         }
+
+
 
       
         if($request->hasFile('cr_image'))
@@ -227,14 +229,14 @@ class AdController extends Controller
             'type'=>'Ad'
         ];
 
-        $this->sendAdminNotification('contract_manager_notification',$info);
+      //  $this->sendAdminNotification('contract_manager_notification',$info);
 
 
        
-        $c_not = Notification::send($getAdmin, new AddInfluencer($info));
+       // $c_not = Notification::send($getAdmin, new AddInfluencer($info));
 
 
-        
+
 
 
         return response()->json([
@@ -718,14 +720,14 @@ class AdController extends Controller
             'type'=>'Ad'
         ];
 
-        $this->sendAdminNotification('contract_manager_notification',$info);
+        // $this->sendAdminNotification('contract_manager_notification',$info);
 
-        $getContactManagers = User::whereHas('roles',function($q){
-            $q->where('name','Contracts Manager')
-            ->orWhere('name','superAdmin');
-        })->get();
+        // $getContactManagers = User::whereHas('roles',function($q){
+        //     $q->where('name','Contracts Manager')
+        //     ->orWhere('name','superAdmin');
+        // })->get();
 
-        Notification::send($getContactManagers, new AddInfluencer($info));
+        // Notification::send($getContactManagers, new AddInfluencer($info));
         
         
 
@@ -1057,6 +1059,98 @@ class AdController extends Controller
         //     'status'=>config('global.OK_STATUS')
         // ],config('global.OK_STATUS'));
     }
+
+
+
+    public function wait_for_influencer_response($ad_id)
+    {
+        $data = Ad::find($ad_id);
+        if(!$data) return response()->json([
+            'err'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+        $cal = $data->budget * 5.5/100;
+
+        return response()->json([
+            'msg'=>'all matches',
+            'data'=>[
+                'id'=>$data->id,
+                'type'=>$data->type,
+                'category'=>$data->categories?$data->categories->name:null,
+                'price'=>$data->budget - $cal,
+                'budget'=>$data->budget,
+                'match'=> $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
+                    $contract = InfluencerContract::where('influencer_id',$item->influencer_id)->first();
+
+                    $status = null;
+                   
+                    if(isset($contract)&&$contract->is_accepted == 2)
+                    {
+                      $status = 'rejected';
+                    }
+                    else if(isset($contract)&&$contract->is_accepted == 1)
+                    {
+                      if($contract->status == 1&&$contract->admin_status == 1)
+                      {
+                        $status = 'completed';
+                      }
+                      else
+                      {
+                        $status = 'progress';
+                      }
+                    }
+                    else
+                    {
+                      $status = 'pending';
+                    }
+                    return [
+                      'id'=>$item->influencers->id,
+                      'image'=>$item->influencers->users->infulncerImage,
+                      'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
+                      'match'=>$item->match,
+                      'status'=>$status
+                    ];
+                    })
+            ],
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+
+    }
+
+    public function get_influencer_customer_chose($ad_id)
+    {
+        $data = Ad::find($ad_id);
+        if(!$data) return response()->json([
+            'err'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+        $cal = $data->budget * 5.5/100;
+
+        return response()->json([
+            'msg'=>'all matches',
+            'data'=>[
+                'id'=>$data->id,
+                'type'=>$data->type,
+                'category'=>$data->categories?$data->categories->name:null,
+                'price'=>$data->budget - $cal,
+                'budget'=>$data->budget,
+                'match'=> $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
+                    
+                    return [
+                        'id'=>$item->influencers->id,
+                        'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
+                        'image'=>$item->influencers->users->InfulncerImage?$item->influencers->users->InfulncerImage:null,
+                        'match'=>$item->match,
+                        'status'=>$item->status
+                    ];
+                    })
+            ],
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+
+
+    }
+
 
     public function check_payment(CheckPaymentRequest $request ,$ad_id)
     {
