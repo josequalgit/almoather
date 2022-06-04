@@ -34,7 +34,7 @@
 }
 
 .vertical-layout.vertical-menu-modern.menu-expanded .main-menu {
-  width: 260px;
+  width: 245px;
 }
 
 .vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation > li.open > a > span.badge {
@@ -51,10 +51,11 @@
   right: 7px;
   transform: rotate(0deg);
   transition: -webkit-transform 0.4s ease-in-out;
+  transition: 0.2s ease all;
 }
 
 .vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation li.open > a:not(.mm-next):after {
-  transform: rotate(180deg);
+  transform: rotate(140deg);
 }
 
 .vertical-layout.vertical-menu-modern.menu-expanded .footer {
@@ -62,14 +63,16 @@
 }
 
 .vertical-layout.vertical-menu-modern.menu-collapsed .navbar.fixed-top {
-  left: 78px;
+  left: 95px;
+}
+
+.main-menu{
+  transition: 300ms ease all;
 }
 
 .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu {
   width: 78px;
-  transition: 300ms ease all, background 0s;
   backface-visibility: hidden;
-  transform: translate3d(0, 0, 0);
 }
 
 .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu .navbar-header .brand-text,
@@ -169,9 +172,6 @@
 }
 
 @media (min-width: 992px) {
-  .vertical-layout.vertical-menu-modern .main-menu {
-    border-right: 1px solid #DFE3E7;
-  }
   .vertical-layout.vertical-menu-modern .main-menu.menu-dark {
     border-right: 1px solid #464d5c;
   }

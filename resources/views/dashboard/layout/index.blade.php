@@ -29,9 +29,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('main2/css/themes/semi-dark-layout.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('main2/css/pages/app-chat.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/videopopup.css') }}">
-
     <!-- END: Theme CSS-->
-
 
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('main2/css/core/menu/menu-types/vertical-menu.css') }}">
@@ -45,55 +43,18 @@
 <!-- END: Head-->
 
 <!-- BEGIN: Body-->
-    <button class="bottom-right">
-            {{-- <i class="ficon bx bx-bell bx-tada bx-flip-horizontal"></i> --}}
-           
-            @if(\Request::route()->getName() != 'dashboard.chat.index' && $count_unread_messages != 0)
-                <span id="message_counter" class="badge badge-pill badge-danger badge-up">{{ $count_unread_messages }}</span>
-            @endif
-       <a href="{{ route('dashboard.chat.index') }}"><i class="menu-icon tf-icons bx bx-chat"></i></a> 
-    </button>
-
-<body class="vertical-layout vertical-menu-modern 2-columns  navbar-sticky footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
-    
-    <style>
-        .table-longText{
-            overflow: hidden;
-            width:100px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-        }
-        .select2-container{
-    width: 100% !important;
-}
-.select2-selection--multiple .select2-selection__choice__display {
-    padding-left: 13px !important;
-}
-.pagination .page-item.active .page-link, .pagination .page-item.active .page-link:hover {
-    border-radius: 0.267rem;
-    background-color: #475f7b !important;
-    color: #fbd075;
-}
-    </style>
-
-    @php
-
-    @endphp
-
+<body class="vertical-layout vertical-menu-modern 2-columns  navbar-sticky pace-done {{ isset($_COOKIE['collapsed']) && $_COOKIE['collapsed'] ? 'menu-collapsed' : 'menu-expanded'}}  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
     <!-- BEGIN: Header-->
-    <div class="header-navbar-shadow"></div>
     <nav class="header-navbar main-header-navbar navbar-expand-lg navbar navbar-with-menu fixed-top ">
         <div class="navbar-wrapper">
             <div class="navbar-container content">
                 <div class="navbar-collapse" id="navbar-mobile">
                     <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
                         <ul class="nav navbar-nav">
-                            <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="javascript:void(0);"><i class="ficon bx bx-menu"></i></a></li>
+                            <li class="nav-item mobile-menu mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="javascript:void(0);"><i class="ficon bx bx-menu"></i></a></li>
                         </ul>
-                       
                     </div>
-                    <ul class="nav navbar-nav float-right">
+                    <ul class="nav navbar-nav float-right justify-content-center align-items-center">
                     
                         <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" href="javascript:void(0);" data-toggle="dropdown"><i class="ficon bx bx-bell bx-tada bx-flip-horizontal"></i><span id="notification_counter1" class="badge badge-pill badge-danger badge-up">{{ count($notifications) }}</span></a>
                             <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
@@ -121,19 +82,21 @@
                                   
                                   
                                     </a></li>
-                                {{-- <li class="dropdown-menu-footer"><a class="dropdown-item p-50 text-primary justify-content-center" href="javascript:void(0)">Read all notifications</a></li> --}}
                             </ul>
                         </li>
-                        <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link" href="javascript:void(0);" data-toggle="dropdown">
-                                <div class="user-nav d-sm-flex d-none"><span class="user-name">{{ auth()->user()->name }}</span><span class="user-status text-muted"></span></div><span></span>
+                        
+                        <li class="dropdown dropdown-user nav-item">
+                            <a class="dropdown-toggle nav-link dropdown-user-link" href="javascript:void(0);" data-toggle="dropdown">
+                                <div class="user-nav d-sm-flex d-none m-0">
+                                    <div class="avatar avatar-lg">
+                                        <img src="https://pixinvent.com/demo/frest-bootstrap-laravel-admin-dashboard-template/demo/assets/img/avatars/1.png" alt="" class="rounded-circle">
+                                    </div>
+                                </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right pb-0">
                                 @role('superAdmin')
                                 <a class="dropdown-item" href="{{ route('dashboard.admins.editSuperAdmin') }}"><i class="bx bx-user mr-50"></i> Edit Profile</a>
                                 @endrole
-                                {{-- <a class="dropdown-item" href="app-email.html"><i class="bx bx-envelope mr-50"></i> My Inbox</a>
-                                <a class="dropdown-item" href="app-todo.html"><i class="bx bx-check-square mr-50"></i> Task</a>
-                                <a class="dropdown-item" href="app-chat.html"><i class="bx bx-message mr-50"></i> Chats</a> --}}
                                 <div class="dropdown-divider mb-0"></div><a class="dropdown-item" href="{{ route('dashboard.logout') }}"><i class="bx bx-power-off mr-50"></i> Logout</a>
                             </div>
                         </li>
@@ -157,6 +120,13 @@
 
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
+
+    <button class="bottom-right">
+        @if(\Request::route()->getName() != 'dashboard.chat.index' && $count_unread_messages != 0)
+            <span id="message_counter" class="badge badge-pill badge-danger badge-up">{{ $count_unread_messages }}</span>
+        @endif
+        <a href="{{ route('dashboard.chat.index') }}"><i class="menu-icon tf-icons bx bx-chat"></i></a> 
+    </button>
 
     <!-- BEGIN: Footer-->
     <footer class="footer footer-static footer-light">

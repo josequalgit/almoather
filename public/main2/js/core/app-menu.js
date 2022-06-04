@@ -115,11 +115,12 @@
         }
 
         if ($body.data("menu") == "vertical-menu-modern") {
-          var menuToggle = "";
-          if (menuToggle === "false") {
+          var menuToggle = getCookie('collapsed');
+          if (menuToggle) {
             this.change("collapsed");
           } else {
             this.change(defMenu);
+            
           }
         } else {
           this.change(defMenu);
@@ -256,103 +257,10 @@
         }
       );
 
-      // Horizontal layout submenu drawer scrollbar
-      if (menuType == "horizontal-menu") {
-        $("li.dropdown-submenu").on("mouseenter", function () {
-          if (!$(this).parent(".dropdown").hasClass("show")) {
-            $(this).removeClass("openLeft");
-          }
-          var dd = $(this).find(".dropdown-menu");
-          if (dd) {
-            var pageHeight = $(window).height(),
-              // ddTop = dd.offset().top,
-              ddTop = $(this).position().top,
-              ddLeft = dd.offset().left,
-              ddWidth = dd.width(),
-              ddHeight = dd.height();
-            if (pageHeight - ddTop - ddHeight - 28 < 1) {
-              var maxHeight = pageHeight - ddTop - 170;
-              $(this)
-                .find(".dropdown-menu")
-                .css({
-                  "max-height": maxHeight + "px",
-                  "overflow-y": "auto",
-                  "overflow-x": "hidden",
-                });
-            }
-            // Add class to horizontal sub menu if screen width is small
-            if (ddLeft + ddWidth - (window.innerWidth - 16) >= 0) {
-              $(this).addClass("openLeft");
-            }
-          }
-        });
-      }
-
       /********************************************
        *             Searchable Menu               *
        ********************************************/
 
-      function searchMenu(list) {
-        var input = $(".menu-search");
-        $(input)
-          .change(function () {
-            var filter = $(this).val();
-            if (filter) {
-              // Hide Main Navigation Headers
-              $(".navigation-header").hide();
-              // this finds all links in a list that contain the input,
-              // and hide the ones not containing the input while showing the ones that do
-              $(list)
-                .find("li a:not(:Contains(" + filter + "))")
-                .hide()
-                .parent()
-                .hide();
-              // $(list).find("li a:Contains(" + filter + ")").show().parents('li').show().addClass('open').closest('li').children('a').show();
-              var searchFilter = $(list).find("li a:Contains(" + filter + ")");
-              if (searchFilter.parent().hasClass("has-sub")) {
-                searchFilter
-                  .show()
-                  .parents("li")
-                  .show()
-                  .addClass("open")
-                  .closest("li")
-                  .children("a")
-                  .show()
-                  .children("li")
-                  .show();
-
-                // searchFilter.parents('li').find('li').show().children('a').show();
-                if (searchFilter.siblings("ul").length > 0) {
-                  searchFilter
-                    .siblings("ul")
-                    .children("li")
-                    .show()
-                    .children("a")
-                    .show();
-                }
-              } else {
-                searchFilter
-                  .show()
-                  .parents("li")
-                  .show()
-                  .addClass("open")
-                  .closest("li")
-                  .children("a")
-                  .show();
-              }
-            } else {
-              // return to default
-              $(".navigation-header").show();
-              $(list).find("li a").show().parent().show().removeClass("open");
-            }
-            $.app.menu.manualScroller.update();
-            return false;
-          })
-          .keyup(function () {
-            // fire the above change event after every letter
-            $(this).change();
-          });
-      }
 
       if (
         menuType === "vertical-menu" ||
@@ -484,8 +392,18 @@
             $body.removeClass("menu-collapsed").addClass("menu-expanded");
             this.collapsed = false;
             this.expanded = true;
-
+            $(".main-menu, .navbar-header").addClass("expanded");
+            setCookie('collapsed',false,3600);
             $(".sidenav-overlay").removeClass("d-block d-none");
+
+            var $listItem = $(".main-menu li.menu-collapsed-open"),
+              $subList = $listItem.children("ul");
+
+            $subList.hide().slideDown(200, function () {
+              $(this).css("display", "");
+            });
+
+            $listItem.addClass("open").removeClass("menu-collapsed-open");
           },
           function () {
             if (
@@ -528,10 +446,23 @@
         this.transit(
           function () {
             $body.removeClass("menu-expanded").addClass("menu-collapsed");
+            $(".main-menu, .navbar-header").removeClass("expanded");
+            setCookie('collapsed',true,3600);
             this.collapsed = true;
             this.expanded = false;
 
             $(".content-overlay").removeClass("d-block d-none");
+
+            var $listItem = $(".main-menu li.open"),
+            $subList = $listItem.children("ul");
+            $listItem.addClass("menu-collapsed-open");
+
+            $subList.show().slideUp(200, function () {
+              $(this).css("display", "");
+            });
+
+            $listItem.removeClass("open");
+
           },
           function () {
             if (
@@ -1153,3 +1084,23 @@
     },
   };
 })(window, document, jQuery);
+
+function setCookie(name,value,days) {
+  var expires = "";
+  if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days*24*60*60*1000));
+      expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+function getCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0;i < ca.length;i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1,c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+  }
+  return null;
+}

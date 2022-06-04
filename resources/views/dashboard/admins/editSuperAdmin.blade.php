@@ -1,6 +1,6 @@
 @extends('dashboard.layout.index')
 @section('content')
-<div class="app-content content p-5 mt-5">
+<div class="app-content content">
     
     <section id="basic-input">
         <div class="card p-5">
