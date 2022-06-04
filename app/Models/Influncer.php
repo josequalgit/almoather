@@ -66,7 +66,8 @@ class Influncer extends Model implements HasMedia
         'verify',
         'commercialFiles',
         'taxFiles',
-        'snapVideos'
+        'snapVideos',
+        'full_name'
     ];
 
     public function users()
@@ -233,6 +234,11 @@ class Influncer extends Model implements HasMedia
             return null;
         }
        
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name;
     }
 
 

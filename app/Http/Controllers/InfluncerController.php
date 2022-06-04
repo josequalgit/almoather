@@ -13,6 +13,7 @@ class InfluncerController extends Controller
     public function index($status = null)
     {
         $data = Influncer::with('users');
+
         $allStatus = ['pending','accepted','rejected','band'];
         if($status) $data->where('status',$status);
         $counter = $data->count();
@@ -28,7 +29,7 @@ class InfluncerController extends Controller
             array_push($influncersData,$influncerNumber);
         }
 
-       $data =  $data->orderBy('created_at','desc')->paginate(10);
+       $data =  $data->orderBy('created_at','desc')->paginate(24);
        if(!in_array($status,$allStatus)) $status = null;
 
         return view('dashboard.influncers.index',compact('data','counter','influncersData','status'));

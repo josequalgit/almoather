@@ -2,119 +2,157 @@
 
 @section('content')
 <div class="app-content content">
+    
     <div class="content-overlay"></div>
     <div class="content-wrapper">
-        <div class="content-header row">
-            <div class="content-header-left col-12 mb-2 mt-1">
-                <div class="breadcrumbs-top">
-                    <h5 class="content-header-title float-left pr-1 mb-0">Tabs</h5>
-                    <div class="breadcrumb-wrapper d-none d-sm-block">
-                        <ol class="breadcrumb p-0 mb-0 pl-1">
-                            <li class="breadcrumb-item"><a href="index.html"><i class="bx bx-home-alt"></i></a>
-                            </li>
-                            <li class="breadcrumb-item"><a href="#">Dashboard</a>
-                            </li>
-                            <li class="breadcrumb-item active">Influncers
-                            </li>
-                        </ol>
-                        {{-- @can('Create Influncer')
-                            <a href="{{ route('dashboard.influncers.create') }}" class=" btn btn-primary float-right">Create</a>                            
-                        @endcan --}}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="content-body mt-5">
-            @can('See Influncer')
-            <div class="col">
-                <div class="card widget-followers">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <div>
-                            <h4 class="card-title">Influncers</h4>
-                            <small class="text-muted">this is the amount of influncers added every month</small>
-                        </div>
-                        <div class="d-flex align-items-center widget-followers-heading-right">
-                            <h5 class="mr-2 font-weight-normal mb-0">{{ $counter }}</h5>
-                            {{-- <div class="d-flex flex-column align-items-center">
-                                <i class='bx bx-caret-up text-success font-medium-1'></i>
-                                <small class="text-muted">+31%</small>
-                            </div> --}}
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div id="follower-primary-chart"></div>
-                    </div>
-                </div>
-            </div>
-            @endcan
-            <!-- Basic tabs start -->
-            <section id="basic-datatable">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Influncers</h4>
+        <div class="content-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card widget-followers">
+                        <div class="card-header pb-0">
+                            <div class="card-title">
+                                <p class="mb-0">Influencer</p>   
+                                <small class="text-muted mb-0">Number of influncers registred every month</small>
                             </div>
-                            <div class="card-body card-dashboard">
-                                @can('See Influncer')
-                                <p class="card-text">
-                                    There is {{ $counter }} Influncer/'s
-                                </p>
-                                @endcan
-                                <div class="dropdown float-right">
-                                    <button style="text-transform: uppercase;" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                     {{ $status ?? 'Status' }}
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" style="text-transform: uppercase;" href="{{ route('dashboard.influncers.index') }}">All</a>
-                                      <a class="dropdown-item" style="text-transform: uppercase;" href="{{ route('dashboard.influncers.index','pending') }}">Pending</a>
-                                      <a class="dropdown-item" style="text-transform: uppercase;" href="{{ route('dashboard.influncers.index','accepted') }}">Accepted</a>
-                                      <a class="dropdown-item" style="text-transform: uppercase;" href="{{ route('dashboard.influncers.index','rejected') }}">Rejected</a>
-                                      <a class="dropdown-item" style="text-transform: uppercase;" href="{{ route('dashboard.influncers.index','band') }}">Band</a>
+                            <hr class="w-100">
+                        </div>
+                        
+                        <div class="card-body">
+                            <div id="follower-primary-chart"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card widget-followers">
+                        <div class="card-header pb-0">
+                            <div class="card-title">
+                                <p class="mb-0">Top Influencer</p>   
+                                <small class="text-muted mb-0">Top Influencers (Completed ADS)</small>
+                            </div>
+                            <hr class="w-100">
+                        </div>
+                        
+                        <div class="card-body">
+                            <div id="ads-chart"></div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="card-title">
+                        <p class="mb-0">Influencer</p>   
+                        <small class="text-muted mb-0">12000 Influncers Found</small>
+                    </div>
+                    
+                    <div class="section-right">
+                        <ul class="view-type d-flex list-unstyled">
+                            <li class=""><a href="#" class="grid active"><i class="bx bx-grid-alt"></i></a></li>
+                            <li class=""><a href="#" class="list"><i class="bx bx-list-ul"></i></a></li>
+                        </ul>
+                    </div>
+                    <hr class="w-100">
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="list-tems">
+                            @foreach ($data as $item)
+                            <div class="col-md-4 col-xl-3">
+                                <div class="item-wrapper">
+                                    <div class="list-item profile-block">
+                                        <div class="block-top">
+                                            <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->country_code) }}.png" alt="{{$item->countries->name}}"></div>
+                                            <div class="back-grey"></div>
+                                            <div class="block-image"><img src="{{ $item->users->image['url'] }}" alt="{{ $item->full_name }}"></div>
+                                        </div>
+                                        <div class="block-info">
+                                            <span class="name">{{ $item->full_name }}</span>
+                                            <div class="categories text-center">
+                                                @foreach($item->InfluncerCategories()->pluck('name')->toArray() as $cat)
+                                                <span class="desc badge bg-info mt-1">{{$cat}}</span>
+                                                @endforeach
+                                            </div>
+                                        
+                                        </div>
+                                        <div class="block-counts w-100 py-2 row">
+                                            <div class="followers text-center col-6 mb-1">
+                                                <div class="count-box">
+                                                    <span class="numbers">435.6M</span>
+                                                    <span>Followers</span>
+                                                </div>
+                                            </div>
+                                            <div class="engagement text-center col-6 mb-1">
+                                                <div class="count-box">
+                                                    <span class="numbers">7.7M</span>
+                                                    <span>Engagement</span>
+                                                </div>
+                                            </div>
+                                            <div class="engagement text-center col-6 mb-1">
+                                                <div class="count-box">
+                                                    <span class="numbers">7.7M</span>
+                                                    <span>ROAS</span>
+                                                </div>
+                                            </div>
+                                            <div class="engagement text-center col-6 mb-1">
+                                                <div class="count-box">
+                                                    <span class="numbers">7.7M</span>
+                                                    <span>AOAF</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="block-add w-100">
+                                            <a href="{{ route('dashboard.influncers.edit',$item->id) }}" class="btn">View <i class="bx bx-edit"></i></a>
+                                        </div>
                                     </div>
-                                  </div>
-                                <div class="table-responsive">
-                                    @can('See Influncer')
-                                    <table class="table zero-configuration">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Bank number</th>
-                                                <th>Status</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($data as $item)
-                                                    <tr>
-                                                        <td>{{ $item->first_name  }} {{ $item->middle_name }} {{ $item->last_name }}</td>
-                                                        <td>{{ $item->users->email }}</td>
-                                                        <td>{{ $item->bank_account_number }}</td>
-                                                        <td style="text-transform: uppercase;">{{ $item->status }}</td>
-                                                        <td>
-                                                           @can('Edit Influncer')
-                                                            <a class="btn btn-secondary" href="{{ route('dashboard.influncers.edit',$item->id) }}">
-                                                                <i class="bx bx-show"></i>
-                                                            </a>                                                               
-                                                           @endcan
-                                                        </td>
-                                                    </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                    @endcan
                                 </div>
                             </div>
-                            @can('See Influncer')
-                            <div class="p-1">
-                                {{ $data->links('pagination::bootstrap-5') }}
-                            </div>
-                            @endcan
+                            
+                            @endforeach
                         </div>
+                        <div class="list-tems" style="display: none">
+                            <table class="table zero-configuration table-influencers col-12" >
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Name</th>
+                                        <th>Country</th>
+                                        <th>Followers</th>
+                                        <th>Engagement</th>
+                                        <th>AOAF</th>
+                                        <th>ROAS</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($data as $item)
+                                            <tr>
+                                                <td><img src="{{ $item->users->image['url'] }}" alt="{{ $item->full_name }}"></td>
+                                                <td>{{ $item->full_name  }}</td>
+                                                <td><div class="d-flex justify-content-center align-items-center"><div class="contry-name">{{$item->countries->name}}</div> <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->country_code) }}.png" alt="{{$item->countries->name}}"></div></div></td>
+                                                <td>100,000</td>
+                                                <td>87%</td>
+                                                <td>77%</td>
+                                                <td>55,000</td>
+                                                <td>
+                                                    <a class="btn btn-secondary" href="{{ route('dashboard.influncers.edit',$item->id) }}">
+                                                        <i class="bx bx-show"></i>
+                                                    </a>    
+                                                </td>
+                                            </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
+                    <div class="mt-1 pagination-wrapper">
+                        {{ $data->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
     </div>
     <div id="deleteModal" class="modal" tabindex="-1" role="dialog">
@@ -205,6 +243,42 @@
 
         var chart = new ApexCharts(document.querySelector("#follower-primary-chart"), options);
         chart.render();
+
+        var options = {
+          series: [{
+          data: [50, 16]
+        }],
+          chart: {
+          height: 350,
+          type: 'bar',
+        },
+        plotOptions: {
+          bar: {
+            columnWidth: '45%',
+            distributed: true,
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        legend: {
+          show: false
+        },
+        xaxis: {
+          categories: [
+            ['Sephea', 'asd'],
+            ['Sephea', 'asd']
+          ],
+          labels: {
+            style: { 
+              fontSize: '12px'
+            }
+          }
+        }
+        };
+
+        var adsChart = new ApexCharts(document.querySelector("#ads-chart"), options);
+        adsChart.render();
 </script>
 
 @endsection

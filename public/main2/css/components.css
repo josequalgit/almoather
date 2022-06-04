@@ -49,6 +49,16 @@ html body {
   direction: ltr;
 }
 
+body{
+  color: #000;
+}
+
+.text-muted {
+  font-size: 13px;
+  letter-spacing: 0px;
+  color: #707070 !important;
+}
+
 html .content {
   padding: 0;
   position: relative;
@@ -170,8 +180,8 @@ html .navbar-sticky .app-content .navbar-container .search-input .search-list.sh
 }
 
 html .navbar-sticky .app-content .content-wrapper {
-  padding: 1.8rem 2.2rem 0;
-  margin-top: 3rem;
+  padding: 15px;
+  margin-top: 5rem;
 }
 
 html .navbar-static .navbar-container,

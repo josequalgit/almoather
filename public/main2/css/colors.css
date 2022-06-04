@@ -3442,15 +3442,15 @@ input:focus ~ .bg-secondary {
 /* Basic buttons */
 /* ------------- */
 .btn-secondary {
-    border-color: #34465b !important;
-    background-color: #475f7b !important;
+    border-color: #f7c870 !important;
+    background-color: #f7c870!important;
     color: #fff;
 }
 
 .btn-secondary:hover,
 .btn-secondary.hover {
-    background-color: #506b8b !important;
-    color: #fff;
+    border-color: #f7c870 !important;
+    background-color: #f7c870!important;
 }
 
 .btn-secondary:hover.glow,
@@ -3461,7 +3461,7 @@ input:focus ~ .bg-secondary {
 .btn-secondary:focus,
 .btn-secondary:active,
 .btn-secondary.active {
-    background-color: #3e536b !important;
+    background-color: #f7c870!important;
     color: #fff !important;
 }
 
