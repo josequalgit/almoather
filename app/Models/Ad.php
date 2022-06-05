@@ -201,13 +201,18 @@ class Ad extends Model implements HasMedia
         return $publicFullUrl;
    }
     public function getLogoAttribute() {
-        $mediaItems = $this->getMedia('logos');
-        $publicFullUrl = null;
-        if(count($mediaItems) > 0)
+        $mediaItems = $this->getMedia('logos')->first();
+        if($mediaItems)
         {
-            $publicFullUrl = $mediaItems[0]->getFullUrl();
+            return [
+                'id'=> $mediaItems->id,
+                'url'=> $mediaItems->getFullUrl()
+            ];
         }
-        return $publicFullUrl;
+        return [
+            'id'=> 0,
+            'url'=>'https://cdn5.vectorstock.com/i/1000x1000/51/99/icon-of-user-avatar-for-web-site-or-mobile-app-vector-3125199.jpg'
+        ];
    }
    public function checkIfAccepted($inf_id)
    {

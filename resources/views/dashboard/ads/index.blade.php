@@ -197,51 +197,56 @@ $para = $checkStatus ? request()->route()->parameters['status'] : null;
                     </div>
                     <hr class="w-100">
                 </div>
-                <div class="card-body">
-                    <div class="row grid-items"  style="{{ !isset($_COOKIE['data-item']) || $_COOKIE['data-item'] == 'grid-items' ? '' : 'display: none'}}">
+                <div class="card-body campaign-items">
+                    <div class="row grid-items"  xxstyle="{{ !isset($_COOKIE['data-item']) || $_COOKIE['data-item'] == 'grid-items' ? '' : 'display: none'}}">
                         @foreach ($data as $item)
                         <div class="col-md-4 col-xl-3">
                             <div class="item-wrapper">
                                 <div class="list-item profile-block">
                                     <div class="block-top">
-                                        <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->country_code) }}.png" alt="{{$item->countries->name}}"></div>
                                         <div class="back-grey"></div>
-                                        <div class="block-image"><img src="{{ $item->image?$item->image['url']:null }}" alt="{{ $item->full_name }}"></div>
+                                        <div class="block-image"><img src="{{ $item->logo['url']  }}" alt="{{ $item->store }}"></div>
                                     </div>
                                     <div class="block-info">
-                                        <span class="name">{{ $item->full_name }}</span>
+                                        <span class="name">{{ $item->store }}</span>
                                         <div class="categories text-center">
-                                            {{-- @foreach($item->InfluncerCategories()->pluck('name')->toArray() as $cat)
-                                            <span class="desc badge bg-info mt-1">{{$cat}}</span>
-                                            @endforeach --}}
+                                        
                                         </div>
                                     
                                     </div>
                                     <div class="block-counts w-100 py-2 row">
-                                        <div class="followers text-center col-6 mb-1">
+                                        <div class="followers text-center col-12 mb-1">
                                             <div class="count-box">
-                                                <span class="numbers">{{ number_format($item->subscribers); }}</span>
-                                                <span>Followers</span>
+                                                <span>Budget</span>
+                                                <span class="numbers">{{ number_format($item->budget); }}</span>
+                                                
                                             </div>
                                         </div>
-                                        <div class="engagement text-center col-6 mb-1">
+
+                                        <div class="followers text-center col-12 mb-1">
                                             <div class="count-box">
-                                                <span class="numbers">7.7M</span>
-                                                <span>Engagement</span>
+                                                <span>Goal</span>
+                                                <span class="numbers">{{ $item->campaignGoals->title; }}</span>
+                                                
                                             </div>
                                         </div>
-                                        <div class="engagement text-center col-6 mb-1">
+
+                                        <div class="followers text-center col-12 mb-1">
                                             <div class="count-box">
-                                                <span class="numbers">7.7M</span>
-                                                <span>ROAS</span>
+                                                <span>Category</span>
+                                                <span class="numbers">{{ '' }}</span>
+                                                
                                             </div>
                                         </div>
-                                        <div class="engagement text-center col-6 mb-1">
+
+                                        <div class="followers text-center col-12 mb-1">
                                             <div class="count-box">
-                                                <span class="numbers">7.7M</span>
-                                                <span>AOAF</span>
+                                                <span>Type</span>
+                                                <span class="numbers">{{ '' }}</span>
+                                                
                                             </div>
                                         </div>
+                                        
                                     </div>
                                     <div class="block-add w-100">
                                         <a href="{{ route('dashboard.influncers.edit',$item->id) }}" class="btn">View <i class="bx bx-edit"></i></a>

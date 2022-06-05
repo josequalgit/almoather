@@ -881,3 +881,9 @@ table.zero-configuration .flag img {
 .dangerStatus {
     background: #67CE6F 0% 0% no-repeat padding-box;
 }
+
+.campaign-items .count-box{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+}
