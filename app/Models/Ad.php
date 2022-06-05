@@ -8,6 +8,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\SocialMedia;
+use App\Models\InfluencerContract;
 use DB;
 class Ad extends Model implements HasMedia
 {
@@ -243,7 +244,7 @@ class Ad extends Model implements HasMedia
        return Contract::where(['influencer_id'=>$inf_id])
         ->where(['ad_id'=>$this->id])
         ->first();
-    }
+   }
 
 
     public function getSocialMediaLinks()
@@ -261,6 +262,38 @@ class Ad extends Model implements HasMedia
       //  dd($data);
         return $data;
 
+    }
+
+    public function is_all_accepted()
+    {
+       $data =  $this->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
+            $contract = InfluencerContract::where('influencer_id',$item->influencer_id)->first();
+            
+                if(isset($contract)&&$contract->is_accepted == 2)
+                {
+                    return false ;
+                }
+                else if(isset($contract)&&$contract->is_accepted == 1)
+                {
+                    if($contract->status == 1&&$contract->admin_status == 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+        })
+        ->reject(function ($value) {
+            return $value === true;
+        });
+       
+        return (count($data) > 0) ? false : true;
     }
    
 

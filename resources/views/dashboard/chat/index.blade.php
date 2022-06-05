@@ -196,7 +196,27 @@
                     for(let i =0; i < res.data.messages.length; i++) {
                         let element = res.data.messages[i]
                         if(element.sender_id == current_user_id){
-                            let senderDiv = `<div class="chat">
+                            let senderDiv = null
+                            console.log(element)
+                            if(element.contentType = 'file')
+                            {
+                                senderDiv  = `<div class="chat">
+                                                <div class="chat-avatar">
+                                                    <a class="avatar m-0">
+                                                    <img src="${adminAvatar}" alt="avatar" height="36" width="36" />
+                                                    </a>
+                                                </div>
+                                                <div class="chat-body">
+                                                <div class="chat-message">
+                                                    
+                                                    <a href="${element.text}" download class='btn btn-primary'>Download</a>
+                                                </div>
+                                                </div>
+                                            </div>`;
+                            }
+                            else
+                            {
+                                senderDiv = `<div class="chat">
                                                 <div class="chat-avatar">
                                                     <a class="avatar m-0">
                                                     <img src="${adminAvatar}" alt="avatar" height="36" width="36" />
@@ -209,7 +229,12 @@
                                                 </div>
                                                 </div>
                                             </div>`;
+                            }
+
+                         
+                            
                            $("#chat_messages").append(senderDiv);
+                           
                         }else{
                             let reciverDiv = `<div class="chat chat-left">
                                                 <div class="chat-avatar">
@@ -257,21 +282,24 @@
     }
     // Add message to chat
     function chatMessagesSend(source) {
+        console.log('sourse: ',source)
         let chatMessageSend = $(".chat-message-send");
         var message = chatMessageSend.val();
        
         var d = new Date();
         let time = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-        if (message != "") {
+        if (message != ""||source != null) {
+            console.log('channel: ',channel)
             chatMessageSend.val("");
             var objDiv = document.getElementById("chat_messages");
             chatContainer.find('.chat-content').animate({ scrollTop: objDiv.scrollHeight }, 400);
-
+            
             socket.emit(channel, {
-                message: message,
+                message: source?source:message,
                 sender_id: 1,
                 receiver_id: senToUser,
-                time: time
+                time: time,
+                contentType:source?'file':'message'
             });
         }
     }
