@@ -6,6 +6,120 @@
     <div class="content-overlay"></div>
     <div class="content-wrapper">
         <div class="content-body">
+            
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="card-title">
+                        <p class="mb-0">{{ ucwords($status) }} Influencer</p>   
+                        <small class="text-muted mb-0">{{ $counter}} Influncers Found</small>
+                    </div>
+                   
+                    
+                    <div class="section-right">
+                        <ul class="view-type d-flex list-unstyled">
+                            <li><div class="search-item"><input type="search" class="form-control" value="" placeholder="Search"><i class="bx bx-search"></i></div></li>
+                            <li class=""><a href="#" class="grid {{ !isset($_COOKIE['data-item']) || $_COOKIE['data-item'] == 'grid-items' ? 'active' : ''}}" data-item="grid-items"><i class="bx bx-grid-alt"></i></a></li>
+                            <li class=""><a href="#" class="list {{ isset($_COOKIE['data-item']) && $_COOKIE['data-item'] == 'list-items' ? 'active' : ''}}" data-item="list-items"><i class="bx bx-list-ul"></i></a></li>
+                        </ul>
+                    </div>
+                    <hr class="w-100">
+                </div>
+                <div class="card-body">
+                    <div class="row grid-items"  style="{{ !isset($_COOKIE['data-item']) || $_COOKIE['data-item'] == 'grid-items' ? '' : 'display: none'}}">
+                        @foreach ($data as $item)
+                        <div class="col-md-4 col-xl-3">
+                            <div class="item-wrapper">
+                                <div class="list-item profile-block">
+                                    <div class="block-top">
+                                        <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->country_code) }}.png" alt="{{$item->countries->name}}"></div>
+                                        <div class="back-grey"></div>
+                                        <div class="block-image"><img src="{{ $item->users->image['url'] }}" alt="{{ $item->full_name }}"></div>
+                                    </div>
+                                    <div class="block-info">
+                                        <span class="name">{{ $item->full_name }}</span>
+                                        <div class="categories text-center">
+                                            @foreach($item->InfluncerCategories()->pluck('name')->toArray() as $cat)
+                                            <span class="desc badge bg-info mt-1">{{$cat}}</span>
+                                            @endforeach
+                                        </div>
+                                    
+                                    </div>
+                                    <div class="block-counts w-100 py-2 row">
+                                        <div class="followers text-center col-6 mb-1">
+                                            <div class="count-box">
+                                                <span class="numbers">{{ number_format($item->subscribers); }}</span>
+                                                <span>Followers</span>
+                                            </div>
+                                        </div>
+                                        <div class="engagement text-center col-6 mb-1">
+                                            <div class="count-box">
+                                                <span class="numbers">7.7M</span>
+                                                <span>Engagement</span>
+                                            </div>
+                                        </div>
+                                        <div class="engagement text-center col-6 mb-1">
+                                            <div class="count-box">
+                                                <span class="numbers">7.7M</span>
+                                                <span>ROAS</span>
+                                            </div>
+                                        </div>
+                                        <div class="engagement text-center col-6 mb-1">
+                                            <div class="count-box">
+                                                <span class="numbers">7.7M</span>
+                                                <span>AOAF</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="block-add w-100">
+                                        <a href="{{ route('dashboard.influncers.edit',$item->id) }}" class="btn">View <i class="bx bx-edit"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        @endforeach
+                    </div>
+                    <div class="row list-items" style="{{ isset($_COOKIE['data-item']) && $_COOKIE['data-item'] == 'list-items' ? '' : 'display: none'}}">
+                        <table class="table zero-configuration table-influencers col-12" >
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Country</th>
+                                    <th>Followers</th>
+                                    <th>Engagement</th>
+                                    <th>AOAF</th>
+                                    <th>ROAS</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($data as $item)
+                                        <tr>
+                                            <td><img src="{{ $item->users->image['url'] }}" alt="{{ $item->full_name }}"></td>
+                                            <td>{{ $item->full_name  }}</td>
+                                            <td><div class="d-flex justify-content-center align-items-center"><div class="contry-name">{{$item->countries->name}}</div> <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->country_code) }}.png" alt="{{$item->countries->name}}"></div></div></td>
+                                            <td>100,000</td>
+                                            <td>87%</td>
+                                            <td>77%</td>
+                                            <td>55,000</td>
+                                            <td>
+                                                <a class="btn btn-secondary" href="{{ route('dashboard.influncers.edit',$item->id) }}">
+                                                    <i class="bx bx-show"></i>
+                                                </a>    
+                                            </td>
+                                        </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                        
+                    <div class="mt-1 pagination-wrapper">
+                        {{ $data->links('pagination::bootstrap-5') }}
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="card widget-followers">
@@ -39,119 +153,6 @@
                     </div>
                 </div>
                 
-            </div>
-            
-            <div class="card">
-                <div class="card-header pb-0">
-                    <div class="card-title">
-                        <p class="mb-0">Influencer</p>   
-                        <small class="text-muted mb-0">12000 Influncers Found</small>
-                    </div>
-                    
-                    <div class="section-right">
-                        <ul class="view-type d-flex list-unstyled">
-                            <li class=""><a href="#" class="grid active"><i class="bx bx-grid-alt"></i></a></li>
-                            <li class=""><a href="#" class="list"><i class="bx bx-list-ul"></i></a></li>
-                        </ul>
-                    </div>
-                    <hr class="w-100">
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="list-tems">
-                            @foreach ($data as $item)
-                            <div class="col-md-4 col-xl-3">
-                                <div class="item-wrapper">
-                                    <div class="list-item profile-block">
-                                        <div class="block-top">
-                                            <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->country_code) }}.png" alt="{{$item->countries->name}}"></div>
-                                            <div class="back-grey"></div>
-                                            <div class="block-image"><img src="{{ $item->users->image['url'] }}" alt="{{ $item->full_name }}"></div>
-                                        </div>
-                                        <div class="block-info">
-                                            <span class="name">{{ $item->full_name }}</span>
-                                            <div class="categories text-center">
-                                                @foreach($item->InfluncerCategories()->pluck('name')->toArray() as $cat)
-                                                <span class="desc badge bg-info mt-1">{{$cat}}</span>
-                                                @endforeach
-                                            </div>
-                                        
-                                        </div>
-                                        <div class="block-counts w-100 py-2 row">
-                                            <div class="followers text-center col-6 mb-1">
-                                                <div class="count-box">
-                                                    <span class="numbers">435.6M</span>
-                                                    <span>Followers</span>
-                                                </div>
-                                            </div>
-                                            <div class="engagement text-center col-6 mb-1">
-                                                <div class="count-box">
-                                                    <span class="numbers">7.7M</span>
-                                                    <span>Engagement</span>
-                                                </div>
-                                            </div>
-                                            <div class="engagement text-center col-6 mb-1">
-                                                <div class="count-box">
-                                                    <span class="numbers">7.7M</span>
-                                                    <span>ROAS</span>
-                                                </div>
-                                            </div>
-                                            <div class="engagement text-center col-6 mb-1">
-                                                <div class="count-box">
-                                                    <span class="numbers">7.7M</span>
-                                                    <span>AOAF</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="block-add w-100">
-                                            <a href="{{ route('dashboard.influncers.edit',$item->id) }}" class="btn">View <i class="bx bx-edit"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            @endforeach
-                        </div>
-                        <div class="list-tems" style="display: none">
-                            <table class="table zero-configuration table-influencers col-12" >
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Name</th>
-                                        <th>Country</th>
-                                        <th>Followers</th>
-                                        <th>Engagement</th>
-                                        <th>AOAF</th>
-                                        <th>ROAS</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($data as $item)
-                                            <tr>
-                                                <td><img src="{{ $item->users->image['url'] }}" alt="{{ $item->full_name }}"></td>
-                                                <td>{{ $item->full_name  }}</td>
-                                                <td><div class="d-flex justify-content-center align-items-center"><div class="contry-name">{{$item->countries->name}}</div> <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->country_code) }}.png" alt="{{$item->countries->name}}"></div></div></td>
-                                                <td>100,000</td>
-                                                <td>87%</td>
-                                                <td>77%</td>
-                                                <td>55,000</td>
-                                                <td>
-                                                    <a class="btn btn-secondary" href="{{ route('dashboard.influncers.edit',$item->id) }}">
-                                                        <i class="bx bx-show"></i>
-                                                    </a>    
-                                                </td>
-                                            </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                    </div>
-                    <div class="mt-1 pagination-wrapper">
-                        {{ $data->links('pagination::bootstrap-5') }}
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -210,7 +211,7 @@
     var options = {
           series: [{
             name: "Influncers",
-            data: {{json_encode($influncersData)}}
+            data: {{json_encode($influencerData)}}
         }],
           chart: {
           height: 350,
@@ -279,6 +280,15 @@
 
         var adsChart = new ApexCharts(document.querySelector("#ads-chart"), options);
         adsChart.render();
+
+        $('.view-type a').on('click',function(e){
+            e.preventDefault();
+            let item = $(this).attr('data-item');
+            $('.view-type a').removeClass('active');
+            $(this).addClass('active');
+            $('.'+item).show().siblings().hide();
+            setCookie('data-item',item,3600);
+        });
 </script>
 
 @endsection

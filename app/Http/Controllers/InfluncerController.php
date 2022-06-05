@@ -10,29 +10,30 @@ use Carbon\Carbon;
 
 class InfluncerController extends Controller
 {
-    public function index($status = null)
+    public function index($status = 'accepted')
     {
-        $data = Influncer::with('users');
-
         $allStatus = ['pending','accepted','rejected','band'];
-        if($status) $data->where('status',$status);
+        
+
+        $status = in_array($status,$allStatus) ? $status : 'active';
+        
+        $data = Influncer::where('status',$status);
         $counter = $data->count();
         $months = [1,2,3,4,5,6,7,8,9,10,11,12];
-        $year = Carbon::now()->year;
-        $influncersData = [];
+        $influencerData = [];
 
         foreach($months as $month)
         {
-            $influncerNumber = Influncer::whereYear('created_at', '=', $year)
+            $influencerNumber = Influncer::whereYear('created_at', '=', Carbon::now()->year)
             ->whereMonth('created_at', '=', $month)
             ->count();
-            array_push($influncersData,$influncerNumber);
+            array_push($influencerData,$influencerNumber);
         }
 
        $data =  $data->orderBy('created_at','desc')->paginate(24);
-       if(!in_array($status,$allStatus)) $status = null;
+       
 
-        return view('dashboard.influncers.index',compact('data','counter','influncersData','status'));
+        return view('dashboard.influncers.index',compact('data','counter','influencerData','status'));
     }
 
     public function edit($id)

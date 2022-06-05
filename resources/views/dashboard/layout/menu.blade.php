@@ -64,26 +64,38 @@
             </li>
             @endcanany
 
-            @canany(['Edit Influncer','Create Influncer','See Influncer','Delete Influncer','Edit Customer','Create Customer','See Customer','Delete Customer'])
+			@canany(['Edit Influncer','Create Influncer','See Influncer','Delete Influncer'])
 
+            <li class="menu-item  {{ strpos($name,'dashboard.influncers') !== false ? 'open active' : '' }}">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-user-pin"></i>
+                <div data-i18n="Invoice">Influencers</div>
+              </a>
+              <ul class="menu-sub">
+                <li class="menu-item {{ strpos($name,'dashboard.influncers') !== false && last(request()->segments()) == 'accepted' ? 'active':''  }}">
+                  <a href="{{ route('dashboard.influncers.index','accepted') }}" class="menu-link"><div data-i18n="List">Accepted Influncers</div></a>
+                </li>
+                <li class="menu-item {{ strpos($name,'dashboard.influncers') !== false && last(request()->segments()) == 'rejected' ? 'active':''  }}">
+                  <a href="{{ route('dashboard.influncers.index','rejected') }}" class="menu-link"><div data-i18n="List">Rejected Influncers</div></a>
+                </li>
+                <li class="menu-item {{ strpos($name,'dashboard.influncers') !== false && last(request()->segments()) == 'pending' ? 'active':''  }}">
+                  <a href="{{ route('dashboard.influncers.index','pending') }}" class="menu-link"><div data-i18n="List">Pending Influncers</div></a>
+                </li>
+                <li class="menu-item {{ strpos($name,'dashboard.influncers') !== false && last(request()->segments()) == 'band' ? 'active':''  }}">
+                  <a href="{{ route('dashboard.influncers.index','band') }}" class="menu-link"><div data-i18n="List">Band Influncers</div></a>
+                </li>
+              </ul>
+            </li>
+            @endcanany
 
+            @canany(['Edit Customer','Create Customer','See Customer','Delete Customer'])
 
-            <li class="menu-item  {{ ($name == 'dashboard.influncers.index'|| $name == 'dashboard.influncers.create'|| $name == 'dashboard.influncers.edit'||$name == 'dashboard.customers.index'||$name == 'dashboard.customers.edit'||$name == 'dashboard.customers.create') ? 'open active':''  }} ">
+            <li class="menu-item  {{ ($name == 'dashboard.customers.index' || $name == 'dashboard.customers.edit' || $name == 'dashboard.customers.create') ? 'open active':''  }} ">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-user-pin"></i>
                 <div data-i18n="Invoice">App Users</div>
               </a>
               <ul class="menu-sub">
-               
-                @canany(['Edit Influncer','Create Influncer','See Influncer','Delete Influncer'])
-                <li class="menu-item
-                {{ ($name == 'dashboard.influncers.index'|| $name == 'dashboard.influncers.create'|| $name == 'dashboard.influncers.edit') ? 'active':''  }}
-                ">
-                  <a href="{{ route('dashboard.influncers.index') }}" class="menu-link">
-                    <div data-i18n="List">Influncers</div>
-                  </a>
-                </li>
-                @endcanany
                 @canany(['Edit Customer','Create Customer','See Customer','Delete Customer'])
                 <li class="menu-item
                 {{ ($name == 'dashboard.customers.index'|| $name == 'dashboard.customers.create'|| $name == 'dashboard.customers.edit'|| $name == 'dashboard.customers.showAds')  ? 'active':''  }}

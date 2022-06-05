@@ -192,47 +192,47 @@ const Toast = Swal.mixin({
             timerProgressBar: true,
            
         })
-    var socket = io.connect('{{env("SOCKET_URL")}}',{transports: ['websocket'],upgrade: false});
-    socket.on('connect', function (err) {
-        console.log('connected');
-    });
+    // var socket = io.connect('{{env("SOCKET_URL")}}',{transports: ['websocket'],upgrade: false});
+    // socket.on('connect', function (err) {
+    //     console.log('connected');
+    // });
 
-    socket.on('disconnect',function(res){
-        console.log('disconnect');
-    });
+    // socket.on('disconnect',function(res){
+    //     console.log('disconnect');
+    // });
 
-    socket.on('error', function (err) {
-        console.log('error',err);
-    });
+    // socket.on('error', function (err) {
+    //     console.log('error',err);
+    // });
 
-    @if ($role == 'superAdmin' || $role == 'Contracts Manager')
+    // @if ($role == 'superAdmin' || $role == 'Contracts Manager')
 
-        @if($role == 'superAdmin')
-        socket.on('super_admin_notification', (data) => {
-            console.log('super admin notification',data);
-            incress_notification(data)
+    //     @if($role == 'superAdmin')
+    //     socket.on('super_admin_notification', (data) => {
+    //         console.log('super admin notification',data);
+    //         incress_notification(data)
 
-        });
-        socket.on('contract_manager_notification', (data) => {
-            console.log('contract manager notification');
-            incress_notification(data)
+    //     });
+    //     socket.on('contract_manager_notification', (data) => {
+    //         console.log('contract manager notification');
+    //         incress_notification(data)
 
-        });
-        socket.on('supportMessages',(data)=>{
-            console.log('support message: ',data);
-            $('#message_counter').empty();
-            $('#message_counter').append(data);
-        })
-        @else
-        socket.on('contract_manager_notification', (data) => {
-            console.log('contract manager notification');
-            incress_notification(data)
+    //     });
+    //     socket.on('supportMessages',(data)=>{
+    //         console.log('support message: ',data);
+    //         $('#message_counter').empty();
+    //         $('#message_counter').append(data);
+    //     })
+    //     @else
+    //     socket.on('contract_manager_notification', (data) => {
+    //         console.log('contract manager notification');
+    //         incress_notification(data)
 
-        });
+    //     });
 
 
 
-        @endif
+    //     @endif
 
 
         function incress_notification(data)
