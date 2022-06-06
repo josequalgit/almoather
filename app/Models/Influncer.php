@@ -138,7 +138,6 @@ class Influncer extends Model implements HasMedia
         $medias = [];
         if(count($mediaItems) > 0){
             foreach($mediaItems as $item){
-
                 $medias[] = [
                     'id' => $item->id,
                     'url' => $item->getFullUrl(),

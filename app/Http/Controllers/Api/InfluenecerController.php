@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\InfluncerCategory;
 use Carbon\Carbon;
 use Auth;
+use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
+use FFMpeg\Filters\Frame\FrameFilters;
 
 class InfluenecerController extends Controller
 {
@@ -101,12 +103,17 @@ class InfluenecerController extends Controller
             ],400);
         }
 
-        $influencer->addMedia($request->file('file'))->toMediaCollection('gallery');
-        
+        $item = $influencer->addMedia($request->file('file'))->toMediaCollection('gallery');
+
+        if(explode('/',$item->mime_type)[0] == 'video'){
+            FFMpeg::fromDisk('custom')->open($item->getPath())->getFrameFromSeconds(5)->export()->addFilter(function (FrameFilters $filters) {
+                $filters->custom('scale=320:180');
+            })->toDisk('local')->save('public/'.$item->id.'/thumpnail.png');
+        }
         return response()->json([
             'msg'       => 'Media Added Successfully',
             'data'      => $influencer->gallery,
-            'status'    => false,
+            'status'    => true,
         ],200);
     }
 
@@ -119,11 +126,11 @@ class InfluenecerController extends Controller
                 'status'    => false,
             ],400);
         }
-                
+
         return response()->json([
-            'msg'       => 'Media Added Successfully',
+            'msg'       => 'Media returned Successfully',
             'data'      => $influencer->gallery,
-            'status'    => false,
+            'status'    => true,
         ],200);
 
 
