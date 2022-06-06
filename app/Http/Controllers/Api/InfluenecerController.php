@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\InfluncerCategory;
 use Carbon\Carbon;
 use Auth;
+use DB;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use FFMpeg\Filters\Frame\FrameFilters;
 
@@ -140,6 +141,23 @@ class InfluenecerController extends Controller
 
 
 
+    }
+
+    function deleteGalleryMedia($id){
+        $media = DB::table('media')->where('id',$id)->first();
+        if(!$media)return response()->json([
+            'err'=>'file not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $model_type = $media->model_type;
+        $model = $model_type::find($media->model_id);
+        $model->deleteMedia($media->id);
+
+        return response()->json([
+            'msg'       => 'Media deleted Successfully',
+            'status'    => true,
+        ],200);
     }
 
    

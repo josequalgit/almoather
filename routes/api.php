@@ -177,6 +177,7 @@ Route::group(['prefix'=>'auth'],function(){
         Route::controller(InfluenecerController::class)->prefix('influencers')->group(function(){
             Route::get('/get-medias','getMedias');
             Route::post('/upload-media','uploadMedia');
+            Route::post('/delete-media/{id}','deleteGalleryMedia');
         });
 
         #GET NOTIFICATION
