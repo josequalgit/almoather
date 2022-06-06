@@ -93,19 +93,10 @@ class Ad extends Model implements HasMedia
         return $this->belongsTo(Category::class,'category_id');
     }
 
-    // public function contacts()
-    // {
-    //     return $this->hasOne(Contract::class,'ad_id');
-    // }
     public function contacts()
     {
         return $this->hasOne(CampaignContract::class,'ad_id');
     }
-
-    // public function campaignContract()
-    // {
-    //     return $this->hasOne(CampaignContract::class,'ad_id');
-    // }
 
     public function customerAdRateings()
     {

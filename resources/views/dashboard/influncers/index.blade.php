@@ -13,7 +13,6 @@
                         <p class="mb-0">{{ ucwords($status) }} Influencer</p>   
                         <small class="text-muted mb-0">{{ $counter}} Influncers Found</small>
                     </div>
-                   
                     
                     <div class="section-right">
                         <ul class="view-type d-flex list-unstyled">

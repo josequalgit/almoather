@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('ads', function (Blueprint $table) {
             $table->id();
-            $table->enum('type',['service','product']);
+            $table->enum('type',['service','product'])->nullable();
             $table->enum('ad_type',['onsite','online']);
             $table->enum('expense_type',['none','pve','pvn'])->default('none');
             $table->string('store');

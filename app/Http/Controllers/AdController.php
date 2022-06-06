@@ -31,15 +31,16 @@ class AdController extends Controller
     use SendNotification;
     public function index($status = null)
     {
-       
-        $data = Ad::where('status', $status)->orderBy('created_at', 'asc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
-        $takeData = Ad::where('status','pending')->take(8)->get();
-        $counter = Ad::where('status', $status)->count();
         if (!$status) {
             $data = Ad::orderBy('created_at', 'desc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
             $counter = Ad::count();
+        }else{
+            $data = Ad::where('status', $status)->orderBy('created_at', 'asc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
+            $counter = Ad::where('status', $status)->count();
         }
-        return view('dashboard.ads.index', compact('data', 'counter','takeData'));
+
+
+        return view('dashboard.ads.index', compact('data', 'counter'));
     }
 
     public function edit($id, $editable = null)
@@ -97,9 +98,9 @@ class AdController extends Controller
                 "title" => "Ads " . $ad->store . " Accepted",
                 "body" => $msg,
                 "type" => 'Ad',
-                'target_id' =>$ad->id            
+                'target_id' =>$ad->id
             ];
-    
+
 
             activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
             $this->sendNotifications($tokens,$data);
@@ -110,7 +111,7 @@ class AdController extends Controller
                 'id'=>$ad->id ,
                 'type'=>'Ad'
             ];
-    
+
             Notification::send($users, new AddInfluencer($info));
 
             return response()->json([
@@ -133,7 +134,7 @@ class AdController extends Controller
 
 
         /** SAVE THE DATA */
-       
+
 
         // STEP 1 - GET THE PROPERTY CATEGORIES
         $category = Category::find($request->category_id)->excludeCategories;
@@ -148,7 +149,7 @@ class AdController extends Controller
         Alert::toast('Add was updated', 'success');
 
 
-       
+
 
         /** END WAY */
         if (!$ad->campaignGoals->profitable) {
@@ -289,7 +290,7 @@ class AdController extends Controller
         $allBigInfluencer = $allBigInfluencer->get();
 
         foreach ($allBigInfluencer as $key => $influencer) {
-           
+
             $getLastMonthAds = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->sum('af');
             $getLastMonthAdsCount = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->count();
 
@@ -324,7 +325,7 @@ class AdController extends Controller
             }
         }
 
-        
+
         /** MERGE THE TOW THE BIG AND THE SMALL INFLUENCER */
         return ['chosenInfluencer' => $chosenSubscribers,'notChosenInfluencer' => $notChosenInfluencer];
     }

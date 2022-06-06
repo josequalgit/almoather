@@ -886,4 +886,24 @@ table.zero-configuration .flag img {
     display: flex;
     justify-content: space-between;
     padding: 10px 15px;
+    color: #000;
+}
+
+.campaign-items .count-box .numbers{
+    font-weight: bold;
+    color: #000;
+}
+
+.campaign-status{
+    border-radius: 15px;
+    min-width: 150px;
+    font-size: 14px;
+    padding: 10px;
+}
+
+.campaign-date{
+    color: #888;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 5px;
 }
