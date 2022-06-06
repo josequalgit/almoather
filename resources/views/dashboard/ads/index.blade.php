@@ -355,7 +355,7 @@ $para = $checkStatus ? request()->route()->parameters['status'] : null;
                                                                 <i class="bx bx-book-content"></i>
                                                                </a> 
                                                            @endif
-                                                         
+
                                                         </td>
                                                     </tr>
                                             @endforeach
