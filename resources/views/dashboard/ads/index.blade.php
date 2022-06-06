@@ -25,9 +25,9 @@
                     <hr class="w-100">
                 </div>
                 <div class="card-body campaign-items">
-                    <div class="row grid-items"  xxstyle="{{ !isset($_COOKIE['data-item']) || $_COOKIE['data-item'] == 'grid-items' ? '' : 'display: none'}}">
+                    <div class="row grid-items" style="{{ !isset($_COOKIE['data-item']) || $_COOKIE['data-item'] == 'grid-items' ? '' : 'display: none'}}">
                         @foreach ($data as $item)
-                        <div class="col-md-4 col-xl-4">
+                        <div class="col-md-4 col-xl-3">
                             <div class="item-wrapper">
                                 <div class="list-item profile-block">
                                     <div class="block-top">
@@ -316,6 +316,15 @@
             }
         });
     }
+
+    $('.view-type a').on('click',function(e){
+        e.preventDefault();
+        let item = $(this).attr('data-item');
+        $('.view-type a').removeClass('active');
+        $(this).addClass('active');
+        $('.'+item).show().siblings().hide();
+        setCookie('data-item',item,3600);
+    });
 </script>
 
 @endsection
