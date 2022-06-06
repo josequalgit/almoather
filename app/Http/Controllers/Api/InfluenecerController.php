@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\InfluncerCategory;
 use Carbon\Carbon;
+use Auth;
 
 class InfluenecerController extends Controller
 {
@@ -86,6 +87,47 @@ class InfluenecerController extends Controller
 
 
         return $data;
+    }
+
+    function uploadMedia(Request $request){
+        $validate = $this->validate($request, [
+            'file' => 'required|mimes:jpeg,png,jpg,svg,mp4,ogx,oga,ogv,ogg,webm'
+        ]);
+        $influencer = Auth::guard('api')->user()->influncers;
+        if(!$influencer){
+            return response()->json([
+                'msg'       =>'You don\'t have permission to add media',
+                'status'    => false,
+            ],400);
+        }
+
+        $influencer->addMedia($request->file('file'))->toMediaCollection('gallery');
+        
+        return response()->json([
+            'msg'       => 'Media Added Successfully',
+            'data'      => $influencer->gallery,
+            'status'    => false,
+        ],200);
+    }
+
+    function getMedias(Request $request){
+        
+        $influencer = Auth::guard('api')->user()->influncers;
+        if(!$influencer){
+            return response()->json([
+                'msg'       =>'You don\'t have permission to add media',
+                'status'    => false,
+            ],400);
+        }
+                
+        return response()->json([
+            'msg'       => 'Media Added Successfully',
+            'data'      => $influencer->gallery,
+            'status'    => false,
+        ],200);
+
+
+
     }
 
    

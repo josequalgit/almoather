@@ -62,11 +62,10 @@ class Influncer extends Model implements HasMedia
     ];
 
     protected $append = [
-        'video',
+        'gallery',
         'verify',
         'commercialFiles',
         'taxFiles',
-        'snapVideos',
         'full_name'
     ];
 
@@ -133,38 +132,26 @@ class Influncer extends Model implements HasMedia
         return $this->hasMany(AdsInfluencerMatch::class,'influencer_id');
     }
 
-    public function getVideoAttribute(Type $var = null)
+    public function getGalleryAttribute(Type $var = null)
     {
-        $mediaItems = $this->getMedia('videos');
-        $publicFullUrl = [];
-        if(count($mediaItems) > 0) $publicFullUrl = $mediaItems->getFullUrl();
-        return $publicFullUrl;
+        $mediaItems = $this->getMedia('gallery');
+        $medias = [];
+        if(count($mediaItems) > 0){
+            foreach($mediaItems as $item){
+
+                $medias[] = [
+                    'id' => $item->id,
+                    'url' => $item->getFullUrl(),
+                    'mime_type' => explode('/',$item->mime_type)[0]
+                ];
+            }
+        } 
+        return $medias;
     }
     public function getVerifyAttribute(Type $var = null)
     {
        
         return $this->users->email_verify_at ? true : false;
-    }
-    
-    public function getSnapVideosAttribute(Type $var = null)
-    {
-       
-        $mediaItems = $this->getMedia('snap_video');
-        $publicFullUrl = null;
-        if(count($mediaItems) > 0)
-        {
-		
-                $publicFullUrl = (object)[
-                    'id'=>$mediaItems[0]->id,
-                    'url'=>$mediaItems[0]->getFullUrl()
-                ];
-				// $publicFullUrl = $item->getFullUrl();
-			
-			
-           
-        }
-        return $publicFullUrl;
-
     }
 
     public function checkIfAccepted($ad_id)
