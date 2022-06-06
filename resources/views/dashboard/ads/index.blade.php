@@ -2,183 +2,11 @@
 
 @section('content')
 
-<style>
-    .user-dashboard-info-box .candidates-list .thumb {
-    margin-right: 20px;
-}
-.user-dashboard-info-box .candidates-list .thumb img {
-    width: 80px;
-    height: 80px;
-    -o-object-fit: cover;
-    object-fit: cover;
-    overflow: hidden;
-    border-radius: 50%;
-}
-
-.user-dashboard-info-box .title {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    padding: 30px 0;
-}
-
-.user-dashboard-info-box .candidates-list td {
-    vertical-align: middle;
-}
-
-.user-dashboard-info-box td li {
-    margin: 0 4px;
-}
-
-.user-dashboard-info-box .table thead th {
-    border-bottom: none;
-}
-
-.table.manage-candidates-top th {
-    border: 0;
-}
-
-.user-dashboard-info-box .candidate-list-favourite-time .candidate-list-favourite {
-    margin-bottom: 10px;
-}
-
-.table.manage-candidates-top {
-    /* min-width: 650px; */
-}
-
-.user-dashboard-info-box .candidate-list-details ul {
-    color: #969696;
-}
-
-/* Candidate List */
-.candidate-list {
-    background: #ffffff;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    border-bottom: 1px solid #eeeeee;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    padding: 20px;
-    -webkit-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
-}
-.candidate-list:hover {
-    -webkit-box-shadow: 0px 0px 34px 4px rgba(33, 37, 41, 0.06);
-    box-shadow: 0px 0px 34px 4px rgba(33, 37, 41, 0.06);
-    position: relative;
-    z-index: 99;
-}
-.candidate-list:hover a.candidate-list-favourite {
-    color: #e74c3c;
-    -webkit-box-shadow: -1px 4px 10px 1px rgba(24, 111, 201, 0.1);
-    box-shadow: -1px 4px 10px 1px rgba(24, 111, 201, 0.1);
-}
-
-.candidate-list .candidate-list-image {
-    margin-right: 25px;
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 80px;
-    flex: 0 0 80px;
-    border: none;
-}
-.candidate-list .candidate-list-image img {
-    width: 80px;
-    height: 80px;
-    -o-object-fit: cover;
-    object-fit: cover;
-}
-
-.candidate-list-title {
-    margin-bottom: 5px;
-}
-
-.candidate-list-details ul {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    margin-bottom: 0px;
-}
-.candidate-list-details ul li {
-    margin: 5px 10px 5px 0px;
-    font-size: 13px;
-}
-
-.candidate-list .candidate-list-favourite-time {
-    margin-left: auto;
-    text-align: center;
-    font-size: 13px;
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 90px;
-    flex: 0 0 90px;
-}
-.candidate-list .candidate-list-favourite-time span {
-    display: block;
-    margin: 0 auto;
-}
-.candidate-list .candidate-list-favourite-time .candidate-list-favourite {
-    display: inline-block;
-    position: relative;
-    height: 40px;
-    width: 40px;
-    line-height: 40px;
-    border: 1px solid #eeeeee;
-    border-radius: 100%;
-    text-align: center;
-    -webkit-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
-    margin-bottom: 20px;
-    font-size: 16px;
-    color: #646f79;
-}
-.candidate-list .candidate-list-favourite-time .candidate-list-favourite:hover {
-    background: #ffffff;
-    color: #e74c3c;
-}
-
-.candidate-banner .candidate-list:hover {
-    position: inherit;
-    -webkit-box-shadow: inherit;
-    box-shadow: inherit;
-    z-index: inherit;
-}
-
-.bg-white {
-    background-color: #ffffff !important;
-}
-.p-4 {
-    padding: 1.5rem!important;
-}
-.mb-0, .my-0 {
-    margin-bottom: 0!important;
-}
-.shadow-sm {
-    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
-}
-
-.user-dashboard-info-box .candidates-list .thumb {
-    margin-right: 20px;
-}
-
-</style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
-@php
-$checkStatus = array_key_exists("status", request()->route()->parameters);
-$route = Route::current();
-$name = $route->getName();
-$para = $checkStatus ? request()->route()->parameters['status'] : null;
-@endphp
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
    
-        <div class="content-body mt-5">
+        <div class="content-body">
 
             <div class="card">
                 <div class="card-header pb-0">
@@ -187,7 +15,6 @@ $para = $checkStatus ? request()->route()->parameters['status'] : null;
                         <small class="text-muted mb-0">{{ $counter}} Ads Found</small>
                     </div>
                    
-                    
                     <div class="section-right">
                         <ul class="view-type d-flex list-unstyled">
                             <li><div class="search-item"><input type="search" class="form-control" value="" placeholder="Search"><i class="bx bx-search"></i></div></li>
@@ -200,7 +27,7 @@ $para = $checkStatus ? request()->route()->parameters['status'] : null;
                 <div class="card-body campaign-items">
                     <div class="row grid-items"  xxstyle="{{ !isset($_COOKIE['data-item']) || $_COOKIE['data-item'] == 'grid-items' ? '' : 'display: none'}}">
                         @foreach ($data as $item)
-                        <div class="col-md-4 col-xl-3">
+                        <div class="col-md-4 col-xl-4">
                             <div class="item-wrapper">
                                 <div class="list-item profile-block">
                                     <div class="block-top">
@@ -209,15 +36,21 @@ $para = $checkStatus ? request()->route()->parameters['status'] : null;
                                     </div>
                                     <div class="block-info">
                                         <span class="name">{{ $item->store }}</span>
+                                        <small class="campaign-date">{{ $item->created_at->diffForHumans() }}</small>
+                                        @if($item->categories)
                                         <div class="categories text-center">
-                                        
+                                            @foreach($item->categories()->pluck('name')->toArray() as $cat)
+                                            <span class="desc badge bg-info mt-1">{{$cat}}</span>
+                                            @endforeach
                                         </div>
-                                    
+                                        @else 
+                                        <span class="desc badge bg-info mt-1">No category choosen</span>
+                                        @endif
                                     </div>
-                                    <div class="block-counts w-100 py-2 row">
+                                    <div class="block-counts w-100 pt-2 row">
                                         <div class="followers text-center col-12 mb-1">
                                             <div class="count-box">
-                                                <span>Budget</span>
+                                                <span><i class="fas fa-dollar-sign"></i> Budget</span>
                                                 <span class="numbers">{{ number_format($item->budget); }}</span>
                                                 
                                             </div>
@@ -225,31 +58,28 @@ $para = $checkStatus ? request()->route()->parameters['status'] : null;
 
                                         <div class="followers text-center col-12 mb-1">
                                             <div class="count-box">
-                                                <span>Goal</span>
+                                                <span><i class="fas fa-bullseye"></i> Goal</span>
                                                 <span class="numbers">{{ $item->campaignGoals->title; }}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="followers text-center col-12 mb-1">
+                                            <div class="count-box">
+                                                <span><i class="fas fa-audio-description"></i> Type</span>
+                                                <span class="numbers">{{ $item->type ? $item->type : 'Not selected yet' }}</span>
                                                 
                                             </div>
                                         </div>
 
                                         <div class="followers text-center col-12 mb-1">
                                             <div class="count-box">
-                                                <span>Category</span>
-                                                <span class="numbers">{{ '' }}</span>
-                                                
+                                                <span><i class="fas fa-plane-slash"></i> Campaign Type</span>
+                                                <span class="numbers">{{ $item->ad_type }}</span>
                                             </div>
-                                        </div>
-
-                                        <div class="followers text-center col-12 mb-1">
-                                            <div class="count-box">
-                                                <span>Type</span>
-                                                <span class="numbers">{{ '' }}</span>
-                                                
-                                            </div>
-                                        </div>
-                                        
+                                        </div>                                        
                                     </div>
-                                    <div class="block-add w-100">
-                                        <a href="{{ route('dashboard.influncers.edit',$item->id) }}" class="btn">View <i class="bx bx-edit"></i></a>
+                                    <div class="block-add w-100 text-center">
+                                        <span class="campaign-status badge bg-warning my-1">{{ $item->status }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -298,144 +128,6 @@ $para = $checkStatus ? request()->route()->parameters['status'] : null;
                 </div>
             </div>
             <!-- Basic tabs start -->
-            {{-- <section id="basic-datatable">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">ads</h4>
-                            </div>
-                            <div class="card-body card-dashboard">
-                                @can('See Ads')
-                                <p class="card-text">
-                                    There is {{ $counter }} ad/'s
-                                </p>
-                                @endcan
-                                <div class="table-responsive">
-                                    @can('See Ads')
-                                    <table class="table zero-configuration">
-                                        <thead>
-                                            <tr>
-                                                <th>Type</th>
-                                                <th>Store</th>
-                                                <th>Budget</th>
-                                                <th>On Site</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($data as $item)
-                                                    <tr>
-                                                        <td style="text-transform: uppercase;">{{ $item->type  }}</td>
-                                                        <td>{{ $item->store }}</td>
-                                                        <td>{{ $item->budget }}</td>
-                                                        <td>{{ $item->onsite ? 'Yes':'No' }}</td>
-                                                        <td style="text-transform: uppercase;">{{ $item->status }}</td>
-                                                        <td>
-                                                           @can('Edit Ads')
-                                                            <a class="btn btn-secondary" href="{{ route('dashboard.ads.edit',$item->id) }}">
-                                                                <i class="bx bx-show"></i>
-                                                            </a>                                                               
-                                                            <button {{$item->status == 'pending'?'disabled':''}} onclick="seeMatched('{{$item->id}}')" class="btn btn-secondary" href="{{ route('dashboard.ads.edit',$item->id) }}">
-                                                                <i class="bx bx-user"></i>
-                                                            </button>                                                               
-                                                           @endcan
-                                                        
-                                                           @if ($item->status == 'pending')
-                                                           <button disabled  class="btn btn-secondary" href="{{ route('dashboard.ads.editContract',$item->id) }}">
-                                                            <i class="bx bx-book-content"></i>
-                                                           </button> 
-                                                           @elseif($item->status == 'fullpayment'||$item->status == 'progress'||$item->status == 'influncer_complete'||$item->status == 'complete'||$item->status == 'incomplete'||$item->status == 'rejected')
-                                                           <button  onclick="openModalSeeContract('{{ $item->contacts?$item->contacts->content:'No data avalibale' }}')" class="btn btn-secondary">
-                                                            <i class="bx bx-book-content"></i>
-                                                           </button> 
-                                                               @else
-                                                               <a  class="btn btn-secondary" href="{{ route('dashboard.ads.editContract',$item->id) }}">
-                                                                <i class="bx bx-book-content"></i>
-                                                               </a> 
-                                                           @endif
-                                                         
-                                                        </td>
-                                                    </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                    @endcan
-                                </div>
-                            </div>
-                            @can('See Ads')
-                            <div class="p-1">
-                                {{ $data->links('pagination::bootstrap-5') }}
-                            </div>
-                            @endcan
-
-                        </div>
-                    </div>
-                </div>
-            </section> --}}
-
-            <div class="card p-2">
-
-                <div class="row">
-                    @foreach ($data as $item)
-                        <div class="col-3 mb-3">
-                            <div class="item-wrapper">
-                                <div class="list-item profile-block">
-                                    <div class="block-top">
-                                        <div class="flag"><img src="https://ipdata.co/flags/{{ $item->countries->code }}.png" alt="asdasdasd"></div>
-                                        <div class="back-grey"></div>
-                                        {{-- @php
-                                            dd($item->image);
-                                        @endphp --}}
-                                        <div class="block-image"><img src="{{$item->image?$item->image['url']:null }}" alt="asd"></div>
-                                    </div>
-                                    <div class="block-info">
-                                        <span class="name">{{ $item->store }}</span>
-                                        <div class="categories text-center">
-                                            {{-- @foreach($item->InfluncerCategories()->pluck('name')->toArray() as $cat)
-                                            <span class="desc badge bg-info mt-1">{{$cat}}</span>
-                                            @endforeach --}}
-                                        </div>
-                                    
-                                    </div>
-                                    <div class="block-counts w-100 py-2 row">
-                                        <div class="followers text-center col-6 mb-1">
-                                            <div class="count-box">
-                                                <span class="numbers">{{ $item->budget }}</span>
-                                                <span>Budget</span>
-                                            </div>
-                                        </div>
-                                        <div class="engagement text-center col-6 mb-1">
-                                            <div class="count-box">
-                                                <span class="numbers">{{ count($item->matches) }}</span>
-                                                <span>Matches</span>
-                                            </div>
-                                        </div>
-                                        <div class="engagement text-center col-6 mb-1">
-                                            <div class="count-box">
-                                                <span class="numbers">{{ $item->campaignGoals->title }}</span>
-                                                <span>Goal</span>
-                                            </div>
-                                        </div>
-                                        <div class="engagement text-center col-6 mb-1">
-                                            <div class="count-box">
-                                                <span class="numbers">{{ $item->campaignGoals->profitable?'Yes':'No' }}</span>
-                                                <span>Profitable</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div  class="rounded text-center btn btn-{{ $item->status == 'rejected'?'danger':'success' }} mb-2 ">
-                                        <a href="{{ route('dashboard.influncers.edit',2) }}" class="text-uppercase text-white font-weight-bold h6">{{$item->status}}</i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-
-           
         </div>
     </div>
 

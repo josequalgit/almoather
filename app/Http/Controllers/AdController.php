@@ -31,13 +31,15 @@ class AdController extends Controller
     use SendNotification;
     public function index($status = null)
     {
-       
-        $data = Ad::where('status', $status)->orderBy('created_at', 'asc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
-        $counter = Ad::where('status', $status)->count();
         if (!$status) {
             $data = Ad::orderBy('created_at', 'desc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
             $counter = Ad::count();
+        }else{
+            $data = Ad::where('status', $status)->orderBy('created_at', 'asc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
+            $counter = Ad::where('status', $status)->count();
         }
+        
+        
         return view('dashboard.ads.index', compact('data', 'counter'));
     }
 

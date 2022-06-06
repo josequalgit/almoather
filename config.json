@@ -1,16 +1,16 @@
 {
     "server": {
-        "origin": "192.168.1.103",
+        "origin": "127.0.0.1",
         "port": 3000
     },
     "db": {
         "host": "localhost",
         "user": "root",
-        "password": "",
-        "database": "moather"
+        "password": "root",
+        "database": "almuaather"
     },
     "redis": {
-        "url": "192.168.1.103",
+        "url": "127.0.0.1",
         "port": 6379
     },
     "environment": "http"
