@@ -192,15 +192,16 @@ $para = $checkStatus ? request()->route()->parameters['status'] : null;
                         <ul class="view-type d-flex list-unstyled">
                             <li><div class="search-item"><input type="search" class="form-control" value="" placeholder="Search"><i class="bx bx-search"></i></div></li>
                             <li class=""><a href="#" class="grid {{ !isset($_COOKIE['data-item']) || $_COOKIE['data-item'] == 'grid-items' ? 'active' : ''}}" data-item="grid-items"><i class="bx bx-grid-alt"></i></a></li>
-                            <li class=""><a href="#" class="list {{ isset($_COOKIE['data-item']) && $_COOKIE['data-item'] == 'list-items' ? 'active' : ''}}" data-item="list-items"><i class="bx bx-list-ul"></i></a></li>
+                            {{-- <li class=""><a href="#" class="list {{ isset($_COOKIE['data-item']) && $_COOKIE['data-item'] == 'list-items' ? 'active' : ''}}" data-item="list-items"><i class="bx bx-list-ul"></i></a></li> --}}
                         </ul>
                     </div>
                     <hr class="w-100">
                 </div>
                 <div class="card-body campaign-items">
+                   
                     <div class="row grid-items"  xxstyle="{{ !isset($_COOKIE['data-item']) || $_COOKIE['data-item'] == 'grid-items' ? '' : 'display: none'}}">
-                        @foreach ($data as $item)
-                        <div class="col-md-4 col-xl-3">
+                        @foreach ($takeData as $item)
+                        <div class="mb-2 col-md-4 col-xl-3">
                             <div class="item-wrapper">
                                 <div class="list-item profile-block">
                                     <div class="block-top">
@@ -257,7 +258,7 @@ $para = $checkStatus ? request()->route()->parameters['status'] : null;
                         
                         @endforeach
                     </div>
-                    <div class="row list-items" style="{{ isset($_COOKIE['data-item']) && $_COOKIE['data-item'] == 'list-items' ? '' : 'display: none'}}">
+                    <div class="row list-items mt-2" style="{{ isset($_COOKIE['data-item']) && $_COOKIE['data-item'] == 'list-items' ? '' : 'display: none'}}">
                         <table class="table zero-configuration table-influencers col-12" >
                             <thead>
                                 <tr>
@@ -272,22 +273,22 @@ $para = $checkStatus ? request()->route()->parameters['status'] : null;
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- @foreach ($data as $item)
+                                @foreach ($data as $item)
                                         <tr>
-                                            <td><img src="{{ $item->users->image['url'] }}" alt="{{ $item->full_name }}"></td>
-                                            <td>{{ $item->full_name  }}</td>
+                                            <td><img src="{{ $item->customers?$item->customers->users->image['url']:null }}" alt="{{ $item->customers->full_name }}"></td>
+                                            <td>{{ $item->customers->full_name  }}</td>
                                             <td><div class="d-flex justify-content-center align-items-center"><div class="contry-name">{{$item->countries->name}}</div> <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->country_code) }}.png" alt="{{$item->countries->name}}"></div></div></td>
                                             <td>100,000</td>
                                             <td>87%</td>
                                             <td>77%</td>
                                             <td>55,000</td>
                                             <td>
-                                                <a class="btn btn-secondary" href="{{ route('dashboard.influncers.edit',$item->id) }}">
+                                                <a class="btn btn-secondary" href="{{ route('dashboard.ads.edit',$item->id) }}">
                                                     <i class="bx bx-show"></i>
                                                 </a>    
                                             </td>
                                         </tr>
-                                @endforeach --}}
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -297,143 +298,9 @@ $para = $checkStatus ? request()->route()->parameters['status'] : null;
                     </div>
                 </div>
             </div>
-            <!-- Basic tabs start -->
-            {{-- <section id="basic-datatable">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">ads</h4>
-                            </div>
-                            <div class="card-body card-dashboard">
-                                @can('See Ads')
-                                <p class="card-text">
-                                    There is {{ $counter }} ad/'s
-                                </p>
-                                @endcan
-                                <div class="table-responsive">
-                                    @can('See Ads')
-                                    <table class="table zero-configuration">
-                                        <thead>
-                                            <tr>
-                                                <th>Type</th>
-                                                <th>Store</th>
-                                                <th>Budget</th>
-                                                <th>On Site</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($data as $item)
-                                                    <tr>
-                                                        <td style="text-transform: uppercase;">{{ $item->type  }}</td>
-                                                        <td>{{ $item->store }}</td>
-                                                        <td>{{ $item->budget }}</td>
-                                                        <td>{{ $item->onsite ? 'Yes':'No' }}</td>
-                                                        <td style="text-transform: uppercase;">{{ $item->status }}</td>
-                                                        <td>
-                                                           @can('Edit Ads')
-                                                            <a class="btn btn-secondary" href="{{ route('dashboard.ads.edit',$item->id) }}">
-                                                                <i class="bx bx-show"></i>
-                                                            </a>                                                               
-                                                            <button {{$item->status == 'pending'?'disabled':''}} onclick="seeMatched('{{$item->id}}')" class="btn btn-secondary" href="{{ route('dashboard.ads.edit',$item->id) }}">
-                                                                <i class="bx bx-user"></i>
-                                                            </button>                                                               
-                                                           @endcan
-                                                        
-                                                           @if ($item->status == 'pending')
-                                                           <button disabled  class="btn btn-secondary" href="{{ route('dashboard.ads.editContract',$item->id) }}">
-                                                            <i class="bx bx-book-content"></i>
-                                                           </button> 
-                                                           @elseif($item->status == 'fullpayment'||$item->status == 'progress'||$item->status == 'influncer_complete'||$item->status == 'complete'||$item->status == 'incomplete'||$item->status == 'rejected')
-                                                           <button  onclick="openModalSeeContract('{{ $item->contacts?$item->contacts->content:'No data avalibale' }}')" class="btn btn-secondary">
-                                                            <i class="bx bx-book-content"></i>
-                                                           </button> 
-                                                               @else
-                                                               <a  class="btn btn-secondary" href="{{ route('dashboard.ads.editContract',$item->id) }}">
-                                                                <i class="bx bx-book-content"></i>
-                                                               </a> 
-                                                           @endif
+         
 
-                                                        </td>
-                                                    </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                    @endcan
-                                </div>
-                            </div>
-                            @can('See Ads')
-                            <div class="p-1">
-                                {{ $data->links('pagination::bootstrap-5') }}
-                            </div>
-                            @endcan
-
-                        </div>
-                    </div>
-                </div>
-            </section> --}}
-
-            <div class="card p-2">
-
-                <div class="row">
-                    @foreach ($data as $item)
-                        <div class="col-3 mb-3">
-                            <div class="item-wrapper">
-                                <div class="list-item profile-block">
-                                    <div class="block-top">
-                                        <div class="flag"><img src="https://ipdata.co/flags/{{ $item->countries->code }}.png" alt="asdasdasd"></div>
-                                        <div class="back-grey"></div>
-                                        {{-- @php
-                                            dd($item->image);
-                                        @endphp --}}
-                                        <div class="block-image"><img src="{{$item->image?$item->image['url']:null }}" alt="asd"></div>
-                                    </div>
-                                    <div class="block-info">
-                                        <span class="name">{{ $item->store }}</span>
-                                        <div class="categories text-center">
-                                            {{-- @foreach($item->InfluncerCategories()->pluck('name')->toArray() as $cat)
-                                            <span class="desc badge bg-info mt-1">{{$cat}}</span>
-                                            @endforeach --}}
-                                        </div>
-                                    
-                                    </div>
-                                    <div class="block-counts w-100 py-2 row">
-                                        <div class="followers text-center col-6 mb-1">
-                                            <div class="count-box">
-                                                <span class="numbers">{{ $item->budget }}</span>
-                                                <span>Budget</span>
-                                            </div>
-                                        </div>
-                                        <div class="engagement text-center col-6 mb-1">
-                                            <div class="count-box">
-                                                <span class="numbers">{{ count($item->matches) }}</span>
-                                                <span>Matches</span>
-                                            </div>
-                                        </div>
-                                        <div class="engagement text-center col-6 mb-1">
-                                            <div class="count-box">
-                                                <span class="numbers">{{ $item->campaignGoals->title }}</span>
-                                                <span>Goal</span>
-                                            </div>
-                                        </div>
-                                        <div class="engagement text-center col-6 mb-1">
-                                            <div class="count-box">
-                                                <span class="numbers">{{ $item->campaignGoals->profitable?'Yes':'No' }}</span>
-                                                <span>Profitable</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div  class="rounded text-center btn btn-{{ $item->status == 'rejected'?'danger':'success' }} mb-2 ">
-                                        <a href="{{ route('dashboard.influncers.edit',2) }}" class="text-uppercase text-white font-weight-bold h6">{{$item->status}}</i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
+           
 
            
         </div>

@@ -33,12 +33,13 @@ class AdController extends Controller
     {
        
         $data = Ad::where('status', $status)->orderBy('created_at', 'asc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
+        $takeData = Ad::where('status','pending')->take(8)->get();
         $counter = Ad::where('status', $status)->count();
         if (!$status) {
             $data = Ad::orderBy('created_at', 'desc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
             $counter = Ad::count();
         }
-        return view('dashboard.ads.index', compact('data', 'counter'));
+        return view('dashboard.ads.index', compact('data', 'counter','takeData'));
     }
 
     public function edit($id, $editable = null)
