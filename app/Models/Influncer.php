@@ -9,6 +9,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
 use App\Models\Contract;
 use App\Models\InfluencerContract;
+use URL;
 
 class Influncer extends Model implements HasMedia
 {
@@ -138,10 +139,19 @@ class Influncer extends Model implements HasMedia
         $medias = [];
         if(count($mediaItems) > 0){
             foreach($mediaItems as $item){
+                $videoThumbnail = '';
+                if(explode('/',$item->mime_type)[0] == 'video'){
+                    if(file_exists(storage_path('app/public/' . $item->id . '/thumbnail.png'))){
+                        $videoThumbnail = URL::to('/storage/' . $item->id . '/thumbnail.png');
+                    }else{
+                        $videoThumbnail = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIbS95_HsNHOxW05lRFaEOx52YxA2aCxP1TXwDCjwyjB8bBb4mqXf3edVSKdB2KvDsHC4&usqp=CAU';
+                    }
+                }
                 $medias[] = [
                     'id' => $item->id,
                     'url' => $item->getFullUrl(),
-                    'mime_type' => explode('/',$item->mime_type)[0]
+                    'mime_type' => explode('/',$item->mime_type)[0],
+                    'video_thumb' => $videoThumbnail
                 ];
             }
         } 

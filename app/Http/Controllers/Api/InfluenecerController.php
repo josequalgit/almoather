@@ -106,9 +106,14 @@ class InfluenecerController extends Controller
         $item = $influencer->addMedia($request->file('file'))->toMediaCollection('gallery');
 
         if(explode('/',$item->mime_type)[0] == 'video'){
-            FFMpeg::fromDisk('custom')->open($item->getPath())->getFrameFromSeconds(5)->export()->addFilter(function (FrameFilters $filters) {
-                $filters->custom('scale=320:180');
-            })->toDisk('local')->save('public/'.$item->id.'/thumpnail.png');
+            try {
+                FFMpeg::fromDisk('custom')->open($item->getPath())->getFrameFromSeconds(5)->export()->addFilter(function (FrameFilters $filters) {
+                    $filters->custom('scale=320:180');
+                })->toDisk('local')->save('public/'.$item->id.'/thumbnail.png');
+
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+            }
         }
         return response()->json([
             'msg'       => 'Media Added Successfully',
