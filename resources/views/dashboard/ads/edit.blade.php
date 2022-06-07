@@ -248,7 +248,7 @@
                                     </td>
                                       <td>
                                         
-                                        @if ($data->status == 'approve')
+                                        @if ($data->status == 'approve'||$data->status == 'fullpayment')
                                         <button {{ $item->influencers->checkIfAccepted($data->id) == 1?'disabled':'' }} type="button" onclick="seeContract('{{$data->contacts->content}}','{{ $item->influencers->id }}')" class="btn btn-secondary">
                                           <i class="bx bx-send "></i>
                                         </button> 
@@ -628,6 +628,7 @@ var steps = $("#wizard-basic").steps({
             startIndex:userCurrentStep,
             onFinishing:function(){
               sendStatusRequest('Confirm');
+              window.location.reload();
             },
             onStepChanging:function(event, currentIndex, nextIndex){
               //console.log('next index: ',nextIndex)
