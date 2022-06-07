@@ -29,7 +29,7 @@
                                                                                           <div class="row">
                                                                                              <div class="col-lg-2 col-md-3 text-center w-100">
                                                                                                   <img class="ad-image" src="{{ $data->customers->users->image['url'] }}" alt="Ahmed ahmed jo">
-                                                                                                  <h3 class="title mt-2">Testing the Payment</h3>
+                                                                                                  <h3 class="title mt-2">{{ $data->customers->full_name }}</h3>
                                                                                               </div>
                                                                                               <div class="col details-content">
                                                                                                   <p>
@@ -59,9 +59,9 @@
                                                                                                       <b class="me-2">goal:</b> <span class="me-2">{{ $data->campaignGoals->title }}</span>
                                                                                                   </div>
                                                                                                   <div class="border-top pt-1 pb-1">
-                                                                                                      <b class="me-2">On:</b> <span class="me-2">
+                                                                                                      <b class="me-2">On: </b> <span class="me-2">
                                                                                                           @foreach ($data->socialMedias as $item) 
-                                                                                                              <li><img class="socialMedia-img" src="{{ $item->image }}" /> {{ $item->name }}</li>
+                                                                                                              <img src="{{ $item->image }}" class="rounded-circle social-media-icon" />
                                                                                                           @endforeach
                                                                                                       </span>
                                                                                                   </div>
@@ -87,7 +87,7 @@
                                                                                                 <div class="col-lg-6 col-md-12 p-2">
                                                                                                     <div class="count-box list">
                                                                                                         <span> <i class="bx bx-user"></i> Influncer:</span>
-                                                                                                        <span class="numbers">{{ count($data->matches) }}</span>
+                                                                                                        <span class="numbers">{{ count($matches) }}</span>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
@@ -262,13 +262,15 @@
                                       
                                       </td>
                                   </tr>
-                          @endforeach
+                                @endforeach
                                             </tbody>
                                         </table>
                                         </div>
                                     </div>
                                 </section>
                             </div>
+                            <button class="btn btn-danger float-right">Reject</button>
+
                         </div>
                     </form>
                 </div>
@@ -626,6 +628,10 @@ var steps = $("#wizard-basic").steps({
             enablePagination: true,
             enableAllSteps: false,
             startIndex:userCurrentStep,
+            onInit:function(){
+            
+              $('.actions').append(`<li class='list-dicration' aria-disabled="false"><button class='btn btn-danger' role="menuitem">Reject</button></li>`)
+            },
             onFinishing:function(){
               sendStatusRequest('Confirm');
               window.location.reload();

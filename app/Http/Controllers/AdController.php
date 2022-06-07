@@ -46,7 +46,7 @@ class AdController extends Controller
     public function edit($id, $editable = null)
     {
         $data = Ad::findOrFail($id);
-        $matches = $data->matches()->where('chosen', 1)->get();
+        $matches = $data->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
         $unMatched = $data->matches()->where('chosen', 0)->get();
         // dd($unMatched);
         $categories = Category::get();

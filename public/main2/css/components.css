@@ -4359,3 +4359,16 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
     border-width: 0.5px;
     border-color: #ededed;
 }
+
+.social-media-icon {
+    width: 25px !important;
+    height: 25px !important;
+}
+
+.list-dicration {
+    direction: none;
+}
+
+ul {
+    list-style-type: none;
+}
