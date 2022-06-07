@@ -69,6 +69,10 @@
                                                                                                       <b class="me-2">Link: <a target="_blank" href="{{ $data->store_link }}">Click Me!</a> </b><span class="me-2">
                                                                                                       </span>
                                                                                                   </div>
+                                                                                                  <div class="border-top pt-1 pb-1">
+                                                                                                      <b class="me-2">Status: {{$data->status}} </b><span class="me-2">
+                                                                                                      </span>
+                                                                                                  </div>
                                                                                               </div>
                                                                                       </div>
                                                                                       <div class="">
@@ -245,8 +249,8 @@
                                       <td>
                                         
                                         @if ($data->status == 'approve')
-                                        <button  {{ $item->influencers->checkIfAccepted($data->id) == 1?'disabled':'' }} type="button" onclick="seeContract('{{$data->contacts->content}}','{{ $item->influencers->id }}')" class="btn btn-secondary mb-2">
-                                          <i class="bx bx-send"></i>
+                                        <button {{ $item->influencers->checkIfAccepted($data->id) == 1?'disabled':'' }} type="button" onclick="seeContract('{{$data->contacts->content}}','{{ $item->influencers->id }}')" class="btn btn-secondary">
+                                          <i class="bx bx-send "></i>
                                         </button> 
                                         @endif
 
@@ -622,6 +626,9 @@ var steps = $("#wizard-basic").steps({
             enablePagination: true,
             enableAllSteps: false,
             startIndex:userCurrentStep,
+            onFinishing:function(){
+              sendStatusRequest('Confirm');
+            },
             onStepChanging:function(event, currentIndex, nextIndex){
               //console.log('next index: ',nextIndex)
               if(nextIndex == 2)
@@ -649,7 +656,7 @@ var steps = $("#wizard-basic").steps({
               
              
               }
-        });
+            });
 
       
 
