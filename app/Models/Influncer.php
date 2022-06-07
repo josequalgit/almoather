@@ -135,7 +135,7 @@ class Influncer extends Model implements HasMedia
 
     public function getGalleryAttribute(Type $var = null)
     {
-        $mediaItems = $this->getMedia('gallery');
+        $mediaItems = $this->getMedia('gallery')->reverse();
         $medias = [];
         if(count($mediaItems) > 0){
             foreach($mediaItems as $item){
