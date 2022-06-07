@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\InfluncerCategory;
+use App\Models\Influncer;
 use Carbon\Carbon;
 use Auth;
 use DB;
@@ -47,6 +48,7 @@ class InfluenecerController extends Controller
             'videos'=>$data->influncers->video,
             'location'=>$data->influncers->nationalities->name,
             'social_media'=>$get_social_media,
+            'gallery' => $data->influncers->gallery
         ];
 
         #RESPONSE
@@ -144,7 +146,7 @@ class InfluenecerController extends Controller
     }
 
     function deleteGalleryMedia($id){
-        $media = DB::table('media')->where('id',$id)->first();
+        $media = DB::table('media')->where('id',$id)->where('model_type','App\Models\Influncer')->first();
         if(!$media)return response()->json([
             'err'=>'file not found',
             'status'=>config('global.NOT_FOUND_STATUS')
