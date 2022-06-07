@@ -269,7 +269,7 @@
                                     </div>
                                 </section>
                             </div>
-                            <button class="btn btn-danger float-right">Reject</button>
+                            {{-- <button class="btn btn-danger float-right">Reject</button> --}}
 
                         </div>
                     </form>

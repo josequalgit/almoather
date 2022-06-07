@@ -4366,9 +4366,5 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 }
 
 .list-dicration {
-    direction: none;
-}
-
-ul {
-    list-style-type: none;
+    list-style: none;
 }
