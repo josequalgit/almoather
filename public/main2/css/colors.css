@@ -3444,13 +3444,14 @@ input:focus ~ .bg-secondary {
 .btn-secondary {
     border-color: #f7c870 !important;
     background-color: #f7c870!important;
-    color: #fff;
+    color: #000;
 }
 
 .btn-secondary:hover,
 .btn-secondary.hover {
     border-color: #f7c870 !important;
     background-color: #f7c870!important;
+    color: #000;
 }
 
 .btn-secondary:hover.glow,
@@ -3462,7 +3463,7 @@ input:focus ~ .bg-secondary {
 .btn-secondary:active,
 .btn-secondary.active {
     background-color: #f7c870!important;
-    color: #fff !important;
+    color: #000 !important;
 }
 
 .btn-secondary.glow {
@@ -3471,7 +3472,7 @@ input:focus ~ .bg-secondary {
 
 .btn-secondary:disabled,
 .btn-secondary.disabled {
-    color: #fff !important;
+    color: #000 !important;
 }
 
 .btn-light-secondary {
@@ -3482,13 +3483,13 @@ input:focus ~ .bg-secondary {
 .btn-light-secondary:hover,
 .btn-light-secondary.hover {
     background-color: #506b8b !important;
-    color: #fff !important;
+    color: #000 !important;
 }
 
 .btn-light-secondary:active,
 .btn-light-secondary.active {
     background-color: #3e536b !important;
-    color: #fff !important;
+    color: #000 !important;
 }
 
 /* Outline buttons */
