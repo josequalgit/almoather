@@ -167,6 +167,8 @@ return [
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider::class,
         willvincent\Rateable\RateableServiceProvider::class,
+      //  ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider::class
+
 
 
 
@@ -184,7 +186,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\NotificationServicePrvoder::class,
-        ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider::class,
+       // ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider::class,
 
 
     ],

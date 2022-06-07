@@ -1,7 +1,7 @@
 @extends('dashboard.layout.index')
 
 @section('content')
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
@@ -19,7 +19,7 @@
                         <ul class="view-type d-flex list-unstyled">
                             <li><div class="search-item"><input type="search" class="form-control" value="" placeholder="Search"><i class="bx bx-search"></i></div></li>
                             <li class=""><a href="#" class="grid {{ !isset($_COOKIE['data-item']) || $_COOKIE['data-item'] == 'grid-items' ? 'active' : ''}}" data-item="grid-items"><i class="bx bx-grid-alt"></i></a></li>
-                            {{-- <li class=""><a href="#" class="list {{ isset($_COOKIE['data-item']) && $_COOKIE['data-item'] == 'list-items' ? 'active' : ''}}" data-item="list-items"><i class="bx bx-list-ul"></i></a></li> --}}
+                            <li class=""><a href="#" class="list {{ isset($_COOKIE['data-item']) && $_COOKIE['data-item'] == 'list-items' ? 'active' : ''}}" data-item="list-items"><i class="bx bx-list-ul"></i></a></li>
                         </ul>
                     </div>
                     <hr class="w-100">
@@ -30,9 +30,51 @@
                         <div class="col-md-4 col-xl-3">
                             <div class="item-wrapper">
                                 <div class="list-item profile-block">
+
                                     <div class="block-top">
+                                        <div class="dropdown more">
+                                            <button class="styleless-button" data-toggle="dropdown"><i class="bx bx-menu"></i>
+                                            <span class="caret"></span></button>
+
+                                            <ul class="dropdown-menu p-1 border menu-position">
+
+                                                    {{-- <li  class="list-item-custom mb-1 ">
+                                                        <button class="styleless-button w-100" href="{{ route('dashboard.ads.edit',$item->id) }}">
+                                                            <span class="icon-list-container ">
+                                                                <i class="bx bx-show list-item-icon"></i>
+                                                            </span>
+                                                            <span class="list-item-text">Show</span>
+                                                        </button>
+                                                    </li> --}}
+                                                    <li  class="list-item-custom mb-1 ">
+                                                        <button class="styleless-button w-100" onclick="openModalSeeContract('{{ $item->contacts?$item->contacts->content:'No data avalibale' }}')">
+                                                            <i class="bx bx-book-content list-item-icon"></i>
+                                                            <span class="list-item-text">Contract1</span>
+                                                        </button>
+                                                </li>
+
+                                                    <li  class="list-item-custom mb-1 ">
+                                                        <button class="styleless-button w-100" onclick="seeMatched('{{$item->id}}')">
+                                                            <i class="bx bx-book-content list-item-icon"></i>
+                                                            <span class="list-item-text">Contract2</span>
+                                                        </button>
+                                                </li>
+
+                                                <li  class="list-item-custom mb-1 ">
+                                                    <button class="styleless-button w-100" onclick="goToAd('{{ $item->id }}')">
+                                                        <i class="bx bx-book-content list-item-icon"></i>
+                                                        <span class="list-item-text">Contract3</span>
+                                                    </button>
+                                            </li>
+
+                                            </ul>
+                                          </div>
+                                        {{-- <button class="styleless-button">
+                                            <div class="flag"><i class="bx bx-menu-alt-left "></i> </div>
+                                        </button> --}}
                                         <div class="back-grey"></div>
                                         <div class="block-image"><img src="{{ $item->logo['url']  }}" alt="{{ $item->store }}"></div>
+
                                     </div>
                                     <div class="block-info">
                                         <span class="name">{{ $item->store }}</span>
@@ -315,6 +357,13 @@
                 console.log('delete admin Error')
             }
         });
+    }
+
+    function goToAd(ad_id)
+    {
+        let route = '{{ route("dashboard.ads.edit",":id") }}';
+        let url = route.replace(':id',ad_id);
+        return window.location.href = url;
     }
 
     $('.view-type a').on('click',function(e){
