@@ -630,7 +630,7 @@ var steps = $("#wizard-basic").steps({
             startIndex:userCurrentStep,
             onInit:function(){
             
-              $('.actions').append(`<li class='list-dicration' aria-disabled="false"><button class='btn btn-danger' role="menuitem">Reject</button></li>`)
+              $('.actions').append(`<li class='list-dicration' aria-disabled="false"><button type='button' onclick='sendStatusRequest("rejected")' class='btn btn-danger' role="menuitem">Reject</button></li>`)
             },
             onFinishing:function(){
               sendStatusRequest('Confirm');
@@ -716,6 +716,7 @@ CKEDITOR.replace('contractContent', {
   let deletetedFileId = null;
   function changeStatus()
   {
+    
     let statusValue = document.getElementById('status').value;
 
     if(statusValue == 'rejected')
@@ -737,17 +738,18 @@ CKEDITOR.replace('contractContent', {
 
   function sendStatusRequest(status = null)
   {
+   
+    if(status == 'rejected')
+    {
+        $('#rejectedReson').modal('toggle');
+        return;
+    }
     $('#loading').modal({
       keyboard: false,
       backdrop: 'static'
 
     });
 
-    if(status == 'rejected')
-    {
-        $('#rejectedReson').modal('toggle');
-        return;
-    }
     if(status == 'Confirm')
     {
       
