@@ -85,6 +85,7 @@ trait UserResponse {
             //      ];
             //  }),
              'is_verify'=>$info->users->email_verified_at ? true : false,
+             'gallery' => $info->gallery ? $info->gallery  : []
          ];
 
 
