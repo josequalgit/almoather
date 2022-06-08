@@ -133,7 +133,7 @@ class AdController extends Controller
             $ad->save();
         }
 
-        if($request->change)
+        if(!$confirm)
         {
 
             DB::table('ads_influencer_matches')->where('ad_id',$ad->id)->delete();
@@ -169,6 +169,7 @@ class AdController extends Controller
 
         return response()->json([
             'msg' => 'status was changed',
+            'data' => $allInfluencer,
             'status' => 200,
         ], 200);
     }
@@ -531,7 +532,7 @@ class AdController extends Controller
             ->toMediaCollection('adVideos');
         $numberOfVideos = count($data->videos);
         $last_video = $data->videos[$numberOfVideos - 1];
-
+ 
 
         return response()->json([
             'msg' => 'video was added',
@@ -557,7 +558,7 @@ class AdController extends Controller
             ->toMediaCollection('adImage');
 
             $numberOfImages = count($data->videos);
-            $last_image = $data->videos[$numberOfVideos - 1];
+            $last_image = $data->videos[$numberOfImages - 1];
     
 
         return response()->json([

@@ -875,6 +875,7 @@
 let userCurrentStep = 0;
 let countMatches = '{{count($matches)}}';
 let adStatus = '{{  $data->status }}';
+let isConfirm = false;
 if(adStatus != 'pending')
 {
   userCurrentStep = 1;
@@ -900,6 +901,7 @@ var steps = $("#wizard-basic").steps({
               }
             },
             onFinishing:function(){
+              isConfirm = true;
               sendStatusRequest('Confirm');
               window.location.reload();
             },
@@ -915,6 +917,7 @@ var steps = $("#wizard-basic").steps({
                    alert('please add correct amout of rate')
                    return false;
                 }
+                isConfirm = false;
                 
                 sendStatusRequest();
 
@@ -964,7 +967,7 @@ var steps = $("#wizard-basic").steps({
   
   let choosen_inf_id = 0;
   let showAddress = false;
-  var isConfirm = false;
+  //var isConfirm = false;
   var notChange = null;
 
   let removed_inf = 0;
@@ -1212,7 +1215,7 @@ CKEDITOR.replace('contractContent', {
       success:(res)=>{
         if(res.status == 200)
         {
-          if(!res.data.added_video)
+          if(res.data.added_video)
           {
             $('#videoSection').append(`
             <div class="col-3 h-25 mt-2">
@@ -1225,7 +1228,7 @@ CKEDITOR.replace('contractContent', {
                 <div class="about"><button onclick="deleteFileModal(${res.data.added_video.id})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
                 </div>
               </div>
-              </div>
+              </div> 
             `);
           }
           else
@@ -1249,7 +1252,7 @@ CKEDITOR.replace('contractContent', {
 
             Toast.fire({
             icon: 'success',
-            title: 'Video was uploaded successfully'
+            title: 'File was uploaded successfully'
           })
 
 
