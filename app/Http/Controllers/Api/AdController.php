@@ -120,7 +120,7 @@ class AdController extends Controller
             ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
 
             $statusCode = [
-                'Pending'           => ['approve','prepay','choosing_influencer'],
+                'Pending'           => ['approve','pending','prepay','choosing_influencer'],
                 'Active'            => ['fullpayment','active','progress'],
                 'Finished'          => ['complete']
             ];

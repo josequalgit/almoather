@@ -1212,6 +1212,8 @@ CKEDITOR.replace('contractContent', {
       success:(res)=>{
         if(res.status == 200)
         {
+          if(!res.data.added_video)
+          {
             $('#videoSection').append(`
             <div class="col-3 h-25 mt-2">
               <div class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
@@ -1225,6 +1227,23 @@ CKEDITOR.replace('contractContent', {
               </div>
               </div>
             `);
+          }
+          else
+          {
+            $('#videoSection').append(`
+            <div class="col-3 h-25 mt-2">
+              <div class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
+                  <a href="${res.data.added_image.url}" target="_blank" rel="noopener noreferrer">
+                    <img src="{{ asset('img/icons/misc/mp4.jpg') }}" width="40" />
+                  </a>
+              <div class="ml-2">
+                <h6 class="mb-0">Video #${res.data.number_of_images}</h6>
+                <div class="about"><button onclick="deleteFileModal(${res.data.added_image.id})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
+                </div>
+              </div>
+              </div>
+            `);
+          }
 
             $('#myInput').modal('toggle');
 
