@@ -93,9 +93,16 @@ class AdController extends Controller
 
 
             $tokens = [$ad->customers->users->fcm_token];
-            $msg = $request->note?"Your Ad {$ad->store} has been rejected":"Your Ad {$ad->store} has been accepted";
+            if($request->note){
+                $title = "Your campaign {$ad->store} has been rejected";
+                $msg = "Your campaign {$ad->store} rejected because ({$request->note})";
+            }else{
+                $title = "Your campaign {$ad->store} has been accepted";
+                $msg = "Congratulation! Your campaign {$ad->store} accepted Please go to campaign and complete the steps";
+            }
+           
             $data = [
-                "title" => "Ads " . $ad->store . " Accepted",
+                "title" => $title,
                 "body" => $msg,
                 "type" => 'Ad',
                 'target_id' =>$ad->id
@@ -107,9 +114,9 @@ class AdController extends Controller
 
             $users = [$ad->customers->users];
             $info =[
-                'msg'=>'Your Ad "'.$ad->store.'" has been accepted',
-                'id'=>$ad->id ,
-                'type'=>'Ad'
+                'msg' => $msg,
+                'id' => $ad->id ,
+                'type' => 'Ad'
             ];
 
             Notification::send($users, new AddInfluencer($info));
