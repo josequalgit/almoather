@@ -1225,7 +1225,7 @@ CKEDITOR.replace('contractContent', {
                 <div class="about"><button onclick="deleteFileModal(${res.data.added_video.id})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
                 </div>
               </div>
-              </div>
+              </div> 
             `);
           }
           else
