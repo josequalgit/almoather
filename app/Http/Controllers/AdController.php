@@ -524,7 +524,7 @@ class AdController extends Controller
             ->toMediaCollection('adVideos');
         $numberOfVideos = count($data->videos);
         $last_video = $data->videos[$numberOfVideos - 1];
-
+ 
 
         return response()->json([
             'msg' => 'video was added',
