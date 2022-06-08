@@ -1249,7 +1249,7 @@ CKEDITOR.replace('contractContent', {
 
             Toast.fire({
             icon: 'success',
-            title: 'Video was uploaded successfully'
+            title: 'File was uploaded successfully'
           })
 
 
