@@ -550,7 +550,7 @@ class AdController extends Controller
             ->toMediaCollection('adImage');
 
             $numberOfImages = count($data->videos);
-            $last_image = $data->videos[$numberOfVideos - 1];
+            $last_image = $data->videos[$numberOfImages - 1];
     
 
         return response()->json([
