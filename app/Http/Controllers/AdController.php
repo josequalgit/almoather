@@ -126,7 +126,7 @@ class AdController extends Controller
             $ad->save();
         }
 
-        if($request->change)
+        if(!$confirm)
         {
 
             DB::table('ads_influencer_matches')->where('ad_id',$ad->id)->delete();
@@ -162,6 +162,7 @@ class AdController extends Controller
 
         return response()->json([
             'msg' => 'status was changed',
+            'data' => $allInfluencer,
             'status' => 200,
         ], 200);
     }
