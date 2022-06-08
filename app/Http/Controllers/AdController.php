@@ -524,6 +524,8 @@ class AdController extends Controller
             ->toMediaCollection('adVideos');
         $numberOfVideos = count($data->videos);
         $last_video = $data->videos[$numberOfVideos - 1];
+
+
         return response()->json([
             'msg' => 'video was added',
             'data'=>[
@@ -547,8 +549,16 @@ class AdController extends Controller
         $data->addMedia($request->file('file'))
             ->toMediaCollection('adImage');
 
+            $numberOfImages = count($data->videos);
+            $last_image = $data->videos[$numberOfVideos - 1];
+    
+
         return response()->json([
-            'msg' => 'video was added',
+            'msg' => 'image was added',
+            'data'=>[
+                'added_image'=>$last_image,
+                'number_of_images'=>$numberOfImages
+            ],
             'status' => config('global.OK_STATUS'),
         ], config('global.OK_STATUS'));
     }
