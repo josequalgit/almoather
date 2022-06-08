@@ -36,18 +36,12 @@ li.nav-item.mr-auto {
 
 .main-menu.menu-light .navigation>li.active:not(.sidebar-group-active)>a {
     border-radius: 0.267rem;
-    background-image: linear-gradient(to right,
-            #bc6428,
-            #ffd77a,
-            #945825) !important;
+    background-image: linear-gradient(to right, #bc6428, #ffd77a, #945825) !important;
 }
 
 .breadcrumb-item.active {
     border-radius: 0.267rem;
-    background-image: linear-gradient(to right,
-            #bc6428,
-            #ffd77a,
-            #945825) !important;
+    background-image: linear-gradient(to right, #bc6428, #ffd77a, #945825) !important;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -55,10 +49,7 @@ li.nav-item.mr-auto {
 
 .bx-edit {
     border-radius: 0.267rem;
-    background-image: linear-gradient(to right,
-            #bc6428,
-            #ffd77a,
-            #945825) !important;
+    background-image: linear-gradient(to right, #bc6428, #ffd77a, #945825) !important;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -72,33 +63,21 @@ li.nav-item.mr-auto {
 
 .bx-broadcast {
     border-radius: 0.267rem;
-    background-image: linear-gradient(to right,
-            #bc6428,
-            #ffd77a,
-            #945825) !important;
+    background-image: linear-gradient(to right, #bc6428, #ffd77a, #945825) !important;
 }
 
 .nav-item.hover.open {
     border-radius: 0.267rem;
-    background-image: linear-gradient(to right,
-            #bc6428,
-            #ffd77a,
-            #945825) !important;
+    background-image: linear-gradient(to right, #bc6428, #ffd77a, #945825) !important;
 }
 
 .dropdown-item:active {
     border-radius: 0.267rem;
-    background-image: linear-gradient(to right,
-            #bc6428,
-            #ffd77a,
-            #945825) !important;
+    background-image: linear-gradient(to right, #bc6428, #ffd77a, #945825) !important;
 }
 
 .logButton {
-    background-image: linear-gradient(to right,
-            #bc6428,
-            #ffd77a,
-            #945825) !important;
+    background-image: linear-gradient(to right, #bc6428, #ffd77a, #945825) !important;
     border: none !important;
 }
 
@@ -786,7 +765,6 @@ span.numbers {
     margin-bottom: 0;
 }
 
-
 .pagination-wrapper .d-sm-none {
     justify-content: center !important;
     margin-top: 15px;
@@ -935,7 +913,6 @@ ul.dropdown-menu.p-1.border.show {
     padding: 2%;
 }
 
-
 .list-item-icon {
     margin-right: 9%;
     top: 4px;
@@ -953,4 +930,9 @@ ul.dropdown-menu.p-1.border.show {
 .list-item-custom:hover {
     padding-bottom: 5px;
     transition: all 0.2s ease;
+}
+
+.deleteModal {
+    height: 17vh !important;
+    overflow-y: auto;
 }
