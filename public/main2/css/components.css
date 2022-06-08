@@ -4359,3 +4359,37 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
     border-width: 0.5px;
     border-color: #ededed;
 }
+
+.social-media-icon {
+    width: 25px !important;
+    height: 25px !important;
+}
+
+.list-dicration {
+    list-style: none;
+}
+
+.sectionTitle {
+    font-size: 18px;
+    margin-left: 2%;
+    margin-bottom: 2%;
+    margin-top: 3%;
+}
+
+.camp-section-show-status {
+    display: block;
+    margin: 0.5em;
+    min-height: 35em;
+    overflow: hidden;
+    position: relative;
+    width: auto;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.live-section {
+    background: #f3f6fa;
+    border-radius: 7px;
+    padding: 2px;
+}
