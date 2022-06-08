@@ -801,7 +801,7 @@
               <div class="modal-body deleteModal">
                 {{-- <h3 id="addFileIcon" class="text-center mt-4" ><i class="bx bx-trash"></i></h3> --}}
                 {{-- <h3 id="addFileModalTitle" class="text-center">Delete</h3> --}}
-                <h1>Delete</h1>
+                <h1 class="wont">Delete</h1>
                 <p>Are you sure you want to delete This File ? After Deleteing the file you will not be able to restore it</p>
               </div>
               <div class="modal-footer">
