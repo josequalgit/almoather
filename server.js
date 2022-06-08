@@ -71,7 +71,7 @@ io.on("connect", (socket) => {
     socket.on('*', async function (event, data) {
         console.log('event: ' + event.includes('support'));
         console.log('event2: ' + event);
-        if (event.includes('support')) {
+        if (event.includes('support') || event.includes('user-')) {
             var CURRENT_TIMESTAMP = { toSqlString: function () { return 'CURRENT_TIMESTAMP()'; } };
 
             let messageData = {
@@ -92,7 +92,7 @@ io.on("connect", (socket) => {
         }
         let numberOfMessages = 0;
         connection.query("SELECT COUNT(id) As number FROM messages WHERE is_read = 0 and type='support';", function (err, result) {
-            numberOfMessages = result[0].number;
+            numberOfMessages = result ? result[0].number : 0;
             io.emit('supportMessages', numberOfMessages);
             io.emit(event, data);
         });
