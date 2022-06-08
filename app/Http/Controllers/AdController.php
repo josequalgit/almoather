@@ -432,6 +432,8 @@ class AdController extends Controller
         $data->date = $request->date;
         $data->is_accepted = 0;
         $data->ad_id = $ad_id;
+        $data->scenario = $request->scenario;
+        $data->af = 0;
         $data->save();
 
         $influencer = Influncer::find($request->influncers_id);

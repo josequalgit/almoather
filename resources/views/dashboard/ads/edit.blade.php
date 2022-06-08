@@ -752,6 +752,10 @@
               <div class="modal-body">
                   <textarea name="content" id="contractContent" rows="10" cols="80"></textarea>  
                   <div class="form-group">
+                    <label for="exampleFormControlSelect1">Scenario</label>
+                    <textarea class="form-control" name="content" id="scenario" rows="10" cols="80"></textarea>  
+                  </div>
+                  <div class="form-group">
                     <label for="exampleFormControlSelect1">Date</label>
                     <input id="contractDate" value="" name="website_link" type="date" class="form-control" id="inputAddress2" placeholder="date">
                   </div>              
@@ -1158,7 +1162,8 @@ CKEDITOR.replace('contractContent', {
       url:addId,
       data:{
         influncers_id:choosen_inf_id,
-        date:document.getElementById('contractDate').value
+        date:document.getElementById('contractDate').value,
+        scenario:document.getElementById('scenario').value
       },
       type:'POST',
       success:(res)=>{

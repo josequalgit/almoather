@@ -19,6 +19,7 @@ class InfluencerContract extends Model
         'date',
         'rejectNote',
         'link',
+        'scenario',
     ];
 
     public function ads()
