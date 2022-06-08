@@ -1212,7 +1212,7 @@ CKEDITOR.replace('contractContent', {
       success:(res)=>{
         if(res.status == 200)
         {
-          if(!res.data.added_video)
+          if(res.data.added_video)
           {
             $('#videoSection').append(`
             <div class="col-3 h-25 mt-2">
