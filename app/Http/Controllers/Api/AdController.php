@@ -1136,7 +1136,7 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        
+        return $request->social_media;
         if(count($request->social_media) > 0)
         {
             DB::table('social_media_id')->where('ad_id',$data->id)->delete();

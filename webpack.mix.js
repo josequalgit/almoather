@@ -13,8 +13,8 @@ const mix = require('laravel-mix');
 mix.webpackConfig({
     resolve: {
         fallback: {
-            "fs": true,
-            'https': true,
+            "fs": false,
+            'https': false,
             'utf-8-validate': false,
             'bufferutil': false,
 
@@ -26,6 +26,7 @@ mix.webpackConfig({
 
 
 mix.js('server.js', './')
+mix.version('./server.js')
     // mix.js('server.js', 'ndeo/js')
     .postCss('resources/css/app.css', 'public/css', [
         //
