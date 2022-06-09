@@ -1168,6 +1168,21 @@ class AdController extends Controller
         }
     }
 
+    public function ad_details_update($ad_id)
+    {
+        #GET THE AD AND CHECK IF THE AD EXIST
+        $data = Ad::find($ad_id);
+        if(!$data) return response()->json([
+            'err'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        return response()->json([
+            'data'=>$data,
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+    }
+
     private function match_response($ad)
     {
         return response()->json([

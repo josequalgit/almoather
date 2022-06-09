@@ -293,6 +293,20 @@ class Ad extends Model implements HasMedia
        
         return (count($data) > 0) ? false : true;
     }
+
+
+
+    public function socialMediaWithAccount()
+    {
+       return DB::table('social_media_id')->where([
+            'ad_id'=>$this->id,
+         ])->get()->map(function($item){
+             return [
+                 'id'=>$item->id,
+                 'link'=>$item->link,
+             ];
+         });
+    }
    
 
 }
