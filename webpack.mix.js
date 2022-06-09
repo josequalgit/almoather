@@ -24,7 +24,7 @@ mix.webpackConfig({
 });
 
 
-mix.js('server.js', 'node_modules')
+mix.js('server.js', './')
     // mix.js('server.js', 'ndeo/js')
     .postCss('resources/css/app.css', 'public/css', [
         //
