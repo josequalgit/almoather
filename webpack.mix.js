@@ -13,9 +13,10 @@ const mix = require('laravel-mix');
 mix.webpackConfig({
     resolve: {
         fallback: {
-            "fs": false,
+            "fs": true,
+            'https': true,
             'utf-8-validate': false,
-            'bufferutil': false
+            'bufferutil': false,
 
         },
     },
