@@ -18,7 +18,7 @@
                 <div class="card-body">
                     <form id="ad_details_from" action="/" class="campaign-form">
                         <div class="row">
-                          @if($data->status == 'pending' || $data->status == 'choosing_influencer')
+                          @if($data->status == 'pending')
                             <div id="wizard-basic">
                                 <h3>CAMPAIGN</h3>
                                 <section>
@@ -502,7 +502,7 @@
                                     </td>
                                       <td>
                                         
-                                        @if ($data->status == 'approve'||$data->status == 'fullpayment')
+                                        @if ($data->status == 'choosing_influencer')
                                         <button {{ $item->influencers->checkIfAccepted($data->id) == 1?'disabled':'' }} type="button" onclick="seeContract('{{$data->contacts->content}}','{{ $item->influencers->id }}')" class="btn btn-secondary">
                                           <i class="bx bx-send "></i>
                                         </button> 
@@ -884,7 +884,7 @@ if(countMatches > 0)
 {
   userCurrentStep = 2
 }
-@if($data->status == 'pending' || $data->status == 'choosing_influencer')
+@if($data->status == 'pending')
 
 var steps = $("#wizard-basic").steps({
             headerTag: "h3",
