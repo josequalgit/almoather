@@ -1126,7 +1126,48 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
 
     }
-    
+
+    public function update(Request $request , $ad_id)
+    {
+        #GET THE AD AND CHECK IF THE AD EXIST
+        $data = Ad::find($ad_id);
+        if(!$data) return response()->json([
+            'err'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        
+        if(count($request->social_media) > 0)
+        {
+            DB::table('social_media_id')->where('ad_id',$data->id)->delete();
+
+            foreach ($request->social_media as $value) {
+                DB::table('social_media_id')->insert([
+                   'ad_id'=>$data->id,
+                   'social_media_id'=>$value['type']??$value->type,
+                   'link'=>$value['link']??$value->type
+                ]);
+			
+            }
+        }
+
+        if($data->update($request->all()))
+        {
+            return response()->json([
+                'msg'=>'ad was updated',
+                'data'=>$data,
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
+        }
+        else
+        {
+            return response()->json([
+                'err'=>'something wrong',
+                'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
+        }
+    }
+
     private function match_response($ad)
     {
         return response()->json([

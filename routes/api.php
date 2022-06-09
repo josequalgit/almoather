@@ -162,6 +162,7 @@ Route::group(['prefix'=>'auth'],function(){
             Route::post('check_payment/{ad_id}','check_payment');
             Route::get('get_ad_influencers_match/{ad_id}','get_ad_influencers_match');
             Route::get('wait_for_influencer_response/{ad_id}','wait_for_influencer_response');
+            Route::post('update/{ad_id}','update');
         });
 
         #CATEGORIES ROUTES
