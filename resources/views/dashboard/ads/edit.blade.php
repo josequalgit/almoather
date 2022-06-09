@@ -492,7 +492,7 @@
                                       <td>{{ $item->match }}%</td>
                                       <td>{{ $item->chosen ? 'Yes':'No' }}</td>
                                       <td>{{ $item->status  }}</td>
-                                      <td>{{ $item->contract->status?'Completed':'In Progress'}}</td>
+                                      <td>{{ $item->contract?$item->contract->status?'Completed':'In Progress':'No Data'}}</td>
                                       <td>
                                       @if ($item->influencers->checkIfAccepted($data->id) == 1)
                                           Yes
