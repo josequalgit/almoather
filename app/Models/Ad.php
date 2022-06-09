@@ -234,6 +234,8 @@ class Ad extends Model implements HasMedia
        }
    }
 
+  
+
    public function getInfAdContract($inf_id)
    {
         

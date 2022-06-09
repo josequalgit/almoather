@@ -178,7 +178,7 @@
                                                       <h6 for="add_category">Images</h6>
                                                       <button type="button" onclick="addVideoModal(1)" class="btn btn-info ml-2">Add</button>
                                                     </div>
-                                                    <div class="row video-section p-1">
+                                                    <div id="imageSection" class="row image-section p-1">
                                                       @foreach ($data->image  as $key => $item)
                                                     
                                                           <div class="col-2 h-25 mt-2">
@@ -431,7 +431,7 @@
                                                       <h6 for="add_category">Images</h6>
                                                       <button type="button" onclick="addVideoModal(1)" class="btn btn-info ml-2">Add</button>
                                                     </div>
-                                                    <div class="row video-section p-1">
+                                                    <div id="imageSection" class="row video-section p-1">
                                                       @foreach ($data->image  as $key => $item)
                                                     
                                                           <div class="col-3 h-25 mt-2">
@@ -473,6 +473,7 @@
                                                   <th>Match</th>
                                                   <th>Chosen</th>
                                                   <th>Status</th>
+                                                  <th>Ad Status</th>
                                                   <th>Accepted</th>
                                                   <th>Action</th>
                                                 </tr>
@@ -491,6 +492,7 @@
                                       <td>{{ $item->match }}%</td>
                                       <td>{{ $item->chosen ? 'Yes':'No' }}</td>
                                       <td>{{ $item->status  }}</td>
+                                      <td>{{ $item->contract->status?'Completed':'In Progress'}}</td>
                                       <td>
                                       @if ($item->influencers->checkIfAccepted($data->id) == 1)
                                           Yes
@@ -503,14 +505,32 @@
                                       <td>
                                         
                                         @if ($data->status == 'approve'||$data->status == 'fullpayment')
-                                        <button {{ $item->influencers->checkIfAccepted($data->id) == 1?'disabled':'' }} type="button" onclick="seeContract('{{$data->contacts->content}}','{{ $item->influencers->id }}')" class="btn btn-secondary">
-                                          <i class="bx bx-send "></i>
-                                        </button> 
+
+                                          
+                                       
+
+                                        @if($item->influencers->checkIfAccepted($data->id) == 1 && $item->contract->status == 1&&$item->contract->admin_status != 1)
+                                          <button type="button" onclick="reject_data_inf('{{ $item->contract->id }}')" class="btn btn-danger">
+                                            Reject
+                                          </button>
+                                          <button type="button" onclick="accept_data_inf('{{ $item->contract->id }}')" class="btn btn-success">
+                                            Accept 
+                                          </button>
+                                          @elseif($item->contract->admin_status == 1)
+                                          <button type="button" class="btn btn-info">
+                                              Ad is Complted
+                                          </button>
+                                          @else
+                                          <button {{ $item->influencers->checkIfAccepted($data->id) == 1?'disabled':'' }} type="button" onclick="seeContract('{{$data->contacts->content}}','{{ $item->influencers->id }}')" class="btn btn-secondary">
+                                            <i class="bx bx-send "></i>
+                                          </button> 
+                                          @endif
                                         @endif
-                            
+                                        @if($item->contract&&$item->contract->admin_status != 1)
                                         <button type="button" onclick="getUnchosenInfulncers('{{ $item->influencers->id }}')" class="btn btn-secondary">
                                           <i class="bx bx-transfer"></i>
                                         </button> 
+                                        @endif
                                             
                             
                                       
@@ -793,6 +813,40 @@
           </div>
         </div>
 
+
+        <div id="reject_ad_contract" class="modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <p>Add Reject Reason</p>
+                <textarea id="reject_ad_contract_input" class="form-control" id="rejectedNote" rows="12"></textarea>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick="sendAdContractStatus('reject')" class="btn btn-primary">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="accept_ad_contract" class="modal accept_adcontract_modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-body accept_ad_contract_body">
+                <p>Please provide the ad link</p>
+                  <input type="text" id="link_ad_contract_input" class="form-control" >
+                </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick="sendAdContractStatus()" class="btn btn-primary">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+
+
+
         <div id="deleteFile" class="modal" tabindex="-1" role="dialog">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -1065,7 +1119,6 @@ CKEDITOR.replace('contractContent', {
     {
       status = 'rejected';
     }
-    $('#loading').modal('show');
 
     $.ajax({
       url:fullUrl,
@@ -1084,15 +1137,7 @@ CKEDITOR.replace('contractContent', {
       },
       success:(res)=>{
         let url = '{{ route("dashboard.ads.index") }}'
-        $('#loading').modal('hide');
-        //return true;
-        //location.reload();
-        // uncomment this
-        if(status == 'rejected')
-        {
-          window.location.reload();
-
-        }
+        location.reload();
       },
       error:(err)=>{
         console.log("updateding error: ",err);
@@ -1233,14 +1278,14 @@ CKEDITOR.replace('contractContent', {
           }
           else
           {
-            $('#videoSection').append(`
+            $('#imageSection').append(`
             <div class="col-3 h-25 mt-2">
               <div class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
                   <a href="${res.data.added_image.url}" target="_blank" rel="noopener noreferrer">
-                    <img src="{{ asset('img/icons/misc/mp4.jpg') }}" width="40" />
+                    <img src="{{ asset('img/icons/misc/img.png') }}" width="40" />
                   </a>
               <div class="ml-2">
-                <h6 class="mb-0">Video #${res.data.number_of_images}</h6>
+                <h6 class="mb-0">Image #${res.data.number_of_images}</h6>
                 <div class="about"><button onclick="deleteFileModal(${res.data.added_image.id})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
                 </div>
               </div>
@@ -1397,7 +1442,10 @@ CKEDITOR.replace('contractContent', {
 
       },
       error:(err)=>{
-        alert('err')
+        Toast.fire({
+            icon: 'error',
+            title: 'Erro updateing address'
+        })
       }
     })
   }
@@ -1424,6 +1472,69 @@ CKEDITOR.replace('contractContent', {
     }
     return true;
   }
+
+  let chossen_contract_id = 0;
+  function reject_data_inf(contract_id)
+  {
+     chossen_contract_id = contract_id
+     $('#reject_ad_contract').modal('toggle');
+
+  }
+
+  function accept_data_inf(contract_id)
+  {
+    chossen_contract_id = contract_id
+    $('#accept_ad_contract').modal('toggle');
+  }
+
+  function sendAdContractStatus(reject = null)
+  {
+    let rejectNote = document.getElementById('reject_ad_contract_input').value;
+    let link = document.getElementById('link_ad_contract_input').value;
+  
+    if(reject&&!rejectNote)
+    {
+      Toast.fire({
+            icon: 'error',
+            title: 'Please add the rejct reason'
+        })
+        return;
+    }
+
+    if(!reject && !link)
+    {
+      Toast.fire({
+            icon: 'error',
+            title: 'Please add the ad link'
+        })
+        return;
+    }
+
+
+    let url = '{{ route("dashboard.ads.changeStatus",":contract_id") }}';
+    let urlWithContractId = url.replace(':contract_id',chossen_contract_id);
+    $.ajax({
+      url:urlWithContractId,
+      type:'POST',
+      data:{
+        status: rejectNote?0:1,
+        rejectNote,
+        link
+      },
+      success:(res)=>{
+        window.location.reload()          
+      },
+      error:(err)=>{
+        Toast.fire({
+            icon: 'error',
+            title: 'Erro updateing influncer'
+        })
+        console.log('Error changeing the status: ',err)
+      },
+    })
+  }
+
+
   
 
 

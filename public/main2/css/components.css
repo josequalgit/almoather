@@ -4393,3 +4393,8 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
     border-radius: 7px;
     padding: 2px;
 }
+
+.accept_ad_contract_body {
+    height: 26vh !important;
+    overflow-y: auto;
+}

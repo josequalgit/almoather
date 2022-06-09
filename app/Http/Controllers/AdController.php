@@ -58,8 +58,6 @@ class AdController extends Controller
     public function update(Request $request, $id , $confirm = null)
     {
 
-      // dd('s');
-
         /** VALIDATIONS */
         $ad = Ad::find($id);
 
@@ -169,7 +167,7 @@ class AdController extends Controller
 
         return response()->json([
             'msg' => 'status was changed',
-            'data' => $allInfluencer,
+           // 'data' => $allInfluencer,
             'status' => 200,
         ], 200);
     }
@@ -184,12 +182,12 @@ class AdController extends Controller
                     ->orWhere('city_id', $ad->city_id);
             });
         }
-        //dd('here');
+        
         $allInfluencer = $allInfluencer->get()->map(function($influencer){
             $influencerContractsRevenue = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->get()->map(function($query){
                 return $query->ads->budget ? $query->revenue / $query->ads->budget : 0;
             });
-            // dd($influencerContractsRevenue->sum());
+           
             $influencerContractsRevenue = $influencerContractsRevenue->sum();
             $influencerContractsCount = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->count();
 
@@ -228,6 +226,41 @@ class AdController extends Controller
         return ['chosenInfluencer' => $chosenInfluencer,'notChosenInfluencer' => $notChosenInfluencer];
     }
 
+    public function changeStatus(Request $request,$contract_id)
+    {
+        $data = InfluencerContract::find($contract_id);
+        if(!$data) return response()->json([
+            'msg'=>'contract not found',
+            'status'=>config('global.NOT_FOUND')
+        ],config('global.NOT_FOUND'));
+
+        /** IF THE AD IS REJECTED RETURN THE INFLUENCER STATUS TO NOT COMPLIED */
+        if($request->rejectNote)
+        {
+            $data->status = 0;
+            $data->link = null;
+            $data->rejectNote = $request->rejectNote;
+
+
+        }
+        else
+        {
+            $data->link = $request->link;
+            $data->rejectNote = null;
+
+        }
+
+        $data->admin_status = $request->status;
+        $data->save();
+
+        
+
+        return response()->json([
+            'msg'=>'status was changed',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+    }
+
     private function calculateNonProfitableAds($request, $ad, $data)
     {
 
@@ -241,6 +274,7 @@ class AdController extends Controller
 
         $chosenSubscribers = [];
         $notChosenInfluencer = [];
+       
         $allSmallInfluencer = Influncer::where('status', 'accepted')->whereNotIn('id', $data)->where('subscribers', '<', 500000)->where('subscribers', '>', 0);
         if ($ad->ad_type == 'onsite') {
             $allSmallInfluencer = $allSmallInfluencer->where(function ($query) use ($ad) {
@@ -557,8 +591,8 @@ class AdController extends Controller
         $data->addMedia($request->file('file'))
             ->toMediaCollection('adImage');
 
-            $numberOfImages = count($data->videos);
-            $last_image = $data->videos[$numberOfImages - 1];
+            $numberOfImages = count($data->image);
+            $last_image = $data->image[$numberOfImages - 1];
     
 
         return response()->json([
