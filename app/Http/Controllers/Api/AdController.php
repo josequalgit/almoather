@@ -728,21 +728,35 @@ class AdController extends Controller
 
     }
 
-    /** NOT IN USE */
+
+    /** When the influencer response to the ad */
     public function completeAd($contract_id)
     {
+        /** FIND THE CONTRACT */
         $data = InfluencerContract::find($contract_id);
-        // return response()->json([
-        //     'err'=>$contract_id,
-        //     'status'=>config('global.NOT_FOUND_STATUS')
-        // ],config('global.NOT_FOUND_STATUS'));
-        $influencer = Influncer::find($data->influencer_id);
-        
-        $ad = Ad::find($data->ad_id);
-        if(!$influencer&&!$ad) return response()->json([
-            'err'=>'something wrong',
+
+        if(!$data) return response()->json([
+            'msg'=>'contract not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
+
+        
+        /** FIND THE INFLUENCER  */
+        $influencer = Influncer::find($data->influencer_id);
+
+        if(!$influencer) return response()->json([
+            'msg'=>'influencer not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        /** FIND THE AD  */
+        $ad = Ad::find($data->ad_id);
+        
+        if(!$influencer&&!$ad) return response()->json([
+            'msg'=>'something wrong',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
 
         $name = $influencer->first_name.' '.$influencer->middle_name.' '.$influencer->last_name;
         $info =[
@@ -750,23 +764,17 @@ class AdController extends Controller
             'id'=>$ad->id,
             'type'=>'Ad'
         ];
-      
+
+      /** FIND THE CONTRACT ADMINS  */
         $getContactManagers = User::whereHas('roles',function($q){
             $q->where('name','Contracts Manager')
             ->orWhere('name','superAdmin');
         })->get();
-        
-       
+
         $this->sendAdminNotification('contract_manager_notification',$info);
-
         Notification::send($getContactManagers, new AddInfluencer($info));
-        
 
-        if(!$data) return response()->json([
-            'err'=>'contract not found',
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
-
+        /** CONTRACT ACCEPT*/
         $data->status = 1;
         $data->save();
 
@@ -1118,7 +1126,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
 
     }
-
+    
     private function match_response($ad)
     {
         return response()->json([
@@ -1294,4 +1302,5 @@ class AdController extends Controller
         }
       
     }
+    
 }
