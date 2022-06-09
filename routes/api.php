@@ -164,6 +164,7 @@ Route::group(['prefix'=>'auth'],function(){
             Route::get('wait_for_influencer_response/{ad_id}','wait_for_influencer_response');
             Route::post('update/{ad_id}','update');
             Route::get('ad_details_update/{ad_id}','ad_details_update');
+            Route::post('/upload_media/{file_id}/{type}','uploadMedia')->where('type','remove|add|replace');
         });
 
         #CATEGORIES ROUTES

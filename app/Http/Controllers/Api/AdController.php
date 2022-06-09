@@ -1358,5 +1358,121 @@ class AdController extends Controller
         }
       
     }
+
+    function uploadMedia(Request $request , $file_id , $type){
+
+        /**
+         * Add 
+         * Remove
+         * Replace
+         */
+        $media = DB::table('media')->where('id',$file_id)->where('model_type','App\Models\Ad')->first();
+
+        if(!$media) return response()->json([
+            'err'=>'file was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+        $ad = Ad::find($media->model_id);
+        if(!$ad) return response()->json([
+            'err'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        if($type == 'remove')
+        {
+            DB::table('media')->where('id',$file_id)->where('model_type','App\Models\Ad')->delete();
+            return response()->json([
+                'err'=>'file was removed',
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
+
+        };
+        if($type == 'replace')
+        {
+            $file = $ad->addMedia($request->file)
+            ->toMediaCollection($media->collection_name);
+            DB::table('media')->where('id',$file_id)->where('model_type','App\Models\Ad')->delete();
+
+            return response()->json([
+                'msg'=>'file was uploaded',
+                'data'=>[
+                    'id'=>$file->id,
+                    'url'=>$file->getFullUrl(),
+                ],
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
+
+        }
+        else
+        {
+            $ad->addMedia($request->file)
+            ->toMediaCollection($media->collection_name);
+
+            $mediaItems = $ad->getMedia($media->collection_name);
+            $publicFullUrl = [];
+            if(count($mediaItems) > 0)
+            {
+                foreach($mediaItems as $item)
+                {
+                    $obj = (object)[
+                        'id'=>$item->id,
+                        'url'=>$item->getFullUrl()
+                    ];
+                    // $publicFullUrl = $item->getFullUrl();
+                    array_push($publicFullUrl,$obj);
+                }
+               
+            }
+
+            return response()->json([
+                'msg'=>'file was uploaded',
+                'data'=>$publicFullUrl,
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
+        }
+       // $ad->clearMediaCollection($)
+
+
+
+      
+    }
+
+    function getMedias(Request $request){
+        
+        $influencer = Auth::guard('api')->user()->influncers;
+        if(!$influencer){
+            return response()->json([
+                'msg'       =>'You don\'t have permission to add media',
+                'status'    => false,
+            ],400);
+        }
+
+        return response()->json([
+            'msg'       => 'Media returned Successfully',
+            'data'      => $influencer->gallery,
+            'status'    => true,
+        ],200);
+
+
+
+    }
+
+    function deleteGalleryMedia($id){
+        $media = DB::table('media')->where('id',$id)->where('model_type','App\Models\Influncer')->first();
+        if(!$media)return response()->json([
+            'err'=>'file not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $model_type = $media->model_type;
+        $model = $model_type::find($media->model_id);
+        $model->deleteMedia($media->id);
+
+        return response()->json([
+            'msg'       => 'Media deleted Successfully',
+            'status'    => true,
+        ],200);
+    }
+
     
 }
