@@ -42,11 +42,11 @@ const io = require('socket.io')(server, {
     upgrade: false
 });
 
-sub.psubscribe('*', function (data) {
+sub.psubscribe('*', function(data) {
     console.log('redis connected');
 });
 
-sub.on('pmessage', function (event, channel, message) {
+sub.on('pmessage', function(event, channel, message) {
     console.log('channel: ' + channel);
     console.log('message: ' + message);
 
@@ -57,22 +57,22 @@ io.on("connect", (socket) => {
     console.log('connected');
 
     var onevent = socket.onevent;
-    socket.onevent = function (packet) {
+    socket.onevent = function(packet) {
         var args = packet.data || [];
         onevent.call(this, packet);
         packet.data = ["*"].concat(args);
         onevent.call(this, packet);
     };
 
-    socket.on('disconnect', function () {
+    socket.on('disconnect', function() {
         console.log('disconnect');
     });
 
-    socket.on('*', async function (event, data) {
+    socket.on('*', async function(event, data) {
         console.log('event: ' + event.includes('support'));
         console.log('event2: ' + event);
         if (event.includes('support') || event.includes('user-')) {
-            var CURRENT_TIMESTAMP = { toSqlString: function () { return 'CURRENT_TIMESTAMP()'; } };
+            var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
 
             let messageData = {
                 text: data.message,
@@ -86,12 +86,12 @@ io.on("connect", (socket) => {
 
             console.log(messageData);
 
-            connection.query('INSERT INTO messages SET ?', messageData, function (error, results, fields) {
+            connection.query('INSERT INTO messages SET ?', messageData, function(error, results, fields) {
                 if (error) throw error;
             });
         }
         let numberOfMessages = 0;
-        connection.query("SELECT COUNT(id) As number FROM messages WHERE is_read = 0 and type='support';", function (err, result) {
+        connection.query("SELECT COUNT(id) As number FROM messages WHERE is_read = 0 and type='support';", function(err, result) {
             numberOfMessages = result ? result[0].number : 0;
             io.emit('supportMessages', numberOfMessages);
             io.emit(event, data);
@@ -99,6 +99,6 @@ io.on("connect", (socket) => {
 
     });
 });
-io.on('error', function (err) {
+io.on('error', function(err) {
     console.log(err);
 });

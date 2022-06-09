@@ -1366,17 +1366,22 @@ class AdController extends Controller
          * Remove
          * Replace
          */
-        $media = DB::table('media')->where('id',$file_id)->where('model_type','App\Models\Ad')->first();
+        
+        if($file_id != -1)
+        {
 
-        if(!$media) return response()->json([
-            'err'=>'file was not found',
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
-        $ad = Ad::find($media->model_id);
-        if(!$ad) return response()->json([
-            'err'=>'ad was not found',
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
+            $media = DB::table('media')->where('id',$file_id)->where('model_type','App\Models\Ad')->first();
+            if(!$media) return response()->json([
+                'err'=>'file was not found',
+                'status'=>config('global.NOT_FOUND_STATUS')
+            ],config('global.NOT_FOUND_STATUS'));
+            $ad = Ad::find($media->model_id);
+            if(!$ad) return response()->json([
+                'err'=>'ad was not found',
+                'status'=>config('global.NOT_FOUND_STATUS')
+            ],config('global.NOT_FOUND_STATUS'));
+        }
+
 
         if($type == 'remove')
         {
@@ -1405,10 +1410,16 @@ class AdController extends Controller
         }
         else
         {
+           $ad = Ad::find($request->ad_id);
+           
+            if(!$ad) return response()->json([
+                'err'=>'ad was not found',
+                'status'=>config('global.NOT_FOUND_STATUS')
+            ],config('global.NOT_FOUND_STATUS'));
             $ad->addMedia($request->file)
-            ->toMediaCollection($media->collection_name);
+            ->toMediaCollection($request->type);
 
-            $mediaItems = $ad->getMedia($media->collection_name);
+            $mediaItems = $ad->getMedia($request->type);
             $publicFullUrl = [];
             if(count($mediaItems) > 0)
             {
