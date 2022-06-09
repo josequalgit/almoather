@@ -1437,7 +1437,7 @@ class AdController extends Controller
 
             return response()->json([
                 'msg'=>'file was uploaded',
-                'data'=>$publicFullUrl,
+                'data'=>$publicFullUrl[count($mediaItems) - 1],
                 'status'=>config('global.OK_STATUS')
             ],config('global.OK_STATUS'));
         }
