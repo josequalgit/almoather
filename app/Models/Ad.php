@@ -49,6 +49,7 @@ class Ad extends Model implements HasMedia
         'videos',
         'image',
         'document',
+        'crImage',
         'logo'
     ];
 
@@ -175,6 +176,24 @@ class Ad extends Model implements HasMedia
    }
     public function getDocumentAttribute() {
         $mediaItems = $this->getMedia('commercial_docs');
+        $publicFullUrl = [];
+        if(count($mediaItems) > 0)
+        {
+			foreach($mediaItems as $item)
+			{
+                $obj = (object)[
+                    'id'=>$item->id,
+                    'url'=>$item->getFullUrl()
+                ];
+				// $publicFullUrl = $item->getFullUrl();
+				array_push($publicFullUrl,$obj);
+			}
+           
+        }
+        return $publicFullUrl;
+   }
+    public function getCrImageAttribute() {
+        $mediaItems = $this->getMedia('document');
         $publicFullUrl = [];
         if(count($mediaItems) > 0)
         {

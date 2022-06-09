@@ -21,6 +21,7 @@ trait AdResponse {
             'image'=>$ad->image,
             'videos'=>$ad->videos,
             'cr_certificate'=>$ad->document,
+            'cr_image'=>$ad->crImage,
             'campaign_goal'=>[
               'id'=>$ad->campaignGoals->id,
               'title'=>$ad->campaignGoals->title
