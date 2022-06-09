@@ -516,7 +516,7 @@
                                           <button type="button" onclick="accept_data_inf('{{ $item->contract->id }}')" class="btn btn-success">
                                             Accept 
                                           </button>
-                                          @elseif($item->contract->admin_status == 1)
+                                          @elseif($item->contract&&$item->contract->admin_status == 1)
                                           <button type="button" class="btn btn-info">
                                               Ad is Complted
                                           </button>
