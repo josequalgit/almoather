@@ -2,4 +2,4 @@ ResetPassword
 
 Code: {{$code}}
 
-Sending Mail from Al Moather.
+Sending Mail from Al Muaathir.

@@ -11,10 +11,10 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up() 
+    public function up()
     {
-        Schema::table('messages', function (Blueprint $table) {
-            $table->enum('contentType',['text','file'])->default('text');
+        Schema::table('influencer_contracts', function (Blueprint $table) {
+            $table->longText('scenario')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('messages', function (Blueprint $table) {
-            $table->dropColumn('contentType');
+        Schema::table('influencer_contracts', function (Blueprint $table) {
+            $table->dropColumn('scenario');
         });
     }
 };

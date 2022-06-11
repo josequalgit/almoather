@@ -49,6 +49,7 @@ class Ad extends Model implements HasMedia
         'videos',
         'image',
         'document',
+        'crImage',
         'logo'
     ];
 
@@ -191,6 +192,23 @@ class Ad extends Model implements HasMedia
         }
         return $publicFullUrl;
    }
+    public function getCrImageAttribute() {
+        $mediaItems = $this->getMedia('document');
+        $obj = [];
+        if(count($mediaItems) > 0)
+        {
+			
+                $obj = (object)[
+                    'id'=>$mediaItems[0]->id,
+                    'url'=>$mediaItems[0]->getFullUrl()
+                ];
+				// $publicFullUrl = $item->getFullUrl();
+			
+			
+           
+        }
+        return $obj;
+   }
     public function getLogoAttribute() {
         $mediaItems = $this->getMedia('logos')->first();
         if($mediaItems)
@@ -233,6 +251,8 @@ class Ad extends Model implements HasMedia
            return 2;
        }
    }
+
+  
 
    public function getInfAdContract($inf_id)
    {
@@ -290,6 +310,20 @@ class Ad extends Model implements HasMedia
         });
        
         return (count($data) > 0) ? false : true;
+    }
+
+
+
+    public function socialMediaWithAccount()
+    {
+       return DB::table('social_media_id')->where([
+            'ad_id'=>$this->id,
+         ])->get()->map(function($item){
+             return [
+                 'id'=>$item->id,
+                 'link'=>$item->link,
+             ];
+         });
     }
    
 

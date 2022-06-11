@@ -38,15 +38,15 @@ class AdController extends Controller
             $data = Ad::where('status', $status)->orderBy('created_at', 'asc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
             $counter = Ad::where('status', $status)->count();
         }
-        
-        
+
+
         return view('dashboard.ads.index', compact('data', 'counter'));
     }
 
     public function edit($id, $editable = null)
     {
         $data = Ad::findOrFail($id);
-        $matches = $data->matches()->where('chosen', 1)->get();
+        $matches = $data->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
         $unMatched = $data->matches()->where('chosen', 0)->get();
         // dd($unMatched);
         $categories = Category::get();
@@ -57,8 +57,6 @@ class AdController extends Controller
 
     public function update(Request $request, $id , $confirm = null)
     {
-
-      // dd('s');
 
         /** VALIDATIONS */
         $ad = Ad::find($id);
@@ -93,25 +91,32 @@ class AdController extends Controller
 
 
             $tokens = [$ad->customers->users->fcm_token];
-            $msg = $request->note?"Your Ad {$ad->store} has been rejected":"Your Ad {$ad->store} has been accepted";
+            if($request->note){
+                $title = "Your campaign {$ad->store} has been rejected";
+                $msg = "Your campaign {$ad->store} rejected because ({$request->note})";
+            }else{
+                $title = "Your campaign {$ad->store} has been accepted";
+                $msg = "Congratulation! Your campaign {$ad->store} accepted Please go to campaign and complete the steps";
+            }
+           
             $data = [
-                "title" => "Ads " . $ad->store . " Accepted",
+                "title" => $title,
                 "body" => $msg,
                 "type" => 'Ad',
-                'target_id' =>$ad->id            
+                'target_id' =>$ad->id
             ];
-    
+
 
             activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
             $this->sendNotifications($tokens,$data);
 
             $users = [$ad->customers->users];
             $info =[
-                'msg'=>'Your Ad "'.$ad->store.'" has been accepted',
-                'id'=>$ad->id ,
-                'type'=>'Ad'
+                'msg' => $msg,
+                'id' => $ad->id ,
+                'type' => 'Ad'
             ];
-    
+
             Notification::send($users, new AddInfluencer($info));
 
             return response()->json([
@@ -126,7 +131,7 @@ class AdController extends Controller
             $ad->save();
         }
 
-        if($request->change)
+        if(!$confirm)
         {
 
             DB::table('ads_influencer_matches')->where('ad_id',$ad->id)->delete();
@@ -134,7 +139,7 @@ class AdController extends Controller
 
 
         /** SAVE THE DATA */
-       
+
 
         // STEP 1 - GET THE PROPERTY CATEGORIES
         $category = Category::find($request->category_id)->excludeCategories;
@@ -149,7 +154,7 @@ class AdController extends Controller
         Alert::toast('Add was updated', 'success');
 
 
-       
+
 
         /** END WAY */
         if (!$ad->campaignGoals->profitable) {
@@ -162,6 +167,7 @@ class AdController extends Controller
 
         return response()->json([
             'msg' => 'status was changed',
+           // 'data' => $allInfluencer,
             'status' => 200,
         ], 200);
     }
@@ -176,12 +182,12 @@ class AdController extends Controller
                     ->orWhere('city_id', $ad->city_id);
             });
         }
-        //dd('here');
+        
         $allInfluencer = $allInfluencer->get()->map(function($influencer){
             $influencerContractsRevenue = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->get()->map(function($query){
                 return $query->ads->budget ? $query->revenue / $query->ads->budget : 0;
             });
-            // dd($influencerContractsRevenue->sum());
+           
             $influencerContractsRevenue = $influencerContractsRevenue->sum();
             $influencerContractsCount = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->count();
 
@@ -220,6 +226,41 @@ class AdController extends Controller
         return ['chosenInfluencer' => $chosenInfluencer,'notChosenInfluencer' => $notChosenInfluencer];
     }
 
+    public function changeStatus(Request $request,$contract_id)
+    {
+        $data = InfluencerContract::find($contract_id);
+        if(!$data) return response()->json([
+            'msg'=>'contract not found',
+            'status'=>config('global.NOT_FOUND')
+        ],config('global.NOT_FOUND'));
+
+        /** IF THE AD IS REJECTED RETURN THE INFLUENCER STATUS TO NOT COMPLIED */
+        if($request->rejectNote)
+        {
+            $data->status = 0;
+            $data->link = null;
+            $data->rejectNote = $request->rejectNote;
+
+
+        }
+        else
+        {
+            $data->link = $request->link;
+            $data->rejectNote = null;
+
+        }
+
+        $data->admin_status = $request->status;
+        $data->save();
+
+        
+
+        return response()->json([
+            'msg'=>'status was changed',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+    }
+
     private function calculateNonProfitableAds($request, $ad, $data)
     {
 
@@ -233,6 +274,7 @@ class AdController extends Controller
 
         $chosenSubscribers = [];
         $notChosenInfluencer = [];
+       
         $allSmallInfluencer = Influncer::where('status', 'accepted')->whereNotIn('id', $data)->where('subscribers', '<', 500000)->where('subscribers', '>', 0);
         if ($ad->ad_type == 'onsite') {
             $allSmallInfluencer = $allSmallInfluencer->where(function ($query) use ($ad) {
@@ -290,7 +332,7 @@ class AdController extends Controller
         $allBigInfluencer = $allBigInfluencer->get();
 
         foreach ($allBigInfluencer as $key => $influencer) {
-           
+
             $getLastMonthAds = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->sum('af');
             $getLastMonthAdsCount = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->count();
 
@@ -325,7 +367,7 @@ class AdController extends Controller
             }
         }
 
-        
+
         /** MERGE THE TOW THE BIG AND THE SMALL INFLUENCER */
         return ['chosenInfluencer' => $chosenSubscribers,'notChosenInfluencer' => $notChosenInfluencer];
     }
@@ -432,6 +474,8 @@ class AdController extends Controller
         $data->date = $request->date;
         $data->is_accepted = 0;
         $data->ad_id = $ad_id;
+        $data->scenario = $request->scenario;
+        $data->af = 0;
         $data->save();
 
         $influencer = Influncer::find($request->influncers_id);
@@ -520,9 +564,16 @@ class AdController extends Controller
 
         $data->addMedia($request->file('file'))
             ->toMediaCollection('adVideos');
+        $numberOfVideos = count($data->videos);
+        $last_video = $data->videos[$numberOfVideos - 1];
+ 
 
         return response()->json([
             'msg' => 'video was added',
+            'data'=>[
+                'added_video'=>$last_video,
+                'number_of_videos'=>$numberOfVideos
+            ],
             'status' => config('global.OK_STATUS'),
         ], config('global.OK_STATUS'));
     }
@@ -540,8 +591,16 @@ class AdController extends Controller
         $data->addMedia($request->file('file'))
             ->toMediaCollection('adImage');
 
+            $numberOfImages = count($data->image);
+            $last_image = $data->image[$numberOfImages - 1];
+    
+
         return response()->json([
-            'msg' => 'video was added',
+            'msg' => 'image was added',
+            'data'=>[
+                'added_image'=>$last_image,
+                'number_of_images'=>$numberOfImages
+            ],
             'status' => config('global.OK_STATUS'),
         ], config('global.OK_STATUS'));
     }

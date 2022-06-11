@@ -6,7 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\InfluncerCategory;
+use App\Models\Influncer;
 use Carbon\Carbon;
+use Auth;
+use DB;
+use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
+use FFMpeg\Filters\Frame\FrameFilters;
 
 class InfluenecerController extends Controller
 {
@@ -43,6 +48,7 @@ class InfluenecerController extends Controller
             'videos'=>$data->influncers->video,
             'location'=>$data->influncers->nationalities->name,
             'social_media'=>$get_social_media,
+            'gallery' => $data->influncers->gallery
         ];
 
         #RESPONSE
@@ -86,6 +92,74 @@ class InfluenecerController extends Controller
 
 
         return $data;
+    }
+
+    function uploadMedia(Request $request){
+        $validate = $this->validate($request, [
+            'file' => 'required|mimes:jpeg,png,jpg,svg,mp4,ogx,oga,ogv,ogg,webm'
+        ]);
+        $influencer = Auth::guard('api')->user()->influncers;
+        if(!$influencer){
+            return response()->json([
+                'msg'       =>'You don\'t have permission to add media',
+                'status'    => false,
+            ],400);
+        }
+
+        $item = $influencer->addMedia($request->file('file'))->toMediaCollection('gallery');
+
+        if(explode('/',$item->mime_type)[0] == 'video'){
+            try {
+                FFMpeg::fromDisk('custom')->open($item->getPath())->getFrameFromSeconds(5)->export()->addFilter(function (FrameFilters $filters) {
+                    $filters->custom('scale=320:180');
+                })->toDisk('local')->save('public/'.$item->id.'/thumbnail.png');
+
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+            }
+        }
+        return response()->json([
+            'msg'       => 'Media Added Successfully',
+            'data'      => $influencer->gallery,
+            'status'    => true,
+        ],200);
+    }
+
+    function getMedias(Request $request){
+        
+        $influencer = Auth::guard('api')->user()->influncers;
+        if(!$influencer){
+            return response()->json([
+                'msg'       =>'You don\'t have permission to add media',
+                'status'    => false,
+            ],400);
+        }
+
+        return response()->json([
+            'msg'       => 'Media returned Successfully',
+            'data'      => $influencer->gallery,
+            'status'    => true,
+        ],200);
+
+
+
+    }
+
+    function deleteGalleryMedia($id){
+        $media = DB::table('media')->where('id',$id)->where('model_type','App\Models\Influncer')->first();
+        if(!$media)return response()->json([
+            'err'=>'file not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $model_type = $media->model_type;
+        $model = $model_type::find($media->model_id);
+        $model->deleteMedia($media->id);
+
+        return response()->json([
+            'msg'       => 'Media deleted Successfully',
+            'status'    => true,
+        ],200);
     }
 
    

@@ -26,7 +26,7 @@ return new class extends Migration
             $table->date('date')->nullable();
             $table->longText('rejectNote')->nullable();
             $table->longText('link')->nullable();
-            $table->bigInteger('af');
+            $table->bigInteger('af')->default(0);
             $table->timestamps();
         });
     }

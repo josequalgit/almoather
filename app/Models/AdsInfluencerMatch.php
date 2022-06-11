@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\InfluencerContract;
 
 class AdsInfluencerMatch extends Model
 {
@@ -16,6 +17,10 @@ class AdsInfluencerMatch extends Model
         'chosen'
     ];
 
+    protected $append = [
+        'contract'
+    ];
+
 
     public function ads()
     {
@@ -25,6 +30,20 @@ class AdsInfluencerMatch extends Model
     public function influencers()
     {
         return $this->belongsTo(Influncer::class,'influencer_id');
+    }
+
+
+
+    public function getContractAttribute()
+    {
+         
+         $contract = InfluencerContract::where(['influencer_id'=>$this->influencer_id])
+         ->where(['ad_id'=>$this->ad_id])
+         ->first();
+
+         if(!$contract) return null;
+
+         return $contract;
     }
     
 }

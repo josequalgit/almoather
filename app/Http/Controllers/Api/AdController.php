@@ -120,7 +120,7 @@ class AdController extends Controller
             ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
 
             $statusCode = [
-                'WaitingPayment'    => ['approve','prepay','choosing_influencer'],
+                'Pending'           => ['approve','pending','prepay','choosing_influencer'],
                 'Active'            => ['fullpayment','active','progress'],
                 'Finished'          => ['complete']
             ];
@@ -728,21 +728,35 @@ class AdController extends Controller
 
     }
 
-    /** NOT IN USE */
+
+    /** When the influencer response to the ad */
     public function completeAd($contract_id)
     {
+        /** FIND THE CONTRACT */
         $data = InfluencerContract::find($contract_id);
-        // return response()->json([
-        //     'err'=>$contract_id,
-        //     'status'=>config('global.NOT_FOUND_STATUS')
-        // ],config('global.NOT_FOUND_STATUS'));
-        $influencer = Influncer::find($data->influencer_id);
-        
-        $ad = Ad::find($data->ad_id);
-        if(!$influencer&&!$ad) return response()->json([
-            'err'=>'something wrong',
+
+        if(!$data) return response()->json([
+            'msg'=>'contract not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
+
+        
+        /** FIND THE INFLUENCER  */
+        $influencer = Influncer::find($data->influencer_id);
+
+        if(!$influencer) return response()->json([
+            'msg'=>'influencer not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        /** FIND THE AD  */
+        $ad = Ad::find($data->ad_id);
+        
+        if(!$influencer&&!$ad) return response()->json([
+            'msg'=>'something wrong',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
 
         $name = $influencer->first_name.' '.$influencer->middle_name.' '.$influencer->last_name;
         $info =[
@@ -750,23 +764,17 @@ class AdController extends Controller
             'id'=>$ad->id,
             'type'=>'Ad'
         ];
-      
+
+      /** FIND THE CONTRACT ADMINS  */
         $getContactManagers = User::whereHas('roles',function($q){
             $q->where('name','Contracts Manager')
             ->orWhere('name','superAdmin');
         })->get();
-        
-       
+
         $this->sendAdminNotification('contract_manager_notification',$info);
-
         Notification::send($getContactManagers, new AddInfluencer($info));
-        
 
-        if(!$data) return response()->json([
-            'err'=>'contract not found',
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
-
+        /** CONTRACT ACCEPT*/
         $data->status = 1;
         $data->save();
 
@@ -1119,6 +1127,62 @@ class AdController extends Controller
 
     }
 
+    public function update(Request $request , $ad_id)
+    {
+        #GET THE AD AND CHECK IF THE AD EXIST
+        $data = Ad::find($ad_id);
+        if(!$data) return response()->json([
+            'err'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        
+        if(gettype($request->social_media) == 'array'&&count($request->social_media) > 0)
+        {
+            DB::table('social_media_id')->where('ad_id',$data->id)->delete();
+
+            foreach ($request->social_media as $value) {
+                DB::table('social_media_id')->insert([
+                   'ad_id'=>$data->id,
+                   'social_media_id'=>$value['type']??$value->type,
+                   'link'=>$value['link']??$value->type
+                ]);
+			
+            }
+        }
+
+        if($data->update($request->all()))
+        {
+            return response()->json([
+                'msg'=>'ad was updated',
+                'data'=>$data,
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
+        }
+        else
+        {
+            return response()->json([
+                'err'=>'something wrong',
+                'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
+        }
+    }
+
+    public function ad_details_update($ad_id)
+    {
+        #GET THE AD AND CHECK IF THE AD EXIST
+        $data = Ad::find($ad_id);
+        if(!$data) return response()->json([
+            'err'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        return response()->json([
+            'data'=>$data,
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+    }
+
     private function match_response($ad)
     {
         return response()->json([
@@ -1294,4 +1358,132 @@ class AdController extends Controller
         }
       
     }
+
+    function uploadMedia(Request $request , $file_id , $type){
+
+        /**
+         * Add 
+         * Remove
+         * Replace
+         */
+        
+        if($file_id != -1)
+        {
+
+            $media = DB::table('media')->where('id',$file_id)->where('model_type','App\Models\Ad')->first();
+            if(!$media) return response()->json([
+                'err'=>'file was not found',
+                'status'=>config('global.NOT_FOUND_STATUS')
+            ],config('global.NOT_FOUND_STATUS'));
+            $ad = Ad::find($media->model_id);
+            if(!$ad) return response()->json([
+                'err'=>'ad was not found',
+                'status'=>config('global.NOT_FOUND_STATUS')
+            ],config('global.NOT_FOUND_STATUS'));
+        }
+
+
+        if($type == 'remove')
+        {
+            DB::table('media')->where('id',$file_id)->where('model_type','App\Models\Ad')->delete();
+            return response()->json([
+                'err'=>'file was removed',
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
+
+        };
+        if($type == 'replace')
+        {
+            $file = $ad->addMedia($request->file)
+            ->toMediaCollection($media->collection_name);
+            DB::table('media')->where('id',$file_id)->where('model_type','App\Models\Ad')->delete();
+
+            return response()->json([
+                'msg'=>'file was uploaded',
+                'data'=>[
+                    'id'=>$file->id,
+                    'url'=>$file->getFullUrl(),
+                ],
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
+
+        }
+        else
+        {
+           $ad = Ad::find($request->ad_id);
+           
+            if(!$ad) return response()->json([
+                'err'=>'ad was not found',
+                'status'=>config('global.NOT_FOUND_STATUS')
+            ],config('global.NOT_FOUND_STATUS'));
+            $ad->addMedia($request->file)
+            ->toMediaCollection($request->type);
+
+            $mediaItems = $ad->getMedia($request->type);
+            $publicFullUrl = [];
+            if(count($mediaItems) > 0)
+            {
+                foreach($mediaItems as $item)
+                {
+                    $obj = (object)[
+                        'id'=>$item->id,
+                        'url'=>$item->getFullUrl()
+                    ];
+                    // $publicFullUrl = $item->getFullUrl();
+                    array_push($publicFullUrl,$obj);
+                }
+               
+            }
+
+            return response()->json([
+                'msg'=>'file was uploaded',
+                'data'=>$publicFullUrl[count($mediaItems) - 1],
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
+        }
+       // $ad->clearMediaCollection($)
+
+
+
+      
+    }
+
+    function getMedias(Request $request){
+        
+        $influencer = Auth::guard('api')->user()->influncers;
+        if(!$influencer){
+            return response()->json([
+                'msg'       =>'You don\'t have permission to add media',
+                'status'    => false,
+            ],400);
+        }
+
+        return response()->json([
+            'msg'       => 'Media returned Successfully',
+            'data'      => $influencer->gallery,
+            'status'    => true,
+        ],200);
+
+
+
+    }
+
+    function deleteGalleryMedia($id){
+        $media = DB::table('media')->where('id',$id)->where('model_type','App\Models\Influncer')->first();
+        if(!$media)return response()->json([
+            'err'=>'file not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $model_type = $media->model_type;
+        $model = $model_type::find($media->model_id);
+        $model->deleteMedia($media->id);
+
+        return response()->json([
+            'msg'       => 'Media deleted Successfully',
+            'status'    => true,
+        ],200);
+    }
+
+    
 }

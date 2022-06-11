@@ -25,17 +25,16 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             AreaSeeder::class,
             CategorySeeder::class,
-           // CustomerSeeder::class,
-           // AdSeeder::class,
             ContractSeeder::class,
             AddressSeeder::class,
             BankSeeder::class,
-          //  InfulencerSeeder::class,
             QuestionSeeder::class,
             RattingSeeder::class,
             SettingSeeder::class,
             CampaignGoalsSeeder::class,
-
+            // CustomerSeeder::class,
+            // AdSeeder::class,
+            // InfulencerSeeder::class,
         ]);
     }
 }

@@ -129,6 +129,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/ads/seeMatched/{ad_id}','seeMatched')->name('seeMatched');
             Route::get('/ads/contract/edit/{ad_id}','editContract')->name('editContract');
             Route::post('/ads/contract/update/{ad_id}','updateContract')->name('updateContract');
+            Route::post('/ads/contract/changeStatus/{contract_id}','changeStatus')->name('changeStatus');
             Route::post('/ads/UpdateAddress/{id}','updateAddress')->name('updateAddress');
             Route::post('/ads/contract/influencers/{ad_id}','sendContractToInfluencer')->name('sendContractToInfluncer');
             Route::post('/ads/contract/customers/{contract_id}','sendContractToCustomer')->name('sendContractToCustomer');

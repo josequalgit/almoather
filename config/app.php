@@ -167,6 +167,8 @@ return [
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider::class,
         willvincent\Rateable\RateableServiceProvider::class,
+      //  ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider::class
+
 
 
 
@@ -183,7 +185,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\NotificationServicePrvoder::class
+        App\Providers\NotificationServicePrvoder::class,
+       // ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider::class,
 
 
     ],
@@ -202,6 +205,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         'PRedis' => Illuminate\Support\Facades\Redis::class,
+        'FFMpeg' => ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::class
         
     ])->toArray(),
 

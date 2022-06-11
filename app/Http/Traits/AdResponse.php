@@ -21,7 +21,11 @@ trait AdResponse {
             'image'=>$ad->image,
             'videos'=>$ad->videos,
             'cr_certificate'=>$ad->document,
-            'campaign_goal'=>$ad->campaignGoals->title,
+            'cr_image'=>$ad->crImage,
+            'campaign_goal'=>[
+              'id'=>$ad->campaignGoals->id,
+              'title'=>$ad->campaignGoals->title
+            ],
             'logo'=>$ad->logo,
             // 'locations'=>$ad->storeLocation?$ad->storeLocations()->get()->map(function($item){
             //   return $item->cities->name.','.$item->areas->name.','.$item->countries->name;
@@ -30,13 +34,21 @@ trait AdResponse {
             'marouf_num'=>$ad->marouf_num,
             'store_link'=>$ad->store_link,
               'prefired'=>$ad->socialMedias()->get()->map(function($item){
-              return $item->image;
+              return [
+                'id'=>$item->id,
+                'url'=>$item->image
+              ];
             }),
               'media_accounts'=>$ad->socialMediasAccount()->get()->map(function($item){
-              return $item->image;
+              return [
+                'id'=>$item->id,
+                'image'=>$item->image,
+              ];
             }),
+            'media_accounts_with_link'=>$ad->socialMediaWithAccount(),
             'cr_num'=>$ad->cr_num,
             'about'=>$ad->about,
+            'relation'=>$ad->relation,
             'category'=>$ad->categories?$ad->categories->name:null,
             'scenario'=>$ad->scenario,
             'videos'=>$ad->videos,
@@ -51,10 +63,10 @@ trait AdResponse {
               'id'=>$ad->countries->id,
               'name'=>$ad->countries->name
              ],
-            'city'=>[
+            'city'=>$ad->cities?[
               'id'=>$ad->cities->id,
               'name'=>$ad->cities->name
-            ],
+            ]:null,
             'area'=>[
               'id'=>$ad->areas->id,
               'name'=>$ad->areas->name

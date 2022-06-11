@@ -1,20 +1,20 @@
 @extends('dashboard.layout.index')
 
 @section('content')
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
-   
+
         <div class="content-body">
 
             <div class="card">
                 <div class="card-header pb-0">
                     <div class="card-title">
-                        <p class="mb-0">Ads</p>   
+                        <p class="mb-0">Ads</p>
                         <small class="text-muted mb-0">{{ $counter}} Ads Found</small>
                     </div>
-                   
+
                     <div class="section-right">
                         <ul class="view-type d-flex list-unstyled">
                             <li><div class="search-item"><input type="search" class="form-control" value="" placeholder="Search"><i class="bx bx-search"></i></div></li>
@@ -25,14 +25,56 @@
                     <hr class="w-100">
                 </div>
                 <div class="card-body campaign-items">
-                    <div class="row grid-items"  xxstyle="{{ !isset($_COOKIE['data-item']) || $_COOKIE['data-item'] == 'grid-items' ? '' : 'display: none'}}">
+                    <div class="row grid-items" style="{{ !isset($_COOKIE['data-item']) || $_COOKIE['data-item'] == 'grid-items' ? '' : 'display: none'}}">
                         @foreach ($data as $item)
-                        <div class="col-md-4 col-xl-4">
+                        <div class="col-md-4 col-xl-3">
                             <div class="item-wrapper">
                                 <div class="list-item profile-block">
+
                                     <div class="block-top">
+                                        <div class="dropdown more">
+                                            <button class="styleless-button" data-toggle="dropdown"><i class="bx bx-menu"></i>
+                                            <span class="caret"></span></button>
+
+                                            <ul class="dropdown-menu p-1 border menu-position">
+
+                                                    {{-- <li  class="list-item-custom mb-1 ">
+                                                        <button class="styleless-button w-100" href="{{ route('dashboard.ads.edit',$item->id) }}">
+                                                            <span class="icon-list-container ">
+                                                                <i class="bx bx-show list-item-icon"></i>
+                                                            </span>
+                                                            <span class="list-item-text">Show</span>
+                                                        </button>
+                                                    </li> --}}
+                                                    <li  class="list-item-custom mb-1 ">
+                                                        <button class="styleless-button w-100" onclick="openModalSeeContract('{{ $item->contacts?$item->contacts->content:'No data avalibale' }}')">
+                                                            <i class="bx bx-book-content list-item-icon"></i>
+                                                            <span class="list-item-text">Contract1</span>
+                                                        </button>
+                                                </li>
+
+                                                    <li  class="list-item-custom mb-1 ">
+                                                        <button class="styleless-button w-100" onclick="seeMatched('{{$item->id}}')">
+                                                            <i class="bx bx-book-content list-item-icon"></i>
+                                                            <span class="list-item-text">Contract2</span>
+                                                        </button>
+                                                </li>
+
+                                                <li  class="list-item-custom mb-1 ">
+                                                    <button class="styleless-button w-100" onclick="goToAd('{{ $item->id }}')">
+                                                        <i class="bx bx-book-content list-item-icon"></i>
+                                                        <span class="list-item-text">Contract3</span>
+                                                    </button>
+                                            </li>
+
+                                            </ul>
+                                          </div>
+                                        {{-- <button class="styleless-button">
+                                            <div class="flag"><i class="bx bx-menu-alt-left "></i> </div>
+                                        </button> --}}
                                         <div class="back-grey"></div>
                                         <div class="block-image"><img src="{{ $item->logo['url']  }}" alt="{{ $item->store }}"></div>
+
                                     </div>
                                     <div class="block-info">
                                         <span class="name">{{ $item->store }}</span>
@@ -43,7 +85,7 @@
                                             <span class="desc badge bg-info mt-1">{{$cat}}</span>
                                             @endforeach
                                         </div>
-                                        @else 
+                                        @else
                                         <span class="desc badge bg-info mt-1">No category choosen</span>
                                         @endif
                                     </div>
@@ -52,7 +94,7 @@
                                             <div class="count-box">
                                                 <span><i class="fas fa-dollar-sign"></i> Budget</span>
                                                 <span class="numbers">{{ number_format($item->budget); }}</span>
-                                                
+
                                             </div>
                                         </div>
 
@@ -67,7 +109,7 @@
                                             <div class="count-box">
                                                 <span><i class="fas fa-audio-description"></i> Type</span>
                                                 <span class="numbers">{{ $item->type ? $item->type : 'Not selected yet' }}</span>
-                                                
+
                                             </div>
                                         </div>
 
@@ -76,7 +118,7 @@
                                                 <span><i class="fas fa-plane-slash"></i> Campaign Type</span>
                                                 <span class="numbers">{{ $item->ad_type }}</span>
                                             </div>
-                                        </div>                                        
+                                        </div>
                                     </div>
                                     <div class="block-add w-100 text-center">
                                         <span class="campaign-status badge bg-warning my-1">{{ $item->status }}</span>
@@ -84,10 +126,10 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         @endforeach
                     </div>
-                    <div class="row list-items" style="{{ isset($_COOKIE['data-item']) && $_COOKIE['data-item'] == 'list-items' ? '' : 'display: none'}}">
+                    <div class="row list-items mt-2" style="{{ isset($_COOKIE['data-item']) && $_COOKIE['data-item'] == 'list-items' ? '' : 'display: none'}}">
                         <table class="table zero-configuration table-influencers col-12" >
                             <thead>
                                 <tr>
@@ -102,26 +144,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- @foreach ($data as $item)
+                                @foreach ($data as $item)
                                         <tr>
-                                            <td><img src="{{ $item->users->image['url'] }}" alt="{{ $item->full_name }}"></td>
-                                            <td>{{ $item->full_name  }}</td>
+                                            <td><img src="{{ $item->customers?$item->customers->users->image['url']:null }}" alt="{{ $item->customers->full_name }}"></td>
+                                            <td>{{ $item->customers->full_name  }}</td>
                                             <td><div class="d-flex justify-content-center align-items-center"><div class="contry-name">{{$item->countries->name}}</div> <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->country_code) }}.png" alt="{{$item->countries->name}}"></div></div></td>
                                             <td>100,000</td>
                                             <td>87%</td>
                                             <td>77%</td>
                                             <td>55,000</td>
                                             <td>
-                                                <a class="btn btn-secondary" href="{{ route('dashboard.influncers.edit',$item->id) }}">
+                                                <a class="btn btn-secondary" href="{{ route('dashboard.ads.edit',$item->id) }}">
                                                     <i class="bx bx-show"></i>
-                                                </a>    
+                                                </a>
                                             </td>
                                         </tr>
-                                @endforeach --}}
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
-                        
+
                     <div class="mt-1 pagination-wrapper">
                         {{ $data->links('pagination::bootstrap-5') }}
                     </div>
@@ -132,7 +174,7 @@
     </div>
 
 
-    
+
     <div id="deleteModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -174,7 +216,7 @@
                           </tr>
                         </thead> --}}
                         <tbody id="matchedTabel">
-                         
+
                         </tbody>
                       </table>
                     </div>
@@ -245,7 +287,7 @@
             a.document.close();
             a.print();
     }
-    
+
 
     function deleteApi()
     {
@@ -307,7 +349,7 @@
                 {
                   return alert('some thing wrong');
                 }
-                
+
                 // location.reload();
 
             },
@@ -316,6 +358,22 @@
             }
         });
     }
+
+    function goToAd(ad_id)
+    {
+        let route = '{{ route("dashboard.ads.edit",":id") }}';
+        let url = route.replace(':id',ad_id);
+        return window.location.href = url;
+    }
+
+    $('.view-type a').on('click',function(e){
+        e.preventDefault();
+        let item = $(this).attr('data-item');
+        $('.view-type a').removeClass('active');
+        $(this).addClass('active');
+        $('.'+item).show().siblings().hide();
+        setCookie('data-item',item,3600);
+    });
 </script>
 
 @endsection
