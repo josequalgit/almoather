@@ -568,11 +568,11 @@ footer.footer span i {
 }
 
 .main-menu.menu-light .navigation > li ul .active {
-  background: rgba(90, 141, 238, 0.15);
+  background: rgba(152,134,170,0.13);
 }
 
 .main-menu.menu-light .navigation > li ul .active > a {
-  color: #5A8DEE;
+  color: #9886aa;
 }
 
 .main-menu.menu-light .navigation > li > ul > li:first-child > a {

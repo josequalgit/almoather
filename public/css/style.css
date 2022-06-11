@@ -35,25 +35,11 @@ li.nav-item.mr-auto {
 }
 
 .main-menu.menu-light .navigation>li.active:not(.sidebar-group-active)>a {
-    border-radius: 0.267rem;
-    background-image: linear-gradient(to right,
-            #bc6428,
-            #ffd77a,
-            #945825) !important;
+    background: rgba(152,134,170,0.13);
+    color: #9886aa;
 }
 
 .breadcrumb-item.active {
-    border-radius: 0.267rem;
-    background-image: linear-gradient(to right,
-            #bc6428,
-            #ffd77a,
-            #945825) !important;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.bx-edit {
     border-radius: 0.267rem;
     background-image: linear-gradient(to right,
             #bc6428,
@@ -124,7 +110,7 @@ input[type="color"]:focus,
     border-color: none;
     box-shadow: none;
     -webkit-box-shadow: none;
-    outline: #ffd77a auto 5px;
+    outline: #9886aa8c auto 5px;
 }
 
 option:not(:checked) {
@@ -899,6 +885,7 @@ table.zero-configuration .flag img {
     min-width: 150px;
     font-size: 14px;
     padding: 10px;
+    background-color: #9886AA !important;
 }
 
 .campaign-date{
