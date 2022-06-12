@@ -48,24 +48,6 @@ li.nav-item.mr-auto {
     border-radius: 0.267rem;
 }
 
-.breadcrumb-item.active {
-    border-radius: 0.267rem;
-    background-image: linear-gradient(to right, #bc6428, #ffd77a, #945825) !important;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.nav-item.hover.open {
-    border-radius: 0.267rem;
-    background-image: linear-gradient(to right, #bc6428, #ffd77a, #945825) !important;
-}
-
-.dropdown-item:active {
-    border-radius: 0.267rem;
-    background-image: linear-gradient(to right, #bc6428, #ffd77a, #945825) !important;
-}
-
 .logButton {
     background-image: linear-gradient(to right, #bc6428, #ffd77a, #945825) !important;
     border: none !important;
@@ -929,3 +911,5 @@ ul.dropdown-menu.p-1.border.show {
     width: 150px;
     height: 5px;
 }
+
+.custom-avatar {}

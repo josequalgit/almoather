@@ -1240,15 +1240,34 @@ class AdController extends Controller
 
     private function get_ad_influencers_matchs($ad)
     {
-        return $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
-                    
-            return [
+       $isProfitable =  $ad->campaignGoals->profitable;
+        return $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($isProfitable){
+                
+            $response = [
                 'id'=>$item->influencers->id,
                 'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
                 'image'=>$item->influencers->users->InfulncerImage?$item->influencers->users->InfulncerImage:null,
-                'match'=>$item->match,
+              //  'roas'=>$item->match,
+                //'roas'=>$item->match,
+                'gender'=>$item->influencers->gender,
                 'is_primary'=>$item->status == 'basic'?true:false
             ];
+
+            $response['ROAS'] = null;
+            $response['engagement_rate'] = null;
+            $response['aoaf'] = null;
+            if($isProfitable)
+            {
+                $response['ROAS'] = $item->match;
+            }
+            else
+            {
+                $response['engagement_rate'] = $item->match;
+                $response['AOAF'] = $item->AOAF;
+
+            }
+
+            return $response;
         });
     }
 

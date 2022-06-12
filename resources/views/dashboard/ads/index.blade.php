@@ -36,25 +36,26 @@
 
                                             <ul class="dropdown-menu p-1 border menu-position">
                                                     <li  class="list-item-custom mb-1 ">
-                                                        <button class="styleless-button w-100" onclick="openModalSeeContract('{{ $item->contacts?$item->contacts->content:'No data avalibale' }}')">
-                                                            <i class="bx bx-book-content list-item-icon"></i>
-                                                            <span class="list-item-text">Contract1</span>
+                                                        
+                                                        <button class="styleless-button w-100 text-left" onclick="openModalSeeContract('{{ $item->contacts?$item->contacts->content:'No data avalibale' }}')">
+                                                            <i class="bx bx-printer list-item-icon"></i>
+                                                            <span class="list-item-text">Print</span>
                                                         </button>
                                                 </li>
 
                                                     <li  class="list-item-custom mb-1 ">
-                                                        <button class="styleless-button w-100" onclick="seeMatched('{{$item->id}}')">
-                                                            <i class="bx bx-book-content list-item-icon"></i>
-                                                            <span class="list-item-text">Contract2</span>
+                                                        <button class="styleless-button w-100 text-left" onclick="seeMatched('{{$item->id}}')">
+                                                            <i class="bx bx-user list-item-icon"></i>
+                                                            <span class="list-item-text">Influncers</span>
                                                         </button>
                                                 </li>
 
                                                 <li  class="list-item-custom mb-1 ">
-                                                    <button class="styleless-button w-100" onclick="goToAd('{{ $item->id }}')">
+                                                    <button class="styleless-button w-100 text-left" onclick="goToAd('{{ $item->id }}')">
                                                         <i class="bx bx-book-content list-item-icon"></i>
-                                                        <span class="list-item-text">Contract3</span>
+                                                        <span class="list-item-text">Details</span>
                                                     </button>
-                                            </li>
+                                                </li>
 
                                             </ul>
                                           </div>
@@ -304,9 +305,7 @@
                             console.log(element)
                        let div = `<tr class="candidates-list bg-dnager">
                             <td class="title">
-                              <div class="thumb">
-                                <img class="img-fluid" src="${element.image}" alt="">
-                              </div>
+                            
                               <div class="candidate-list-details">
                                 <div class="candidate-list-info">
                                   <div class="candidate-list-title">

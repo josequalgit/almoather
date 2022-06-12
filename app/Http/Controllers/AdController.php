@@ -31,10 +31,23 @@ class AdController extends Controller
     use SendNotification;
     public function index($status = null)
     {
+
+      
+
+
+
         if (!$status) {
             $data = Ad::orderBy('created_at', 'desc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
             $counter = Ad::count();
         }else{
+
+            // $statusCode = [
+            //     'Pending'           => ['approve','pending','prepay','choosing_influencer'],
+            //     'Active'            => ['fullpayment','active','progress'],
+            //     'Finished'          => ['complete'],
+            //     'Rejected'          => ['reject']
+            // ];
+
             $data = Ad::where('status', $status)->orderBy('created_at', 'asc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
             $counter = Ad::where('status', $status)->count();
         }
@@ -292,6 +305,7 @@ class AdController extends Controller
 
             $eng_rate = $AOAF / $influencer->subscribers;
             $allSmallInfluencer[$key]->eng_rate = $eng_rate;
+            $allSmallInfluencer[$key]->AOAF = $AOAF;
         }
 
         $allSmallInfluencer = collect($allSmallInfluencer)->sortByDesc('eng_rate');
@@ -307,7 +321,8 @@ class AdController extends Controller
                     'ad_id'=>$ad->id,
                     'influencer_id'=>$influencer->id,
                     'chosen'=>1,
-                    'match'=>$influencer->eng_rate
+                    'match'=> $influencer->eng_rate,
+                    'AOAF' => $influencer->AOAF,
                 ]);
             } else {
                 array_push($notChosenInfluencer, $influencer);
@@ -315,7 +330,8 @@ class AdController extends Controller
                     'ad_id'=>$ad->id,
                     'influencer_id'=>$influencer->id,
                     'chosen'=>0,
-                    'match'=>$influencer->eng_rate
+                    'match'=>$influencer->eng_rate,
+                    'AOAF' => $influencer->AOAF,
                 ]);
             }
         }
