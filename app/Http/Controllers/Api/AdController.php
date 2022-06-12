@@ -1402,7 +1402,7 @@ class AdController extends Controller
                    'status'=>config('global.NOT_FOUND_STATUS')
                ],config('global.NOT_FOUND_STATUS'));
            }
-
+ 
            DB::table('media')->where('id',$file_id)->where('model_type','App\Models\Ad')->delete();
 
             return response()->json([
