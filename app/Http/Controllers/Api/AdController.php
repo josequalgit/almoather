@@ -471,7 +471,7 @@ class AdController extends Controller
                 }
                 $counter = $counter +1;
 
-                return $this->match_influencer_with_eligible_status($item->influencers,$item->match,$counter == 2?:$currentBudget,$item->status);
+                return $this->match_influencer_with_eligible_status($item->influencers,$item,$counter == 2?:$currentBudget,$item->status);
             });
 
             return response()->json([
@@ -916,6 +916,9 @@ class AdController extends Controller
                     {
                       $status = 'pending';
                     }
+
+                    
+
                     return [
                       'id'=>$item->influencers->id,
                       'image'=>$item->influencers->users->infulncerImage,
@@ -1204,7 +1207,7 @@ class AdController extends Controller
 
     private function get_ad_influncers_with_status($ad)
     {
-        return $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
+        return $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($ad){
                 $contract = InfluencerContract::where('influencer_id',$item->influencer_id)->first();
 
                 $status = null;
@@ -1228,13 +1231,48 @@ class AdController extends Controller
                 {
                     $status = 'pending';
                 }
-                return [
-                    'id'=>$item->influencers->id,
-                    'image'=>$item->influencers->users->infulncerImage,
-                    'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
+
+                // $response = [
+                //     'id'=>$item->influencers->id,
+                //     'image'=>$item->influencers->users->infulncerImage,
+                //     'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
+                //     'match'=>$item->match,
+                //     'status'=>$status
+                // ];
+
+                $inf = $item->influencers;
+                $isProfitable =  $ad->campaignGoals->profitable;
+                $isOnSite = $ad->ad_type;
+         
+
+                $response =  [
+                    'id'=>$inf->id,
+                    'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
+                    'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage:null,
                     'match'=>$item->match,
+                    'gender'=>$item->influencers->gender,
+                    'budget'=>$isOnSite?$item->influencers->ad_onsite_price:$item->influencers->ad_price,
                     'status'=>$status
+                    
                 ];
+            // if($eligible != null) $response['eligible'] = $eligible;
+    
+            $response['ROAS'] = null;
+            $response['engagement_rate'] = null;
+            $response['aoaf'] = null;
+    
+            if($isProfitable)
+            {
+                $response['ROAS'] = $item->match;
+            }
+            else
+            {
+                $response['engagement_rate'] = $item->match;
+                $response['AOAF'] = $item->AOAF;
+            }
+
+
+                return $response;
             });
     }
 
@@ -1264,24 +1302,48 @@ class AdController extends Controller
             {
                 $response['engagement_rate'] = $item->match;
                 $response['AOAF'] = $item->AOAF;
-
             }
 
             return $response;
         });
     }
 
-    private function match_influencer_with_eligible_status($inf,$match,$eligible = null,$status)
+    private function match_influencer_with_eligible_status($inf,$item,$eligible = null,$status)
     {
+        $ad = Ad::find($item->ad_id);
+        if(!$ad) return response()->json([
+            'err'=>'ad was not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $isProfitable = $ad->campaignGoals->profitable;
+       $isOnSite = $ad->ad_type;
         $response =  [
                 'id'=>$inf->id,
                 'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
                 'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage:null,
-                'match'=>$match,
+                'match'=>$item->match,
+                'gender'=>$item->influencers->gender,
+                'budget'=>$isOnSite?$item->influencers->ad_onsite_price:$item->influencers->ad_price,
                 'status'=>$status
                 
             ];
         if($eligible != null) $response['eligible'] = $eligible;
+
+        $response['ROAS'] = null;
+        $response['engagement_rate'] = null;
+        $response['aoaf'] = null;
+
+        if($isProfitable)
+        {
+            $response['ROAS'] = $item->match;
+        }
+        else
+        {
+            $response['engagement_rate'] = $item->match;
+            $response['AOAF'] = $item->AOAF;
+        }
+
         return $response;
     }
 
