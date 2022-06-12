@@ -77,6 +77,7 @@ trait AdResponse {
             'hasStore'=>$ad->has_hasStore?true:false,
             'is_onSite'=>$ad->onSite?'Online':'Site',
             'tax_value'=>$ad->tax_value,
+            'reject_note'=>$ad->reject_note,
            
       ];
 
