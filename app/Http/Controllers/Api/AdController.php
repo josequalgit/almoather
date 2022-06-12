@@ -8,6 +8,7 @@ use App\Models\Ad;
 use App\Http\Requests\Api\AdRequest;
 use App\Http\Requests\Api\AcceptAdContractRequest;
 use App\Http\Requests\Api\CheckPaymentRequest;
+use App\Http\Requests\Api\UploadAdMedia;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\AddInfluencer;
 use App\Models\User;
@@ -1359,33 +1360,51 @@ class AdController extends Controller
       
     }
 
-    function uploadMedia(Request $request , $file_id , $type){
+    public function uploadMedia(UploadAdMedia $request , $file_id , $type){
 
         /**
+         * type:
          * Add 
          * Remove
          * Replace
          */
         
-        if($file_id != -1)
+        # IF THE FILE ID IS -1 IT WILL ADD A FILE
+        if($type == 'add')
         {
 
-            $media = DB::table('media')->where('id',$file_id)->where('model_type','App\Models\Ad')->first();
-            if(!$media) return response()->json([
-                'err'=>'file was not found',
-                'status'=>config('global.NOT_FOUND_STATUS')
-            ],config('global.NOT_FOUND_STATUS'));
-            $ad = Ad::find($media->model_id);
-            if(!$ad) return response()->json([
-                'err'=>'ad was not found',
-                'status'=>config('global.NOT_FOUND_STATUS')
-            ],config('global.NOT_FOUND_STATUS'));
+            if(!$request->ad_id)
+            {
+                return response()->json([
+                    'err'=>'please add the ad id',
+                    'status'=>config('global.WRONG_VALIDATION_STATUS')
+                ],config('global.WRONG_VALIDATION_STATUS'));
+            }
+            if(!$request->file_type)
+            {
+                return response()->json([
+                    'err'=>"please add the type of file's your adding",
+                    'status'=>config('global.WRONG_VALIDATION_STATUS')
+                ],config('global.WRONG_VALIDATION_STATUS'));
+            }
+
         }
 
 
         if($type == 'remove')
         {
-            DB::table('media')->where('id',$file_id)->where('model_type','App\Models\Ad')->delete();
+           $media =  DB::table('media')->where('id',$file_id)->where('model_type','App\Models\Ad')->first();
+
+           if(!$media)
+           {
+               return response()->json([
+                   'err'=>'file was not found',
+                   'status'=>config('global.NOT_FOUND_STATUS')
+               ],config('global.NOT_FOUND_STATUS'));
+           }
+
+           DB::table('media')->where('id',$file_id)->where('model_type','App\Models\Ad')->delete();
+
             return response()->json([
                 'err'=>'file was removed',
                 'status'=>config('global.OK_STATUS')
@@ -1394,8 +1413,30 @@ class AdController extends Controller
         };
         if($type == 'replace')
         {
+            $media = DB::table('media')->where('id',$file_id)->where('model_type','App\Models\Ad')->first();
+
+
+            if(!$media)
+            {
+                return response()->json([
+                    'err'=>'file was not found',
+                    'status'=>config('global.NOT_FOUND_STATUS')
+                ],config('global.NOT_FOUND_STATUS'));
+            }
+
+            $ad = Ad::find($media->model_id);
+
+            if(!$ad)
+            {
+                return response()->json([
+                    'err'=>'ad was not found',
+                    'status'=>config('global.NOT_FOUND_STATUS')
+                ],config('global.NOT_FOUND_STATUS'));
+            }
+
             $file = $ad->addMedia($request->file)
             ->toMediaCollection($media->collection_name);
+
             DB::table('media')->where('id',$file_id)->where('model_type','App\Models\Ad')->delete();
 
             return response()->json([
@@ -1416,10 +1457,11 @@ class AdController extends Controller
                 'err'=>'ad was not found',
                 'status'=>config('global.NOT_FOUND_STATUS')
             ],config('global.NOT_FOUND_STATUS'));
-            $ad->addMedia($request->file)
-            ->toMediaCollection($request->type);
 
-            $mediaItems = $ad->getMedia($request->type);
+            $ad->addMedia($request->file)
+            ->toMediaCollection($request->file_type);
+
+            $mediaItems = $ad->getMedia($request->file_type);
             $publicFullUrl = [];
             if(count($mediaItems) > 0)
             {
@@ -1432,7 +1474,7 @@ class AdController extends Controller
                     // $publicFullUrl = $item->getFullUrl();
                     array_push($publicFullUrl,$obj);
                 }
-               
+                
             }
 
             return response()->json([
@@ -1441,11 +1483,7 @@ class AdController extends Controller
                 'status'=>config('global.OK_STATUS')
             ],config('global.OK_STATUS'));
         }
-       // $ad->clearMediaCollection($)
 
-
-
-      
     }
 
     function getMedias(Request $request){
