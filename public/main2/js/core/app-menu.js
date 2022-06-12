@@ -26,83 +26,6 @@
     container: null,
     horizontalMenu: false,
 
-    manualScroller: {
-      obj: null,
-
-      init: function () {
-        var scroll_theme = $(".main-menu").hasClass("menu-dark")
-          ? "light"
-          : "dark";
-        this.obj = new PerfectScrollbar(".main-menu-content", {
-          suppressScrollX: true,
-          wheelPropagation: false,
-        });
-      },
-
-      update: function () {
-        if (this.obj) {
-          // Scroll to currently active menu on page load if data-scroll-to-active is true
-          if ($(".main-menu").data("scroll-to-active") === true) {
-            var activeEl, menu, activeElHeight;
-            activeEl = document.querySelector(".main-menu-content li.active");
-            menu = document.querySelector(".main-menu-content");
-            if ($body.hasClass("menu-collapsed")) {
-              if ($(".main-menu-content li.sidebar-group-active").length) {
-                activeEl = document.querySelector(
-                  ".main-menu-content li.sidebar-group-active"
-                );
-              }
-            }
-            if (activeEl) {
-              activeElHeight =
-                activeEl.getBoundingClientRect().top + menu.scrollTop;
-            }
-            // If active element's top position is less than 2/3 (66%) of menu height than do not scroll
-            if (activeElHeight > parseInt((menu.clientHeight * 2) / 3)) {
-              var start = menu.scrollTop,
-                change =
-                  activeElHeight - start - parseInt(menu.clientHeight / 2);
-            }
-            setTimeout(function () {
-              $.app.menu.container.stop().animate({ scrollTop: change }, 300);
-              $(".main-menu").data("scroll-to-active", "false");
-            }, 300);
-          }
-          this.obj.update();
-        }
-      },
-
-      enable: function () {
-        if (!$(".main-menu-content").hasClass("ps")) {
-          this.init();
-        }
-      },
-
-      disable: function () {
-        if (this.obj) {
-          this.obj.destroy();
-        }
-      },
-
-      updateHeight: function () {
-        if (
-          ($body.data("menu") == "vertical-menu" ||
-            $body.data("menu") == "vertical-menu-modern" ||
-            $body.data("menu") == "vertical-overlay-menu") &&
-          $(".main-menu").hasClass("menu-fixed")
-        ) {
-          $(".main-menu-content").css(
-            "height",
-            $(window).height() -
-              $(".header-navbar").height() -
-              $(".main-menu-header").outerHeight() -
-              $(".main-menu-footer").outerHeight()
-          );
-          this.update();
-        }
-      },
-    },
-
     init: function (compactMenu) {
       if ($(".main-menu-content").length > 0) {
         this.container = $(".main-menu-content");
@@ -332,7 +255,7 @@
             !$(".main-menu").hasClass("menu-native-scroll") &&
             $(".main-menu").hasClass("menu-fixed")
           ) {
-            this.manualScroller.enable();
+          
             $(".main-menu-content").css(
               "height",
               $(window).height() -
@@ -340,7 +263,6 @@
                 $(".main-menu-header").outerHeight() -
                 $(".main-menu-footer").outerHeight()
             );
-            // this.manualScroller.update();
           }
 
           if (!$body.hasClass("vertical-overlay-menu")) {
@@ -364,12 +286,7 @@
           }
         },
         function () {
-          if (
-            !$(".main-menu").hasClass("menu-native-scroll") &&
-            $(".main-menu").hasClass("menu-fixed")
-          ) {
-            this.manualScroller.enable();
-          }
+          
 
           if (!$body.hasClass("vertical-overlay-menu")) {
             $(".sidenav-overlay").removeClass("d-block d-none");
@@ -406,15 +323,7 @@
             $listItem.addClass("open").removeClass("menu-collapsed-open");
           },
           function () {
-            if (
-              $(".main-menu").hasClass("menu-native-scroll") ||
-              $body.data("menu") == "horizontal-menu"
-            ) {
-              this.manualScroller.disable();
-            } else {
-              if ($(".main-menu").hasClass("menu-fixed"))
-                this.manualScroller.enable();
-            }
+           
 
             if (
               ($body.data("menu") == "vertical-menu" ||
@@ -428,7 +337,7 @@
                   $(".main-menu-header").outerHeight() -
                   $(".main-menu-footer").outerHeight()
               );
-              // this.manualScroller.update();
+              
             }
           }
         );
@@ -465,13 +374,7 @@
 
           },
           function () {
-            if (
-              $body.data("menu") == "horizontal-menu" &&
-              $body.hasClass("vertical-overlay-menu")
-            ) {
-              if ($(".main-menu").hasClass("menu-fixed"))
-                this.manualScroller.enable();
-            }
+            
             if (
               ($body.data("menu") == "vertical-menu" ||
                 $body.data("menu") == "vertical-menu-modern") &&
@@ -481,12 +384,8 @@
                 "height",
                 $(window).height() - $(".header-navbar").height()
               );
-              // this.manualScroller.update();
             }
-            if ($body.data("menu") == "vertical-menu-modern") {
-              if ($(".main-menu").hasClass("menu-fixed"))
-                this.manualScroller.enable();
-            }
+           
           }
         );
       }
@@ -736,7 +635,7 @@
     },
 
     update: function () {
-      this.manualScroller.update();
+      
     },
 
     reset: function () {

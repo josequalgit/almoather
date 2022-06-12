@@ -263,3 +263,8 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
 });
 
 
+Route::get('voluum',function(){
+    $voluum = new App\Voluum\Influencer;
+    $voluum->getInfluencer(1);
+});
+

@@ -98,12 +98,12 @@
 }
 
 .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation li.active a {
-  background: rgba(90, 141, 238, 0.2);
+  background: rgb(190 186 213 / 25%);
   box-shadow: none;
 }
 
 .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation li.menu-collapsed-open {
-  background: rgba(90, 141, 238, 0.2);
+  background: rgb(190 186 213 / 25%);
   border: none;
 }
 

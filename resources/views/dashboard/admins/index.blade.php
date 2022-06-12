@@ -9,7 +9,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header pb-0">
                                 <div class="card-title">
                                     <p class="mb-0">Admins</p>
                                 </div>

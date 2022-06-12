@@ -1,9 +1,7 @@
 @extends('dashboard.layout.index')
 
 @section('content')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <div class="app-content content">
-    <div class="content-overlay"></div>
     <div class="content-wrapper">
 
         <div class="content-body">
@@ -37,15 +35,6 @@
                                             <span class="caret"></span></button>
 
                                             <ul class="dropdown-menu p-1 border menu-position">
-
-                                                    {{-- <li  class="list-item-custom mb-1 ">
-                                                        <button class="styleless-button w-100" href="{{ route('dashboard.ads.edit',$item->id) }}">
-                                                            <span class="icon-list-container ">
-                                                                <i class="bx bx-show list-item-icon"></i>
-                                                            </span>
-                                                            <span class="list-item-text">Show</span>
-                                                        </button>
-                                                    </li> --}}
                                                     <li  class="list-item-custom mb-1 ">
                                                         <button class="styleless-button w-100" onclick="openModalSeeContract('{{ $item->contacts?$item->contacts->content:'No data avalibale' }}')">
                                                             <i class="bx bx-book-content list-item-icon"></i>
@@ -69,9 +58,6 @@
 
                                             </ul>
                                           </div>
-                                        {{-- <button class="styleless-button">
-                                            <div class="flag"><i class="bx bx-menu-alt-left "></i> </div>
-                                        </button> --}}
                                         <div class="back-grey"></div>
                                         <div class="block-image"><img src="{{ $item->logo['url']  }}" alt="{{ $item->store }}"></div>
 
@@ -208,13 +194,7 @@
                 <div class="col">
                     <div class="user-dashboard-info-box table-responsive mb-0 bg-white  shadow-sm">
                       <table class="table manage-candidates-top mb-0">
-                        {{-- <thead>
-                          <tr>
-                            <th>Candidate Name</th>
-                            <th class="text-center">Status</th>
-                            <th class="action text-right">Action</th>
-                          </tr>
-                        </thead> --}}
+                       
                         <tbody id="matchedTabel">
 
                         </tbody>

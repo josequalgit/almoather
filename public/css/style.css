@@ -3,15 +3,22 @@
     width: 60px;
     height: 60px;
     right: 25px;
-    background-color: #25d366;
+    background-color: #9886aa;
     border-radius: 50px;
     text-align: center;
     font-size: 40px;
-    box-shadow: 2px 2px 3px #999;
+    box-shadow: 2px 2px 6px 0px #0000003b;
     z-index: 100;
     bottom: 50px;
     border: none;
 }
+
+.profileImage{
+    width:150px;
+  }
+  .video{
+    margin: 2%;
+  }
 
 .bottom-right a {
     color: #fff;
@@ -47,18 +54,6 @@ li.nav-item.mr-auto {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-
-.bx-show {
-    color: #000;
-    font-size: 20px;
-    font-weight: 600;
-}
-
-.bx-broadcast {
-    border-radius: 0.267rem;
-    background-image: linear-gradient(to right, #bc6428, #ffd77a, #945825) !important;
-}
-
 .nav-item.hover.open {
     border-radius: 0.267rem;
     background-image: linear-gradient(to right, #bc6428, #ffd77a, #945825) !important;
@@ -699,14 +694,13 @@ input[type="radio"] .styled:checked+label::after {
 }
 
 .list-item .block-add .btn {
-    border: 1px solid #f7c870;
-    background-color: #f7c870;
+    border: 1px solid #9886AA;
+    background-color: #9886AA;
     border-radius: 8px;
     padding: 5px;
     width: 100%;
-    color: #000;
-    font-size: 12px;
-    font-weight: 600;
+    color: #fff;
+    font-size: 14px;
 }
 
 .list-item .block-add .btn .bx {
@@ -918,8 +912,6 @@ ul.dropdown-menu.p-1.border.show {
     color: black;
     font-weight: bold;
 }
-
-.icon-list-container {}
 
 .list-item-custom:hover {
     padding-bottom: 5px;

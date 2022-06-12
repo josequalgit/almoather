@@ -3438,14 +3438,14 @@ input:focus ~ .bg-secondary {
 .btn-secondary {
     border-color: #9886AA !important;
     background-color: #9886AA!important;
-    color: #000;
+    color: #fff;
 }
 
 .btn-secondary:hover,
 .btn-secondary.hover {
     border-color: #9886AA !important;
     background-color: #9886AA !important;
-    color: #000;
+    color: #fff;
 }
 
 .btn-secondary:hover.glow,

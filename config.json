@@ -1,7 +1,7 @@
 {
     "server": {
-        "origin": "almuaathir.josequal.net",
-        "port": 3001
+        "origin": "127.0.0.1:8000",
+        "port": 3000
     },
     "db": {
         "host": "localhost",
@@ -10,8 +10,8 @@
         "database": "almuaathir"
     },
     "redis": {
-        "url": "almuaathir.josequal.net",
+        "url": "127.0.0.1:8000",
         "port": 6379
     },
-    "environment": "https"
+    "environment": "http"
 }
