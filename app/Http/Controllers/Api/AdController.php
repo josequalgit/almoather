@@ -1408,7 +1408,7 @@ class AdController extends Controller
             return response()->json([
                 'err'=>'file was removed',
                 'status'=>config('global.OK_STATUS')
-            ],config('global.OK_STATUS'));
+            ],config('global.OK_STATUS')); 
 
         };
         if($type == 'replace')
