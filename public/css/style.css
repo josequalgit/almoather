@@ -924,3 +924,7 @@ ul.dropdown-menu.p-1.border.show {
     height: 17vh !important;
     overflow-y: auto;
 }
+
+#profileImage {
+    width: 150px;
+}
