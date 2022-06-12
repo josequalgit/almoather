@@ -13,12 +13,13 @@
     border: none;
 }
 
-.profileImage{
-    width:150px;
-  }
-  .video{
+.profileImage {
+    width: 150px;
+}
+
+.video {
     margin: 2%;
-  }
+}
 
 .bottom-right a {
     color: #fff;
@@ -42,7 +43,7 @@ li.nav-item.mr-auto {
 }
 
 .main-menu.menu-light .navigation>li.active:not(.sidebar-group-active)>a {
-    background: rgba(152,134,170,0.13);
+    background: rgba(152, 134, 170, 0.13);
     color: #9886aa;
     border-radius: 0.267rem;
 }
@@ -54,6 +55,7 @@ li.nav-item.mr-auto {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
 .nav-item.hover.open {
     border-radius: 0.267rem;
     background-image: linear-gradient(to right, #bc6428, #ffd77a, #945825) !important;
