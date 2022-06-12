@@ -14,9 +14,7 @@ class CampaignGoalController extends Controller
 
    public function index()
    {
-   
-
-    $itemsPaginated = CampaignGoal::select(['id','title'])->get()->map(function($item){
+    $itemsPaginated = CampaignGoal::get()->map(function($item){
         return [
             'id'=>$item->id,
             'name'=>$item->title

@@ -9,9 +9,9 @@
             <div class="card">
                 <div class="card-header pb-0">
                     <div class="card-title">
-                        <p class="mb-0">Ads</p>
-                        <small class="text-muted mb-0">{{ $counter}} Ads Found</small>
+                        <p class="mb-0">Categories</p>
                     </div>
+                    <hr class="w-100 my-1">
 
                     <div class="section-right">
                         <ul class="view-type d-flex list-unstyled">
