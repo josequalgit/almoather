@@ -13,35 +13,22 @@
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
-        <div class="content-header row">
-            <div class="content-header-left col-12 mb-2 mt-1">
-                <div class="breadcrumbs-top">
-                    <h5 class="content-header-title float-left pr-1 mb-0">Tabs</h5>
-                    <div class="breadcrumb-wrapper d-none d-sm-block">
-                        <ol class="breadcrumb p-0 mb-0 pl-1">
-                            <li class="breadcrumb-item"><a href="index.html"><i class="bx bx-home-alt"></i></a>
-                            </li>
-                            <li class="breadcrumb-item"><a href="#">Dashboard</a>
-                            </li>
-                            <li class="breadcrumb-item active">Faqs
-                            </li>
-                        </ol>
-                        @can('Create Faq')
-                        <a href="{{ route('dashboard.faqs.create') }}" class=" btn btn-primary float-right">Create</a>                            
-                        @endcan
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="content-body mt-5">
+     
+        <div class="content-body">
             <!-- Basic tabs start -->
             <section id="basic-datatable">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Faqs</h4>
-                            </div>
+                            <div class="card-header pb-0">
+                                <div class="card-title">
+                                    <p class="mb-0">Faq</p>
+                                </div>
+                                
+                                <div class="section-right">
+                                    <a href="{{ route('dashboard.faqs.create') }}" class="btn btn-secondary">Create</a>
+                                </div>
+                                <hr class="w-100 my-1">
                             <div class="card-body card-dashboard">
                                 {{-- <p class="card-text">
                                     There is 40 doctor added

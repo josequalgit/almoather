@@ -1,57 +1,59 @@
 @extends('dashboard.layout.index')
 @section('content')
-<div class="app-content content p-5 mt-5">
-    
-    <section id="basic-input">
-        <form method="post" enctype="multipart/form-data" action="{{ route('dashboard.faqs.store') }}">
-            @csrf
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Create Faq</h4>
-                    </div>
-                    <div class="card-body">
-                        @if($errors->any())
-                        <div class="alert alert-danger" role="alert"> There is something wrong
-                            @foreach ($errors->all() as $error )
-                                <li>{{$error}}</li>
-                            @endforeach
+<div class="app-content content">
+    <div class="content-wrapper">
+        <section id="basic-input">
+            <form method="post" enctype="multipart/form-data" action="{{ route('dashboard.faqs.store') }}">
+                @csrf
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Create Faq</h4>
                         </div>
-                        @endif
-                    
-                        <div class="row">
-                            <div class="col-12">
-                                <fieldset class="form-group">
-                                    <label for="basicInput">Question En</label>
-                                    <input id="question" value="{{ old('question_en') }}" type="text" class="form-control"  name="question_en" placeholder="Enter question" />
-                                </fieldset>
-                                <fieldset class="form-group">
-                                    <label for="basicInput">Answer En</label>
-                                    <textarea  class="form-control" name="answer_en">{{ old('answer_en') }}</textarea>
-                                </fieldset>
+                        <div class="card-body">
+                            @if($errors->any())
+                            <div class="alert alert-danger" role="alert"> There is something wrong
+                                @foreach ($errors->all() as $error )
+                                    <li>{{$error}}</li>
+                                @endforeach
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <fieldset class="form-group">
-                                    <label for="basicInput">Question Ar</label>
-                                    <input id="question" value="{{ old('question_ar') }}" type="text" class="form-control"  name="question_ar" placeholder="Enter question" />
-                                </fieldset>
-                                <fieldset class="form-group">
-                                    <label for="basicInput">Answer Ar</label>
-                                    <textarea  class="form-control" name="answer_ar">{{ old('answer_ar') }}</textarea>
-                                </fieldset>
+                            @endif
+                        
+                            <div class="row">
+                                <div class="col-12">
+                                    <fieldset class="form-group">
+                                        <label for="basicInput">Question En</label>
+                                        <input id="question" value="{{ old('question_en') }}" type="text" class="form-control"  name="question_en" placeholder="Enter question" />
+                                    </fieldset>
+                                    <fieldset class="form-group">
+                                        <label for="basicInput">Answer En</label>
+                                        <textarea  class="form-control" name="answer_en">{{ old('answer_en') }}</textarea>
+                                    </fieldset>
+                                </div>
                             </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <fieldset class="form-group">
+                                        <label for="basicInput">Question Ar</label>
+                                        <input id="question" value="{{ old('question_ar') }}" type="text" class="form-control"  name="question_ar" placeholder="Enter question" />
+                                    </fieldset>
+                                    <fieldset class="form-group">
+                                        <label for="basicInput">Answer Ar</label>
+                                        <textarea  class="form-control" name="answer_ar">{{ old('answer_ar') }}</textarea>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <hr/>
+                            <button type="submit" class="btn btn-primary float-right">Create</button>
                         </div>
-                        <hr/>
-                        <button type="submit" class="btn btn-primary float-right">Create</button>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
-    </section>
+            </form>
+        </section>
+
+    </div>
 
       
 </div>

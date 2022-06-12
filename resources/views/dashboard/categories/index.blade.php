@@ -17,7 +17,7 @@
                                 </div>
                                 
                                 <div class="section-right">
-                                    <a href="{{ route('dashboard.campaignGoals.create') }}" class="btn btn-secondary">Create</a>
+                                    <a href="{{ route('dashboard.categories.create') }}" class="btn btn-secondary">Create</a>
                                 </div>
                                 <hr class="w-100 my-1">
                             </div>

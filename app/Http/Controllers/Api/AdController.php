@@ -1154,8 +1154,9 @@ class AdController extends Controller
 			
             }
         }
+        $arr = array_merge($request->all(),['status'=>'pending']);
 
-        if($data->update($request->all()))
+        if($data->update($arr))
         {
             return response()->json([
                 'msg'=>'ad was updated',

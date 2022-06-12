@@ -54,17 +54,24 @@
   font-size:15px;
 }
 </style>
-<div class="app-content content p-5 mt-5">
+<div class="app-content content">
     
-    <section id="basic-input">
+    <section id="basic-input" class="content-wrapper">
         <form method="post" enctype="multipart/form-data" action="{{ route('dashboard.influencerCategories.update',$data->id) }}">
             @csrf
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
+                    {{-- <div class="card-header">
                         <h4 class="card-title">Update Influencer Category</h4>
-                    </div>
+                    </div> --}}
+                    <div class="card">
+                        <div class="card-header pb-0">
+                          <div class="card-title">
+                              <p class="mb-0">Update Influencer Category</p>   
+                          </div>
+                          <hr class="w-100 mt-1">
+                      </div>
                     <div class="card-body">
                         @if($errors->any())
                         <div class="alert alert-danger" role="alert"> There is something wrong

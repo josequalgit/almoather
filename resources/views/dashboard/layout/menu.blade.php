@@ -134,61 +134,39 @@
                 <li class="menu-item
                 {{ (($name == 'dashboard.ads.index'&&$para == null)|| ($name == 'dashboard.ads.create'&&$para == null)||($name == 'dashboard.ads.edit')&&$para == null) ? 'active':''  }}
                 ">
-                  <a href="{{ route('dashboard.ads.index') }}" class="menu-link">
+                  <a href="{{ route('dashboard.ads.index','All') }}" class="menu-link">
                     <div data-i18n="List">All</div>
                   </a>
                 </li>
                 <li class="menu-item
-                {{ (($name == 'dashboard.ads.index'&&$para == 'pending')|| ($name == 'dashboard.ads.create'&&$para == 'pending')||($name == 'dashboard.ads.edit')&&$para == 'pending') ? 'active':''  }}
+                {{ (($name == 'dashboard.ads.index'&&$para == 'Pending')|| ($name == 'dashboard.ads.create'&&$para == 'Pending')||($name == 'dashboard.ads.edit')&&$para == 'Pending') ? 'active':''  }}
                 ">
-                  <a href="{{ route('dashboard.ads.index','pending') }}" class="menu-link">
+                  <a href="{{ route('dashboard.ads.index','Pending') }}" class="menu-link">
                     <div data-i18n="List">Pending</div>
                   </a>
                 </li>
                 <li class="menu-item 
-                {{ (($name == 'dashboard.ads.index'&&$para == 'APPROVE')|| ($name == 'dashboard.ads.create'&&$para == 'APPROVE')||($name == 'dashboard.ads.edit')&&$para == 'APPROVE') ? 'active':''  }}">
-                  <a href="{{ route('dashboard.ads.index','APPROVE') }}" class="menu-link">
-                    <div data-i18n="List">Approved</div>
+                {{ (($name == 'dashboard.ads.index'&&$para == 'Active')|| ($name == 'dashboard.ads.create'&&$para == 'Active')||($name == 'dashboard.ads.edit')&&$para == 'Active') ? 'active':''  }}">
+                  <a href="{{ route('dashboard.ads.index','Active') }}" class="menu-link">
+                    <div data-i18n="List">Active</div>
                   </a>
                 </li>
                 <li class="menu-item
-                {{ (($name == 'dashboard.ads.index'&&$para == 'prepay')|| ($name == 'dashboard.ads.create'&&$para == 'prepay')||($name == 'dashboard.ads.edit')&&$para == 'prepay') ? 'active':''  }}
+                {{ (($name == 'dashboard.ads.index'&&$para == 'Finished')|| ($name == 'dashboard.ads.create'&&$para == 'Finished')||($name == 'dashboard.ads.edit')&&$para == 'Finished') ? 'active':''  }}
                 ">
-                  <a href="{{ route('dashboard.ads.index','prepay') }}" class="menu-link">
-                    <div data-i18n="List">Pre Pay</div>
+                  <a href="{{ route('dashboard.ads.index','Finished') }}" class="menu-link">
+                    <div data-i18n="List">Finished</div>
                   </a>
                 </li>
                 <li class="menu-item
-                {{ (($name == 'dashboard.ads.index'&&$para == 'fullpayment')|| ($name == 'dashboard.ads.create'&&$para == 'fullpayment')||($name == 'dashboard.ads.edit')&&$para == 'fullpayment') ? 'active':''  }}
+                {{ (($name == 'dashboard.ads.index'&&$para == 'Rejected')|| ($name == 'dashboard.ads.create'&&$para == 'Rejected')||($name == 'dashboard.ads.edit')&&$para == 'Rejected') ? 'active':''  }}
 
                 ">
-                  <a href="{{ route('dashboard.ads.index','fullpayment') }}" class="menu-link">
-                    <div data-i18n="List">Full Payment</div>
+                  <a href="{{ route('dashboard.ads.index','Rejected') }}" class="menu-link">
+                    <div data-i18n="List">Rejected</div>
                   </a>
                 </li>
-                <li class="menu-item
-                {{ (($name == 'dashboard.ads.index'&&$para == 'progress')|| ($name == 'dashboard.ads.create'&&$para == 'progress')||($name == 'dashboard.ads.edit')&&$para == 'progress') ? 'active':''  }}
-
-                ">
-                  <a href="{{ route('dashboard.ads.index','progress') }}" class="menu-link">
-                    <div data-i18n="List">Progress</div>
-                  </a>
-                </li>
-                <li class="menu-item
-                {{ (($name == 'dashboard.ads.index'&&$para == 'influncer_complete')|| ($name == 'dashboard.ads.create'&&$para == 'influncer_complete')||($name == 'dashboard.ads.edit')&&$para == 'influncer_complete') ? 'active':''  }}
-
-                ">
-                  <a href="{{ route('dashboard.ads.index','influncer_complete') }}" class="menu-link">
-                    <div data-i18n="List">Influncer Complete</div>
-                  </a>
-                </li>
-                <li class="menu-item
-                {{ (($name == 'dashboard.ads.index'&&$para == 'complete')|| ($name == 'dashboard.ads.create'&&$para == 'complete')||($name == 'dashboard.ads.edit')&&$para == 'complete') ? 'active':''  }}
-                ">
-                  <a href="{{ route('dashboard.ads.index','complete') }}" class="menu-link">
-                    <div data-i18n="List">Complete</div>
-                  </a>
-                </li>
+              
                 
               </ul>
             </li>
