@@ -1241,16 +1241,16 @@ class AdController extends Controller
     private function get_ad_influencers_matchs($ad)
     {
        $isProfitable =  $ad->campaignGoals->profitable;
-        return $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($isProfitable){
+       $isOnSite = $ad->ad_type;
+        return $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($isProfitable,$isOnSite){
                 
             $response = [
                 'id'=>$item->influencers->id,
                 'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
                 'image'=>$item->influencers->users->InfulncerImage?$item->influencers->users->InfulncerImage:null,
-              //  'roas'=>$item->match,
-                //'roas'=>$item->match,
                 'gender'=>$item->influencers->gender,
-                'is_primary'=>$item->status == 'basic'?true:false
+                'is_primary'=>$item->status == 'basic'?true:false,
+                'budget'=>$isOnSite?$item->influencers->ad_onsite_price:$item->influencers->ad_price,
             ];
 
             $response['ROAS'] = null;
