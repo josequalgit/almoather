@@ -333,16 +333,16 @@ Route::group(['middleware' => 'language'],function(){
 
 
             
-
-        });
-
-
         Route::controller(RegionController::class)
         ->prefix('regions')
         ->name('regions.')
         ->group(function(){
             Route::get('/{country_id}','index')->name('index');
         });
+
+        });
+
+
 
     
         Route::get('/logout',[HomeController::class,'logout'])->name('dashboard.logout');    
