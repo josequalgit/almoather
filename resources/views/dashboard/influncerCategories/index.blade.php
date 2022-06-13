@@ -15,16 +15,13 @@
                                 <div class="card-title">
                                     <p class="mb-0">Influencer Categories</p>
                                 </div>
-                                {{-- <div class="section-right">
-                                    <a href="{{ route('dashboard.campaignGoals.create') }}" class="btn btn-secondary">Create</a>
+                                <div class="section-right">
+                                    <a href="{{ route('dashboard.influencerCategories.create') }}" class="btn btn-primary">Create</a>
                                 </div>
-                                <hr class="w-100 my-1"> --}}
+                                <hr class="w-100">
                             </div>
                             
                             <div class="card-body card-dashboard">
-                                {{-- <p class="card-text">
-                                    There is 40 doctor added
-                                </p> --}}
                              
                                 <div class="table-responsive">
                                     @can('See Influencer Category')

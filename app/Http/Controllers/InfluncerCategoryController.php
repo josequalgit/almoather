@@ -34,9 +34,13 @@ class InfluncerCategoryController extends Controller
             ],
             'type'=>$request->type,
         ];
-       $data =  InfluncerCategory::create($addTranslate);
-       $data->addMedia($request->file('image'))
-       ->toMediaCollection('influncerCategories');
+        
+        $data =  InfluncerCategory::create($addTranslate);
+        
+        if($request->hasFile('image')){
+            $data->addMedia($request->file('image'))->toMediaCollection('influncerCategories');
+        }
+       
         activity()->log('Admin "'.Auth::user()->name.'" Added "'. $data->name .'" Influncer Category');
         Alert::toast('Influncer Category was added', 'success');
 
@@ -47,13 +51,13 @@ class InfluncerCategoryController extends Controller
     {
         $data = InfluncerCategory::find($id);
         $data->update($request->all());   
+        
         if($request->hasFile('image'))
         {
-            $data
-            ->clearMediaCollection('influncerCategories')
-            ->addMedia($request->file('image'))
-            ->toMediaCollection('influncerCategories');
-        }        
+            $data->clearMediaCollection('influncerCategories')
+            ->addMedia($request->file('image'))->toMediaCollection('influncerCategories');
+        }
+
         activity()->log('Admin "'.Auth::user()->name.'" update "'. $data->name .'" Influncer Category');
         Alert::toast('Influncer Category was updated', 'success');
         return redirect()->route('dashboard.influencerCategories.index');
