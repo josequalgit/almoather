@@ -24,6 +24,7 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\ReasonsController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\RegionController;
 
 Route::redirect('/','/dashboard/admins')->name('home');
 Route::get('/test-msg',[ChatController::class,'sendMessageTo'])->name('test');
@@ -223,6 +224,9 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
         ->group(function(){
             Route::get('/all','index')->name('all');
             Route::get('/Area/{id}','get_city_according_to_area')->name('index');
+            Route::post('store','store')->name('store');
+            Route::post('update/{id}','update')->name('update');
+            Route::post('delete/{id}','delete')->name('delete');
         });
 
         Route::controller(ReasonsController::class)
@@ -251,6 +255,13 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
         ->group(function(){
             Route::get('/','index')->name('index');
             Route::get('/details/{id}','details')->name('details');
+        });
+
+        Route::controller(RegionController::class)
+        ->prefix('regions')
+        ->name('regions.')
+        ->group(function(){
+            Route::get('/{country_id}','index')->name('index');
         });
 
     
