@@ -236,29 +236,28 @@
 .wizard>.actions a,
 .wizard>.actions a:hover,
 .wizard>.actions a:active {
-    background: #738AD3;
+    display: inline-block;
+    font-weight: 400;
     color: #fff;
-    display: block;
-    padding: 12px 25px;
-    text-decoration: none;
-
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    padding: 0.467rem 1.5rem;
+    font-size: 1rem;
+    line-height: 1.6rem;
+    border-radius: 0.267rem;
+    transition: all 0.15s ease-in-out;
+    border-color: #9886aa !important;
+    background-color: #9886aa !important;
+    color: #fff;
 }
 
 .wizard>.actions .disabled a,
 .wizard>.actions .disabled a:hover,
 .wizard>.actions .disabled a:active {
-    background: #eee;
+    background-color: #eee !important;
     color: #aaa;
 }
-
-.wizard>.loading {}
-
-.wizard>.loading .spinner {}
-
-
 
 /*
     Tabcontrol

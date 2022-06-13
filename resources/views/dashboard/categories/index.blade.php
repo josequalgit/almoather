@@ -30,6 +30,7 @@
                                                 <tr>
                                                     <th>Image</th>
                                                     <th>Name</th>
+                                                    <th>Type</th>
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
@@ -40,6 +41,7 @@
                                                                 <img class="cateImage"  src="{{ $item->image }}" />
                                                             </td>
                                                             <td>{{ $item->name }}</td>
+                                                            <td>{{ ucfirst($item->type) }}</td>
                                                             
                                                             <td>
                                                                 @can('Delete Category')
@@ -63,7 +65,7 @@
                                 </div>
                             </div>
                             @can('See Category')
-                            {{ $data->links() }}
+                            {{ $data->links('pagination::bootstrap-5') }}
                             @endcan
                         </div>
                     </div>

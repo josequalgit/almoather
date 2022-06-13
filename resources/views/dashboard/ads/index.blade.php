@@ -11,7 +11,6 @@
                     <div class="card-title">
                         <p class="mb-0">Categories</p>
                     </div>
-                    <hr class="w-100 my-1">
 
                     <div class="section-right">
                         <ul class="view-type d-flex list-unstyled">
@@ -25,7 +24,7 @@
                 <div class="card-body campaign-items">
                     <div class="row grid-items" style="{{ !isset($_COOKIE['data-item']) || $_COOKIE['data-item'] == 'grid-items' ? '' : 'display: none'}}">
                         @foreach ($data as $item)
-                        <div class="col-md-4 col-xl-3">
+                        <div class="col-md-4 col-xl-3 mb-2">
                             <div class="item-wrapper">
                                 <div class="list-item profile-block">
 
@@ -34,8 +33,8 @@
                                             <button class="styleless-button" data-toggle="dropdown"><i class="bx bx-menu"></i>
                                             <span class="caret"></span></button>
 
-                                            <ul class="dropdown-menu p-1 border menu-position">
-                                                    <li  class="list-item-custom mb-1 ">
+                                            <ul class="dropdown-menu border menu-position m-0 p-1">
+                                                    <li  class="list-item-custom">
                                                         
                                                         <button class="styleless-button w-100 text-left" onclick="openModalSeeContract('{{ $item->contacts?$item->contacts->content:'No data avalibale' }}')">
                                                             <i class="bx bx-printer list-item-icon"></i>
@@ -43,18 +42,18 @@
                                                         </button>
                                                 </li>
 
-                                                    <li  class="list-item-custom mb-1 ">
+                                                    <li  class="list-item-custom">
                                                         <button class="styleless-button w-100 text-left" onclick="seeMatched('{{$item->id}}')">
                                                             <i class="bx bx-user list-item-icon"></i>
                                                             <span class="list-item-text">Influncers</span>
                                                         </button>
                                                 </li>
 
-                                                <li  class="list-item-custom mb-1 ">
-                                                    <button class="styleless-button w-100 text-left" onclick="goToAd('{{ $item->id }}')">
+                                                <li  class="list-item-custom">
+                                                    <a class="styleless-button w-100 text-left" href="{{ route("dashboard.ads.edit",$item->id) }}" >
                                                         <i class="bx bx-book-content list-item-icon"></i>
                                                         <span class="list-item-text">Details</span>
-                                                    </button>
+                                                    </a>
                                                 </li>
 
                                             </ul>
@@ -160,28 +159,6 @@
         </div>
     </div>
 
-
-
-    <div id="deleteModal" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Delete Influncer!</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p>Are you sure you want to delete this  '<span id="adminInfluncerModal"></span>' ?</p>
-            </div>
-            <div class="modal-footer">
-              <button onclick="deleteApi()" type="button" class="btn btn-primary">Delete</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
     <div id="seeMatched" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -242,13 +219,6 @@
 <script>
     let admin_id = null;
 
-    function openModal(id,name)
-    {
-        admin_id = id;
-        $('#adminInfluncerModal').empty();
-        $('#adminInfluncerModal').append(name);
-        $('#deleteModal').modal('toggle');
-    };
 
     function openModalSeeContract(content)
     {
@@ -267,23 +237,6 @@
             a.document.write('</body></html>');
             a.document.close();
             a.print();
-    }
-
-
-    function deleteApi()
-    {
-        let url = '{{ route("dashboard.admins.delete",":id") }}';
-        let updatedUrl = url.replace(':id',admin_id);
-        $.ajax({
-            type:'GET',
-            url:updatedUrl,
-            success:(res)=>{
-                location.reload();
-            },
-            error:(err)=>{
-                console.log('delete admin Error')
-            }
-        });
     }
 
     function seeMatched(ad_id)
@@ -336,13 +289,6 @@
                 console.log('delete admin Error')
             }
         });
-    }
-
-    function goToAd(ad_id)
-    {
-        let route = '{{ route("dashboard.ads.edit",":id") }}';
-        let url = route.replace(':id',ad_id);
-        return window.location.href = url;
     }
 
     $('.view-type a').on('click',function(e){

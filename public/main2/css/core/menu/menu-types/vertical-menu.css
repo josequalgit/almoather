@@ -306,3 +306,9 @@
     margin-top: 3.5rem;
   }
 }
+
+li.list-item-custom:not(:last-child) {
+  border-bottom: 1px solid #d5d5d5;
+  padding-bottom: 6px;
+  margin-bottom: 5px;
+}
