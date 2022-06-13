@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Area;
 use App\Models\City;
+use App\Models\Country;
+use Alert;
 
 class CityController extends Controller
 {
@@ -12,8 +14,8 @@ class CityController extends Controller
     public function index()
     {
         $data = City::paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
-
-        return view('dashboard.cities.index',compact('data'));
+        $countries = Country::get();
+        return view('dashboard.cities.index',compact('data','countries'));
     }
 
     public function get_city_according_to_country($id)
@@ -28,5 +30,48 @@ class CityController extends Controller
             'data'=>$data->cities,
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
+    }
+
+    public function store(Request $request)
+    {
+        City::create($request->all());
+        Alert::toast('City was created', 'success');
+
+        return response()->json([
+            'status'=>config('global.OK_STATUS'),
+            'msg'=>'city was created'
+        ],config('global.OK_STATUS'));
+    }
+
+    public function update(Request $request , $id)
+    {
+        $city = City::find($id);
+        if(!$city) return response()->json([
+            'msg'=>'city not found',
+            'status'=>config('global.NOT_FOUND_STATUS')
+        ],config('global.OK_STATUS'));
+        $city->update($request->all());
+        Alert::toast('City was updated', 'success');
+
+        return response()->json([
+            'status'=>config('global.OK_STATUS'),
+            'msg'=>'city was updated'
+        ],config('global.OK_STATUS'));
+    }
+
+    public function delete($id)
+    {
+        $city = City::find($id);
+        if(!$city) return response()->json([
+            'status'=>config('global.NOT_FOUND_STATUS'),
+            'msg'=>'city not found',
+        ],config('global.OK_STATUS'));
+        $city->delete();
+        Alert::toast('City was deleted', 'success');
+        return response()->json([
+            'msg'=>'city was deleted',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+
     }
 }

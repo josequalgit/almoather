@@ -10,6 +10,14 @@
         width: 15%;
         -webkit-line-clamp: 2;
     }
+    .modal-dialog {
+        max-width: 50% !important;
+    margin: 1.75rem auto;
+}
+.createCityButton{
+    margin-top: 4px;
+    border-radius: 3px;
+}
 
 </style>
 <div class="app-content content">
@@ -28,8 +36,7 @@
                                 </div>
 
                                 <div class="section-right">
-                                    <a href="{{ route('dashboard.faqs.create') }}"
-                                        class="btn btn-secondary">Create</a>
+                                    <button  onclick="openModalCreateCity()" class="btn btn-secondary">Create</button>
                                 </div>
                                 <hr class="w-100 my-1">
                                 <div class="w-100 card-dashboard">
@@ -53,14 +60,14 @@
                                                             <td>{{ $item->regions->countries->name }}</td>
                                                             <td>
                                                                 {{-- @can('Edit City') --}}
-                                                                    <a class="btn btn-secondary"
+                                                                    <button onclick="getUserData('{{ $item->id }}','{{$item->name }}','{{ $item->regions->countries->id }}','{{ $item->regions->id }}')" class="btn btn-secondary"
                                                                         href="{{ route('dashboard.faqs.edit',$item->id) }}">
                                                                         <i class="bx bx-edit"></i>
-                                                                    </a>
+                                                                    </button>
                                                                 {{-- @endcan --}}
                                                                 {{-- @can('Delete City') --}}
                                                                     <button class="btn btn-danger"
-                                                                        onclick="openModal('{{ $item->id }}','{{ $item->question }}')">
+                                                                        onclick="openModal('{{ $item->id }}','{{ $item->name }}')">
                                                                         <i class="bx bx-trash buttonIcon"></i>
                                                                     </button>
                                                                 {{-- @endcan --}}
@@ -85,7 +92,44 @@
             </section>
         </div>
     </div>
-    <div id="faqModel" class="modal" tabindex="-1" role="dialog">
+    <div id="createCity" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              
+                <div class="modal-body">
+                    <h3 id="city_model_title" class="text-center modal-title">
+                        Create City
+                    </h3>
+                    <div class="mb-1">
+                        <label for="exampleFormControlInput1" class="form-label">Name</label>
+                        <input id="city_name" type="email" class="form-control" id="exampleFormControlInput1" placeholder="Name ">
+                      </div>
+                      <div class="mb-1">
+                        <label for="exampleFormControlTextarea1" class="form-label">Country</label>
+                        <select id="country" onchange="getRegionsAccordingToCountry(event.target.value)" class="form-control" aria-label="Default select example">
+                            @foreach($countries as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                          </select>
+                          
+                      </div>
+                      <div class="mb-1">
+                        <label for="exampleFormControlTextarea1" class="form-label">Region</label>
+                        <select  placeholder="here" id="region_selecter" disabled class="form-control" aria-label="Default select example">
+                        </select>
+                          
+                      </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button onclick="addCityApi()" type="button" class="btn btn-primary createCityButton">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="deleteModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -98,33 +142,43 @@
                     <p>Are you sure you want to delete this '<span id="faqName"></span>' faq ?</p>
                 </div>
                 <div class="modal-footer">
-                    <button onclick="deleteApi()" type="button" class="btn btn-primary">Delete</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button onclick="deleteApi()" type="button" class="btn btn-danger createCityButton">Delete</button>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 @endsection
 
 @section('scripts')
 
 <script>
-    let role_id = null;
 
-    function openModal(id, name) {
-        role_id = id;
+    getRegionsAccordingToCountry('{{ $countries[0]->id }}')
+
+    let city_id = null;
+
+    function openModal(id, name) 
+    {
+        city_id = id;
         $('#faqName').empty();
         $('#faqName').append(name);
-        $('#faqModel').modal('toggle');
+        $('#deleteModal').modal('toggle');
     };
 
-    function deleteApi() {
-        let url = '{{ route("dashboard.faqs.delete",":id") }}';
-        let updatedUrl = url.replace(':id', role_id);
+
+    function deleteApi() 
+    {
+        let url = '{{ route("dashboard.cities.delete",":id") }}';
+        let updatedUrl = url.replace(':id', city_id);
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             url: updatedUrl,
+            data:{
+                _token:'{{ csrf_token() }}'
+            },
             success: (res) => {
                 if (!res.err) {
                     location.reload();
@@ -135,6 +189,120 @@
                 console.log('delete faq Error')
             }
         });
+    }
+
+    function openModalCreateCity()
+    {
+        city_id = null;
+        $('#city_model_title').empty();
+        $('#city_model_title').append('Create City');
+
+        $('#createCity').modal('toggle');
+    }
+
+    function getUserData(id,name,country_id,region_id)
+    {
+        // let item = JSON.parse(user);
+        city_id = id;
+        $('#city_model_title').empty();
+        $('#city_model_title').append('Update City');
+        /** 
+         * add values
+         * 
+         * **/
+
+         $('#city_name').val(name);
+         $('#country_id').val(country_id);
+         $('#region_id').val(region_id);
+
+        $('#createCity').modal('toggle');
+
+
+    }
+    function getRegionsAccordingToCountry(id)
+    {
+        $('#region_selecter').prop("disabled", true); 
+
+        let url = '{{ route("dashboard.regions.index",":id") }}';
+        let updateUrl = url.replace(':id',id);
+        $.ajax({
+            type:'GET',
+            url:updateUrl,
+            success:(res)=>{
+                console.log('response: ',res.data);
+              //  $('#city_selecter').
+                $('#region_selecter').prop("disabled", false); 
+                for(let i = 0; i < res.data.length;i++)
+                {
+                    $('#region_selecter').append(`
+                        <option value='${res.data[i].id}' class="form-control">${res.data[i].name}</option>
+                    `);
+                }
+            },
+            error:(err)=>{
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Error updateing getting regions'
+                })
+                console.log('error getting the regions: ',err);
+            }
+        })
+    }
+
+    function addCityApi()
+    {
+        if(!addCityValdation()) return;
+        let url = '{{route("dashboard.cities.store")}}';
+        if(city_id)
+        {
+            let updateWithId = '{{route("dashboard.cities.update",":id")}}'
+            url = updateWithId.replace(':id',city_id);
+        }
+        $.ajax({
+            url:url,
+            type:'POST',
+            data:{
+                name:document.getElementById('city_name').value,
+                region_id:document.getElementById('region_selecter').value,
+                _token:'{{ csrf_token() }}'
+            },
+            success:(res)=>{
+               window.location.reload();
+            },
+            error:(err)=>{
+                console.log(err)
+            }
+        })
+    }
+
+    function addCityValdation()
+    {
+        if(document.getElementById('city_name').value == '')
+        {
+            Toast.fire({
+                    icon: 'error',
+                    title: 'Please add city'
+            })
+            return false;
+        }
+        if(document.getElementById('country').value == '')
+        {
+            Toast.fire({
+                    icon: 'error',
+                    title: 'Please select country'
+            })
+            return false;
+        }
+        if(document.getElementById('region_selecter').value == '')
+        {
+            Toast.fire({
+                    icon: 'error',
+                    title: 'Please select region '
+            })
+            return false;
+        }
+        return true;
+
     }
 
 </script>
