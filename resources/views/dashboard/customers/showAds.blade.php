@@ -5,27 +5,8 @@
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
-        <div class="content-header row">
-            <div class="content-header-left col-12 mb-2 mt-1">
-                <div class="breadcrumbs-top">
-                    <h5 class="content-header-title float-left pr-1 mb-0">Tabs</h5>
-                    <div class="breadcrumb-wrapper d-none d-sm-block">
-                        <ol class="breadcrumb p-0 mb-0 pl-1">
-                            <li class="breadcrumb-item"><a href="index.html"><i class="bx bx-home-alt"></i></a>
-                            </li>
-                            <li class="breadcrumb-item"><a href="#">Dashboard</a>
-                            </li>
-                            <li class="breadcrumb-item active">Customer {{ $customer->first_name }}
-                            </li>
-                        </ol>
-                        {{-- @can('Create Influncer')
-                            <a href="{{ route('dashboard.customers.create') }}" class=" btn btn-primary float-right">Create</a>                            
-                        @endcan --}}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="content-body mt-5">
+        
+        <div class="content-body">
             <!-- Basic tabs start -->
             @can('See Customer')
             <div class="row">

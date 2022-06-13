@@ -4,10 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Area;
+use App\Models\City;
 
 class CityController extends Controller
 {
-    public function index($id)
+
+    public function index()
+    {
+        $data = City::paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
+
+        return view('dashboard.cities.index',compact('data'));
+    }
+
+    public function get_city_according_to_country($id)
     {
         $data = Area::find($id);
         if(!$data) return response()->json([

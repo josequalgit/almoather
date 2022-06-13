@@ -13,7 +13,7 @@
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
-        <div class="content-header row">
+        {{-- <div class="content-header row">
             <div class="content-header-left col-12 mb-2 mt-1">
                 <div class="breadcrumbs-top">
                     <h5 class="content-header-title float-left pr-1 mb-0">Tabs</h5>
@@ -27,20 +27,32 @@
                             </li>
                         </ol>
                         @can('Create Reasons')
-                        <button onclick="openCreateModal()" class=" btn btn-primary float-right">Create</button>                            
+                         <button onclick="openCreateModal()" class=" btn btn-primary float-right">Create</button>                            
                         @endcan
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="content-body mt-5">
+        </div> --}}
+        <div class="content-body">
             <!-- Basic tabs start -->
             <section id="basic-datatable">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Reasons</h4>
+                                <div class="card-title">
+                                    <p class="mb-0">Reasons</p>
+                                </div>
+                                {{-- <div class="section-right">
+                                    <a href="{{ route('dashboard.slides.create') }}" class="btn btn-secondary">Create</a>
+                                </div> --}}
+                                @can('Create Reasons')
+                                <div class="section-right">
+                                    <button onclick="openCreateModal()" class=" btn btn-primary float-right">Create</button>                            
+                                </div>
+                               @endcan
+                                <hr class="w-100 my-1">
+
                             </div>
                             <div class="card-body card-dashboard">
                                 {{-- <p class="card-text">

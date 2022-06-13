@@ -10,7 +10,10 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Create Campaing Goal</h4>
+                            <div class="card-title">
+                                <p class="mb-0">Create Campaing Goal</p>
+                            </div>
+                            <hr class="w-100">
                         </div>
                         <div class="card-body">
                             @if($errors->any())

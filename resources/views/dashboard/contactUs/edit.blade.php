@@ -1,7 +1,7 @@
 @extends('dashboard.layout.index')
 @section('content')
-<div class="app-content content p-5 mt-5">
-
+<div class="app-content content">
+<div class="content-wrapper">
     <section id="basic-input">
         @can('Edit Contact Us')
         <form method="post" enctype="multipart/form-data" action="{{ route('dashboard.contactUs.update') }}">
@@ -10,8 +10,12 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Update Contact Us</h4>
+                        <div class="card-title">
+                            <p class="mb-0">Update Contact Us</p>
+                        </div>
                     </div>
+                    
+                    <hr class="w-100 my-1">
                     <div class="card-body">
                         @if($errors->any())
                         <div class="alert alert-danger" role="alert"> There is something wrong
@@ -47,59 +51,32 @@
                     </div>
             </div>
         </div>
-    </form>
-    @endcan
-    @can('Edit Terms')
-    <form method="post" enctype="multipart/form-data" action="{{ route('dashboard.terms.update') }}">
-        @csrf
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Update Terms</h4>
-                </div>
-                <div class="card-body">
-                        <div class="">
-                            <div class="form-group col">
-                              <label for="inputEmail4">Text EN</label>
-                              <textarea name="text_en" class="form-control" id="exampleFormControlTextarea1" rows="10">{{ old('text')?old('text'):$terms->getTranslations('text')['en'] }}</textarea>
-                            </div>
-                            <div class="form-group col">
-                              <label for="inputEmail4">Text AR</label>
-                              <textarea name="text_ar" class="form-control" id="exampleFormControlTextarea1" rows="10">{{ old('text')?old('text'):$terms->getTranslations('text')['ar'] }}</textarea>
-                            </div>
-                          
-                         
-                          <hr/>
-                          <button type="submit" class="btn btn-primary float-right ">Update</button>
-                    </div>
-                   
-                </div>
-        </div>
-    </div>
-    </form>
-        
-    @endcan
-    
-    @can('Edit Privacy')
-        <form  class="col" method="post" enctype="multipart/form-data" action="{{ route('dashboard.privacy.update') }}">
-            @csrf
+        </form>
+        @endcan
+        @can('Edit Terms')
+            <form method="post" enctype="multipart/form-data" action="{{ route('dashboard.terms.update') }}">
+                @csrf
             <div class="row">
-                <div class="col">
+                <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Update Privacy</h4>
+                            <div class="card-title">
+                                <p class="mb-0">Update Terms</p>
+                            </div>
                         </div>
+                        <hr class="w-100 my-1">
+
+                        
+                        
                         <div class="card-body">
                                 <div class="">
                                     <div class="form-group col">
                                     <label for="inputEmail4">Text EN</label>
-                                    <textarea name="text_en" class="form-control" id="exampleFormControlTextarea1" rows="10">{{ old('text_en')?old('text_en'):$privacy->getTranslations('text')['en'] }}</textarea>
+                                    <textarea name="text_en" class="form-control" id="exampleFormControlTextarea1" rows="10">{{ old('text')?old('text'):$terms->getTranslations('text')['en'] }}</textarea>
                                     </div>
-                                
                                     <div class="form-group col">
                                     <label for="inputEmail4">Text AR</label>
-                                    <textarea name="text_ar" class="form-control" id="exampleFormControlTextarea1" rows="10">{{ old('text_ar')?old('text_ar'):$privacy->getTranslations('text')['ar'] }}</textarea>
+                                    <textarea name="text_ar" class="form-control" id="exampleFormControlTextarea1" rows="10">{{ old('text')?old('text'):$terms->getTranslations('text')['ar'] }}</textarea>
                                     </div>
                                 
                                 
@@ -110,10 +87,49 @@
                         </div>
                 </div>
             </div>
-        </form>
-    @endcan
+            </form>
+                
+        @endcan
+        
+        @can('Edit Privacy')
+            <form  class="col" method="post" enctype="multipart/form-data" action="{{ route('dashboard.privacy.update') }}">
+                @csrf
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <p class="mb-0">Update Privacy</p>
+                                </div>
+                            </div>
+                            <hr class="w-100 my-1">
+                            <div class="card-body">
+                                    <div class="">
+                                        <div class="form-group col">
+                                        <label for="inputEmail4">Text EN</label>
+                                        <textarea name="text_en" class="form-control" id="exampleFormControlTextarea1" rows="10">{{ old('text_en')?old('text_en'):$privacy->getTranslations('text')['en'] }}</textarea>
+                                        </div>
+                                    
+                                        <div class="form-group col">
+                                        <label for="inputEmail4">Text AR</label>
+                                        <textarea name="text_ar" class="form-control" id="exampleFormControlTextarea1" rows="10">{{ old('text_ar')?old('text_ar'):$privacy->getTranslations('text')['ar'] }}</textarea>
+                                        </div>
+                                    
+                                    
+                                    <hr/>
+                                    <button type="submit" class="btn btn-primary float-right ">Update</button>
+                                </div>
+                            
+                            </div>
+                    </div>
+                </div>
+            </form>
+        @endcan
     
     </section>
+
+</div>
 
 
       

@@ -127,7 +127,7 @@
             <li class="menu-item  {{ ($name == 'dashboard.ads.index'|| $name == 'dashboard.ads.create'|| $name == 'dashboard.ads.edit') ? 'open active':''  }} ">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-money"></i>
-                <div data-i18n="Invoice">Ads</div>
+                <div data-i18n="Invoice">Campaigns</div>
               </a>
               <ul class="menu-sub">
 
@@ -214,6 +214,39 @@
             @endcanany
            
             
+               {{-- @canany(['Create City|Edit City|Delete City|Create Country|Edit Country|Delete Country|Create Area|Delete Area|Update Area']) --}}
+               <li class="menu-item  {{ ($name == 'dashboard.socialMedia.index'|| $name == 'dashboard.socialMedia.create'|| $name == 'dashboard.socialMedia.edit'||$name == 'dashboard.faqs.index'||$name == 'dashboard.faqs.edit'||$name == 'dashboard.faqs.create'||$name == 'dashboard.editContactUs.index'||$name == 'dashboard.editContactUs.edit'||$name == 'dashboard.editContactUs.create') ? 'open active':''  }} ">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                  <i class="menu-icon tf-icons bx bx-location-plus"></i>
+                  <div data-i18n="Invoice">Locations</div>
+                  {{-- <i style="font-size: 12px;" class="menu-icon tf-icons bx bx-down-arrow ml-4 float-right"></i> --}}
+                </a>
+                <ul class="menu-sub">
+                  <li class="menu-item
+                  {{ ($name == 'dashboard.cities.all'|| $name == 'dashboard.faqs.create'|| $name == 'dashboard.faqs.edit') ? 'active':''  }}
+                  ">
+                    <a href="{{ route('dashboard.cities.all') }}" class="menu-link">
+                      <div data-i18n="List">City</div>
+                    </a>
+                  </li>
+                  <li class="menu-item
+                  {{ ($name == 'dashboard.faqs.index'|| $name == 'dashboard.faqs.create'|| $name == 'dashboard.faqs.edit') ? 'active':''  }}
+                  ">
+                    <a href="{{ route('dashboard.faqs.index') }}" class="menu-link">
+                      <div data-i18n="List">Area</div>
+                    </a>
+                  </li>
+                  <li class="menu-item
+                  {{ ($name == 'dashboard.faqs.index'|| $name == 'dashboard.faqs.create'|| $name == 'dashboard.faqs.edit') ? 'active':''  }}
+                  ">
+                    <a href="{{ route('dashboard.faqs.index') }}" class="menu-link">
+                      <div data-i18n="List">Country</div>
+                    </a>
+                  </li>
+                </ul>
+               </li>
+                {{-- @endcan --}}
+
             @canany(['Edit SocialMedia','Create SocialMedia','See SocialMedia','Delete SocialMedia'])
 
             <li class="menu-item  {{ ($name == 'dashboard.socialMedia.index'|| $name == 'dashboard.socialMedia.create'|| $name == 'dashboard.socialMedia.edit'||$name == 'dashboard.faqs.index'||$name == 'dashboard.faqs.edit'||$name == 'dashboard.faqs.create'||$name == 'dashboard.editContactUs.index'||$name == 'dashboard.editContactUs.edit'||$name == 'dashboard.editContactUs.create') ? 'open active':''  }} ">
@@ -253,6 +286,8 @@
                 </li>
                 @endcanany
 
+             
+
                 @canany(['Edit Contact Us'])
                 <li class="menu-item
                 {{ ($name == 'dashboard.contactUs.index'|| $name == 'dashboard.contactUs.create'|| $name == 'dashboard.contactUs.edit') ? 'active':''  }}
@@ -262,6 +297,7 @@
                   </a>
                 </li>
                 @endcanany
+                
 
                 @canany(['Edit Slide','Create Slide','See Slide'])
                 <li class="menu-item
