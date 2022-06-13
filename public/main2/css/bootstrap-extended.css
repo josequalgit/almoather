@@ -2792,7 +2792,7 @@ ul.list-inline.list-inline-pipe>li+li:before {
 .pagination .page-item.active .page-link,
 .pagination .page-item.active .page-link:hover {
   border-radius: 0.267rem;
-  background-color: #5A8DEE !important;
+  background-color: #9886aa !important;
   color: #FFFFFF;
 }
 

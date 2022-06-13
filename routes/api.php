@@ -23,8 +23,9 @@ use App\Http\Controllers\Api\SlideController;
 use App\Http\Controllers\Api\CampaignGoalController;
 use App\Http\Controllers\Api\MailController;
 use App\Http\Controllers\Api\ChatController;
+use App\Http\Middleware\LanguageMiddleware;
 
-Route::group(['prefix'=>'auth'],function(){
+Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
     Route::post('login',[AuthController::class,'login']);
     Route::get('changeLanguage/{lang}',[AuthController::class,'changeLang']);
 

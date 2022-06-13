@@ -897,11 +897,6 @@ ul.dropdown-menu.p-1.border.show {
     font-weight: bold;
 }
 
-.list-item-custom:hover {
-    padding-bottom: 5px;
-    transition: all 0.2s ease;
-}
-
 .deleteModal {
     height: 17vh !important;
     overflow-y: auto;

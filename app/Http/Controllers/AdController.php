@@ -31,11 +31,6 @@ class AdController extends Controller
     use SendNotification;
     public function index($status = null)
     {
-
-      
-
-
-
         if ($status == 'All') {
             $data = Ad::orderBy('created_at', 'desc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
             $counter = Ad::count();
@@ -48,7 +43,7 @@ class AdController extends Controller
                 'Rejected'          => ['reject']
             ];
 
-            $data = Ad::whereIn('status',$statusCode[$status])->orderBy('created_at', 'asc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
+            $data = Ad::whereIn('status',$statusCode[$status])->orderBy('created_at', 'desc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
             $counter = Ad::whereIn('status',$statusCode[$status])->count();
         }
 
@@ -62,10 +57,11 @@ class AdController extends Controller
         $matches = $data->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
         $unMatched = $data->matches()->where('chosen', 0)->get();
         // dd($unMatched);
-        $categories = Category::get();
+        $serviceCategories = Category::where('type','service')->get();
+        $productCategories = Category::where('type','product')->get();
         $goals = CampaignGoal::select('title')->get();
         $countries = Country::get();
-        return view('dashboard.ads.edit', compact('data', 'matches', 'unMatched', 'categories', 'editable', 'countries'));
+        return view('dashboard.ads.edit', compact('data', 'matches', 'unMatched', 'serviceCategories','productCategories', 'editable', 'countries'));
     }
 
     public function update(Request $request, $id , $confirm = null)
