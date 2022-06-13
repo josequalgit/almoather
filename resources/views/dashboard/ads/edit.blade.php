@@ -457,12 +457,6 @@
                                                                                   <label for="">Category</label>
                                                                                   <select disabled class="form-control"
                                                                                       id="ad_type">
-                                                                                      @foreach ($categories as $item)
-                                                                                          <option
-                                                                                              {{ $data->category_id == $item->id ? 'selected' : '' }}
-                                                                                              value="{{ $item->id }}">
-                                                                                              {{ $item->name }}</option>
-                                                                                      @endforeach
                                                                                   </select>
                                                                               </div>
                                                                               <div class="col">

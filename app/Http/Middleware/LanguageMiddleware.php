@@ -18,6 +18,7 @@ class LanguageMiddleware
     public function handle(Request $request, Closure $next)
     {
         $lang = $request->header('lang') ? $request->header('lang') : 'en';
+ 
         $availLocale=['en','ar'];
         if(in_array($lang,$availLocale)){
             App::setLocale($lang);
