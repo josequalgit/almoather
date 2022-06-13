@@ -221,7 +221,8 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
         ->prefix('cities')
         ->name('cities.')
         ->group(function(){
-            Route::get('/{id}','index')->name('index');
+            Route::get('/all','index')->name('all');
+            Route::get('/Area/{id}','get_city_according_to_area')->name('index');
         });
 
         Route::controller(ReasonsController::class)
@@ -251,9 +252,8 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
             Route::get('/','index')->name('index');
             Route::get('/details/{id}','details')->name('details');
         });
-        
-        
 
+    
 
         
 
