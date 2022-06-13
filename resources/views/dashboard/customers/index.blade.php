@@ -32,7 +32,7 @@
                                                     <td>{{ $item->first_name }} {{ $item->middle_name }}
                                                         {{ $item->last_name }}</td>
                                                     <td>{{ $item->users->email }}</td>
-                                                    <td>{{ $item->phone }}</td>
+                                                    <td>{{ $item->users->phone }}</td>
                                                     <td style="text-transform: uppercase;">{{ $item->status }}</td>
                                                     <td>
                                                         @can('Edit Customer')

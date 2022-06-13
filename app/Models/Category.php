@@ -24,21 +24,11 @@ class Category extends Model implements HasMedia
     public $translatable = ['name'];
 
 
-   
-    // public function influncerCategories()
-    // {
-    //     return $this->belongsToMany(InfluncerCategory::class,'influncer_category_id');
-    // }
-
     public function ads()
     {
         return $this->hasMany(Ad::class,'category_id');
     }
 
-    // public function preferredCategories()
-    // {
-    //     return $this->belongsToMany(InfluncerCategory::class,'preferred_categories','category_id','influncer_category_id');
-    // }
 
     public function excludeCategories()
     {
@@ -46,9 +36,11 @@ class Category extends Model implements HasMedia
     }
 
     public function getImageAttribute() {
-        $mediaItems = $this->getMedia('categories');
-        $publicFullUrl = $mediaItems[0]->getFullUrl();
-        return $publicFullUrl;
+        $mediaItems = $this->getMedia('categories')->first();
+        if($mediaItems){
+            return $mediaItems->getFullUrl();
+        }
+        return asset('img/no-image.jpg');
    }
 
 

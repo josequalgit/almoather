@@ -25,7 +25,7 @@
                 <div class="card-body">
                     <div class="row grid-items"  style="{{ !isset($_COOKIE['data-item']) || $_COOKIE['data-item'] == 'grid-items' ? '' : 'display: none'}}">
                         @foreach ($data as $item)
-                        <div class="col-md-4 col-xl-3">
+                        <div class="col-md-4 col-xl-3 mb-2">
                             <div class="item-wrapper">
                                 <div class="list-item profile-block">
                                     <div class="block-top">
