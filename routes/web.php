@@ -227,6 +227,14 @@ Route::group(['middleware' => 'language'],function(){
                 Route::get('/Area/{id}','get_city_according_to_area')->name('index');
             });
 
+            Route::controller(CityController::class)
+            ->prefix('areas')
+            ->name('areas.')
+            ->group(function(){
+                Route::get('/all','index')->name('all');
+                Route::get('/Area/{id}','get_city_according_to_area')->name('index');
+            });
+
             Route::controller(ReasonsController::class)
             ->middleware('role_or_permission:superAdmin|Edit Reason|Update Reason|Show Reason|Create Reason')
             ->prefix('reasons')

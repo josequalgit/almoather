@@ -223,19 +223,19 @@
                 </a>
                 <ul class="menu-sub">
                   <li class="menu-item
-                  {{ ($name == 'dashboard.cities.all'|| $name == 'dashboard.faqs.create'|| $name == 'dashboard.faqs.edit') ? 'active':''  }}
+                  {{ ($name == 'dashboard.cities.all'|| $name == 'dashboard.cities.create'|| $name == 'dashboard.cities.edit') ? 'active':''  }}
                   ">
                     <a href="{{ route('dashboard.cities.all') }}" class="menu-link">
                       <div data-i18n="List">City</div>
                     </a>
                   </li>
-                  <li class="menu-item
-                  {{ ($name == 'dashboard.faqs.index'|| $name == 'dashboard.faqs.create'|| $name == 'dashboard.faqs.edit') ? 'active':''  }}
+                  {{-- <li class="menu-item
+                  {{ ($name == 'dashboard.areas.index'|| $name == 'dashboard.areas.create'|| $name == 'dashboard.areas.edit') ? 'active':''  }}
                   ">
-                    <a href="{{ route('dashboard.faqs.index') }}" class="menu-link">
+                    <a href="{{ route('dashboard.areas.index') }}" class="menu-link">
                       <div data-i18n="List">Area</div>
                     </a>
-                  </li>
+                  </li> --}}
                   <li class="menu-item
                   {{ ($name == 'dashboard.faqs.index'|| $name == 'dashboard.faqs.create'|| $name == 'dashboard.faqs.edit') ? 'active':''  }}
                   ">
