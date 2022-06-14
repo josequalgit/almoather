@@ -12,16 +12,16 @@ use Mail;
 
 class MailController extends Controller
 {
-    public function basic_email(SendEmailRequest $request) {
+    private $trans_dir = 'messages.api.';
 
-       
+    public function basic_email(SendEmailRequest $request) {
 
         $user = User::where('email',$request->email)->first();
 
         if(!$user)
         {
            return response()->json([
-               'err'=>'user not found',
+               'err'=>trans($this->trans_dir.'user_not_found'),
                'status'=>404
            ],404);
         }
@@ -36,7 +36,7 @@ class MailController extends Controller
         });
        // echo "Basic Email Sent. Check your inbox.";
         return response()->json([
-            'msg'=>'Email Sent',
+            'msg'=>trans($this->trans_dir.'email_sent'),
             'status'=>200
         ],200);
      }
@@ -48,7 +48,7 @@ class MailController extends Controller
          if(!$user)
          {
             return response()->json([
-                'err'=>'user not found',
+                'err'=>trans($this->trans_dir.'user_not_found'),
                 'status'=>404
             ],404);
          }
@@ -56,14 +56,14 @@ class MailController extends Controller
          if($user->code == $request->code)
          {
             return response()->json([
-                'msg'=>'correct code',
+                'msg'=>trans($this->trans_dir.'correct_code'),
                 'status'=>config('global.OK_STATUS')
             ],config('global.OK_STATUS'));
          }
          else
          {
             return response()->json([
-                'err'=>'wrong code',
+                'err'=>trans($this->trans_dir.'wrong_code'),
                 'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
             ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
          }
@@ -76,7 +76,7 @@ class MailController extends Controller
         if(!$user)
         {
            return response()->json([
-               'err'=>'user not found',
+               'err'=>trans($this->trans_dir.'user_not_found'),
                'status'=>404
            ],404);
         }
@@ -85,7 +85,7 @@ class MailController extends Controller
         $user->save();
 
         return response()->json([
-            'msg'=>'password was changed',
+            'msg'=>trans($this->trans_dir.'password_was_changed'),
             'status'=>200
         ],200);
      }

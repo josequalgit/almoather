@@ -8,6 +8,8 @@ use App\Models\FAQ;
 
 class FaqController extends Controller
 {
+    private $trans_dir = 'messages.api.';
+
     public function index()
     {
        
@@ -19,7 +21,7 @@ class FaqController extends Controller
         });
 
         return response()->json([
-            'msg'=>"get all faq's",
+            'msg'=>trans($this->trans_dir.'get_all_faqs'),
             'data'=>$data,
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
