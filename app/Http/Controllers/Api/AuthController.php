@@ -16,6 +16,8 @@ class AuthController extends Controller
 {
     use UserResponse;
 
+    private $trans_dir = 'messages.api.';
+
     /**
      * Create a new AuthController instance.
      *
@@ -46,7 +48,9 @@ class AuthController extends Controller
         }
         else
         {
-            return response()->json(['msg' => 'wrong email/password'], config('global.UNAUTHORIZED_VALIDATION_STATUS'));
+            return response()->json([
+                'msg' => trans($this->trans_dir.'wrong_email_password')],
+                config('global.UNAUTHORIZED_VALIDATION_STATUS'));
         }
 
         $user = Auth::guard('api')->user();
@@ -57,7 +61,7 @@ class AuthController extends Controller
                 $user->update(['fcm_token' => $request->fcm_token]);
             }
 			 return response()->json([
-                'msg'=>"user data",
+                'msg'=>trans($this->trans_dir.'user_data'),
 				 'data'=>$this->userDataResponse($user,$token , $user->id),
 				 'type'=>'customer',
                 'status'=>config('global.OK_STATUS') 
@@ -67,7 +71,7 @@ class AuthController extends Controller
         {
             $user->update(['fcm_token' => $request->fcm_token]);
 			 return response()->json([
-                'msg' => "user data",
+                'msg' =>trans($this->trans_dir.'user_data'),
 				 'data' => $this->userDataResponse($user,$token, $user->id),
 				 'type' => 'influencer',
                 'status'=>config('global.OK_STATUS')
@@ -78,7 +82,7 @@ class AuthController extends Controller
         {
             auth()->guard('api')->logout();
             return response()->json([
-                'msg'=>"user dose't have the right role to make this action",
+                'msg'=>trans($this->trans_dir.'user_dont_have_right_role'),
                 'status'=>config('global.OK_STATUS') 
             ],config('global.OK_STATUS'));
         }
@@ -104,7 +108,7 @@ class AuthController extends Controller
     {
         auth()->guard('api')->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['message' => trans($this->trans_dir.'successfully_logged_out')]);
     }
 
     /**
@@ -126,14 +130,12 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token , $user,$type)
     {
-
-
         return response()->json([
-            'msg'=>'login successfully',
+            'msg'=>trans($this->trans_dir.'login_successfully'),
             'data'=>$this->userDataResponse($user,$token, $user->id),
             'type'=>$type == 1?'customer':'Influencer',
-            'status'=>200
-        ],200);
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 
     public function details($id = null , $type = null)
@@ -146,7 +148,7 @@ class AuthController extends Controller
            
 
             if(!$data) return response()->json([
-                'err'=>'user not found',
+                'err'=>trans($this->trans_dir.'user_not_found'),
                 'status'=>config('global.NOT_FOUND_STATUS')
             ],config('global.NOT_FOUND_STATUS'));
 
@@ -155,24 +157,22 @@ class AuthController extends Controller
         {
             $data = Auth::guard('api')->user();
             return response()->json([
-                'msg'=>'user data',
+                'msg'=>trans($this->trans_dir.'user_data'),
                 'data'=>$this->userDataResponse($data,null,$data->id),
                 'type'=>$data->customers?'customer':'Influencer',
-                'status'=>config('global.NOT_FOUND_STATUS')
-    
-            ],200);
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
         }
 
 
         
 
         return response()->json([
-            'msg'=>'user data',
+            'msg'=>trans($this->trans_dir.'user_data'),
             'data'=>$this->userDataResponse($data->users,null,$data->users->id),
             'type'=>$data->customers?'customer':'Influencer',
-            'status'=>config('global.NOT_FOUND_STATUS')
-
-        ],200);
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 
     public function changeLang($lang)
@@ -190,13 +190,13 @@ class AuthController extends Controller
             }
             
             return response()->json([
-                'msg'=>'language was changed',
+                'msg'=>trans($this->trans_dir.'language_was_changed'),
                 'current_lang'=>App::getLocale(),
                 'status'=>config('global.OK_STATUS')
             ],config('global.OK_STATUS'));
         }
         return response()->json([
-            'msg'=>'language is not supported',
+            'msg'=>trans($this->trans_dir.'language_is_not_supported'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
     }
@@ -212,14 +212,14 @@ class AuthController extends Controller
             $data->save();
 
             return response()->json([
-                'msg'=>'password was changed',
+                'msg'=>trans($this->trans_dir.'password_was_changed'),
                 'status'=>config('global.OK_STATUS')
             ],config('global.OK_STATUS'));
         }
         else
         {
             return response()->json([
-                'msg'=>'wrong password',
+                'msg'=>trans($this->trans_dir.'wrong_password'),
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }

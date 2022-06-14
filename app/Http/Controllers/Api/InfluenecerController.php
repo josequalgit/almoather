@@ -15,18 +15,20 @@ use FFMpeg\Filters\Frame\FrameFilters;
 
 class InfluenecerController extends Controller
 {
+    private $trans_dir = 'messages.api.';
+
     public function details($id)
     {
         $data = User::find($id);
         #IF THE USER NOT FOUND
         if(!$data) return response()->json([
-            'err'=>'user was not found',
+            'err'=>trans($this->trans_dir.'user_was_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         #IF THE USER IS NOT AN INFLUENCER
         if(!$data->influncers) return response()->json([
-            'err'=>'user is not a influenecer',
+            'err'=>trans($this->trans_dir.'user_not_an_influencer'),
             'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
         ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
 
@@ -53,7 +55,7 @@ class InfluenecerController extends Controller
 
         #RESPONSE
         return response()->json([
-            'msg'=>'Influencer was found',
+            'msg'=>trans($this->trans_dir.'influencer_was_found'),
             'data'=>$formate,
             'status'=>config('global.OK_STATUS'),
         ],config('global.OK_STATUS'));
@@ -64,7 +66,7 @@ class InfluenecerController extends Controller
         $category = InfluncerCategory::find($category_id);
 
         if(!$category) return response()->json([
-            'err'=>'category not found',
+            'err'=>trans($this->trans_dir.'category_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
         $data = $category->influncers;
@@ -85,12 +87,7 @@ class InfluenecerController extends Controller
 
            $getInfAdsLast28 = $inf->ads()->whereBetween('created_at',[$start_date , $end_date])->get();
            $data = $getInfAdsLast28;
-
         }
-
-
-
-
         return $data;
     }
 
@@ -101,7 +98,7 @@ class InfluenecerController extends Controller
         $influencer = Auth::guard('api')->user()->influncers;
         if(!$influencer){
             return response()->json([
-                'msg'       =>'You don\'t have permission to add media',
+                'msg'       =>trans($this->trans_dir.'you_dont_have_permission'),
                 'status'    => false,
             ],400);
         }
@@ -119,7 +116,7 @@ class InfluenecerController extends Controller
             }
         }
         return response()->json([
-            'msg'       => 'Media Added Successfully',
+            'msg'       => trans($this->trans_dir.'media_added_successfully'),
             'data'      => $influencer->gallery,
             'status'    => true,
         ],200);
@@ -130,13 +127,13 @@ class InfluenecerController extends Controller
         $influencer = Auth::guard('api')->user()->influncers;
         if(!$influencer){
             return response()->json([
-                'msg'       =>'You don\'t have permission to add media',
+                'msg'       =>trans($this->trans_dir.'you_dont_have_permission'),
                 'status'    => false,
             ],400);
         }
 
         return response()->json([
-            'msg'       => 'Media returned Successfully',
+            'msg'       => trans($this->trans_dir.'media_returned_successfully'),
             'data'      => $influencer->gallery,
             'status'    => true,
         ],200);
@@ -148,7 +145,7 @@ class InfluenecerController extends Controller
     function deleteGalleryMedia($id){
         $media = DB::table('media')->where('id',$id)->where('model_type','App\Models\Influncer')->first();
         if(!$media)return response()->json([
-            'err'=>'file not found',
+            'err'=>trans($this->trans_dir.'file_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
@@ -157,7 +154,7 @@ class InfluenecerController extends Controller
         $model->deleteMedia($media->id);
 
         return response()->json([
-            'msg'       => 'Media deleted Successfully',
+            'msg'       => trans($this->trans_dir.'media_deleted_successfully'),
             'status'    => true,
         ],200);
     }

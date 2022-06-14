@@ -14,7 +14,8 @@ use App\Http\Requests\Api\UploadFileRequest;
 class ChatController extends Controller
 {
     use UploadFiles;
-    
+    private $trans_dir = 'messages.api.';
+
     public function index($user_id,$type)
     {
         if($type == 'app')
@@ -61,7 +62,7 @@ class ChatController extends Controller
         $response = [
             'data'=>$data,
             'status'=>config('global.OK_STATUS'),
-            'msg'=>'data was return',
+            'msg'=>trans($this->trans_dir.'data_was_return'),
             'receiver_id'=>1,
             'sender_id'=>$receiver_id,
         ];
