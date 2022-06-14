@@ -8,242 +8,218 @@
 
           <section id="basic-input" class="content-wrapper">
 
-              <div class="card">
-                  <div class="card-header pb-0">
-                      <div class="card-title">
-                          <p class="mb-0">Ad Details</p>
-                      </div>
-                      <hr class="w-100 mt-1">
-                  </div>
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="card-title">
+                        <p class="mb-0">Ad Details</p>
+                    </div>
+                    <hr class="w-100 mt-1">
+                </div>
 
-                  <div class="card-body">
-                      <form id="ad_details_from" action="/" class="campaign-form">
-                          <div class="row">
-                              @if ($data->status == 'pending' || $data->status == 'choosing_influencer')
-                                  <div id="wizard-basic">
-                                      <h3>CAMPAIGN</h3>
-                                      <section>
-                                          <div class="camp-section">
-                                              <div class="add-section">
-                                                  <h3 class="f-16 ad-title" style="">Campaign Details
-                                                      ({{ $data->store }})</h3>
-                                                  <div class="blocks-list">
-                                                      <div class="w-100  justify-content-center">
-                                                          <div class="details-banner ad-details">
-                                                              <div class="row">
-                                                                  <div class="col-lg-2 col-md-3 text-center w-100">
-                                                                      <img class="ad-image"
-                                                                          src="{{ $data->customers->users->image['url'] }}"
-                                                                          alt="Ahmed ahmed jo">
-                                                                      <h3 class="title mt-2">
-                                                                          {{ $data->customers->full_name }}</h3>
-                                                                  </div>
-                                                                  <div class="col details-content">
-                                                                      <p>
-                                                                          <b class="me-2">Name:</b>
-                                                                          {{ $data->store }}
-                                                                      </p>
-                                                                      <div class="border-top pt-1 pb-1">
-                                                                          <b class="me-2">Description:</b> <span
-                                                                              class="me-2">{{ $data->about }}</span>
-                                                                      </div>
-                                                                      <div class="hashs border-top pt-1 pb-1">
-                                                                          <b class="mr-2">Category:</b>
-                                                                          @if ($data->categories)
-                                                                              <span
-                                                                                  class="tag mr-2 category-item">{{ $data->categories->name }}</span>
-                                                                          @else
-                                                                              <span class="tag mr-2 category-item">No
-                                                                                  Category</span>
-                                                                          @endif
-                                                                      </div>
-                                                                      <div class="hashs border-top pt-1 pb-1">
-                                                                          <b class="me-2">Cr Number :
-                                                                              {{ $data->cr_num }}</b>
-                                                                      </div>
-                                                                      <div class="hashs border-top pt-1 pb-1">
-                                                                          <b class="me-2">is vat:
-                                                                              {{ $data->is_vat ? 'Yes' : 'No' }}</b>
-                                                                      </div>
-                                                                      <div class="hashs border-top pt-1 pb-1">
-                                                                          <b class="me-2">assoiate to ad:
-                                                                              {{ $data->relation }} </b>
-                                                                      </div>
-                                                                      <div class="border-top pt-1 pb-1">
-                                                                          <b class="me-2">goal:</b> <span
-                                                                              class="me-2">{{ $data->campaignGoals->title }}</span>
-                                                                      </div>
-                                                                      <div class="border-top pt-1 pb-1">
-                                                                          <b class="me-2">On: </b> <span
-                                                                              class="me-2">
-                                                                              @foreach ($data->socialMedias as $item)
-                                                                                  <img src="{{ $item->image }}"
-                                                                                      class="rounded-circle social-media-icon" />
-                                                                              @endforeach
-                                                                          </span>
-                                                                      </div>
-                                                                      <div class="border-top pt-1 pb-1">
-                                                                          <b class="me-2">Link: <a target="_blank"
-                                                                                  href="{{ $data->store_link }}">Click
-                                                                                  Me!</a> </b><span class="me-2">
-                                                                          </span>
-                                                                      </div>
-                                                                      <div class="border-top pt-1 pb-1">
-                                                                          <b class="me-2">Status:
-                                                                              {{ $data->status }} </b><span
-                                                                              class="me-2">
-                                                                          </span>
-                                                                      </div>
-                                                                  </div>
-                                                              </div>
-                                                              <div class="">
-                                                                  <div class="container">
-                                                                      <div class="row">
-                                                                          <div class="col-lg-6 col-md-12 p-2">
-                                                                              <div class="count-box list">
-                                                                                  <span> <i class="bx bx-money"></i>
-                                                                                      Total Budget:</span>
-                                                                                  <span
-                                                                                      class="numbers">{{ $data->budget }}</span>
-                                                                              </div>
-                                                                          </div>
-                                                                          <div class="col-lg-6 col-md-12 p-2">
-                                                                              <div class="count-box list">
-                                                                                  <span> <i class="bx bx-user"></i>
-                                                                                      Influncer:</span>
-                                                                                  <span
-                                                                                      class="numbers">{{ count($matches) }}</span>
-                                                                              </div>
-                                                                          </div>
-                                                                      </div>
-                                                                  </div>
-                                                              </div>
-                                                          </div>
-                                                      </div>
+                <div class="card-body">
+                    <form id="ad_details_from" action="/" class="campaign-form">
+                        <div class="row">
+                            @if ($data->status == 'pending' || $data->status == 'choosing_influencer')
+                                <div id="wizard-basic">
+                                    <h3>CAMPAIGN</h3>
+                                    <section>
+                                        <div class="camp-section">
+                                            <div class="add-section">
+                                                <h3 class="f-16 ad-title" style="">Campaign Details({{ $data->store }})</h3>
+                                                <div class="blocks-list">
+                                                    <div class="w-100  justify-content-center">
+                                                        <div class="details-banner ad-details">
+                                                            <div class="row">
+                                                                <div class="col-lg-2 col-md-3 text-center w-100">
+                                                                    <img class="ad-image" src="{{ $data->logo['url'] }}" alt="{{  $data->store }}">
+                                                                    <h3 class="title mt-2">{{ $data->customers->full_name }}</h3>
+                                                                </div>
+                                                                <div class="col details-content">
+                                                                    <div class="pb-1">
+                                                                        <b class="me-2">Trade Mark Name:</b> <span class="me-2">{{ $data->store }}</span>
+                                                                    </div>
+                                                                    <div class="hashs border-top pt-1 pb-1">
+                                                                        <b class="me-2">Cr Number : </b><span class="me-2">{{ $data->cr_num }}</span>
+                                                                    </div>
+                                                                    <div class="hashs border-top pt-1 pb-1">
+                                                                        <b class="mr-2">Category:</b>
+                                                                        @if ($data->categories)
+                                                                            <span class="tag me-2 category-item">{{ $data->categories->name }}</span>
+                                                                        @else
+                                                                            <span class="tag me-2 category-item">No Category Choosen</span>
+                                                                        @endif
+                                                                    </div>
+                                                                    <div class="border-top pt-1 pb-1">
+                                                                        <b class="me-2">Description:</b> <span class="me-2">{{ $data->about }}</span>
+                                                                    </div>
+                                                                    <div class="border-top pt-1 pb-1">
+                                                                        <b class="me-2">Is Store Verified Through Marouf:</b> <span class="me-2">{{ $data->marouf_num ? 'Yes' : 'No' }}</span>
+                                                                    </div>
+                                                                    @if($data->marouf_num)
+                                                                        <div class="border-top pt-1 pb-1">
+                                                                            <b class="me-2">Marouf Number:</b> <span class="me-2">{{ $data->marouf_num }}</span>
+                                                                        </div>
+                                                                    @endif
+                                                                    <div class="hashs border-top pt-1 pb-1">
+                                                                        <b class="me-2">is vat: </b><span class="me-2">{{ $data->is_vat ? 'Yes' : 'No' }}</span>
+                                                                    </div>
 
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <div class="w-100 d-flex justify-content-center"></div>
-                                      </section>
-                                      <h3>CONTENT</h3>
-                                      <section>
-                                          <div class="add-section contentSection">
-                                              <div class="box-border">
-                                                  <div class="top-section">
-                                                      <div class="selected-items row">
+                                                                    @if($data->is_vat)
+                                                                        <div class="hashs border-top pt-1 pb-1">
+                                                                            <b class="me-2">Tax Number: </b><span class="me-2">{{ $data->tax_value }}</span>
+                                                                        </div>
+                                                                    @endif
+                                                                    <div class="hashs border-top pt-1 pb-1">
+                                                                        <b class="me-2">Relationship With Brand: </b><span class="me-2">{{ $data->relation }}</span>
+                                                                    </div>
 
-                                                      </div>
-                                                  </div>
-                                                  <div class="main-section d-flex justify-content-center p-2">
-                                                      <div class="card col">
-                                                          <form>
-                                                              <div class="col p-4">
-                                                                  <div>
-                                                                      <h6 for="add_category">Add Influncers Requarment</h6>
-                                                                      <div class="row p-4 add_space">
-                                                                          <div class="col">
-                                                                              <label for="">Type</label>
-                                                                              <select class="form-control" id="ad-type">
-                                                                                  <option {{ $data->type == 'product' ? 'selected' : '' }} value="product" data-items="{{json_encode($productCategories)}}" >Product</option>
-                                                                                  <option
-                                                                                      {{ $data->type == 'service' ? 'selected' : '' }} value="service" data-items="{{json_encode($serviceCategories)}}">Service</option>
-                                                                              </select>
-                                                                          </div>
-                                                                          <div class="col">
-                                                                              <label for="">Category</label>
-                                                                              <select class="form-control" id="ad-category" data-item="{{$data->category_id}}"></select>
-                                                                          </div>
-                                                                          <div class="col">
-                                                                              @if (!$data->campaignGoals->profitable)
-                                                                                  <div class="form-group">
-                                                                                      <label
-                                                                                          for="exampleFormControlSelect1">Engagement
-                                                                                          rate</label>
-                                                                                      <input id="engagement_rate"
-                                                                                          class="form-control"
-                                                                                          type="number" value="0" min='0'
-                                                                                          max='100' />
-                                                                                  </div>
-                                                                              @endif
-                                                                          </div>
-                                                                      </div>
-                                                                  </div>
-                                                              </div>
-                                                              <div class="col">
-                                                                  <div class="row p-4  align-items-center">
-                                                                      <h6 for="add_category">Videos</h6>
-                                                                        <button type="button" class="btn btn-info ml-2 open-choose-video">Add</button>
-                                                                        <input type="file" id="adVideo" />
-                                                                  </div>
-                                                                  <div id="videoSection" class="row video-section p-1">
-                                                                      @foreach ($data->videos as $key => $item)
-                                                                          <div class="col-2 h-25 mt-2">
-                                                                              <div
-                                                                                  class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
-                                                                                  <a href="{{ $item->url }}"
-                                                                                      target="_blank"
-                                                                                      rel="noopener noreferrer">
-                                                                                      <img src="{{ asset('img/icons/misc/mp4.jpg') }}"
-                                                                                          width="40" />
-                                                                                  </a>
-                                                                                  <div class="ml-2">
-                                                                                      <h6 class="mb-0">Video
-                                                                                          #{{ $key + 1 }}</h6>
-                                                                                      <div class="about"><button
-                                                                                              onclick="deleteFileModal( {{ $item->id }})"
-                                                                                              type="button"
-                                                                                              class="deleteButton"><span
-                                                                                                  class="small">Delete</span></button>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </div>
-                                                                          </div>
-                                                                      @endforeach
+                                                                    <div class="hashs border-top pt-1 pb-1">
+                                                                        <b class="me-2">About The Company (Brand): </b><span class="me-2">{{ $data->about }}</span>
+                                                                    </div>
 
-                                                                  </div>
-                                                              </div>
-                                                              <div class="col">
-                                                                  <div class="row p-4  align-items-center">
-                                                                      <h6 for="add_category">Images</h6>
-                                                                      <button type="button" onclick="addVideoModal(1)"
-                                                                          class="btn btn-info ml-2">Add</button>
-                                                                  </div>
-                                                                  <div id="imageSection" class="row image-section p-1">
-                                                                      @foreach ($data->image as $key => $item)
-                                                                          <div class="col-2 h-25 mt-2">
-                                                                              <div
-                                                                                  class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
-                                                                                  <a href="{{ $item->url }}"
-                                                                                      target="_blank"
-                                                                                      rel="noopener noreferrer">
-                                                                                      <img src="{{ asset('img/icons/misc/img.png') }}"
-                                                                                          width="40" />
+                                                                    <div class="hashs border-top pt-1 pb-1">
+                                                                        <b class="me-2">About The Product: </b><span class="me-2">{{ $data->about_product }}</span>
+                                                                    </div>
 
-                                                                                  </a>
-                                                                                  <div class="ml-2">
-                                                                                      <h6 class="mb-0">Image
-                                                                                          #{{ $key + 1 }}</h6>
-                                                                                      <div class="about"><button
-                                                                                              onclick="deleteFileModal( {{ $item->id }})"
-                                                                                              type="button"
-                                                                                              class="deleteButton"><span
-                                                                                                  class="small">Delete</span></button>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </div>
-                                                                          </div>
-                                                                      @endforeach
+                                                                    <div class="border-top pt-1 pb-1">
+                                                                        <b class="me-2">Campaign Goals:</b> <span class="me-2">{{ $data->campaignGoals->title }}</span>
+                                                                    </div>
 
-                                                                  </div>
-                                                              </div>
-
-                                                          </form>
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                      </section>
+                                                                    <h6>Location</h6>
+                                                                    <div class="border-top pt-1 pb-1">
+                                                                        <b class="me-2">Country:</b> <span class="me-2">{{ $data->countries->name }}</span>
+                                                                    </div>
+                                                                    <div class="pt-1 pb-1">
+                                                                        <b class="me-2">City:</b> <span class="me-2">{{ $data->cities->name }}</span>
+                                                                    </div>
+                                                                    <div class="pt-1 pb-1">
+                                                                        <b class="me-2">Area:</b> <span class="me-2">{{ $data->areas->name }}</span>
+                                                                    </div>
+                                                                    <div class="border-top pt-1 pb-1">
+                                                                        <b class="me-2">On: </b> <span
+                                                                            class="me-2">
+                                                                            @foreach ($data->socialMedias as $item)
+                                                                                <img src="{{ $item->image }}" class="rounded-circle social-media-icon" />
+                                                                            @endforeach
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="border-top pt-1 pb-1">
+                                                                        <b class="me-2">Link: <a target="_blank" href="{{ $data->store_link }}">{{ $data->store_link }}</a> </b>
+                                                                    </div>
+                                                                    <div class="border-top pt-1 pb-1">
+                                                                        <b class="me-2">Status: {{ $data->status }} </b><span class="me-2"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="">
+                                                                <div class="container">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-6 col-md-12 p-2">
+                                                                            <div class="count-box list">
+                                                                                <span> <i class="bx bx-money"></i>Total Budget:</span><span class="numbers">{{ $data->budget }}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-6 col-md-12 p-2">
+                                                                            <div class="count-box list">
+                                                                                <span> <i class="bx bx-user"></i>Influncer:</span><span class="numbers">{{ count($matches) }}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="w-100 d-flex justify-content-center"></div>
+                                    </section>
+                                    <h3>CONTENT</h3>
+                                    <section>
+                                        <div class="add-section contentSection">
+                                            <div class="box-border">
+                                                <div class="top-section">
+                                                    <div class="selected-items row"></div>
+                                                </div>
+                                                <div class="main-section d-flex justify-content-center p-2">
+                                                    <div class="card col">
+                                                        <form>
+                                                            <div class="col p-4">
+                                                                <div>
+                                                                    <h6 for="add_category">Add Influncers Requarment</h6>
+                                                                    <div class="row p-4 add_space">
+                                                                        <div class="col">
+                                                                            <label for="">Type</label>
+                                                                            <select class="form-control" id="ad-type">
+                                                                                <option {{ $data->type == 'product' ? 'selected' : '' }} value="product" data-items="{{json_encode($productCategories)}}" >Product</option>
+                                                                                <option {{ $data->type == 'service' ? 'selected' : '' }} value="service" data-items="{{json_encode($serviceCategories)}}">Service</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="col">
+                                                                            <label for="">Category</label>
+                                                                            <select class="form-control" id="ad-category" data-item="{{$data->category_id}}"></select>
+                                                                        </div>
+                                                                        
+                                                                        @if (!$data->campaignGoals->profitable)
+                                                                            <div class="col">
+                                                                                <div class="form-group">
+                                                                                    <label for="exampleFormControlSelect1">Engagement rate</label>
+                                                                                    <input id="engagement_rate" class="form-control" type="number" value="0" min='0' max='100' />
+                                                                                </div>
+                                                                            </div>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="row p-4  align-items-center">
+                                                                    <h6 for="add_category">Videos</h6>
+                                                                    <button type="button" class="btn btn-info ml-2 open-choose-video">Add</button>
+                                                                    <input type="file" id="adVideo" style="display:none" />
+                                                                </div>
+                                                                <div id="videoSection" class="row video-section p-1">
+                                                                    @foreach ($data->videos as $key => $item)
+                                                                        <div class="col-2 h-25 mt-2">
+                                                                            <div class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
+                                                                                <a href="{{ $item->url }}" target="_blank" rel="noopener noreferrer">
+                                                                                    <img src="{{ asset('img/icons/misc/mp4.jpg') }}" width="40" />
+                                                                                </a>
+                                                                                <div class="ml-2">
+                                                                                    <h6 class="mb-0">Video #{{ $key + 1 }}</h6>
+                                                                                    <div class="about"><button onclick="deleteFileModal( {{ $item->id }})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="row p-4  align-items-center">
+                                                                    <h6 for="add_category">Images</h6>
+                                                                    <input type="file" id="adImage" style="display:none" />
+                                                                </div>
+                                                                <div id="imageSection" class="row image-section p-1">
+                                                                    @foreach ($data->image as $key => $item)
+                                                                        <div class="col-2 h-25 mt-2">
+                                                                            <div class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
+                                                                                <a href="{{ $item->url }}" target="_blank" rel="noopener noreferrer">
+                                                                                    <img src="{{ asset('img/icons/misc/img.png') }}" width="40" />
+                                                                                </a>
+                                                                                <div class="ml-2">
+                                                                                    <h6 class="mb-0">Image #{{ $key + 1 }}</h6>
+                                                                                    <div class="about"><button onclick="deleteFileModal( {{ $item->id }})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
                                       <h3>LIVE</h3>
                                       <section>
                                           <div class="add-section">
@@ -316,7 +292,7 @@
                                           </div>
                                       </section>
                                   </div>
-                              @else
+                            @else
                                   <div class="col" id="wizard-basic">
                                       <h3 class="sectionTitle">CAMPAIGN</h3>
                                       <section>
@@ -422,11 +398,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <div class="w-100 d-flex justify-content-center">
-                                              {{-- <button role="wizard-basic" type="button" class="btn btn-info w-50">
-                                                                      Next
-                                                                    </button> --}}
-                                          </div>
+                                          <div class="w-100 d-flex justify-content-center"></div>
                                       </section>
                                       @if ($data->status !== 'rejected')
                                           <h3 class="sectionTitle">CONTENT</h3>
@@ -473,7 +445,6 @@
                                                                                       </div>
                                                                                   @endif
                                                                               </div>
-                                                                              {{-- <button onclick="sendStatusRequest()" class="btn btn-info h-25 mt-2">See</button> --}}
                                                                           </div>
                                                                       </div>
                                                                   </div>
@@ -644,51 +615,11 @@
                                       @endif
                                   </div>
 
-                              @endif
-                          </div>
-                      </form>
-                  </div>
-              </div>
-
-              <div class="modal fade" id="changePassword" tabindex="-1" aria-labelledby="changePasswordLabel"
-                  aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered">
-                      <form action="">
-                          <div class="modal-content">
-                              <div class="modal-header">
-                                  <h5 class="modal-title" id="changePasswordLabel">Change Password</h5>
-                                  <button type="button" class="modal-close" data-bs-dismiss="modal"
-                                      aria-label="Close"><img src="images/Icon ionic-md-close-circle.svg" alt=""></button>
-                              </div>
-                              <div class="separate-line"></div>
-                              <div class="modal-body p-0 pt-2">
-                                  <div class="container-fluid">
-                                      <div class="row">
-                                          <div class="form-field col-12 py-2">
-                                              <label class="form-label">Current Password</label>
-                                              <input class="form-control" type="text" placeholder="">
-                                          </div>
-                                          <div class="form-field col-12 py-2">
-                                              <label class="form-label">New Password</label>
-                                              <input class="form-control" type="text" placeholder="">
-                                          </div>
-                                          <div class="form-field col-12 py-2">
-                                              <label class="form-label">Confirm Password</label>
-                                              <input class="form-control" type="text" placeholder="">
-                                          </div>
-                                          <div class="separate-line pt-3"></div>
-                                      </div>
-                                  </div>
-                              </div>
-                              <div class="modal-footer">
-                                  <button type="button" class="btn submit btn-primary">Yes, Change it</button>
-                              </div>
-                          </div>
-                      </form>
-                  </div>
-              </div>
-
-
+                            @endif
+                        </div>
+                    </form>
+                </div>
+            </div>
 
               <div id="rejectedReson" class="modal" tabindex="-1" role="dialog">
                   <div class="modal-dialog" role="document">
@@ -966,9 +897,13 @@
             $('.open-choose-video').on('click',function(){
                 $('#adVideo').trigger('click');
             });
+            $('.open-choose-image').on('click',function(){
+                $('#addImage').trigger('click');
+            });
 
-            $('#adVideo').on('change',function(){
-                let video = document.getElementById("adVideo").files[0];
+            $('#adVideo,#addImage').on('change',function(){
+                var itemId = $(this).attr('id');
+                let video = document.getElementById(itemId).files[0];
                 let formData = new FormData();
                 formData.append('file', video)
                 let url = '{{ route('dashboard.ads.uploadVideo', ':id') }}';

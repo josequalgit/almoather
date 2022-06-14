@@ -36,21 +36,21 @@
                                             <ul class="dropdown-menu border menu-position m-0 p-1">
                                                     <li  class="list-item-custom">
                                                         
-                                                        <button class="styleless-button w-100 text-left" onclick="openModalSeeContract('{{ $item->contacts?$item->contacts->content:'No data avalibale' }}')">
+                                                        <button class="styleless-button w-100 text-left p-0" onclick="openModalSeeContract('{{ $item->contacts?$item->contacts->content:'No data avalibale' }}')">
                                                             <i class="bx bx-printer list-item-icon"></i>
                                                             <span class="list-item-text">Print</span>
                                                         </button>
                                                 </li>
 
                                                     <li  class="list-item-custom">
-                                                        <button class="styleless-button w-100 text-left" onclick="seeMatched('{{$item->id}}')">
+                                                        <button class="styleless-button w-100 text-left p-0" onclick="seeMatched('{{$item->id}}')">
                                                             <i class="bx bx-user list-item-icon"></i>
                                                             <span class="list-item-text">Influncers</span>
                                                         </button>
                                                 </li>
 
                                                 <li  class="list-item-custom">
-                                                    <a class="styleless-button w-100 text-left" href="{{ route("dashboard.ads.edit",$item->id) }}" >
+                                                    <a class="styleless-button w-100 text-left p-0" href="{{ route("dashboard.ads.edit",$item->id) }}" >
                                                         <i class="bx bx-book-content list-item-icon"></i>
                                                         <span class="list-item-text">Details</span>
                                                     </a>
