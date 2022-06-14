@@ -21,6 +21,7 @@ use App\Http\Controllers\CampaignGoalController;
 use App\Http\Controllers\BusinessManagerController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\ReasonsController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PaymentController;
@@ -212,12 +213,12 @@ Route::group(['middleware' => 'language'],function(){
                 Route::get('/rejectedAds','rejectedAds')->name('rejectedAds');
             });
 
-            Route::controller(CountryController::class)
-            ->prefix('countries')
-            ->name('countries.')
-            ->group(function(){
-                Route::get('/{id}','index')->name('index');
-            });
+            // Route::controller(CountryController::class)
+            // ->prefix('countries')
+            // ->name('countries.')
+            // ->group(function(){
+            //     Route::get('/{id}','index')->name('index');
+            // });
 
             Route::controller(CityController::class)
             ->prefix('cities')
@@ -227,13 +228,24 @@ Route::group(['middleware' => 'language'],function(){
                 Route::get('/Area/{id}','get_city_according_to_area')->name('index');
             });
 
-            Route::controller(CityController::class)
+            Route::controller(AreaController::class)
             ->prefix('areas')
             ->name('areas.')
             ->group(function(){
                 Route::get('/all','index')->name('all');
                 Route::get('/Area/{id}','get_city_according_to_area')->name('index');
+                Route::post('store','store')->name('store');
+                Route::post('update/{id}','update')->name('update');
+                Route::post('delete/{id}','delete')->name('delete');
             });
+
+            // Route::controller(CountryController::class)
+            // ->prefix('countries')
+            // ->name('countries.')
+            // ->group(function(){
+           
+            // });
+            
 
             Route::controller(ReasonsController::class)
             ->middleware('role_or_permission:superAdmin|Edit Reason|Update Reason|Show Reason|Create Reason')
@@ -315,7 +327,12 @@ Route::group(['middleware' => 'language'],function(){
         ->prefix('countries')
         ->name('countries.')
         ->group(function(){
-            Route::get('/{id}','index')->name('index');
+            // Route::get('/{id}','index')->name('index');
+            Route::get('/Area/{id}','get_city_according_to_area')->name('index');
+            Route::get('/all','all')->name('all');
+            Route::post('store','store')->name('store');
+            Route::post('update/{id}','update')->name('update');
+            Route::post('delete/{id}','delete')->name('delete');
         });
 
         Route::controller(CityController::class)

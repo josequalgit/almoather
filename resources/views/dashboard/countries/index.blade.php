@@ -32,7 +32,7 @@
                         <div class="card">
                             <div class="card-header pb-0">
                                 <div class="card-title">
-                                    <p class="mb-0">City</p>
+                                    <p class="mb-0">Country</p>
                                 </div>
 
                                 <div class="section-right">
@@ -47,8 +47,8 @@
                                                     <tr>
                                                         <th>Name AR</th>
                                                         <th>Name EN</th>
-                                                        <th>Region</th>
-                                                        <th>Country</th>
+                                                        <th>Phone Code</th>
+                                                        <th>Code</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -58,11 +58,11 @@
                                                             
                                                             <td>{{ $item->getTranslation('name','ar') }}</td>
                                                             <td>{{ $item->getTranslation('name','en') }}</td>
-                                                            <td>{{ $item->regions->name }}</td>
-                                                            <td>{{ $item->regions->countries->name }}</td>
+                                                            <td>{{ $item->country_code }}</td>
+                                                            <td>{{ $item->code }}</td>
                                                             <td>
                                                                 {{-- @can('Edit City') --}}
-                                                                    <button onclick="getUserData('{{ $item->id }}','{{$item->getTranslation('name','ar') }}','{{ $item->getTranslation('name','en') }}','{{ $item->regions->countries->id }}','{{ $item->regions->id }}')" class="btn btn-secondary">
+                                                                    <button onclick="getUserData('{{ $item->id }}','{{$item->getTranslation('name','ar') }}','{{ $item->getTranslation('name','en') }}','{{$item->code }}','{{$item->country_code }}')" class="btn btn-secondary">
                                                                         <i class="bx bx-edit"></i>
                                                                     </button>
                                                                 {{-- @endcan --}}
@@ -98,36 +98,36 @@
             <div class="modal-content">
               
                 <div class="modal-body">
-                    <h3 id="city_model_title" class="text-center modal-title">
-                        Create City
+                    <h3 id="country_model_title" class="text-center modal-title">
+                        Create Country
                     </h3>
                     <div class="mb-1">
-                        <label for="exampleFormControlInput1" class="form-label">Name AR</label>
-                        <input id="city_name_ar" type="email" class="form-control" id="exampleFormControlInput1" placeholder="Name ">
+                        <label for="exampleFormControlInput1" class="form-label">Name Ar</label>
+                        <input id="country_name_ar" type="email" class="form-control" id="exampleFormControlInput1" placeholder="add data... ">
                       </div>
                     <div class="mb-1">
                         <label for="exampleFormControlInput1" class="form-label">Name En</label>
-                        <input id="city_name_en" type="email" class="form-control" id="exampleFormControlInput1" placeholder="Name ">
+                        <input id="country_name_en" type="email" class="form-control" id="exampleFormControlInput1" placeholder="add data... ">
                       </div>
-                      <div class="mb-1">
-                        <label for="exampleFormControlTextarea1" class="form-label">Country</label>
-                        <select id="country" onchange="getRegionsAccordingToCountry(event.target.value)" class="form-control" aria-label="Default select example">
-                            @foreach($countries as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                          </select>
-                          
+                    <div class="mb-1">
+                        <label for="exampleFormControlInput1" class="form-label">Code</label>
+                        <input id="code" type="text" class="form-control" id="exampleFormControlInput1" placeholder="add data... ">
                       </div>
-                      <div class="mb-1">
+                    <div class="mb-1">
+                        <label for="exampleFormControlInput1" class="form-label">Country code</label>
+                        <input id="country_code" type="number" class="form-control" id="exampleFormControlInput1" placeholder="add data... ">
+                      </div>
+                    
+                      {{-- <div class="mb-1">
                         <label for="exampleFormControlTextarea1" class="form-label">Region</label>
                         <select  placeholder="here" id="region_selecter" disabled class="form-control" aria-label="Default select example">
                         </select>
                           
-                      </div>
+                      </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button onclick="addCityApi()" type="button" class="btn btn-primary createCityButton">Save</button>
+                    <button onclick="addAreaApi()" type="button" class="btn btn-primary createCityButton">Save</button>
                 </div>
             </div>
         </div>
@@ -138,13 +138,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Delete City!</h5>
+                    <h5 class="modal-title">Delete Country!</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this '<span id="faqName"></span>' city ?</p>
+                    <p>Are you sure you want to delete this '<span id="faqName"></span>' country ?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -161,7 +161,6 @@
 
 <script>
 
-    getRegionsAccordingToCountry('{{ $countries[0]->id }}')
 
     let city_id = null;
 
@@ -176,7 +175,7 @@
 
     function deleteApi() 
     {
-        let url = '{{ route("dashboard.cities.delete",":id") }}';
+        let url = '{{ route("dashboard.countries.delete",":id") }}';
         let updatedUrl = url.replace(':id', city_id);
         $.ajax({
             type: 'POST',
@@ -199,29 +198,30 @@
     function openModalCreateCity()
     {
         city_id = null;
-        $('#city_model_title').empty();
-        $('#city_model_title').append('Create City');
-        $('#city_name_ar').val('');
-         $('#city_name_en').val('');
+        $('#country_model_title').empty();
+        $('#country_model_title').append('Create Country');
+        $('#country_name_ar').val('');
+        $('#country_name_en').val('');
 
         $('#createCity').modal('toggle');
     }
 
-    function getUserData(id,name_ar,name_en,country_id,region_id)
+    function getUserData(id,name_ar,name_en,code,country_code)
     {
         // let item = JSON.parse(user);
         city_id = id;
-        $('#city_model_title').empty();
-        $('#city_model_title').append('Update City');
+        $('#country_model_title').empty();
+        $('#country_model_title').append('Update Country');
+        
         /** 
          * add values
          * 
          * **/
 
-         $('#city_name_ar').val(name_ar);
-         $('#city_name_en').val(name_en);
-         $('#country_id').val(country_id);
-         $('#region_id').val(region_id);
+         $('#country_name_ar').val(name_ar);
+         $('#country_name_en').val(name_en);
+         $('#code').val(code);
+         $('#country_code').val(country_code);
 
         $('#createCity').modal('toggle');
 
@@ -239,7 +239,6 @@
             success:(res)=>{
                 console.log('response: ',res.data);
               //  $('#city_selecter').
-                $('#region_selecter').empty();
                 $('#region_selecter').prop("disabled", false); 
                 for(let i = 0; i < res.data.length;i++)
                 {
@@ -258,69 +257,65 @@
         })
     }
 
-    function addCityApi()
+    function addAreaApi()
     {
-        if(!addCityValdation()) return;
-
-        let url = '{{route("dashboard.cities.store")}}';
+        if(!addAreaValdation()) return;
+        let url = '{{route("dashboard.countries.store")}}';
         if(city_id)
         {
-            let updateWithId = '{{route("dashboard.cities.update",":id")}}'
+            let updateWithId = '{{route("dashboard.countries.update",":id")}}'
             url = updateWithId.replace(':id',city_id);
         }
         $.ajax({
             url:url,
             type:'POST',
             data:{
-                name_ar:document.getElementById('city_name_ar').value,
-                name_en:document.getElementById('city_name_en').value,
-                region_id:document.getElementById('region_selecter').value,
+                name_ar:document.getElementById('country_name_ar').value,
+                name_en:document.getElementById('country_name_en').value,
+                code:document.getElementById('code').value,
+                country_code:document.getElementById('country_code').value,
                 _token:'{{ csrf_token() }}'
             },
             success:(res)=>{
                window.location.reload();
             },
             error:(err)=>{
-                Toast.fire({
-                    icon: 'error',
-                    title: 'Error adding the city'
-                })
-                console.log('err: '+err)
+                console.log(err)
             }
         })
     }
 
-    function addCityValdation()
+    function addAreaValdation()
     {
-        if(document.getElementById('city_name_ar').value == '')
+        if(document.getElementById('country_name_ar').value == '')
         {
             Toast.fire({
                     icon: 'error',
-                    title: 'Please add city name in arabic'
+                    title: 'Please add country name in arabic'
             })
             return false;
         }
-        if(document.getElementById('city_name_en').value == '')
+        if(document.getElementById('country_name_en').value == '')
         {
             Toast.fire({
                     icon: 'error',
-                    title: 'Please add city name in english'
+                    title: 'Please add country name in English'
             })
             return false;
         }
-        if(document.getElementById('country').value == '')
+        if(document.getElementById('code').value == '')
         {
             Toast.fire({
                     icon: 'error',
-                    title: 'Please select country'
+                    title: 'Please add country phone code'
             })
             return false;
         }
-        if(document.getElementById('region_selecter').value == '')
+        if(document.getElementById('country_code').value == '')
         {
             Toast.fire({
                     icon: 'error',
-                    title: 'Please select region '
+                    title: 'Please add country code'
             })
             return false;
         }

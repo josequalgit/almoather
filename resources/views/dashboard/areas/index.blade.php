@@ -32,7 +32,7 @@
                         <div class="card">
                             <div class="card-header pb-0">
                                 <div class="card-title">
-                                    <p class="mb-0">City</p>
+                                    <p class="mb-0">Area</p>
                                 </div>
 
                                 <div class="section-right">
@@ -45,9 +45,8 @@
                                             <table class="table zero-configuration">
                                                 <thead>
                                                     <tr>
-                                                        <th>Name AR</th>
-                                                        <th>Name EN</th>
-                                                        <th>Region</th>
+                                                        <th>Name Ar</th>
+                                                        <th>Name En</th>
                                                         <th>Country</th>
                                                         <th>Actions</th>
                                                     </tr>
@@ -58,11 +57,10 @@
                                                             
                                                             <td>{{ $item->getTranslation('name','ar') }}</td>
                                                             <td>{{ $item->getTranslation('name','en') }}</td>
-                                                            <td>{{ $item->regions->name }}</td>
-                                                            <td>{{ $item->regions->countries->name }}</td>
+                                                            <td>{{ $item->countries?$item->countries->name:'' }}</td>
                                                             <td>
                                                                 {{-- @can('Edit City') --}}
-                                                                    <button onclick="getUserData('{{ $item->id }}','{{$item->getTranslation('name','ar') }}','{{ $item->getTranslation('name','en') }}','{{ $item->regions->countries->id }}','{{ $item->regions->id }}')" class="btn btn-secondary">
+                                                                    <button onclick="getUserData('{{ $item->id }}','{{$item->getTranslation('name','ar') }}','{{ $item->getTranslation('name','en') }}','{{ $item->countries?$item->countries->id:'0'}}','1')" class="btn btn-secondary">
                                                                         <i class="bx bx-edit"></i>
                                                                     </button>
                                                                 {{-- @endcan --}}
@@ -98,36 +96,36 @@
             <div class="modal-content">
               
                 <div class="modal-body">
-                    <h3 id="city_model_title" class="text-center modal-title">
-                        Create City
+                    <h3 id="area_model_title" class="text-center modal-title">
+                        Create Area
                     </h3>
                     <div class="mb-1">
-                        <label for="exampleFormControlInput1" class="form-label">Name AR</label>
-                        <input id="city_name_ar" type="email" class="form-control" id="exampleFormControlInput1" placeholder="Name ">
+                        <label for="exampleFormControlInput1" class="form-label">Name Ar</label>
+                        <input id="area_name_ar" type="email" class="form-control" id="exampleFormControlInput1" placeholder="Name ">
                       </div>
                     <div class="mb-1">
                         <label for="exampleFormControlInput1" class="form-label">Name En</label>
-                        <input id="city_name_en" type="email" class="form-control" id="exampleFormControlInput1" placeholder="Name ">
+                        <input id="area_name_en" type="email" class="form-control" id="exampleFormControlInput1" placeholder="Name ">
                       </div>
                       <div class="mb-1">
                         <label for="exampleFormControlTextarea1" class="form-label">Country</label>
-                        <select id="country" onchange="getRegionsAccordingToCountry(event.target.value)" class="form-control" aria-label="Default select example">
+                        <select id="country_id" onchange="getRegionsAccordingToCountry(event.target.value)" class="form-control" aria-label="Default select example">
                             @foreach($countries as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
                           </select>
                           
                       </div>
-                      <div class="mb-1">
+                      {{-- <div class="mb-1">
                         <label for="exampleFormControlTextarea1" class="form-label">Region</label>
                         <select  placeholder="here" id="region_selecter" disabled class="form-control" aria-label="Default select example">
                         </select>
                           
-                      </div>
+                      </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button onclick="addCityApi()" type="button" class="btn btn-primary createCityButton">Save</button>
+                    <button onclick="addAreaApi()" type="button" class="btn btn-primary createCityButton">Save</button>
                 </div>
             </div>
         </div>
@@ -176,7 +174,7 @@
 
     function deleteApi() 
     {
-        let url = '{{ route("dashboard.cities.delete",":id") }}';
+        let url = '{{ route("dashboard.areas.delete",":id") }}';
         let updatedUrl = url.replace(':id', city_id);
         $.ajax({
             type: 'POST',
@@ -199,10 +197,11 @@
     function openModalCreateCity()
     {
         city_id = null;
-        $('#city_model_title').empty();
-        $('#city_model_title').append('Create City');
-        $('#city_name_ar').val('');
-         $('#city_name_en').val('');
+        $('#area_model_title').empty();
+        $('#area_model_title').append('Create Area');
+        $('#area_name_ar').val('');
+         $('#area_name_en').val('');
+
 
         $('#createCity').modal('toggle');
     }
@@ -211,15 +210,15 @@
     {
         // let item = JSON.parse(user);
         city_id = id;
-        $('#city_model_title').empty();
-        $('#city_model_title').append('Update City');
+        $('#area_model_title').empty();
+        $('#area_model_title').append('Update Area');
         /** 
          * add values
          * 
          * **/
 
-         $('#city_name_ar').val(name_ar);
-         $('#city_name_en').val(name_en);
+         $('#area_name_ar').val(name_ar);
+         $('#area_name_en').val(name_en);
          $('#country_id').val(country_id);
          $('#region_id').val(region_id);
 
@@ -239,7 +238,6 @@
             success:(res)=>{
                 console.log('response: ',res.data);
               //  $('#city_selecter').
-                $('#region_selecter').empty();
                 $('#region_selecter').prop("disabled", false); 
                 for(let i = 0; i < res.data.length;i++)
                 {
@@ -258,69 +256,56 @@
         })
     }
 
-    function addCityApi()
+    function addAreaApi()
     {
-        if(!addCityValdation()) return;
-
-        let url = '{{route("dashboard.cities.store")}}';
+        if(!addAreaValdation()) return;
+        let url = '{{route("dashboard.areas.store")}}';
         if(city_id)
         {
-            let updateWithId = '{{route("dashboard.cities.update",":id")}}'
+            let updateWithId = '{{route("dashboard.areas.update",":id")}}'
             url = updateWithId.replace(':id',city_id);
         }
         $.ajax({
             url:url,
             type:'POST',
             data:{
-                name_ar:document.getElementById('city_name_ar').value,
-                name_en:document.getElementById('city_name_en').value,
-                region_id:document.getElementById('region_selecter').value,
+                name_ar:document.getElementById('area_name_ar').value,
+                name_en:document.getElementById('area_name_en').value,
+                country_id:document.getElementById('country_id').value,
                 _token:'{{ csrf_token() }}'
             },
             success:(res)=>{
                window.location.reload();
             },
             error:(err)=>{
-                Toast.fire({
-                    icon: 'error',
-                    title: 'Error adding the city'
-                })
-                console.log('err: '+err)
+                console.log(err)
             }
         })
     }
 
-    function addCityValdation()
+    function addAreaValdation()
     {
-        if(document.getElementById('city_name_ar').value == '')
+        if(document.getElementById('area_name_ar').value == '')
         {
             Toast.fire({
                     icon: 'error',
-                    title: 'Please add city name in arabic'
+                    title: 'Please add area name in arabic'
             })
             return false;
         }
-        if(document.getElementById('city_name_en').value == '')
+        if(document.getElementById('area_name_en').value == '')
         {
             Toast.fire({
                     icon: 'error',
-                    title: 'Please add city name in english'
+                    title: 'Please add area name in english'
             })
             return false;
         }
-        if(document.getElementById('country').value == '')
+        if(document.getElementById('country_id').value == '')
         {
             Toast.fire({
                     icon: 'error',
                     title: 'Please select country'
-            })
-            return false;
-        }
-        if(document.getElementById('region_selecter').value == '')
-        {
-            Toast.fire({
-                    icon: 'error',
-                    title: 'Please select region '
             })
             return false;
         }
