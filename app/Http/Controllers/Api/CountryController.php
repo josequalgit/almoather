@@ -10,7 +10,7 @@ class CountryController extends Controller
 {
     public function index()
     {
-        $data = Country::get()->map(function(){
+        $data = Country::get()->map(function($item){
             return [
                 'id' => $item->id,
                 'name' => $item->name,
