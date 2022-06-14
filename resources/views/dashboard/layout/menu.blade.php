@@ -233,7 +233,7 @@
                   {{ ($name == 'dashboard.areas.all'|| $name == 'dashboard.areas.create'|| $name == 'dashboard.areas.edit') ? 'active':''  }}
                   ">
                     <a href="{{ route('dashboard.areas.all') }}" class="menu-link">
-                      <div data-i18n="List">Area</div>
+                      <div data-i18n="List">Region</div>
                     </a>
                   </li>
                   <li class="menu-item
