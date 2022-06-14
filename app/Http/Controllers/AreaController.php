@@ -3,38 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Area;
-use App\Models\City;
+use App\Models\Region;
 use App\Models\Country;
 use Alert;
 
-class CityController extends Controller
+class AreaController extends Controller
 {
-
     public function index()
     {
-        $data = City::paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
+        $data = Region::paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
         $countries = Country::get();
-        return view('dashboard.cities.index',compact('data','countries'));
-    }
 
-    public function get_city_according_to_country($id)
-    {
-        $data = Area::find($id);
-        if(!$data) return response()->json([
-            'msg'=>'area not found',
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
-        return response()->json([
-            'msg'=>'all cities',
-            'data'=>$data->cities()->map(function($item){
-                return[
-                    'id'=>$item->id,
-                    'name'=>$item->name,
-                ];
-            }),
-            'status'=>config('global.OK_STATUS')
-        ],config('global.OK_STATUS'));
+        return view('dashboard.areas.index',compact('data','countries'));
     }
 
     public function store(Request $request)
@@ -43,18 +23,19 @@ class CityController extends Controller
             'ar'=>$request->name_ar,
             'en'=>$request->name_en,
         ]]);
+        Region::create($addTranslation);
+        Alert::toast('Area was created', 'success');
 
-        City::create($addTranslation);
-        Alert::toast('City was created', 'success');
         return response()->json([
             'status'=>config('global.OK_STATUS'),
-            'msg'=>'city was created'
+            'msg'=>'area was created'
         ],config('global.OK_STATUS'));
     }
 
     public function update(Request $request , $id)
     {
-        $city = City::find($id);
+        
+        $city = Region::find($id);
         if(!$city) return response()->json([
             'msg'=>'city not found',
             'status'=>config('global.NOT_FOUND_STATUS')
@@ -64,27 +45,28 @@ class CityController extends Controller
             'en'=>$request->name_en,
         ]]);
         $city->update($addTranslation);
-        Alert::toast('City was updated', 'success');
+        Alert::toast('Area was updated', 'success');
 
         return response()->json([
             'status'=>config('global.OK_STATUS'),
-            'msg'=>'city was updated'
+            'msg'=>'area was updated'
         ],config('global.OK_STATUS'));
     }
 
     public function delete($id)
     {
-        $city = City::find($id);
+        $city = Region::find($id);
         if(!$city) return response()->json([
             'status'=>config('global.NOT_FOUND_STATUS'),
             'msg'=>'city not found',
         ],config('global.OK_STATUS'));
         $city->delete();
-        Alert::toast('City was deleted', 'success');
+        Alert::toast('Area was deleted', 'success');
         return response()->json([
-            'msg'=>'city was deleted',
+            'msg'=>'area was deleted',
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
 
     }
+
 }

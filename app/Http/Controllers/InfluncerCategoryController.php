@@ -27,6 +27,7 @@ class InfluncerCategoryController extends Controller
 
     public function store(InfluncerCategoryRequest $request)
     {
+
         $addTranslate = [
             'name'=>[
                 'ar'=>$request->name_ar,
@@ -50,8 +51,17 @@ class InfluncerCategoryController extends Controller
     public function update(InfluncerCategoryRequest $request,$id)
     {
         $data = InfluncerCategory::find($id);
-        $data->update($request->all());   
-        
+
+        $addTranslate = [
+            'name'=>[
+                'ar'=>$request->name_ar,
+                'en'=>$request->name_en,
+            ],
+            'type'=>$request->type,
+        ];
+
+        $data->update($addTranslate);   
+       
         if($request->hasFile('image'))
         {
             $data->clearMediaCollection('influncerCategories')

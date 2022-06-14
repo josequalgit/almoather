@@ -8,7 +8,12 @@ class RegionController extends Controller
 {
     public function index($country_id)
     {
-        $data = Region::where('country_id',$country_id)->get();
+        $data = Region::where('country_id',$country_id)->get()->map(function($item){
+            return[
+                'id'=>$item->id,
+                'name'=>$item->name,
+            ];
+        });
 
         return response()->json([
             'data'=>$data,
