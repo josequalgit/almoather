@@ -45,7 +45,8 @@
                                             <table class="table zero-configuration">
                                                 <thead>
                                                     <tr>
-                                                        <th>Name</th>
+                                                        <th>Name AR</th>
+                                                        <th>Name EN</th>
                                                         <th>Region</th>
                                                         <th>Country</th>
                                                         <th>Actions</th>
@@ -55,13 +56,13 @@
                                                     @foreach($data as $item)
                                                         <tr>
                                                             
-                                                            <td>{{ $item->name }}</td>
+                                                            <td>{{ $item->getTranslation('name','ar') }}</td>
+                                                            <td>{{ $item->getTranslation('name','en') }}</td>
                                                             <td>{{ $item->regions->name }}</td>
                                                             <td>{{ $item->regions->countries->name }}</td>
                                                             <td>
                                                                 {{-- @can('Edit City') --}}
-                                                                    <button onclick="getUserData('{{ $item->id }}','{{$item->name }}','{{ $item->regions->countries->id }}','{{ $item->regions->id }}')" class="btn btn-secondary"
-                                                                        href="{{ route('dashboard.faqs.edit',$item->id) }}">
+                                                                    <button onclick="getUserData('{{ $item->id }}','{{$item->getTranslation('name','ar') }}','{{ $item->getTranslation('name','en') }}','{{ $item->regions->countries->id }}','{{ $item->regions->id }}')" class="btn btn-secondary">
                                                                         <i class="bx bx-edit"></i>
                                                                     </button>
                                                                 {{-- @endcan --}}
@@ -101,8 +102,12 @@
                         Create City
                     </h3>
                     <div class="mb-1">
-                        <label for="exampleFormControlInput1" class="form-label">Name</label>
-                        <input id="city_name" type="email" class="form-control" id="exampleFormControlInput1" placeholder="Name ">
+                        <label for="exampleFormControlInput1" class="form-label">Name AR</label>
+                        <input id="city_name_ar" type="email" class="form-control" id="exampleFormControlInput1" placeholder="Name ">
+                      </div>
+                    <div class="mb-1">
+                        <label for="exampleFormControlInput1" class="form-label">Name En</label>
+                        <input id="city_name_en" type="email" class="form-control" id="exampleFormControlInput1" placeholder="Name ">
                       </div>
                       <div class="mb-1">
                         <label for="exampleFormControlTextarea1" class="form-label">Country</label>
@@ -196,11 +201,13 @@
         city_id = null;
         $('#city_model_title').empty();
         $('#city_model_title').append('Create City');
+        $('#city_name_ar').val('');
+         $('#city_name_en').val('');
 
         $('#createCity').modal('toggle');
     }
 
-    function getUserData(id,name,country_id,region_id)
+    function getUserData(id,name_ar,name_en,country_id,region_id)
     {
         // let item = JSON.parse(user);
         city_id = id;
@@ -211,7 +218,8 @@
          * 
          * **/
 
-         $('#city_name').val(name);
+         $('#city_name_ar').val(name_ar);
+         $('#city_name_en').val(name_en);
          $('#country_id').val(country_id);
          $('#region_id').val(region_id);
 
@@ -231,6 +239,7 @@
             success:(res)=>{
                 console.log('response: ',res.data);
               //  $('#city_selecter').
+                $('#region_selecter').empty();
                 $('#region_selecter').prop("disabled", false); 
                 for(let i = 0; i < res.data.length;i++)
                 {
@@ -252,6 +261,7 @@
     function addCityApi()
     {
         if(!addCityValdation()) return;
+
         let url = '{{route("dashboard.cities.store")}}';
         if(city_id)
         {
@@ -262,7 +272,8 @@
             url:url,
             type:'POST',
             data:{
-                name:document.getElementById('city_name').value,
+                name_ar:document.getElementById('city_name_ar').value,
+                name_en:document.getElementById('city_name_en').value,
                 region_id:document.getElementById('region_selecter').value,
                 _token:'{{ csrf_token() }}'
             },
@@ -270,18 +281,30 @@
                window.location.reload();
             },
             error:(err)=>{
-                console.log(err)
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Error adding the city'
+                })
+                console.log('err: '+err)
             }
         })
     }
 
     function addCityValdation()
     {
-        if(document.getElementById('city_name').value == '')
+        if(document.getElementById('city_name_ar').value == '')
         {
             Toast.fire({
                     icon: 'error',
-                    title: 'Please add city'
+                    title: 'Please add city name in arabic'
+            })
+            return false;
+        }
+        if(document.getElementById('city_name_en').value == '')
+        {
+            Toast.fire({
+                    icon: 'error',
+                    title: 'Please add city name in english'
             })
             return false;
         }

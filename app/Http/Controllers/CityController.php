@@ -27,16 +27,25 @@ class CityController extends Controller
         ],config('global.NOT_FOUND_STATUS'));
         return response()->json([
             'msg'=>'all cities',
-            'data'=>$data->cities,
+            'data'=>$data->cities()->map(function($item){
+                return[
+                    'id'=>$item->id,
+                    'name'=>$item->name,
+                ];
+            }),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
 
     public function store(Request $request)
     {
-        City::create($request->all());
-        Alert::toast('City was created', 'success');
+        $addTranslation = array_merge($request->all(),['name'=>[
+            'ar'=>$request->name_ar,
+            'en'=>$request->name_en,
+        ]]);
 
+        City::create($addTranslation);
+        Alert::toast('City was created', 'success');
         return response()->json([
             'status'=>config('global.OK_STATUS'),
             'msg'=>'city was created'
@@ -50,7 +59,11 @@ class CityController extends Controller
             'msg'=>'city not found',
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.OK_STATUS'));
-        $city->update($request->all());
+        $addTranslation = array_merge($request->all(),['name'=>[
+            'ar'=>$request->name_ar,
+            'en'=>$request->name_en,
+        ]]);
+        $city->update($addTranslation);
         Alert::toast('City was updated', 'success');
 
         return response()->json([

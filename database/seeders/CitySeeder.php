@@ -16,7 +16,10 @@ class CitySeeder extends Seeder
     public function run()
     {
         City::create([
-            'name'=>'jedi',
+            'name'=>[
+                'ar'=>'جده',
+                'en'=>'Jeddah'
+            ],
             'region_id'=>'1',
             'area_id'=>'1'
         ]);
