@@ -12,7 +12,13 @@ class CountryController extends Controller
 
     public function index()
     {
-        $data = Country::select(['id','name','code'])->get();
+        $data = Country::get()->map(function(){
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'code' => $item->code
+            ];
+        });
         return response()->json([
             'msg'=>trans($this->trans_dir.'all_the_countries_available'),
             'data'=>$data,
