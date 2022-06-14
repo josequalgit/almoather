@@ -8,11 +8,13 @@ use App\Models\Country;
 
 class CountryController extends Controller
 {
+    private $trans_dir = 'messages.api.';
+
     public function index()
     {
         $data = Country::select(['id','name','code'])->get();
         return response()->json([
-            'msg'=>'all the countries avalibale',
+            'msg'=>trans($this->trans_dir.'all_the_countries_available'),
             'data'=>$data,
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));

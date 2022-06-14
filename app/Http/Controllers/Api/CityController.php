@@ -8,16 +8,18 @@ use App\Models\Region;
 
 class CityController extends Controller
 {
+    private $trans_dir = 'messages.api.';
+
     public function index($id)
     {
         $data = Region::find($id);
         if(!$data) return response()->json([
-            'err'=>"Area dose't exist",
+            'err'=>trans($this->trans_dir.'area_doset_exist'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         return response()->json([
-            'msg'=>'all cities belongs to '.$data->name,
+            'msg'=>trans($this->trans_dir.'all_cities_belongs_to').' '.$data->name,
             'data'=>$data->cities()->get()->map(function($item){
                 return [
                     'id'=>$item->id,

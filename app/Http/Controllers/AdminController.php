@@ -76,6 +76,12 @@ class AdminController extends Controller
         $user->email = $request->email;
         if($request->password) $user->password = bcrypt($request->password);
         $user->save();
+        if($request->hasFile('image'))
+        {
+            $user->clearMediaCollection('admin');
+            $user->addMedia($request->file('image'))
+            ->toMediaCollection('admin');
+        }
         activity()->log('Super admin data was updated');
         Alert::toast('Super admin was updated', 'success');
 

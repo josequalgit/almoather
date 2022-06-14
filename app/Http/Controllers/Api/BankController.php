@@ -8,11 +8,13 @@ use App\Models\Bank;
 
 class BankController extends Controller
 {
+    private $trans_dir = 'messages.api.';
+
     public function index()
     {
         $data = Bank::select(['id','name'])->get();
         return response()->json([
-            'msg'=>'all banks available',
+            'msg'=>trans($this->trans_dir.'all_banks_available'),
             'data'=>$data,
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));

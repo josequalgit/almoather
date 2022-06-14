@@ -9,13 +9,15 @@ use App\Models\InfluncerCategory;
 
 class CategoryController extends Controller
 {
+    private $trans_dir = 'messages.api.';
+
     public function index()
     {
         $serviceCat = Category::where('type','service')->select(['id','name'])->get();
         $productCat = Category::where('type','product')->select(['id','name'])->get();
 
         return response()->json([
-            'msg'=>'the product categories available',
+            'msg'=>trans($this->trans_dir.'product_categories_available'),
             'data'=>[
                 'service'=>$serviceCat,
                 'product'=>$productCat
@@ -34,7 +36,7 @@ class CategoryController extends Controller
         });
 
         return response()->json([
-            'msg'=>'the influncer categories available',
+            'msg'=>trans($this->trans_dir.'influencer_categories_available'),
             'data'=>$data,
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
@@ -51,7 +53,7 @@ class CategoryController extends Controller
         });
 
         return response()->json([
-            'msg'=>'search result for the categories',
+            'msg'=>trans($this->trans_dir.'search_result_for_the_categories'),
             'data'=>$data,
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));

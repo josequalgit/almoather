@@ -92,7 +92,7 @@
                             <a class="dropdown-toggle nav-link dropdown-user-link" href="javascript:void(0);" data-toggle="dropdown">
                                 <div class="user-nav d-sm-flex d-none m-0">
                                     <div class="avatar avatar-lg">
-                                        <img src="https://pixinvent.com/demo/frest-bootstrap-laravel-admin-dashboard-template/demo/assets/img/avatars/1.png" alt="" class="rounded-circle">
+                                        <img src="{{ auth()->user()->adminImage['url'] }}" alt="" class="rounded-circle">
                                     </div>
                                 </div>
                             </a>
