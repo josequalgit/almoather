@@ -8,6 +8,7 @@ use App\Models\InfluencerContract;
 
 trait AdResponse {
 
+  private $trans_dir = 'messages.api.';
 
     public function adResponse($ad)
     {
@@ -135,8 +136,36 @@ trait AdResponse {
       
         $basicResponse['status']=$ad->status;
       }
+      $basicResponse['messages']=[
+        'label_text'=>$this->getLabelTextResponse($ad->status),
+        'button_text'=>$this->getButtonTextResponse($ad->is_all_accepted()?'inf_list':$ad->status)
+      ];
 
-      
       return $basicResponse;
+    }
+
+    private function getLabelTextResponse($status)
+    {
+      $array = 
+      [
+        'pending'=>trans($this->trans_dir.'status_response_label.pending'),
+        'approve'=>trans($this->trans_dir.'status_response_label.approve'),
+        'choosing_influencer'=>trans($this->trans_dir.'status_response_label.choosing_influencer'),
+        'fullpayment'=>trans($this->trans_dir.'status_response_label.choosing_influencer'),
+      ];
+
+      return $array[$status]??null;
+    }
+
+    private function getButtonTextResponse($status)
+    {
+      $array = 
+      [
+        'approve'=>trans($this->trans_dir.'status_response_button_text.approve'),
+        'inf_list'=>trans($this->trans_dir.'status_response_button_text.inf_list'),
+        'fullpayment'=>trans($this->trans_dir.'status_response_button_text.fullpayment'),
+      ];
+
+      return $array[$status]??null;
     }
 }

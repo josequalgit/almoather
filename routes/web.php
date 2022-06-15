@@ -38,9 +38,6 @@ Route::group(['middleware' => 'language'],function(){
     });
 
     Route::middleware('auth')->prefix('dashboard')->group(function(){
-
-
-
         //Analysis Routes
         Route::name('dashboard.')->controller(HomeController::class)->group(function(){
             Route::get('/','index')->name('home');
@@ -213,13 +210,6 @@ Route::group(['middleware' => 'language'],function(){
                 Route::get('/rejectedAds','rejectedAds')->name('rejectedAds');
             });
 
-            // Route::controller(CountryController::class)
-            // ->prefix('countries')
-            // ->name('countries.')
-            // ->group(function(){
-            //     Route::get('/{id}','index')->name('index');
-            // });
-
             Route::controller(CityController::class)
             ->prefix('cities')
             ->name('cities.')
@@ -238,14 +228,6 @@ Route::group(['middleware' => 'language'],function(){
                 Route::post('update/{id}','update')->name('update');
                 Route::post('delete/{id}','delete')->name('delete');
             });
-
-            // Route::controller(CountryController::class)
-            // ->prefix('countries')
-            // ->name('countries.')
-            // ->group(function(){
-           
-            // });
-            
 
             Route::controller(ReasonsController::class)
             ->middleware('role_or_permission:superAdmin|Edit Reason|Update Reason|Show Reason|Create Reason')
@@ -327,7 +309,6 @@ Route::group(['middleware' => 'language'],function(){
         ->prefix('countries')
         ->name('countries.')
         ->group(function(){
-            // Route::get('/{id}','index')->name('index');
             Route::get('/Area/{id}','get_city_according_to_area')->name('index');
             Route::get('/all','all')->name('all');
             Route::post('store','store')->name('store');
@@ -356,8 +337,6 @@ Route::group(['middleware' => 'language'],function(){
             Route::get('/delete/{id}','delete')->name('delete');
         });
 
-
-            
         Route::controller(RegionController::class)
         ->prefix('regions')
         ->name('regions.')
@@ -366,9 +345,6 @@ Route::group(['middleware' => 'language'],function(){
         });
 
         });
-
-
-
     
         Route::get('/logout',[HomeController::class,'logout'])->name('dashboard.logout');    
     });
