@@ -26,8 +26,7 @@ class SuperAdminRequest extends FormRequest
         return [
             'name'=>'required',
             'email'=>'required',
-            'password'=>'required|same:con_password',
-            'con_password'=>'required',
+            'password'=>'same:con_password',
         ];
     }
 
