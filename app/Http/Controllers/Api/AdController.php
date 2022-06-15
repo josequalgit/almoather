@@ -80,12 +80,14 @@ class AdController extends Controller
                 $itemsPaginated =  $data
                 ->where('status',0)
                 ->where('is_accepted',$statusCode[$status])
+                ->orderBy('created_at','desc')
                 ->paginate(10);
             }
             elseif($status == 'Rejected')
             {
                 $itemsPaginated =  $data
                 ->where('status',0)
+                ->orderBy('created_at','desc')
                 ->where('is_accepted',$statusCode[$status])
                 ->paginate(10);
             }
