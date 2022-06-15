@@ -65,6 +65,7 @@ class AdController extends Controller
             if($status == 'Completed'){
                 $itemsPaginated =  $data
                 ->where('status',1)
+                ->orderBy('created_at','desc')
                 ->where('is_accepted',$statusCode[$status])
                 ->paginate(10);
             }
@@ -72,6 +73,7 @@ class AdController extends Controller
             {
                 $itemsPaginated =  $data
                 ->where('status',0)
+                ->orderBy('created_at','desc')
                 ->where('is_accepted',$statusCode[$status])
                 ->paginate(10);
             }
@@ -80,18 +82,21 @@ class AdController extends Controller
                 $itemsPaginated =  $data
                 ->where('status',0)
                 ->where('is_accepted',$statusCode[$status])
+                ->orderBy('created_at','desc')
                 ->paginate(10);
             }
             elseif($status == 'Rejected')
             {
                 $itemsPaginated =  $data
                 ->where('status',0)
+                ->orderBy('created_at','desc')
                 ->where('is_accepted',$statusCode[$status])
                 ->paginate(10);
             }
             else
             {
-                $itemsPaginated = $data->paginate(10);
+                $itemsPaginated = $data->orderBy('created_at','desc')
+                ->paginate(10);
             };
           
 
@@ -128,11 +133,11 @@ class AdController extends Controller
 
             if(in_array($status,array_keys($statusCode)))
             {
-                $itemsPaginated = Ad::where('customer_id',$user_id)->whereIn('status',$statusCode[$status])->paginate(10);
+                $itemsPaginated = Ad::where('customer_id',$user_id)->orderBy('created_at','desc')->whereIn('status',$statusCode[$status])->paginate(10);
             }
             else
             {
-                $itemsPaginated = Ad::where([['customer_id',$user_id],['status',$status]])->paginate(10);
+                $itemsPaginated = Ad::where([['customer_id',$user_id],['status',$status]])->orderBy('created_at','desc')->paginate(10);
             }
 
             $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
