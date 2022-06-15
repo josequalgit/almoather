@@ -65,6 +65,7 @@ class AdController extends Controller
             if($status == 'Completed'){
                 $itemsPaginated =  $data
                 ->where('status',1)
+                ->orderBy('created_at','desc')
                 ->where('is_accepted',$statusCode[$status])
                 ->paginate(10);
             }
@@ -72,6 +73,7 @@ class AdController extends Controller
             {
                 $itemsPaginated =  $data
                 ->where('status',0)
+                ->orderBy('created_at','desc')
                 ->where('is_accepted',$statusCode[$status])
                 ->paginate(10);
             }
