@@ -18,7 +18,7 @@ class AreaController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        $cities = $data->areas()->get()->map(function($item){
+        $regions = $data->regions()->get()->map(function($item){
             return [
                 'id' => $item->id,
                 'name' => $item->name
@@ -27,7 +27,7 @@ class AreaController extends Controller
 
         return response()->json([
             'msg'=>trans($this->trans_dir.'areas_for').$data->name.' '.trans($this->trans_dir.'country_small'),
-            'data'=>$data->areas()->select(['id','name'])->get(),
+            'data'=>$regions,
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
