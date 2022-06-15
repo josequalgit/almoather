@@ -133,11 +133,11 @@ class AdController extends Controller
 
             if(in_array($status,array_keys($statusCode)))
             {
-                $itemsPaginated = Ad::where('customer_id',$user_id)->whereIn('status',$statusCode[$status])->paginate(10);
+                $itemsPaginated = Ad::where('customer_id',$user_id)->orderBy('created_at','desc')->whereIn('status',$statusCode[$status])->paginate(10);
             }
             else
             {
-                $itemsPaginated = Ad::where([['customer_id',$user_id],['status',$status]])->paginate(10);
+                $itemsPaginated = Ad::where([['customer_id',$user_id],['status',$status]])->orderBy('created_at','desc')->paginate(10);
             }
 
             $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
