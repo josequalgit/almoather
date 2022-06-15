@@ -95,7 +95,8 @@ class AdController extends Controller
             }
             else
             {
-                $itemsPaginated = $data->paginate(10);
+                $itemsPaginated = $data->orderBy('created_at','desc')
+                ->paginate(10);
             };
           
 
