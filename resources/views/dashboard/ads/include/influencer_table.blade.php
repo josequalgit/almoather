@@ -1,3 +1,4 @@
+
 <table class="table zero-configuration table-influencers col-12">
     <thead>
         <tr>
@@ -11,14 +12,15 @@
         </tr>
     </thead>
     <tbody id="table-body">
+        @if($allInfluencer)
         @foreach ($allInfluencer as $item)
             <tr>
                 <td>
                     <div class="thumb">
-                        <img class="img-fluid inf-image" src="{{ $item->influencers->users->infulncerImage ? $item->influencers->users->infulncerImage['url'] : null }}" alt="">
+                        <img class="img-fluid inf-image" src="{{ $item->users->infulncerImage ? $item->users->infulncerImage['url'] : null }}" alt="">
                     </div>
                 </td>
-                <td>{{ $item->influencers->full_name }}</td>
+                <td>{{ $item->full_name }}</td>
                 <td>{{ $item->match }}%</td>
                 <td>{{ $item->chosen ? 'Yes' : 'No' }}</td>
                 <td>{{ $item->status }}</td>
@@ -44,5 +46,8 @@
                 </td>
             </tr>
         @endforeach
+        @else
+        <tr><td colspan="7" class="text-ceter">No Influencers found that matched this campaign</td></tr>
+        @endif
     </tbody>
 </table>

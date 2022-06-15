@@ -172,18 +172,11 @@ class AdController extends Controller
             $allInfluencer = $this->calculateProfitableAds($request, $ad, $data);
         }
 
-        /** GET THE LOW ENGAGEMENT INFLUENCER*/
-        if($request->ajax()){
-            $influencer = view('dashboard.ads.include.influencer', compact('allInfluencer'))->render();
-            return response()->json([
-                'msg' => 'status was changed',
-                'data' => $influencer,
-                'status' => 200,
-            ], 200);
-        }
+        $allInfluencer = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
+        $influencer = view('dashboard.ads.include.influencer_table', compact('allInfluencer'))->render();
         return response()->json([
             'msg' => 'status was changed',
-            'data' => $allInfluencer,
+            'data' => $influencer,
             'status' => 200,
         ], 200);
     }

@@ -23,7 +23,18 @@
                                 <div class="col" id="wizard-basic">
                                     @include('dashboard.ads.include.campaigns')
                                     @include('dashboard.ads.include.content')
-                                    @include('dashboard.ads.include.influencers')
+                                    <h3 class="f-16 ad-title">LIVE</h3>
+                                    <section>
+                                        <div class="add-section">
+                                            <div class="blocks-table d-block influencer-data">
+                                                <div class="loader-wrapper">
+                                                    <div class="spinner-border" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
                                     
                                     
                                 </div>
@@ -660,9 +671,7 @@
                     $('.actions ul li:nth-child(2)').hide();
                 },
                 onFinishing: function() {
-                    isConfirm = true;
-                    sendStatusRequest('Confirm');
-                    window.location.reload();
+                    sendStatusRequest('approve');
                 },
                 onStepChanging: function(event, currentIndex, nextIndex) {
                     if (nextIndex == 2) {
@@ -673,7 +682,6 @@
                             alert('please add correct amout of rate')
                             return false;
                         }
-                        isConfirm = false;
                         sendStatusRequest();
                     }
 
@@ -737,78 +745,53 @@
 
 
           function sendStatusRequest(status = null) {
+                status = status || false;
 
-              if (status == 'rejected') {
-                  $('#rejectedReson').modal('toggle');
-                  return;
-              }
-
-
-                if (status == 'Confirm') {
-                    let localData = JSON.parse(localStorage.getItem('rateData'));
-                    localData.splice(ad_id, 1);
-                    localStorage.setItem('rateData', JSON.stringify(localData));
-                    isConfirm = true;
+                if (status == 'rejected') {
+                    $('#rejectedReson').modal('toggle');
+                    return;
                 }
-
-                // SAVE DATA TO LOCAL
-                let localData = localStorage.getItem('rateData');
-
-                // IF THE LOCAL STORAGE HAVE DATA GET IT AND MAKE IT AN ARRAY
-                if (localData && status != 'Confirm') {
-                    localData = JSON.parse(localStorage.getItem('rateData'))
-                    localData[ad_id] = document.getElementById('engagement_rate') ? document.getElementById('engagement_rate').value : 0;
-                    localStorage.setItem('rateData', JSON.stringify(localData));
-                } else {
-                    let array = [];
-                    array[ad_id] = document.getElementById('engagement_rate') ? document.getElementById('engagement_rate').value : 0;
-                    localStorage.setItem('rateData', JSON.stringify(array));
-                };
+                $('[href="#next"]').attr('disabled',true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Next..')
 
                 let rate = '{{ $data->campaignGoals->profitable }}';
                 let url = '{{ route('dashboard.ads.update', ':id') }}';
                 let fullUrl = url.replace(':id', '{{ $data->id }}');
                 let initValue = document.getElementById('engagement_rate') ? document.getElementById('engagement_rate').value : 0;
-              if ((rate && initValue > 100) || (rate && initValue < 0)) {
-                  return alert('please add correct amout of rate')
-              }
-              if (isConfirm) {
-                  url = '{{ route('dashboard.ads.update', [':id', ':confirm']) }}';
-                  urlWithId = url.replace(':id', '{{ $data->id }}');
-                  fullUrl = urlWithId.replace(':confirm', 1);
-              }
-              status = 'approve';
-              if (document.getElementById('rejectedNote').value) {
-                  status = 'rejected';
-              }
-
-              $.ajax({
-                  url: fullUrl,
-                  type: 'POST',
-                  data: {
-                      status: status,
-                      note: document.getElementById('rejectedNote').value,
-                      category_id: document.getElementById('ad-category').value,
-                      engagement_rate: initValue,
-                      change: notChange,
-                      onSite: '{{ $data->onSite }}',
-                      adBudget: '{{ $data->budget }}',
-                      _token: '{{ csrf_token() }}'
-                  },
-                  success: (res) => {
-                     // let url = '{{ route('dashboard.ads.index') }}'
-                      //location.reload();
-                  },
-                  error: (err) => {
-                      console.log("updateding error: ", err);
-                      alert('something wrong with updateing the ad');
-                  }
-              })
+                if ((rate && initValue > 100) || (rate && initValue < 0)) {
+                    return alert('please add correct amout of rate')
+                }
+                if (status == 'approve') {
+                    url = '{{ route('dashboard.ads.update', [':id', ':confirm']) }}';
+                    urlWithId = url.replace(':id', '{{ $data->id }}');
+                    fullUrl = urlWithId.replace(':confirm', 1);
+                }
+               
+                $.ajax({
+                    url: fullUrl,
+                    type: 'POST',
+                    data: {
+                        status: status,
+                        note: document.getElementById('rejectedNote').value,
+                        category_id: document.getElementById('ad-category').value,
+                        engagement_rate: initValue,
+                        change: notChange,
+                        onSite: '{{ $data->onSite }}',
+                        adBudget: '{{ $data->budget }}',
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: (res) => {
+                        $('.influencer-data').html(res.data);
+                    },
+                    error: (err) => {
+                        console.log("updateding error: ", err);
+                        alert('something wrong with updateing the ad');
+                    }
+                })
           }
 
-          function openModel() {
-              $('#inf').modal('toggle');
-          }
+            function openModel() {
+                $('#inf').modal('toggle');
+            }
 
 
           function getUnchosenInfulncers(inf_id) {
