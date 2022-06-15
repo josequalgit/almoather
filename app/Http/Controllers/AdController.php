@@ -61,7 +61,7 @@ class AdController extends Controller
         $goals = CampaignGoal::select('title')->get();
         $countries = Country::get();
 
-        if($data->status != 'pending'&&$data->status != 'choosing_influencer') return view('dashboard.ads.showAd',compact('data','matches','productCategories','serviceCategories','unMatched'));
+        if($data->status != 'pending') return view('dashboard.ads.showAd',compact('data','matches','productCategories','serviceCategories','unMatched'));
         
         return view('dashboard.ads.edit', compact('data', 'matches', 'unMatched', 'serviceCategories','productCategories', 'editable', 'countries'));
     }
