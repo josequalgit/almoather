@@ -22,8 +22,8 @@ class MailController extends Controller
         {
            return response()->json([
                'err'=>trans($this->trans_dir.'user_not_found'),
-               'status'=>404
-           ],404);
+               'status'=>config('global.NOT_FOUND_STATUS')
+           ],config('global.NOT_FOUND_STATUS'));
         }
         $user->code = mt_rand(100000,999999);
         $user->save();
@@ -37,8 +37,8 @@ class MailController extends Controller
        // echo "Basic Email Sent. Check your inbox.";
         return response()->json([
             'msg'=>trans($this->trans_dir.'email_sent'),
-            'status'=>200
-        ],200);
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
      }
 
      public function checkCode(CheckCodeRequest $request)
@@ -49,8 +49,8 @@ class MailController extends Controller
          {
             return response()->json([
                 'err'=>trans($this->trans_dir.'user_not_found'),
-                'status'=>404
-            ],404);
+                'status'=>config('global.NOT_FOUND_STATUS')
+            ],config('global.NOT_FOUND_STATUS'));
          }
          
          if($user->code == $request->code)
@@ -77,8 +77,8 @@ class MailController extends Controller
         {
            return response()->json([
                'err'=>trans($this->trans_dir.'user_not_found'),
-               'status'=>404
-           ],404);
+               'status'=>config('global.NOT_FOUND_STATUS')
+           ],config('global.NOT_FOUND_STATUS'));
         }
 
         $user->password = bcrypt($request->password);
@@ -86,8 +86,8 @@ class MailController extends Controller
 
         return response()->json([
             'msg'=>trans($this->trans_dir.'password_was_changed'),
-            'status'=>200
-        ],200);
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
      }
 
 

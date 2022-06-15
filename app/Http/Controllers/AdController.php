@@ -173,10 +173,17 @@ class AdController extends Controller
         }
 
         /** GET THE LOW ENGAGEMENT INFLUENCER*/
-
+        if($request->ajax()){
+            $influencer = view('dashboard.ads.include.influencer', compact('allInfluencer'))->render();
+            return response()->json([
+                'msg' => 'status was changed',
+                'data' => $influencer,
+                'status' => 200,
+            ], 200);
+        }
         return response()->json([
             'msg' => 'status was changed',
-           // 'data' => $allInfluencer,
+            'data' => $allInfluencer,
             'status' => 200,
         ], 200);
     }
