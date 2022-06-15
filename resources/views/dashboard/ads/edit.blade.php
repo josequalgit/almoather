@@ -388,57 +388,6 @@
                   </div>
               </div>
 
-              <div id="inf" class="modal" tabindex="-1" role="dialog">
-                  <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                              <h5 class="modal-title">Matched Inulncers</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                              </button>
-                          </div>
-                          <div class="modal-body">
-                              <div class="col">
-                                  <div class="user-dashboard-info-box table-responsive mb-0 bg-white  shadow-sm">
-                                      <table class="table manage-candidates-top mb-0">
-
-                                        <tbody>
-                                              @foreach ($matches as $item)
-                                                  <tr class="candidates-list bg-dnager">
-                                                      <td class="title">
-                                                          <div class="thumb"></div>
-                                                          <div class="candidate-list-details">
-                                                              <div class="candidate-list-info">
-                                                                  <div class="candidate-list-title">
-                                                                      <h5 class="mb-0">{{ $item->influencers->full_name }}</h5>
-                                                                      <span style="font-size:12px;">{{ $item->match }}%</span><br />
-                                                                  </div>
-                                                              </div>
-
-                                                          </div>
-                                                          <div class="col">
-                                                              <button style="background:none; border:none;" onclick=" ('{{ $item->influencers->users->id }}')" class="float-right" href="http://" target="_blank"  rel="noopener noreferrer">
-                                                                  <h5><i class="bx bx-edit"></i></h5>
-                                                              </button>
-                                                          </div>
-                                                      </td>
-                                                  </tr>
-                                              @endforeach
-                                          </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-
-
-                          </div>
-                          <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-
               <div id="unchosen_inf" class="modal" tabindex="-1" role="dialog">
                   <div class="modal-dialog" role="document">
                       <div class="modal-content">
@@ -788,10 +737,6 @@
                     }
                 })
           }
-
-            function openModel() {
-                $('#inf').modal('toggle');
-            }
 
 
           function getUnchosenInfulncers(inf_id) {
