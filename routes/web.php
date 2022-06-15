@@ -118,7 +118,7 @@ Route::group(['middleware' => 'language'],function(){
             });
 
             Route::middleware('role_or_permission:superAdmin|Edit Ads|See Ads')->name('ads.')->controller(AdController::class)->group(function(){
-                Route::get('/ads/{status?}','index')->name('index')->middleware('permission:See Ads')->where('status','Pending|Active|Finished|Rejected|All');
+                Route::get('/ads/{status?}','index')->name('index')->middleware('permission:See Ads')->where('status','Pending|Active|Finished|Rejected|All|UnderReview');
                 Route::get('/ads/edit/{id}/{editable?}','edit')->name('edit')->middleware('permission:Edit Ads');
                 Route::post('/ads/UploadVideo/{ad_id}','uploadVideo')->name('uploadVideo');
                 Route::post('/ads/UploadImage/{ad_id}','uploadImage')->name('uploadImage');

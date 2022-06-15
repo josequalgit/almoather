@@ -139,6 +139,13 @@
                   </a>
                 </li>
                 <li class="menu-item
+                {{ (($name == 'dashboard.ads.index'&&$para == 'UnderReview')|| ($name == 'dashboard.ads.create'&&$para == 'UnderReview')||($name == 'dashboard.ads.edit')&&$para == 'UnderReview') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.ads.index','UnderReview') }}" class="menu-link">
+                    <div data-i18n="List">Under Review</div>
+                  </a>
+                </li>
+                <li class="menu-item
                 {{ (($name == 'dashboard.ads.index'&&$para == 'Pending')|| ($name == 'dashboard.ads.create'&&$para == 'Pending')||($name == 'dashboard.ads.edit')&&$para == 'Pending') ? 'active':''  }}
                 ">
                   <a href="{{ route('dashboard.ads.index','Pending') }}" class="menu-link">
