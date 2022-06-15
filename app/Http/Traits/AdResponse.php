@@ -163,7 +163,7 @@ trait AdResponse {
       [
         'approve'=>trans($this->trans_dir.'status_response_button_text.approve'),
         'inf_list'=>trans($this->trans_dir.'status_response_button_text.inf_list'),
-        'fullpayment'=>trans($this->trans_dir.'status_response_button_text.fullpayment'),
+        'choosing_influencer'=>trans($this->trans_dir.'status_response_button_text.choosing_influencer'),
       ];
 
       return $array[$status]??null;
