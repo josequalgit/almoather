@@ -32,11 +32,12 @@ use Carbon\Carbon;
 class UpdateDataController extends Controller
 {
     use UserResponse;
-   
+    private $trans_dir = 'messages.api.';
+
     public function updateCustomer(UpdateCustomerRequest $request)
     {
         if(!Auth::guard('api')->user())  return response()->json([
-            'msg'=>'user not found',
+            'msg'=>trans($this->trans_dir.'user_not_found'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
@@ -57,31 +58,13 @@ class UpdateDataController extends Controller
         if(!$data->customers)
         {
             return response()->json([
-                'msg'=>'user is not a customer',
+                'msg'=>trans($this->$trans_dir.'user_is_not_a_customer'),
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
         $updateData['phone'] = $request->phone;
         $updateData['country_code'] = $request->country_code;
         $updateData['dial_code'] = $request->dial_code;
-
-        // $updateUser = [];
-        // if($request->password)
-        // {
-        //     $updateUser['password'] = bcrypt($request->password);
-        // }
-        // if($request->email !== $data->email)
-        // {
-        //     $checkEmail = User::where('email',$request->email)->first();
-        //     if($checkEmail)
-        //     {
-        //         return response()->json([
-        //             'msg'=>'email was already found',
-        //             'status'=>config('global.WRONG_VALIDATION_STATUS')
-        //         ],config('global.WRONG_VALIDATION_STATUS'));
-        //     }
-        //     $updateUser['email'] = $request->email;
-        // }
 
         $data->update($updateData);
         $customerData = $request->only([
@@ -114,7 +97,7 @@ class UpdateDataController extends Controller
         $token = Auth::guard('api')->attempt(['email'=>$request->email,'password'=>$request->password]);
 
         return response()->json([
-            'msg'=>'Customer was updated',
+            'msg'=>trans($this->trans_dir.'customer_was_updated'),
             'data'=>$this->userDataResponse($data,null,$data->id),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
@@ -140,7 +123,7 @@ class UpdateDataController extends Controller
         if(!$data->influncers)
         {
             return response()->json([
-                'msg'=>'influencer not found',
+                'msg'=>trans($this->trans_dir.'inf_not_found'),
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
@@ -151,21 +134,7 @@ class UpdateDataController extends Controller
         }
         $updateData['phone'] = $request->phone;
         $updateData['country_code'] = $request->country_code;
-        // if($request->email !== $data->email)
-        // {
-        //     $checkEmail = User::where('email',$request->email)->first();
-        //     if($checkEmail)
-        //     {
-        //         return response()->json([
-        //             'msg'=>'email was already found',
-        //             'status'=>config('global.WRONG_VALIDATION_STATUS')
-        //         ],config('global.WRONG_VALIDATION_STATUS'));
-        //     }
-        //     $updateUser['email'] = $request->email;
-        // }
-
         $data->update($updateUser);
-
         if($request->hasFile('image'))
         {
 
@@ -275,7 +244,7 @@ class UpdateDataController extends Controller
         $token = Auth::guard('api')->attempt(['email'=>$request->email,'password'=>$request->password]);
 
         return response()->json([
-            'msg'=>'Influncer was updated',
+            'msg'=>trans($this->trans_dir.'influncer_was_updated'),
             'data'=>$this->userDataResponse($data,null,$data->id),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
@@ -286,21 +255,21 @@ class UpdateDataController extends Controller
         if($request->country_id||$request->nationality_id)
         {
             $data = Country::find($request->country_id??$request->nationality_id);
-            if(!$data) return 'country not found';
+            if(!$data) return trans($this->trans_dir.'country_not_found');
         }
         if($request->influncer_category_id)
         {
             $data = InfluncerCategory::find($request->influncer_category_id);
-            if(!$data) return 'category not found';
+            if(!$data) return trans($this->trans_dir.'category_not_found');
         }
         if($request->city_id)
         {
             $data = City::find($request->city_id);
-            if(!$data) return 'city not found';
+            if(!$data) return trans($this->trans_dir.'city_not_found');
         }
         if((isset($request->categories)&&count($request->categories) < 3) || (isset($request->categories)&&count($request->categories) > 3))
         {
-            return 'should be 3 categories for the influencer';
+            return trans($this->trans_dir.'should_be_categories_for_the_influencer');
         }
 
         return null;
@@ -309,31 +278,23 @@ class UpdateDataController extends Controller
     public function updatePersonalInfluncerData(UpdatePersonalDataRequest $request)
     {
         if(!Auth::guard('api')->user()) return response()->json([
-            'msg'=>'user not found',
+            'msg'=>trans($this->trans_dir.'user_not_found'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
         $data = User::find(Auth::guard('api')->user()->id);
 
-
-        // if($request->hasFile('image')){
-        //     $data->clearMediaCollection('influncers')
-        //     ->addMedia($request->file('image'))
-        //     ->toMediaCollection('influncers');
-        // }
-
         if(!$data) return response()->json([
-            'msg'=>'user not found',
+            'msg'=>trans($this->trans_dir.'user_not_found'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
         if(!$data->influncers) return response()->json([
-            'msg'=>'influencer not found',
+            'msg'=>trans($this->trans_dir.'inf_not_found'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
         $inf = Influncer::find($data->influncers->id);
-
         $inf->first_name = $request->first_name;
         $inf->middle_name = $request->middle_name;
         $inf->last_name = $request->last_name;
@@ -346,14 +307,13 @@ class UpdateDataController extends Controller
         $data->phone = $request->phone;
         $data->dial_code = $request->dial_code;
         $data->country_code = $request->country_code;
-
         $data->save();
         $inf->save();
 
         
 
         return response()->json([
-            'msg'=>'data was update',
+            'msg'=>trans($this->trans_dir.'data_was_update'),
             'data'=>$this->userDataResponse($data,null,$data->id),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
@@ -363,25 +323,14 @@ class UpdateDataController extends Controller
     {
 
         if(!Auth::guard('api')->user())return response()->json([
-            'msg'=>'user not found',
+            'msg'=>trans($this->trans_dir.'user_not_found'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
         $user = User::find(Auth::guard('api')->user()->id);
 
-        if(!Auth::guard('api')->user()) return response()->json([
-            'msg'=>'user not found',
-            'status'=>config('global.WRONG_VALIDATION_STATUS')
-        ],config('global.WRONG_VALIDATION_STATUS'));
-
-        if(!$user) return response()->json([
-            'msg'=>'user not found',
-            'status'=>config('global.WRONG_VALIDATION_STATUS')
-        ],config('global.WRONG_VALIDATION_STATUS'));
-
-
         if(!$user->influncers) return response()->json([
-            'msg'=>'influencer not found',
+            'msg'=>trans($this->trans_dir.'inf_not_found'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
@@ -396,9 +345,6 @@ class UpdateDataController extends Controller
             'ad_price'=>$request->ad_price,
             'ad_onsite_price'=>$request->ad_onsite_price
         ]);
-        
-
-       
 
         $inf->socialMedias()->detach();
 
@@ -427,17 +373,8 @@ class UpdateDataController extends Controller
         }
         $inf->socialMedias()->detach();
 
-        // foreach ($request->preferred_socialMedias as $item) {
-        //      $inf->socialMedias()->attach($item);
-        // }
-        
-      
-
-       
-
-
         return response()->json([
-                    'msg'=>'data was update',
+                    'msg'=>trans($this->trans_dir.'data_was_update'),
                     'data'=>$this->userDataResponse($user,null,$user->id),
                     'status'=>config('global.OK_STATUS')
                 ],config('global.OK_STATUS'));
@@ -447,20 +384,14 @@ class UpdateDataController extends Controller
     public function updateExtraInfoInfluencers(UpdateExtraInfluncerRequest $request)
     {
         if(!Auth::guard('api')->user())return response()->json([
-            'msg'=>'user not found',
+            'msg'=>trans($this->trans_dir.'user_not_found'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
         $user = User::find(Auth::guard('api')->user()->id);
-
-        if(!$user) return response()->json([
-            'msg'=>'user not found',
-            'status'=>config('global.WRONG_VALIDATION_STATUS')
-        ],config('global.WRONG_VALIDATION_STATUS'));
-
-
+        
         if(!$user->influncers) return response()->json([
-            'msg'=>'influencer not found',
+            'msg'=>trans($this->trans_dir.'inf_not_found'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
@@ -478,7 +409,7 @@ class UpdateDataController extends Controller
 
    
         return response()->json([
-            'msg'=>'data was update',
+            'msg'=>trans($this->trans_dir.'data_was_update'),
             'data'=>$this->userDataResponse($user,null,$user->id),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
@@ -489,28 +420,21 @@ class UpdateDataController extends Controller
     public function updatePriceInfoInfluencers(UpdatePriceInfluncerRequest $request)
     {
         if(!Auth::guard('api')->user())return response()->json([
-            'msg'=>'user not found',
+            'msg'=>trans($this->trans_dir.'user_not_found'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
-        
+
         $user = User::find(Auth::guard('api')->user()->id);
 
-    
-        if(!$user) return response()->json([
-            'msg'=>'user not found',
-            'status'=>config('global.WRONG_VALIDATION_STATUS')
-        ],config('global.WRONG_VALIDATION_STATUS'));
-
-
         if(!$user->influncers) return response()->json([
-            'msg'=>'influencer not found',
+            'msg'=>trans($this->trans_dir.'inf_not_found'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
         $inf = Influncer::find($user->influncers->id);
         $bank = Bank::find($request->bank_id);
         if(!$bank) return response()->json([
-            'msg'=>'bank not found',
+            'msg'=>trans($this->trans_dir.'bank_not_found'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
         
@@ -524,7 +448,7 @@ class UpdateDataController extends Controller
         ]);
 
         return response()->json([
-            'msg'=>'data was update',
+            'msg'=>trans($this->trans_dir.'data_was_update'),
             'data'=>$this->userDataResponse($user,null,$user->id),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
@@ -534,22 +458,19 @@ class UpdateDataController extends Controller
     public function deleteFiles($id)
     {
         $media = DB::table('media')->where('id',$id)->first();
-
         if(!$media)return response()->json([
-            'err'=>'file not found',
+            'err'=>trans($this->trans_dir.'file_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         Storage::deleteDirectory(public_path('storage/'.$media->model_id.'/'.$media->file_name));
 
-
         $model_type = $media->model_type;
-
         $model = $model_type::find($media->model_id);
         $model->deleteMedia($media->id);
 
         return response()->json([
-            'msg'=>'file was deleted',
+            'msg'=>trans($this->trans_dir.'file_was_deleted'),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
 
@@ -566,17 +487,13 @@ class UpdateDataController extends Controller
          */
 
         if(!Auth::guard('api')->user())return response()->json([
-            'err'=>'user not found',
+            'err'=>trans($this->trans_dir.'user_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         $user = User::find(Auth::guard('api')->user()->id);
-
         $inf = $user->influncers;
 
-     
-
-    
         if($user->customers)
         {
             $file = null;
@@ -589,7 +506,6 @@ class UpdateDataController extends Controller
 
             return response()->json([
                 'status'=>config('global.OK_STATUS'),
-                // 'data'=>$this->userDataResponse($user,null,$user->id)
                 'data'=>[
                     'id'=>$file->id,
                     'url'=>$file->getFullUrl()
@@ -598,7 +514,7 @@ class UpdateDataController extends Controller
         }
 
         if(!$request->hasFile('file')) return response()->json([
-            'err'=>'Please add a file',
+            'err'=>trans($this->trans_dir.'please_add_file'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
@@ -616,22 +532,9 @@ class UpdateDataController extends Controller
             $file =  $inf->addMedia($request->file('file'))
             ->toMediaCollection('cr_file');
         }
-        // if($type == 3)
-        // {
-        //     $inf->clearMediaCollection('tax_registration_number_file');
-        //     $file = $inf->addMedia($request->file('file'))
-        //     ->toMediaCollection('tax_registration_number_file');
-        // }
-        // if($type == 4)
-        // {
-        //     $file = $inf->addMedia($request->file('file'))
-        //     ->toMediaCollection('snap_video');
-        // }
-
 
         return response()->json([
             'status'=>config('global.OK_STATUS'),
-            // 'data'=>$this->userDataResponse($user,null,$user->id)
             'data'=>[
                 'id'=>$file->id,
                 'url'=>$file->getFullUrl()
@@ -650,14 +553,14 @@ class UpdateDataController extends Controller
         
 
         if(!$inf) return response()->json([
-            'msg'=>'user is not an influencer',
+            'msg'=>trans($this->trans_dir.'user_not_an_influencer'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         $inf->update($data);
 
         return response()->json([
-            'msg'=>'data was updated',
+            'msg'=>trans($this->trans_dir.'data_was_updated'),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }

@@ -8,6 +8,8 @@ use App\Models\slide;
 
 class SlideController extends Controller
 {
+    private $trans_dir = 'messages.api.';
+
     public function index()
     {
         $data = Slide::get()->map(function($item){
@@ -19,7 +21,7 @@ class SlideController extends Controller
         });
 
         return response()->json([
-            'msg'=>'all status',
+            'msg'=>trans($this->trans_dir.'all_status'),
             'data'=>$data,
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
