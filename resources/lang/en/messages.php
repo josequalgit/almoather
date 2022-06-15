@@ -124,6 +124,17 @@ return [
         "data_was_update"=>"data was update",
         "bank_not_found"=>"bank not found",
         "please_add_file"=>"Please add a file",
+        'status_response_label'=>[
+            "pending"=>"Under review",
+            "approve"=>"Waiting for first payment",
+            "choosing_influencer"=>"Choose Influencer's",
+            "fullpayment"=>"Waiting for first payment",
+        ],
+        'status_response_button_text'=>[
+            "approve"=>"Pay First Payment",
+            "inf_list"=>"Choose Influencer's",
+            "choosing_influencer"=>"Pay The Full Payment",
+        ],
 
     ]
 ];

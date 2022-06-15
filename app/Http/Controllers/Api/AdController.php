@@ -96,7 +96,6 @@ class AdController extends Controller
           
 
             $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($status){
-              //  dd($item->id);
                 $data =  $this->adResponse($item->ads);
                 $data['status']         = $status;
                 $data['contract_id']    = $item->id;
