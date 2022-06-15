@@ -663,7 +663,7 @@
                 autoFocus: true,
                 enablePagination: true,
                 enableAllSteps: false,
-                startIndex: userCurrentStep,
+                startIndex: 0,
                 onInit: function() {
                     if (adStatus == 'pending') {
                         $('.actions ul').prepend(`<li class='list-dicration' aria-disabled="false"><button type='button' onclick='sendStatusRequest("rejected")' class='btn btn-danger' role="menuitem">Reject</button></li>`)

@@ -37,7 +37,8 @@ class AdController extends Controller
         }else{
 
             $statusCode = [
-                'Pending'           => ['approve','pending','prepay','choosing_influencer'],
+                'UnderReview'       => ['pending'],
+                'Pending'           => ['approve','prepay','choosing_influencer'],
                 'Active'            => ['fullpayment','active','progress'],
                 'Finished'          => ['complete'],
                 'Rejected'          => ['reject']
@@ -47,7 +48,6 @@ class AdController extends Controller
             $counter = Ad::whereIn('status',$statusCode[$status])->count();
         }
 
-
         return view('dashboard.ads.index', compact('data', 'counter'));
     }
 
@@ -56,11 +56,13 @@ class AdController extends Controller
         $data = Ad::findOrFail($id);
         $matches = $data->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
         $unMatched = $data->matches()->where('chosen', 0)->get();
-        // dd($unMatched);
         $serviceCategories = Category::where('type','service')->get();
         $productCategories = Category::where('type','product')->get();
         $goals = CampaignGoal::select('title')->get();
         $countries = Country::get();
+
+        if($data->status != 'pending'&&$data->status != 'choosing_influencer') return view('dashboard.ads.showAd',compact('data','matches','productCategories','serviceCategories','unMatched'));
+        
         return view('dashboard.ads.edit', compact('data', 'matches', 'unMatched', 'serviceCategories','productCategories', 'editable', 'countries'));
     }
 
