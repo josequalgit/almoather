@@ -197,6 +197,7 @@ class Ad extends Model implements HasMedia
     public function getCrImageAttribute() {
         $mediaItems = $this->getMedia('document');
         $obj = [];
+        $array = [];
         if(count($mediaItems) > 0)
         {
 			
@@ -204,12 +205,13 @@ class Ad extends Model implements HasMedia
                     'id'=>$mediaItems[0]->id,
                     'url'=>$mediaItems[0]->getFullUrl()
                 ];
+                array_push($array,$obj);
 				// $publicFullUrl = $item->getFullUrl();
 			
 			
            
         }
-        return $obj;
+        return $array;
    }
     public function getLogoAttribute() {
         $mediaItems = $this->getMedia('logos')->first();
