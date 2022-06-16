@@ -475,7 +475,7 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
       
-        if(!$replace_permission&&$data->status !== 'prepay') return response()->json([
+        if(!$replace_permission&&$data->status !== 'prepay'&&$data->status !== 'choosing_influencer') return response()->json([
             'err'=>trans($this->trans_dir.'ad_dont_have_right_status'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));

@@ -72,6 +72,10 @@ class CountryController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS'),
             'msg'=>'city not found',
         ],config('global.OK_STATUS'));
+        if($city->ads&&count($city->ads) > 0){
+            Alert::toast('The Country have ads', 'error');
+            return back();
+        }
         $city->delete();
         Alert::toast('Country was deleted', 'success');
         return response()->json([
