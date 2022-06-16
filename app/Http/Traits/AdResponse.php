@@ -185,11 +185,13 @@ trait AdResponse {
     {
       $contract = $ad->getInfAdContract(Auth::guard('api')->user()->influncers->id);
       if(!$contract) return null;
-      if($contract->rejectNote) return 'Rejected';
-
+      if($contract->is_accepted  == 2) return 'Rejected';
+    
+      if($contract->is_accepted == 1) return 'Progress';
       if($contract->is_accepted == 0 ) return 'Pending';
-      if($contract->is_accepted == 1 ) return 'Progress';
+      if($contract->status == 1&&$contract->status == 0 ) return 'waiting admin approve';
       if($contract->is_accepted == 2 && $contract->admin_status == 1 ) return 'Completed';
       return null;
+      
     }
 }
