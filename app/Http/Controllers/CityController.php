@@ -75,10 +75,15 @@ class CityController extends Controller
     public function delete($id)
     {
         $city = City::find($id);
+      
         if(!$city) return response()->json([
             'status'=>config('global.NOT_FOUND_STATUS'),
             'msg'=>'city not found',
         ],config('global.OK_STATUS'));
+        if($city->ads&&count($city->ads) > 0){
+            Alert::toast('The City have ads', 'error');
+            return back();
+        }
         $city->delete();
         Alert::toast('City was deleted', 'success');
         return response()->json([

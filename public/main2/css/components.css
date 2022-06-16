@@ -607,12 +607,12 @@ footer.footer span i {
     background-color: inherit;
 }
 
-.main-menu.menu-light .navigation > li ul .active {
-  background: rgba(152,134,170,0.13);
+.main-menu.menu-light .navigation>li ul .active {
+    background: rgba(152, 134, 170, 0.13);
 }
 
-.main-menu.menu-light .navigation > li ul .active > a {
-  color: #9886aa;
+.main-menu.menu-light .navigation>li ul .active>a {
+    color: #9886aa;
 }
 
 .main-menu.menu-light .navigation>li>ul>li:first-child>a {
@@ -4397,4 +4397,8 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 .accept_ad_contract_body {
     height: 26vh !important;
     overflow-y: auto;
+}
+
+.form-check-inline {
+    margin-bottom: 2%;
 }
