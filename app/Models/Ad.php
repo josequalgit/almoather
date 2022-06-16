@@ -288,7 +288,7 @@ class Ad extends Model implements HasMedia
     public function is_all_accepted()
     {
        $data =  $this->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
-            $contract = InfluencerContract::where([['influencer_id',$item->influencer_id],['ad_id'=>$this->id]])->first();
+            $contract = InfluencerContract::where('influencer_id',$item->influencer_id)->first();
             
                 if(isset($contract)&&$contract->is_accepted == 2)
                 {
