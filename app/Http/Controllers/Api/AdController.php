@@ -1048,17 +1048,6 @@ class AdController extends Controller
 					'status_code' => $request->ResponseCode,
 					'type' => $request->type,
             	]);
-				 $cal = $data->budget * 5.5/100;
-
-                 if($data->status == 'approve')
-                 {
-                     $data->status = 'prepay';
-                 }
-                 else
-                 {
-                    $data->status = 'fullpayment';
-                 }
-                    $data->save();
 
                  return response()->json([
                      'msg'=>trans($this->trans_dir.'payment_successfully'),
