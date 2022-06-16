@@ -61,8 +61,8 @@ class AdController extends Controller
         $goals = CampaignGoal::select('title')->get();
         $countries = Country::get();
 
-        // if($data->status != 'pending') return view('dashboard.ads.showAd',compact('data','matches','productCategories','serviceCategories','unMatched'));
-         return view('dashboard.ads.showAd',compact('data','matches','productCategories','serviceCategories','unMatched'));
+        if($data->status != 'pending') return view('dashboard.ads.showAd',compact('data','matches','productCategories','serviceCategories','unMatched'));
+        //  return view('dashboard.ads.showAd',compact('data','matches','productCategories','serviceCategories','unMatched'));
         
         return view('dashboard.ads.edit', compact('data', 'matches', 'unMatched', 'serviceCategories','productCategories', 'editable', 'countries'));
     }
@@ -488,11 +488,11 @@ class AdController extends Controller
                 'status' => config('global.NOT_FOUND_STATUS'),
             ], config('global.NOT_FOUND_STATUS'));
         }
-        
+
         if($request->send_to_all)
         {
             $allMatches = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
-            foreach($data as $match)
+            foreach($allMatches as $match)
             {
                 $data = new InfluencerContract;
                 $data->content = $contract->content;

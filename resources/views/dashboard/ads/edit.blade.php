@@ -390,9 +390,15 @@
                         change: notChange,
                         onSite: '{{ $data->onSite }}',
                         adBudget: '{{ $data->budget }}',
-                        _token: '{{ csrf_token() }}'
+                        _token: '{{ csrf_token() }}',
+                        confirm:status == 'approve'?true:false
+
                     },
                     success: (res) => {
+                        if(status == 'approve')
+                        {
+                            location.reload()
+                        }
                         $('.influencer-data').html(res.data);
                     },
                     error: (err) => {
