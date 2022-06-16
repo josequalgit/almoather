@@ -184,12 +184,12 @@ trait AdResponse {
     private function getStatusForInf($ad)
     {
       $contract = $ad->getInfAdContract(Auth::guard('api')->user()->influncers->id);
-      return $contract->status;
       if(!$contract) return null;
-      if($contract->status == 0 ) return 'Pending';
-      if($contract->status == 1 ) return 'Progress';
-      if($contract->status == 2 ) return 'Rejected';
-      if($contract->status == 2 && $contract->admin_status == 1 ) return 'Completed';
+      if($contract->rejectNote == 0) return 'Rejected';
+
+      if($contract->is_accepted == 0 ) return 'Pending';
+      if($contract->is_accepted == 1 ) return 'Progress';
+      if($contract->is_accepted == 2 && $contract->admin_status == 1 ) return 'Completed';
       return null;
     }
 }
