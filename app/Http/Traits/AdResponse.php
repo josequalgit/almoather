@@ -23,10 +23,10 @@ trait AdResponse {
             'videos'=>$ad->videos,
             'cr_certificate'=>$ad->document,
             'cr_image'=>$ad->crImage,
-            'campaign_goal'=>[
+            'campaign_goal'=>$ad->campaignGoals?[
               'id'=>$ad->campaignGoals->id,
               'title'=>$ad->campaignGoals->title
-            ],
+            ]:null,
             'logo'=>$ad->logo,
             // 'locations'=>$ad->storeLocation?$ad->storeLocations()->get()->map(function($item){
             //   return $item->cities->name.','.$item->areas->name.','.$item->countries->name;
@@ -60,18 +60,18 @@ trait AdResponse {
             // 'nearest_location'=>$ad->nearest_location,
             'website_link'=>$ad->website_link,
             'about_product'=>$ad->about_product,
-            'country'=>[
+            'country'=>$ad->countries?[
               'id'=>$ad->countries->id,
               'name'=>$ad->countries->name
-             ],
+             ]:null,
             'city'=>$ad->cities?[
               'id'=>$ad->cities->id,
               'name'=>$ad->cities->name
             ]:null,
-            'area'=>[
+            'area'=>$ad->areas?[
               'id'=>$ad->areas->id,
               'name'=>$ad->areas->name
-            ],
+            ]:null,
             'customer_id'=>$ad->customers->id,
             'isVat'=>$ad->is_vat,
             'discount_code'=>$ad->discount_code,
