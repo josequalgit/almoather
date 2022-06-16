@@ -107,6 +107,14 @@
                                                                         <b class="me-2">Link: <a target="_blank" href="{{ $data->store_link }}">{{ $data->store_link }}</a> </b>
                                                                     </div>
                                                                     <div class="border-top pt-1 pb-1">
+                                                                      
+                                                                        <b class="me-2">Commercial file: <a target="_blank" href="{{ $data->document->url }}">Show</a></b><span class="me-2"></span>
+                                                                    </div>
+                                                                  
+                                                                    <div class="border-top pt-1 pb-1">
+                                                                        <b class="me-2">Document file: <a target="_blank" href="{{ $data->document->url }}">Show</a> </b><span class="me-2"></span>
+                                                                    </div>
+                                                                    <div class="border-top pt-1 pb-1">
                                                                         <b class="me-2">Status: {{ $data->status }} </b><span class="me-2"></span>
                                                                     </div>
                                                                 </div>
@@ -990,7 +998,7 @@
                 autoFocus: true,
                 enablePagination: true,
                 enableAllSteps: false,
-                startIndex: 0,
+                startIndex: 2,
                 onInit: function() {
                     if (adStatus == 'pending') {
                         $('.actions ul').prepend(`<li class='list-dicration' aria-disabled="false"><button type='button' onclick='sendStatusRequest("rejected")' class='btn btn-danger' role="menuitem">Reject</button></li>`)
