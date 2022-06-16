@@ -61,7 +61,8 @@ class AdController extends Controller
         $goals = CampaignGoal::select('title')->get();
         $countries = Country::get();
 
-        if($data->status != 'pending') return view('dashboard.ads.showAd',compact('data','matches','productCategories','serviceCategories','unMatched'));
+        // if($data->status != 'pending') return view('dashboard.ads.showAd',compact('data','matches','productCategories','serviceCategories','unMatched'));
+         return view('dashboard.ads.showAd',compact('data','matches','productCategories','serviceCategories','unMatched'));
         
         return view('dashboard.ads.edit', compact('data', 'matches', 'unMatched', 'serviceCategories','productCategories', 'editable', 'countries'));
     }
@@ -97,7 +98,7 @@ class AdController extends Controller
         {
             $ad->status = $request->status;
             $ad->category_id = $request->category_id;
-            $ad->eng_rate = $request->eng_rate;
+            $ad->eng_number = $request->eng_number ?? 0;
             $ad->reject_note = $request->note ?? null;
             $ad->save();
 
@@ -140,7 +141,7 @@ class AdController extends Controller
         {
             $ad->category_id = $request->category_id;
             $ad->reject_note = $request->note ?? null;
-            $ad->eng_rate = $request->eng_rate;
+            $ad->eng_number = $request->eng_number ?? 0;
             $ad->save();
         }
 
@@ -487,16 +488,43 @@ class AdController extends Controller
                 'status' => config('global.NOT_FOUND_STATUS'),
             ], config('global.NOT_FOUND_STATUS'));
         }
+        
+        if($request->send_to_all)
+        {
+            $allMatches = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
+            foreach($data as $match)
+            {
+                $data = new InfluencerContract;
+                $data->content = $contract->content;
+                $data->influencer_id = $match->influencer_id;
+                $data->date = $request->date;
+                $data->is_accepted = 0;
+                $data->ad_id = $ad_id;
+                $data->scenario = $request->scenario;
+                $data->af = 0;
+                $data->save();
 
-        $data = new InfluencerContract;
-        $data->content = $contract->content;
-        $data->influencer_id = $request->influncers_id;
-        $data->date = $request->date;
-        $data->is_accepted = 0;
-        $data->ad_id = $ad_id;
-        $data->scenario = $request->scenario;
-        $data->af = 0;
-        $data->save();
+
+                $influencer = Influncer::find($match->influencer_id);
+                $name = $influencer->first_name . ' ' . $influencer->middle_name . ' ' . $influencer->last_name;
+        
+                $info = [
+                    'msg' => 'New Contract for ad "' . $ad->store . '"',
+                    'type' => 'Ad',
+                    'id' => $ad->id,
+                ];
+
+                Notification::send($influencer->users, new AddInfluencer($info));
+
+
+            }
+
+            return response()->json([
+                'msg' => 'contract was sent',
+                'status' => config('global.OK_STATUS'),
+            ], config('global.OK_STATUS'));
+        }
+
 
         $influencer = Influncer::find($request->influncers_id);
         $name = $influencer->first_name . ' ' . $influencer->middle_name . ' ' . $influencer->last_name;
