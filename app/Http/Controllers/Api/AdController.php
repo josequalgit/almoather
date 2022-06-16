@@ -546,9 +546,10 @@ class AdController extends Controller
 				'type'=>$data->type,
 				'category'=>$data->categories->name,
 				'budget'=>$data->budget,
-				'match'=>$this->get_ad_influencers_matchs($data),
-                'status'=>config('global.OK_STATUS')
-        ],config('global.OK_STATUS')]);
+				'match'=>$this->get_ad_influencers_matchs($data)
+            ],
+        'status'=>config('global.OK_STATUS')
+       ],config('global.OK_STATUS'));
 
 
     }
