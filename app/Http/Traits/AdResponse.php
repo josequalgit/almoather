@@ -136,6 +136,10 @@ trait AdResponse {
       
         $basicResponse['status']=$ad->status;
       }
+      else
+      {
+        $basicResponse['status']= $this->getStatusForInf($ad);
+      }
       $basicResponse['messages']=[
         'label_text'=>$this->getLabelTextResponse($ad->status),
         'button_text'=>$this->getButtonTextResponse($ad->is_all_accepted()?'inf_list':$ad->status)
@@ -169,5 +173,15 @@ trait AdResponse {
       ];
 
       return $array[$status]??null;
+    }
+
+    private function getStatusForInf($ad)
+    {
+      $contract = $ad->getInfAdContract(Auth::users()->influncers->id);
+      if($contract->status == 0 ) return 'Pending';
+      if($contract->status == 1 ) return 'Progress';
+      if($contract->status == 2 ) return 'Rejected';
+      if($contract->status == 2 && $contract->admin_status == 1 ) return 'Completed';
+      return null;
     }
 }
