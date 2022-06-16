@@ -24,8 +24,8 @@
                                 @include('dashboard.ads.include.content')
                                 @include('dashboard.ads.include.influencers')
                                 <div class="d-flex justify-content-center">
-                                    <button  onclick="seeContract(true)" class="btn btn-primary w-25">
-                                        Send
+                                    <button  type="button" onclick="seeContract(true)" class="btn btn-primary w-25">
+                                        Confirm
                                     </button>
                                 </div>
                             </div>
