@@ -539,17 +539,19 @@ class AdController extends Controller
         $addToChosen->save();
         $data = Ad::findOrFail($id);
 
-        return response()->json([
-            'msg'=>trans($this->trans_dir.'data_was_updated'),
-			'data'=>[
-                'id'=>$data->id,
-				'type'=>$data->type,
-				'category'=>$data->categories->name,
-				'budget'=>$data->budget,
-				'match'=>$this->get_ad_influencers_matchs($data)
-            ],
-        'status'=>config('global.OK_STATUS')
-       ],config('global.OK_STATUS'));
+        return $this->match_response($data);
+
+    //     return response()->json([
+    //         'msg'=>trans($this->trans_dir.'data_was_updated'),
+	// 		'data'=>[
+    //             'id'=>$data->id,
+	// 			'type'=>$data->type,
+	// 			'category'=>$data->categories->name,
+	// 			'budget'=>$data->budget,
+	// 			'match'=>$this->get_ad_influencers_matchs($data)
+    //         ],
+    //     'status'=>config('global.OK_STATUS')
+    //    ],config('global.OK_STATUS'));
 
 
     }

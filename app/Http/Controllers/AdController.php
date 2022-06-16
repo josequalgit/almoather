@@ -97,6 +97,7 @@ class AdController extends Controller
         {
             $ad->status = $request->status;
             $ad->category_id = $request->category_id;
+            $ad->eng_rate = $request->eng_rate;
             $ad->reject_note = $request->note ?? null;
             $ad->save();
 
@@ -139,6 +140,7 @@ class AdController extends Controller
         {
             $ad->category_id = $request->category_id;
             $ad->reject_note = $request->note ?? null;
+            $ad->eng_rate = $request->eng_rate;
             $ad->save();
         }
 
@@ -181,8 +183,8 @@ class AdController extends Controller
         return response()->json([
             'msg' => 'status was changed',
             'data' => $influencer,
-            'status' => 200,
-        ], 200);
+            'status' => config('global.OK_STATUS'),
+        ], config('global.OK_STATUS'));
     }
 
     private function calculateProfitableAds($request, $ad, $data){

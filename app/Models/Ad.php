@@ -41,7 +41,8 @@ class Ad extends Model implements HasMedia
         'is_added_tax',
         'is_vat',
         'about_product',
-        'tax_value'
+        'tax_value',
+        'eng_rate',
     ];
 
     protected $append = 
