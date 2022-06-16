@@ -151,6 +151,7 @@ trait AdResponse {
         'pending'=>trans($this->trans_dir.'status_response_label.pending'),
         'approve'=>trans($this->trans_dir.'status_response_label.approve'),
         'choosing_influencer'=>trans($this->trans_dir.'status_response_label.choosing_influencer'),
+        'prepay'=>trans($this->trans_dir.'status_response_label.choosing_influencer'),
         'fullpayment'=>trans($this->trans_dir.'status_response_label.choosing_influencer'),
       ];
 
@@ -163,6 +164,7 @@ trait AdResponse {
       [
         'approve'=>trans($this->trans_dir.'status_response_button_text.approve'),
         'inf_list'=>trans($this->trans_dir.'status_response_button_text.inf_list'),
+        'prepay'=>trans($this->trans_dir.'status_response_button_text.inf_list'),
         'choosing_influencer'=>trans($this->trans_dir.'status_response_button_text.choosing_influencer'),
       ];
 
