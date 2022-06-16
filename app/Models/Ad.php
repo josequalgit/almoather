@@ -177,6 +177,7 @@ class Ad extends Model implements HasMedia
     public function getDocumentAttribute() {
         $mediaItems = $this->getMedia('commercial_docs');
         $publicFullUrl = [];
+        $obj = [];
         if(count($mediaItems) > 0)
         {
 			foreach($mediaItems as $item)
@@ -190,7 +191,8 @@ class Ad extends Model implements HasMedia
 			}
            
         }
-        return $publicFullUrl;
+     //   return $publicFullUrl;
+        return $obj;
    }
     public function getCrImageAttribute() {
         $mediaItems = $this->getMedia('document');
