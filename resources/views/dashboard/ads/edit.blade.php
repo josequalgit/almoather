@@ -264,16 +264,10 @@
             });
         });
         // to know whate steps the user currently in
-        let userCurrentStep = 0;
         let countMatches = '{{ count($matches) }}';
         let adStatus = '{{ $data->status }}';
         let isConfirm = false;
-        if (adStatus != 'pending') {
-            userCurrentStep = 1;
-        }
-        if (countMatches > 0) {
-            userCurrentStep = 2
-        }
+       
 
             var steps = $("#wizard-basic").steps({
                 headerTag: "h3",
