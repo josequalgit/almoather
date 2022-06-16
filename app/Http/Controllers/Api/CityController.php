@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Area;
+use App\Models\Region;
 
 class CityController extends Controller
 {
@@ -12,7 +13,7 @@ class CityController extends Controller
 
     public function index($id)
     {
-        $data = Area::find($id);
+        $data = Region::find($id);
         if(!$data) return response()->json([
             'err'=>trans($this->trans_dir.'area_doset_exist'),
             'status'=>config('global.NOT_FOUND_STATUS')
