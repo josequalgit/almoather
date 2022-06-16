@@ -87,6 +87,12 @@ trait AdResponse {
         $data =  Contract::select('content')->where([['customer_id',Auth::guard('api')->user()->customers->id],['ad_id',$ad->id]])->first();
         $basicResponse['contract'] = $data?$data->content:null;
       }
+      if(Auth::guard('api')->user()->influncers)
+      {
+        $basicResponse['contract'] = InfluencerContract::where(['influencer_id'=>Auth::guard('api')->user()->influncers->id])
+        ->where(['ad_id'=>$ad->id])
+        ->first();
+      }
 
       if(Auth::guard('api')->user()->customers&&$ad->status !== 'pending'&&$ad->status !== 'approve'&&$ad->status !== 'prepay'&&$ad->status !== 'rejected')
       {
