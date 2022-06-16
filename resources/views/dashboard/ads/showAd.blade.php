@@ -23,7 +23,11 @@
                                 @include('dashboard.ads.include.campaigns')
                                 @include('dashboard.ads.include.content')
                                 @include('dashboard.ads.include.influencers')
-                                
+                                <div class="d-flex justify-content-center">
+                                    <button  onclick="seeContract(true)" class="btn btn-primary w-25">
+                                        Send
+                                    </button>
+                                </div>
                             </div>
                         </div>
                   </form>
@@ -74,6 +78,8 @@
                                                                 rel="noopener noreferrer">
                                                                 <h5>chose</i></h5>
                                                             </button>
+                                                                
+
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -363,7 +369,7 @@
             $('#seeContract').modal('toggle');
         }
 
-        function sendContract() {
+        function sendContract(sendToAll = false) {
             let url = '{{ route('dashboard.ads.sendContractToInfluncer', ':id') }}';
             let addId = url.replace(':id', '{{ $data->id }}');
             $.ajax({
@@ -371,7 +377,8 @@
                 data: {
                     influncers_id: choosen_inf_id,
                     date: document.getElementById('contractDate').value,
-                    scenario: document.getElementById('scenario').value
+                    scenario: document.getElementById('scenario').value,
+                    send_to_all: sendToAll,
                 },
                 type: 'POST',
                 success: (res) => {

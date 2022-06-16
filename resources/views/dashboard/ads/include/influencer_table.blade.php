@@ -27,6 +27,7 @@
                     <button type="button" onclick="getUnchosenInfulncers('{{ $item->influencers->id }}')" class="btn btn-secondary">
                         <i class="bx bx-transfer"></i>
                     </button>
+                   
                 </td>
             </tr>
         @endforeach
