@@ -505,7 +505,7 @@ class AdController extends Controller
 			$counter = $counter +1;
 			
 
-            return $this->match_influencer_with_eligible_status($item->influencers,$item->match,$counter == 2?:$currentBudget,$item->status);
+            return $this->match_influencer_with_eligible_status($item->influencers,$item,$counter == 2?:$currentBudget,$item->status);
             
         });
 
