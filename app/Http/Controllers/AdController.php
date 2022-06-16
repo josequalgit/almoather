@@ -174,7 +174,9 @@ class AdController extends Controller
             $allInfluencer = $this->calculateProfitableAds($request, $ad, $data);
         }
 
+
         $allInfluencer = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
+
         $influencer = view('dashboard.ads.include.influencer_table', compact('allInfluencer'))->render();
         return response()->json([
             'msg' => 'status was changed',
@@ -343,6 +345,7 @@ class AdController extends Controller
                     ->orWhere('city_id', $ad->city_id);
             });
         }
+
         $allBigInfluencer = $allBigInfluencer->get();
 
         foreach ($allBigInfluencer as $key => $influencer) {
@@ -358,6 +361,7 @@ class AdController extends Controller
         $allBigInfluencer = collect($allBigInfluencer)->sortByDesc('AOAF');
         #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
         $isOverBudge = 0;
+       
         foreach ($allBigInfluencer as $key => $influencer) {
             $price = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
 
