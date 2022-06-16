@@ -1168,7 +1168,9 @@ class AdController extends Controller
     private function get_ad_influncers_with_status($ad)
     {
         return $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($ad){
-                $contract = InfluencerContract::where('influencer_id',$item->influencer_id)->first();
+                $contract = InfluencerContract::where('influencer_id',$item->influencer_id)
+                ->where('ad_id',$ad->id)
+                ->first();
 
                 $status = null;
             
@@ -1182,10 +1184,23 @@ class AdController extends Controller
                     {
                         $status = 'completed';
                     }
-                else
-                {
-                    $status = 'progress';
-                }
+                    elseif($contract->status == 1&&$contract->status == 0)
+                    {
+                        $status = 'waiting admin approve';
+                    }
+                    elseif($contract->is_accepted == 1)
+                    {
+                        $status = 'Progress';
+                    }
+                    elseif($contract->is_accepted == 0)
+                    {
+                        $status = 'pending';
+                    }
+                    else
+                    {
+                        $status = 'progress';
+                    }
+
                 }
                 else
                 {
