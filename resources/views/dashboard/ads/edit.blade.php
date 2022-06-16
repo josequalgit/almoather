@@ -19,611 +19,22 @@
                 <div class="card-body">
                     <form id="ad_details_from" action="/" class="campaign-form">
                         <div class="row">
-                            @if ($data->status == 'pending' || $data->status == 'choosing_influencer')
-                                <div id="wizard-basic">
-                                    <h3>CAMPAIGN</h3>
-                                    <section>
-                                        <div class="camp-section">
-                                            <div class="add-section">
-                                                <h3 class="f-16 ad-title" style="">Campaign Details({{ $data->store }})</h3>
-                                                <div class="blocks-list">
-                                                    <div class="w-100  justify-content-center">
-                                                        <div class="details-banner ad-details">
-                                                            <div class="row">
-                                                                <div class="col-lg-2 col-md-3 text-center w-100">
-                                                                    <img class="ad-image" src="{{ $data->logo['url'] }}" alt="{{  $data->store }}">
-                                                                    <h3 class="title mt-2">{{ $data->customers->full_name }}</h3>
-                                                                </div>
-                                                                <div class="col details-content">
-                                                                    <div class="pb-1">
-                                                                        <b class="me-2">Trade Mark Name:</b> <span class="me-2">{{ $data->store }}</span>
-                                                                    </div>
-                                                                    <div class="hashs border-top pt-1 pb-1">
-                                                                        <b class="me-2">Cr Number : </b><span class="me-2">{{ $data->cr_num }}</span>
-                                                                    </div>
-                                                                    <div class="hashs border-top pt-1 pb-1">
-                                                                        <b class="mr-2">Category:</b>
-                                                                        @if ($data->categories)
-                                                                            <span class="tag me-2 category-item">{{ $data->categories->name }}</span>
-                                                                        @else
-                                                                            <span class="tag me-2 category-item">No Category Choosen</span>
-                                                                        @endif
-                                                                    </div>
-                                                                    <div class="border-top pt-1 pb-1">
-                                                                        <b class="me-2">Description:</b> <span class="me-2">{{ $data->about }}</span>
-                                                                    </div>
-                                                                    <div class="border-top pt-1 pb-1">
-                                                                        <b class="me-2">Is Store Verified Through Marouf:</b> <span class="me-2">{{ $data->marouf_num ? 'Yes' : 'No' }}</span>
-                                                                    </div>
-                                                                    @if($data->marouf_num)
-                                                                        <div class="border-top pt-1 pb-1">
-                                                                            <b class="me-2">Marouf Number:</b> <span class="me-2">{{ $data->marouf_num }}</span>
-                                                                        </div>
-                                                                    @endif
-                                                                    <div class="hashs border-top pt-1 pb-1">
-                                                                        <b class="me-2">is vat: </b><span class="me-2">{{ $data->is_vat ? 'Yes' : 'No' }}</span>
-                                                                    </div>
-
-                                                                    @if($data->is_vat)
-                                                                        <div class="hashs border-top pt-1 pb-1">
-                                                                            <b class="me-2">Tax Number: </b><span class="me-2">{{ $data->tax_value }}</span>
-                                                                        </div>
-                                                                    @endif
-                                                                    <div class="hashs border-top pt-1 pb-1">
-                                                                        <b class="me-2">Relationship With Brand: </b><span class="me-2">{{ $data->relation }}</span>
-                                                                    </div>
-
-                                                                    <div class="hashs border-top pt-1 pb-1">
-                                                                        <b class="me-2">About The Company (Brand): </b><span class="me-2">{{ $data->about }}</span>
-                                                                    </div>
-
-                                                                    <div class="hashs border-top pt-1 pb-1">
-                                                                        <b class="me-2">About The Product: </b><span class="me-2">{{ $data->about_product }}</span>
-                                                                    </div>
-
-                                                                    <div class="border-top pt-1 pb-1">
-                                                                        <b class="me-2">Campaign Goals:</b> <span class="me-2">{{ $data->campaignGoals->title }}</span>
-                                                                    </div>
-
-                                                                    <h6>Location</h6>
-                                                                    <div class="border-top pt-1 pb-1">
-                                                                        <b class="me-2">Country:</b> <span class="me-2">{{ $data->countries->name }}</span>
-                                                                    </div>
-                                                                    <div class="pt-1 pb-1">
-                                                                        <b class="me-2">City:</b> <span class="me-2">{{ $data->cities->name }}</span>
-                                                                    </div>
-                                                                    <div class="pt-1 pb-1">
-                                                                        <b class="me-2">Area:</b> <span class="me-2">{{ $data->areas->name }}</span>
-                                                                    </div>
-                                                                    <div class="border-top pt-1 pb-1">
-                                                                        <b class="me-2">On: </b> <span
-                                                                            class="me-2">
-                                                                            @foreach ($data->socialMedias as $item)
-                                                                                <img src="{{ $item->image }}" class="rounded-circle social-media-icon" />
-                                                                            @endforeach
-                                                                        </span>
-                                                                    </div>
-                                                                    <div class="border-top pt-1 pb-1">
-                                                                        <b class="me-2">Link: <a target="_blank" href="{{ $data->store_link }}">{{ $data->store_link }}</a> </b>
-                                                                    </div>
-                                                                    <div class="border-top pt-1 pb-1">
-                                                                      
-                                                                        <b class="me-2">Commercial file: <a target="_blank" href="{{ $data->document->url }}">Show</a></b><span class="me-2"></span>
-                                                                    </div>
-                                                                  
-                                                                    <div class="border-top pt-1 pb-1">
-                                                                        <b class="me-2">Document file: <a target="_blank" href="{{ $data->document->url }}">Show</a> </b><span class="me-2"></span>
-                                                                    </div>
-                                                                    <div class="border-top pt-1 pb-1">
-                                                                        <b class="me-2">Status: {{ $data->status }} </b><span class="me-2"></span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="">
-                                                                <div class="container">
-                                                                    <div class="row">
-                                                                        <div class="col-lg-6 col-md-12 p-2">
-                                                                            <div class="count-box list">
-                                                                                <span> <i class="bx bx-money"></i>Total Budget:</span><span class="numbers">{{ $data->budget }}</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-lg-6 col-md-12 p-2">
-                                                                            <div class="count-box list">
-                                                                                <span> <i class="bx bx-user"></i>Influncer:</span><span class="numbers">{{ count($matches) }}</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                            <div class="col" id="wizard-basic">
+                                @include('dashboard.ads.include.campaigns')
+                                @include('dashboard.ads.include.content')
+                                <h3 class="f-16 ad-title">LIVE</h3>
+                                <section>
+                                    <div class="add-section">
+                                        <div class="blocks-table d-block influencer-data">
+                                            <div class="loader-wrapper">
+                                                <div class="spinner-border" role="status">
+                                                    <span class="sr-only">Loading...</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="w-100 d-flex justify-content-center"></div>
-                                    </section>
-                                    <h3>CONTENT</h3>
-                                    <section>
-                                        <div class="add-section contentSection">
-                                            <div class="box-border">
-                                                <div class="top-section">
-                                                    <div class="selected-items row"></div>
-                                                </div>
-                                                <div class="main-section d-flex justify-content-center p-2">
-                                                    <div class="card col">
-                                                        <form>
-                                                            <div class="col p-4">
-                                                                <div>
-                                                                    <h6 for="add_category">Add Influncers Requarment</h6>
-                                                                    <div class="row p-4 add_space">
-                                                                        <div class="col">
-                                                                            <label for="">Type</label>
-                                                                            <select class="form-control" id="ad-type">
-                                                                                <option {{ $data->type == 'product' ? 'selected' : '' }} value="product" data-items="{{json_encode($productCategories)}}" >Product</option>
-                                                                                <option {{ $data->type == 'service' ? 'selected' : '' }} value="service" data-items="{{json_encode($serviceCategories)}}">Service</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="col">
-                                                                            <label for="">Category</label>
-                                                                            <select class="form-control" id="ad-category" data-item="{{$data->category_id}}"></select>
-                                                                        </div>
-                                                                        
-                                                                        @if (!$data->campaignGoals->profitable)
-                                                                            <div class="col">
-                                                                                <div class="form-group">
-                                                                                    <label for="exampleFormControlSelect1">Engagement rate</label>
-                                                                                    <input id="engagement_rate" class="form-control" type="number" value="0" min='0' max='100' />
-                                                                                </div>
-                                                                            </div>
-                                                                        @endif
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col">
-                                                                <div class="row p-4  align-items-center">
-                                                                    <h6 for="add_category">Videos</h6>
-                                                                    <button type="button" class="btn btn-info ml-2 open-choose-video">Add</button>
-                                                                    <input type="file" id="adVideo" style="display:none" />
-                                                                </div>
-                                                                <div id="videoSection" class="row video-section p-1">
-                                                                    @foreach ($data->videos as $key => $item)
-                                                                        <div class="col-2 h-25 mt-2">
-                                                                            <div class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
-                                                                                <a href="{{ $item->url }}" target="_blank" rel="noopener noreferrer">
-                                                                                    <img src="{{ asset('img/icons/misc/mp4.jpg') }}" width="40" />
-                                                                                </a>
-                                                                                <div class="ml-2">
-                                                                                    <h6 class="mb-0">Video #{{ $key + 1 }}</h6>
-                                                                                    <div class="about"><button onclick="deleteFileModal( {{ $item->id }})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    @endforeach
-                                                                </div>
-                                                            </div>
-                                                            <div class="col">
-                                                                <div class="row p-4  align-items-center">
-                                                                    <h6 for="add_category">Images</h6>
-                                                                    <input type="file" id="adImage" style="display:none" />
-                                                                </div>
-                                                                <div id="imageSection" class="row image-section p-1">
-                                                                    @foreach ($data->image as $key => $item)
-                                                                        <div class="col-2 h-25 mt-2">
-                                                                            <div class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
-                                                                                <a href="{{ $item->url }}" target="_blank" rel="noopener noreferrer">
-                                                                                    <img src="{{ asset('img/icons/misc/img.png') }}" width="40" />
-                                                                                </a>
-                                                                                <div class="ml-2">
-                                                                                    <h6 class="mb-0">Image #{{ $key + 1 }}</h6>
-                                                                                    <div class="about"><button onclick="deleteFileModal( {{ $item->id }})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    @endforeach
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-                                      <h3>LIVE</h3>
-                                      <section>
-                                          <div class="add-section">
-                                              <div class="blocks-table d-block">
-                                                  <table class="table zero-configuration table-influencers col-12">
-                                                      <thead>
-                                                          <tr>
-                                                              <th>Image</th>
-                                                              <th>Full name</th>
-                                                              <th>Match</th>
-                                                              <th>Chosen</th>
-                                                              <th>Status</th>
-                                                              <th>Accepted</th>
-                                                              <th>Action</th>
-                                                          </tr>
-                                                      </thead>
-                                                      <tbody id="table-body">
-                                                          @foreach ($matches as $item)
-                                                              <tr>
-                                                                  <td>
-
-                                                                      <div class="thumb">
-                                                                          <img class="img-fluid inf-image"
-                                                                              src="{{ $item->influencers->users->infulncerImage ? $item->influencers->users->infulncerImage['url'] : null }}"
-                                                                              alt="">
-                                                                      </div>
-                                                                  </td>
-
-                                                                  <td>{{ $item->influencers->first_name }}
-                                                                      {{ $item->influencers->middle_name }}
-                                                                      {{ $item->influencers->last_name }}</td>
-                                                                  <td>{{ $item->match }}%</td>
-                                                                  <td>{{ $item->chosen ? 'Yes' : 'No' }}</td>
-                                                                  <td>{{ $item->status }}</td>
-                                                                  <td>
-                                                                      @if ($item->influencers->checkIfAccepted($data->id) == 1)
-                                                                          Yes
-                                                                      @elseif($item->influencers->checkIfAccepted($data->id) == 2)
-                                                                          No Contract avalibale
-                                                                      @else
-                                                                          No
-                                                                      @endif
-                                                                  </td>
-                                                                  <td>
-
-                                                                      @if ($data->status == 'approve' || $data->status == 'fullpayment')
-                                                                          <button
-                                                                              {{ $item->influencers->checkIfAccepted($data->id) == 1 ? 'disabled' : '' }}
-                                                                              type="button"
-                                                                              onclick="seeContract('{{ $data->contacts->content }}','{{ $item->influencers->id }}')"
-                                                                              class="btn btn-secondary">
-                                                                              <i class="bx bx-send "></i>
-                                                                          </button>
-                                                                      @endif
-
-                                                                      <button type="button"
-                                                                          onclick="getUnchosenInfulncers('{{ $item->influencers->id }}')"
-                                                                          class="btn btn-secondary">
-                                                                          <i class="bx bx-transfer"></i>
-                                                                      </button>
-
-
-
-                                                                  </td>
-                                                              </tr>
-                                                          @endforeach
-                                                      </tbody>
-                                                  </table>
-                                              </div>
-                                          </div>
-                                      </section>
-                                  </div>
-                            @else
-                                  <div class="col" id="wizard-basic">
-                                      <h3 class="sectionTitle">CAMPAIGN</h3>
-                                      <section>
-                                          <div class="camp-section-show-status">
-                                              <div class="add-section">
-                                                  <h3 class="f-16 ad-title" style="">Campaign Details
-                                                      ({{ $data->store }})</h3>
-                                                  <div class="blocks-list">
-                                                      <div class="w-100  justify-content-center">
-                                                          <div class="details-banner ad-details">
-                                                              <div class="row">
-                                                                  <div class="col-lg-2 col-md-3 text-center w-100">
-                                                                      <img class="ad-image"
-                                                                          src="{{ $data->customers->users->image['url'] }}"
-                                                                          alt="Ahmed ahmed jo">
-                                                                      <h3 class="title mt-2">
-                                                                          {{ $data->customers->full_name }}</h3>
-                                                                  </div>
-                                                                  <div class="col details-content">
-                                                                      <p>
-                                                                          <b class="me-2">Name:</b>
-                                                                          {{ $data->store }}
-                                                                      </p>
-                                                                      <div class="border-top pt-1 pb-1">
-                                                                          <b class="me-2">Description:</b> <span
-                                                                              class="me-2">{{ $data->about }}</span>
-                                                                      </div>
-                                                                      <div class="hashs border-top pt-1 pb-1">
-                                                                          <b class="mr-2">Category:</b>
-                                                                          @if ($data->categories)
-                                                                              <span
-                                                                                  class="tag mr-2 category-item">{{ $data->categories->name }}</span>
-                                                                          @else
-                                                                              <span class="tag mr-2 category-item">No
-                                                                                  Category</span>
-                                                                          @endif
-                                                                      </div>
-                                                                      <div class="hashs border-top pt-1 pb-1">
-                                                                          <b class="me-2">Cr Number :
-                                                                              {{ $data->cr_num }}</b>
-                                                                      </div>
-                                                                      <div class="hashs border-top pt-1 pb-1">
-                                                                          <b class="me-2">is vat:
-                                                                              {{ $data->is_vat ? 'Yes' : 'No' }}</b>
-                                                                      </div>
-                                                                      <div class="hashs border-top pt-1 pb-1">
-                                                                          <b class="me-2">assoiate to ad:
-                                                                              {{ $data->relation }} </b>
-                                                                      </div>
-                                                                      <div class="border-top pt-1 pb-1">
-                                                                          <b class="me-2">goal:</b> <span
-                                                                              class="me-2">{{ $data->campaignGoals->title }}</span>
-                                                                      </div>
-                                                                      <div class="border-top pt-1 pb-1">
-                                                                          <b class="me-2">On: </b> <span
-                                                                              class="me-2">
-                                                                              @foreach ($data->socialMedias as $item)
-                                                                                  <img src="{{ $item->image }}"
-                                                                                      class="rounded-circle social-media-icon" />
-                                                                              @endforeach
-                                                                          </span>
-                                                                      </div>
-                                                                      <div class="border-top pt-1 pb-1">
-                                                                          <b class="me-2">Link: <a
-                                                                                  target="_blank"
-                                                                                  href="{{ $data->store_link }}">Click
-                                                                                  Me!</a> </b><span class="me-2">
-                                                                          </span>
-                                                                      </div>
-                                                                      <div class="border-top pt-1 pb-1">
-                                                                          <b class="me-2">Status:
-                                                                              {{ $data->status }} </b><span
-                                                                              class="me-2">
-                                                                          </span>
-                                                                      </div>
-                                                                  </div>
-                                                              </div>
-                                                              <div class="">
-                                                                  <div class="container">
-                                                                      <div class="row">
-                                                                          <div class="col-lg-6 col-md-12 p-2">
-                                                                              <div class="count-box list">
-                                                                                  <span> <i class="bx bx-money"></i>
-                                                                                      Total Budget:</span>
-                                                                                  <span
-                                                                                      class="numbers">{{ $data->budget }}</span>
-                                                                              </div>
-                                                                          </div>
-                                                                          <div class="col-lg-6 col-md-12 p-2">
-                                                                              <div class="count-box list">
-                                                                                  <span> <i class="bx bx-user"></i>
-                                                                                      Influncer:</span>
-                                                                                  <span
-                                                                                      class="numbers">{{ count($matches) }}</span>
-                                                                              </div>
-                                                                          </div>
-                                                                      </div>
-                                                                  </div>
-                                                              </div>
-                                                          </div>
-                                                      </div>
-
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <div class="w-100 d-flex justify-content-center"></div>
-                                      </section>
-                                      @if ($data->status !== 'rejected')
-                                          <h3 class="sectionTitle">CONTENT</h3>
-                                          <section>
-                                              <div class="add-section contentSection">
-                                                  <div class="box-border">
-                                                      <div class="top-section">
-                                                          <div class="selected-items row">
-
-                                                          </div>
-                                                      </div>
-                                                      <div class="main-section d-flex justify-content-center p-2">
-                                                          <div class="card col">
-                                                              <form>
-                                                                  <div class="col p-4">
-                                                                      <div>
-                                                                          <h6 for="add_category">Add Influncers Requarment
-                                                                          </h6>
-                                                                          <div class="row p-4 add_space">
-                                                                              <div class="col">
-                                                                                  <label for="">Type</label>
-                                                                                  <select disabled class="form-control" id="ad_type">
-                                                                                        <option {{ $data->type == 'product' ? 'selected' : '' }} value="product" data-items="{{json_encode($productCategories)}}">Product</option>
-                                                                                        <option {{ $data->type == 'service' ? 'selected' : '' }} value="service" data-items="{{json_encode($serviceCategories)}}">Service</option>
-                                                                                  </select>
-                                                                              </div>
-                                                                              <div class="col">
-                                                                                  <label for="">Category</label>
-                                                                                  <select disabled class="form-control"
-                                                                                      id="ad_type">
-                                                                                  </select>
-                                                                              </div>
-                                                                              <div class="col">
-                                                                                  @if (!$data->campaignGoals->profitable)
-                                                                                      <div class="form-group">
-                                                                                          <label
-                                                                                              for="exampleFormControlSelect1">Engagement
-                                                                                              rate</label>
-                                                                                          <input disabled
-                                                                                              id="engagement_rate"
-                                                                                              class="form-control"
-                                                                                              type="number" value="0"
-                                                                                              min='0' max='100' />
-                                                                                      </div>
-                                                                                  @endif
-                                                                              </div>
-                                                                          </div>
-                                                                      </div>
-                                                                  </div>
-                                                                  <div class="col">
-                                                                        <div class="row p-4  align-items-center">
-                                                                            <h6 for="add_category">Videos</h6>
-                                                                            <button type="button" class="btn btn-info ml-2 open-choose-video">Add</button>
-                                                                            <input type="file" id="adVideo" />
-                                                                        </div>
-                                                                      <div id="videoSection" class="row video-section p-1">
-                                                                          @foreach ($data->videos as $key => $item)
-                                                                              <div class="col-3 h-25 mt-2">
-                                                                                  <div
-                                                                                      class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
-                                                                                      <a href="{{ $item->url }}"
-                                                                                          target="_blank"
-                                                                                          rel="noopener noreferrer">
-                                                                                          <img src="{{ asset('img/icons/misc/mp4.jpg') }}"
-                                                                                              width="40" />
-                                                                                      </a>
-                                                                                      <div class="ml-2">
-                                                                                          <h6 class="mb-0">Video
-                                                                                              #{{ $key + 1 }}</h6>
-                                                                                          <div class="about">
-                                                                                              <button
-                                                                                                  onclick="deleteFileModal( {{ $item->id }})"
-                                                                                                  type="button"
-                                                                                                  class="deleteButton"><span
-                                                                                                      class="small">Delete</span></button>
-                                                                                          </div>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </div>
-                                                                          @endforeach
-
-                                                                      </div>
-                                                                  </div>
-                                                                  <div class="col">
-                                                                      <div class="row p-4  align-items-center">
-                                                                          <h6 for="add_category">Images</h6>
-                                                                          <button type="button" onclick="addVideoModal(1)"
-                                                                              class="btn btn-info ml-2">Add</button>
-                                                                      </div>
-                                                                      <div id="imageSection" class="row video-section p-1">
-                                                                          @foreach ($data->image as $key => $item)
-                                                                              <div class="col-3 h-25 mt-2">
-                                                                                  <div
-                                                                                      class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
-                                                                                      <a href="{{ $item->url }}"
-                                                                                          target="_blank"
-                                                                                          rel="noopener noreferrer">
-                                                                                          <img src="{{ asset('img/icons/misc/img.png') }}"
-                                                                                              width="40" />
-
-                                                                                      </a>
-                                                                                      <div class="ml-2">
-                                                                                          <h6 class="mb-0">Image
-                                                                                              #{{ $key + 1 }}</h6>
-                                                                                          <div class="about">
-                                                                                              <button
-                                                                                                  onclick="deleteFileModal( {{ $item->id }})"
-                                                                                                  type="button"
-                                                                                                  class="deleteButton"><span
-                                                                                                      class="small">Delete</span></button>
-                                                                                          </div>
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </div>
-                                                                          @endforeach
-                                                                      </div>
-                                                                  </div>
-                                                              </form>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                          </section>
-                                          <h3 class="sectionTitle">Influencers</h3>
-                                          <section>
-                                              <div class="live-section">
-                                                  <div class="blocks-table d-block">
-                                                      <table class="table zero-configuration table-influencers col-12">
-                                                          <thead>
-                                                              <tr>
-                                                                  <th>Image</th>
-                                                                  <th>Full name</th>
-                                                                  <th>Match</th>
-                                                                  <th>Chosen</th>
-                                                                  <th>Status</th>
-                                                                  <th>Ad Status</th>
-                                                                  <th>Accepted</th>
-                                                                  <th>Action</th>
-                                                              </tr>
-                                                          </thead>
-                                                          <tbody id="table-body">
-                                                              @foreach ($matches as $item)
-                                                                  <tr>
-                                                                      <td>
-
-                                                                          <div class="thumb">
-                                                                              <img class="img-fluid inf-image"
-                                                                                  src="{{ $item->influencers->users->infulncerImage ? $item->influencers->users->infulncerImage['url'] : null }}"
-                                                                                  alt="">
-                                                                          </div>
-                                                                      </td>
-
-                                                                      <td>{{ $item->influencers->first_name }}
-                                                                          {{ $item->influencers->middle_name }}
-                                                                          {{ $item->influencers->last_name }}</td>
-                                                                      <td>{{ $item->match }}%</td>
-                                                                      <td>{{ $item->chosen ? 'Yes' : 'No' }}</td>
-                                                                      <td>{{ $item->status }}</td>
-                                                                      <td>{{ $item->contract ? ($item->contract->status ? 'Completed' : 'In Progress') : 'No Data' }}
-                                                                      </td>
-                                                                      <td>
-                                                                          @if ($item->influencers->checkIfAccepted($data->id) == 1)
-                                                                              Yes
-                                                                          @elseif($item->influencers->checkIfAccepted($data->id) == 2)
-                                                                              No Contract avalibale
-                                                                          @else
-                                                                              No
-                                                                          @endif
-                                                                      </td>
-                                                                      <td>
-
-                                                                          @if ($data->status == 'approve' || $data->status == 'fullpayment')
-                                                                              @if ($item->influencers->checkIfAccepted($data->id) == 1 && $item->contract->status == 1 && $item->contract->admin_status != 1)
-                                                                                  <button type="button"
-                                                                                      onclick="reject_data_inf('{{ $item->contract->id }}')"
-                                                                                      class="btn btn-danger">
-                                                                                      Reject
-                                                                                  </button>
-                                                                                  <button type="button"
-                                                                                      onclick="accept_data_inf('{{ $item->contract->id }}')"
-                                                                                      class="btn btn-success">
-                                                                                      Accept
-                                                                                  </button>
-                                                                              @elseif($item->contract && $item->contract->admin_status == 1)
-                                                                                  <button type="button"
-                                                                                      class="btn btn-info">
-                                                                                      Ad is Complted
-                                                                                  </button>
-                                                                              @else
-                                                                                  <button
-                                                                                      {{ $item->influencers->checkIfAccepted($data->id) == 1 ? 'disabled' : '' }}
-                                                                                      type="button"
-                                                                                      onclick="seeContract('{{ $data->contacts->content }}','{{ $item->influencers->id }}')"
-                                                                                      class="btn btn-secondary">
-                                                                                      <i class="bx bx-send "></i>
-                                                                                  </button>
-                                                                              @endif
-                                                                          @endif
-                                                                          @if ($item->contract && $item->contract->admin_status != 1)
-                                                                              <button type="button"
-                                                                                  onclick="getUnchosenInfulncers('{{ $item->influencers->id }}')"
-                                                                                  class="btn btn-secondary">
-                                                                                  <i class="bx bx-transfer"></i>
-                                                                              </button>
-                                                                          @endif
-                                                                      </td>
-                                                                  </tr>
-                                                              @endforeach
-                                                          </tbody>
-                                                      </table>
-                                                  </div>
-                                              </div>
-                                          </section>
-                                      @endif
-                                  </div>
-
-                            @endif
+                                    </div>
+                                </section>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -650,63 +61,6 @@
                   </div>
               </div>
 
-              <div id="inf" class="modal" tabindex="-1" role="dialog">
-                  <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                              <h5 class="modal-title">Matched Inulncers</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                              </button>
-                          </div>
-                          <div class="modal-body">
-                              <div class="col">
-                                  <div class="user-dashboard-info-box table-responsive mb-0 bg-white  shadow-sm">
-                                      <table class="table manage-candidates-top mb-0">
-
-                                          <tbody>
-                                              @foreach ($matches as $item)
-                                                  <tr class="candidates-list bg-dnager">
-                                                      <td class="title">
-                                                          <div class="thumb">
-                                                          </div>
-                                                          <div class="candidate-list-details">
-                                                              <div class="candidate-list-info">
-                                                                  <div class="candidate-list-title">
-                                                                      <h5 class="mb-0">
-                                                                          {{ $item->influencers->full_name }}</h5>
-                                                                      <span
-                                                                          style="font-size:12px;">{{ $item->match }}%</span><br />
-                                                                  </div>
-                                                              </div>
-
-                                                          </div>
-                                                          <div class="col">
-                                                              <button style="background:none; border:none;"
-                                                                  onclick=" ('{{ $item->influencers->users->id }}')"
-                                                                  class="float-right" href="http://" target="_blank"
-                                                                  rel="noopener noreferrer">
-                                                                  <h5><i class="bx bx-edit"></i></h5>
-                                                              </button>
-                                                          </div>
-                                                      </td>
-                                                  </tr>
-                                              @endforeach
-                                          </tbody>
-                                      </table>
-                                  </div>
-                              </div>
-
-
-
-                          </div>
-                          <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-
               <div id="unchosen_inf" class="modal" tabindex="-1" role="dialog">
                   <div class="modal-dialog" role="document">
                       <div class="modal-content">
@@ -719,44 +73,7 @@
                           <div class="modal-body">
                               <div class="col">
                                   <div class="user-dashboard-info-box table-responsive mb-0 bg-white  shadow-sm">
-                                      <table class="table manage-candidates-top mb-0">
-
-                                          <tbody>
-                                              @foreach ($unMatched as $item)
-                                                  <tr class="candidates-list bg-dnager">
-                                                      <td class="title">
-                                                          <div class="thumb">
-
-                                                              <img class="img-fluid"
-                                                                  src="{{ $item->influencers->users->infulncerImage ? $item->influencers->users->infulncerImage['url'] : null }}"
-                                                                  alt="">
-                                                          </div>
-                                                          <div class="candidate-list-details">
-                                                              <div class="candidate-list-info">
-                                                                  <div class="candidate-list-title">
-                                                                      <h5 class="mb-0">
-                                                                          {{ $item->influencers->first_name }}
-                                                                          {{ $item->influencers->middle_name }}
-                                                                          {{ $item->influencers->last_name }}</h5>
-                                                                      <span
-                                                                          style="font-size:12px;">{{ $item->match }}%</span><br />
-                                                                  </div>
-                                                              </div>
-
-                                                          </div>
-                                                          <div class="col">
-                                                              <button style="background:none; border:none;"
-                                                                  onclick="replaceInfluncer('{{ $item->influencers->id }}',)"
-                                                                  class="float-right" href="http://" target="_blank"
-                                                                  rel="noopener noreferrer">
-                                                                  <h5>chose</i></h5>
-                                                              </button>
-                                                          </div>
-                                                      </td>
-                                                  </tr>
-                                              @endforeach
-                                          </tbody>
-                                      </table>
+                                      
                                   </div>
                               </div>
 
@@ -849,47 +166,12 @@
                   </div>
             </div>
 
-            <div id="loading" class="modal" tabindex="-1" role="dialog">
-                  <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                              <div class="spinner-grow text-primary" role="status">
-                                  <span class="sr-only">Loading...</span>
-                              </div>
-                              <div class="spinner-grow text-secondary" role="status">
-                                  <span class="sr-only">Loading...</span>
-                              </div>
-                              <div class="spinner-grow text-success" role="status">
-                                  <span class="sr-only">Loading...</span>
-                              </div>
-                              <div class="spinner-grow text-danger" role="status">
-                                  <span class="sr-only">Loading...</span>
-                              </div>
-                              <div class="spinner-grow text-warning" role="status">
-                                  <span class="sr-only">Loading...</span>
-                              </div>
-                              <div class="spinner-grow text-info" role="status">
-                                  <span class="sr-only">Loading...</span>
-                              </div>
-                              <div class="spinner-grow text-light" role="status">
-                                  <span class="sr-only">Loading...</span>
-                              </div>
-                              <div class="spinner-grow text-dark" role="status">
-                                  <span class="sr-only">Loading...</span>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-            </div>
         </section>
     </div>
 @endsection
 
 @section('scripts')
-    @if ($data->status == 'pending' || $data->status == 'choosing_influencer')
-        <script src="{{ asset('main2/js/jquery.steps.min.js') }}" type="text/javascript"></script>
-    @endif
+<script src="{{ asset('main2/js/jquery.steps.min.js') }}" type="text/javascript"></script>
     <script>
 
         $(function(){
@@ -910,13 +192,14 @@
             });
 
             $('#adVideo,#addImage').on('change',function(){
+                var $this = $(this);
                 var itemId = $(this).attr('id');
                 let video = document.getElementById(itemId).files[0];
                 let formData = new FormData();
                 formData.append('file', video)
-                let url = '{{ route('dashboard.ads.uploadVideo', ':id') }}';
-                if (fileType) url = '{{ route('dashboard.ads.uploadImage', ':id') }}';
+                let url = itemId == 'addImage' ? '{{ route('dashboard.ads.uploadImage', ':id') }}' : '{{ route('dashboard.ads.uploadVideo', ':id') }}';
                 let addIdToURL = url.replace(':id', '{{ $data->id }}');
+                $(this).prev().attr('disabled',true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Add..')
                 $.ajax({
                     url: addIdToURL,
                     type: 'POST',
@@ -924,7 +207,7 @@
                     processData: false,
                     data: formData,
                     success: (res) => {
-                            if (res.status == 200) {
+                        if (res.status == 200) {
                             if (res.data.added_video) {
                                 $('#videoSection').append(`
                                     <div class="col-3 h-25 mt-2">
@@ -964,6 +247,7 @@
                                 title: 'server response :' + res.msg
                             });
                         }
+                        $this.prev().attr('disabled',false).html('Add');
                     },
                     error: (res) => {
                         let msg = res.responseJSON.err;
@@ -972,7 +256,8 @@
                         Toast.fire({
                             icon: 'error',
                             title: msg
-                        })
+                        });
+                        $this.prev().attr('disabled',false).html('Add');
 
                     }
                 });
@@ -989,7 +274,6 @@
         if (countMatches > 0) {
             userCurrentStep = 2
         }
-        @if ($data->status == 'pending' || $data->status == 'choosing_influencer')
 
             var steps = $("#wizard-basic").steps({
                 headerTag: "h3",
@@ -1006,9 +290,7 @@
                     $('.actions ul li:nth-child(2)').hide();
                 },
                 onFinishing: function() {
-                    isConfirm = true;
-                    sendStatusRequest('Confirm');
-                    window.location.reload();
+                    sendStatusRequest('approve');
                 },
                 onStepChanging: function(event, currentIndex, nextIndex) {
                     if (nextIndex == 2) {
@@ -1019,7 +301,6 @@
                             alert('please add correct amout of rate')
                             return false;
                         }
-                        isConfirm = false;
                         sendStatusRequest();
                     }
 
@@ -1033,7 +314,7 @@
                     return true;
                 }
             });
-        @endif
+
 
         $('#addressSection').hide();
         let ad_id = '{{ $data->id }}';
@@ -1083,85 +364,48 @@
 
 
           function sendStatusRequest(status = null) {
+                status = status || false;
 
-              if (status == 'rejected') {
-                  $('#rejectedReson').modal('toggle');
-                  return;
-              }
-              $('#loading').modal({
-                  keyboard: false,
-                  backdrop: 'static'
+                if (status == 'rejected') {
+                    $('#rejectedReson').modal('toggle');
+                    return;
+                }
+                $('[href="#next"]').attr('disabled',true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Next..')
 
-              });
-
-              if (status == 'Confirm') {
-
-                  let localData = JSON.parse(localStorage.getItem('rateData'));
-                  localData.splice(ad_id, 1);
-                  localStorage.setItem('rateData', JSON.stringify(localData));
-                  isConfirm = true;
-              }
-
-              // SAVE DATA TO LOCAL
-              let localData = localStorage.getItem('rateData');
-
-              // IF THE LOCAL STORAGE HAVE DATA GET IT AND MAKE IT AN ARRAY
-              if (localData && status != 'Confirm') {
-                  localData = JSON.parse(localStorage.getItem('rateData'))
-                  localData[ad_id] = document.getElementById('engagement_rate') ? document.getElementById('engagement_rate')
-                      .value : 0;
-                  localStorage.setItem('rateData', JSON.stringify(localData));
-              } else {
-                  let array = [];
-                  array[ad_id] = document.getElementById('engagement_rate') ? document.getElementById('engagement_rate')
-                      .value : 0;
-                  localStorage.setItem('rateData', JSON.stringify(array));
-              };
-
-              let rate = '{{ $data->campaignGoals->profitable }}';
-              let url = '{{ route('dashboard.ads.update', ':id') }}';
-              let fullUrl = url.replace(':id', '{{ $data->id }}');
-              let initValue = document.getElementById('engagement_rate') ? document.getElementById('engagement_rate').value :
-                  0;
-              if ((rate && initValue > 100) || (rate && initValue < 0)) {
-                  return alert('please add correct amout of rate')
-              }
-              if (isConfirm) {
-                  url = '{{ route('dashboard.ads.update', [':id', ':confirm']) }}';
-                  urlWithId = url.replace(':id', '{{ $data->id }}');
-                  fullUrl = urlWithId.replace(':confirm', 1);
-              }
-              status = 'approve';
-              if (document.getElementById('rejectedNote').value) {
-                  status = 'rejected';
-              }
-
-              $.ajax({
-                  url: fullUrl,
-                  type: 'POST',
-                  data: {
-                      status: status,
-                      note: document.getElementById('rejectedNote').value,
-                      category_id: document.getElementById('category_id').value,
-                      engagement_rate: initValue,
-                      change: notChange,
-                      onSite: '{{ $data->onSite }}',
-                      adBudget: '{{ $data->budget }}',
-                      _token: '{{ csrf_token() }}'
-                  },
-                  success: (res) => {
-                      let url = '{{ route('dashboard.ads.index') }}'
-                      location.reload();
-                  },
-                  error: (err) => {
-                      console.log("updateding error: ", err);
-                      alert('something wrong with updateing the ad');
-                  }
-              })
-          }
-
-          function openModel() {
-              $('#inf').modal('toggle');
+                let rate = '{{ $data->campaignGoals->profitable }}';
+                let url = '{{ route('dashboard.ads.update', ':id') }}';
+                let fullUrl = url.replace(':id', '{{ $data->id }}');
+                let initValue = document.getElementById('engagement_rate') ? document.getElementById('engagement_rate').value : 0;
+                if ((rate && initValue > 100) || (rate && initValue < 0)) {
+                    return alert('please add correct amout of rate')
+                }
+                if (status == 'approve') {
+                    url = '{{ route('dashboard.ads.update', [':id', ':confirm']) }}';
+                    urlWithId = url.replace(':id', '{{ $data->id }}');
+                    fullUrl = urlWithId.replace(':confirm', 1);
+                }
+               
+                $.ajax({
+                    url: fullUrl,
+                    type: 'POST',
+                    data: {
+                        status: status,
+                        note: document.getElementById('rejectedNote').value,
+                        category_id: document.getElementById('ad-category').value,
+                        engagement_rate: initValue,
+                        change: notChange,
+                        onSite: '{{ $data->onSite }}',
+                        adBudget: '{{ $data->budget }}',
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: (res) => {
+                        $('.influencer-data').html(res.data);
+                    },
+                    error: (err) => {
+                        console.log("updateding error: ", err);
+                        alert('something wrong with updateing the ad');
+                    }
+                })
           }
 
 
