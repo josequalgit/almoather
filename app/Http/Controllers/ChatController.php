@@ -36,6 +36,7 @@ class ChatController extends Controller
         ->orWhere([['sender_id',$user_id],['type','support','updated_at']])->get()->map(function($item){
             return [
                 'text' => $item->text,
+                'contentType' => $item->contentType,
                 'sender_id' => $item->sender_id,
                 'receiver_id' => $item->receiver_id,
                 'time' => $item->created_at->format('Y-m-d h:i')

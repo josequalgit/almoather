@@ -624,6 +624,21 @@ class AdController extends Controller
                         'budget'=>$isOnSite?$item->influencers->ad_onsite_price:$item->influencers->ad_price,
                     ];
 
+                    $response['ROAS'] = null;
+                    $response['engagement_rate'] = null;
+                    $response['aoaf'] = null;
+                    
+                    if($isProfitable)
+                    {
+                        $response['ROAS'] = $item->match;
+                    }
+                    else
+                    {
+                        $response['engagement_rate'] = $item->match;
+                        $response['AOAF'] = $item->AOAF;
+                    }
+        
+
                     return $response;
                 })
             ],

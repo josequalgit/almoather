@@ -162,6 +162,7 @@
 <script src="{{asset('main2/js/scripts/pages/app-chat.js')}}"></script>
 <script>
     let token = '{{csrf_token()}}';
+    let fileIcon = '{{ asset("img/icons/misc/downloadFile2.png") }}'
 
     let current_user_id = '{{ auth()->user()->id }}';
     let senToUser = 0;
@@ -198,18 +199,19 @@
                         if(element.sender_id == current_user_id){
                             let senderDiv = null
                             console.log(element)
-                            if(element.contentType = 'file')
+                            if(element.contentType == 'file')
                             {
                                 senderDiv  = `<div class="chat">
                                                 <div class="chat-avatar">
                                                     <a class="avatar m-0">
-                                                    <img src="${adminAvatar}" alt="avatar" height="36" width="36" />
+                                                    <img class='downloadFilesMessages' src="${adminAvatar}" alt="avatar" height="36" width="36" />
                                                     </a>
                                                 </div>
                                                 <div class="chat-body">
                                                 <div class="chat-message">
-                                                    
-                                                    <a href="${element.text}" download class='btn btn-primary'>Download</a>
+                                                    <a href="${element.text}" download>
+                                                        <img class='downloadFilesMessages' src='${fileIcon}' />
+                                                    </a>
                                                 </div>
                                                 </div>
                                             </div>`;
@@ -230,9 +232,7 @@
                                                 </div>
                                             </div>`;
                             }
-
-                         
-                            
+ 
                            $("#chat_messages").append(senderDiv);
                            
                         }else{
@@ -293,33 +293,60 @@
             chatMessageSend.val("");
             var objDiv = document.getElementById("chat_messages");
             chatContainer.find('.chat-content').animate({ scrollTop: objDiv.scrollHeight }, 400);
-            
+            console.log("source: ",source);
             socket.emit(channel, {
                 message: source?source:message,
                 sender_id: 1,
                 receiver_id: senToUser,
                 time: time,
-                contentType:source?'file':'message'
+                contentType:source == undefined?'text':'file'
             });
         }
     }
 
     function setMessageData(data,left = false){
+        console.log('data: ',data)
+        let message = null;
+        if(data.contentType == "text")
+        {
+            message = `<div class="chat ${ left ? 'chat-left' : '' }">
+                                <div class="chat-avatar">
+                                    <a class="avatar m-0">
+                                    <img src="${data.image}" alt="avatar" height="36" width="36" />
+                                    </a>
+                                </div>
+                                <div class="chat-body">
+                                <div class="chat-message">
+                                    <p>${data.message}</p>
+                                        <span class="chat-time">${data.time}</span>
+                                </div>
+                                </div>
+                            </div>`;
+        }
+        else
+        {
+           
+            message = `<div class="chat">
+                                                    <div class="chat-avatar">
+                                                        <a class="avatar m-0">
+                                                        <img src="${data.image}" alt="avatar" height="36" width="36" />
+                                                        </a>
+                                                    </div>
+                                                    <div class="chat-body">
+                                                    <div class="chat-message">
+                                                        
+                                                        <a href="${data.message}" download>
+                                                        <img class='downloadFilesMessages' src='${fileIcon}' />
+                                                    </a>
+                                                    </div>
+                                                    </div>
+                                                </div>`;
 
-        let html = `<div class="chat ${ left ? 'chat-left' : '' }">
-                            <div class="chat-avatar">
-                                <a class="avatar m-0">
-                                <img src="${data.image}" alt="avatar" height="36" width="36" />
-                                </a>
-                            </div>
-                            <div class="chat-body">
-                            <div class="chat-message">
-                                <p>${data.message}</p>
-                                    <span class="chat-time">${data.time}</span>
-                            </div>
-                            </div>
-                        </div>`;
-        $("#chat_messages").append(html);
+        }
+
+
+
+        $("#chat_messages").append(message);
         chatContainer.animate({ scrollTop: chatContainer[0].scrollHeight }, 400);
     }
 
@@ -388,6 +415,10 @@
             success: function (data) {
                 console.log('success: ',data)
                 chatMessagesSend(data);
+                $('#uploadFileModal').modal('toggle');
+              //  document.getElementById('fileChat').src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Octicons-cloud-upload.svg/1200px-Octicons-cloud-upload.svg.png';
+                document.getElementById('chatFile').value = '';
+
             },
             error: function (error) {
                 console.log('error: ',error)

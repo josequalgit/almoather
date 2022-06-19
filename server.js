@@ -73,13 +73,13 @@ io.on("connect", (socket) => {
         console.log('event2: ' + event);
         if (event.includes('support') || event.includes('user-')) {
             var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
-
+            console.log(data.contentType)
             let messageData = {
                 text: data.message,
                 sender_id: data.sender_id,
                 receiver_id: data.receiver_id,
                 type: event.includes('support') ? 'support' : 'app',
-                contentType: data.contentType || 'message',
+                contentType: data.contentType || 'text',
                 created_at: CURRENT_TIMESTAMP,
                 updated_at: CURRENT_TIMESTAMP,
             };
