@@ -36,7 +36,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if ($data->status == 'approve' || $data->status == 'fullpayment')
+                                @if ($data->status == 'choosing_influencer')
                                     <button {{ $item->influencers->checkIfAccepted($data->id) == 1 ? 'disabled' : '' }} type="button" onclick="seeContract('{{ $data->contacts->content }}','{{ $item->influencers->id }}')" class="btn btn-secondary">
                                         <i class="bx bx-send "></i>
                                     </button>

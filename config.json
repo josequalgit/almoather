@@ -5,9 +5,9 @@
     },
     "db": {
         "host": "localhost",
-        "user": "almuaathir",
-        "password": "%L0wri53",
-        "database": "almuaathir"
+        "user": "root",
+        "password": "",
+        "database": "moather"
     },
     "redis": {
         "url": "127.0.0.1:8000",
