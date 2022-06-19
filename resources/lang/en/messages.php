@@ -124,6 +124,7 @@ return [
         "data_was_update"=>"data was update",
         "bank_not_found"=>"bank not found",
         "please_add_file"=>"Please add a file",
+        "all_relation"=>'All Relations',
         'status_response_label'=>[
             "pending"=>"Under review",
             "approve"=>"Waiting for first payment",

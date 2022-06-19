@@ -26,6 +26,7 @@ use App\Http\Controllers\ReasonsController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RegionController;
+use App\Http\Controllers\AdRelationsController;
 
 Route::group(['middleware' => 'language'],function(){
     Route::redirect('/','/dashboard/admins')->name('home');
@@ -335,6 +336,16 @@ Route::group(['middleware' => 'language'],function(){
             Route::get('/','index')->name('index');
             Route::post('/store','store')->name('store');
             Route::get('/delete/{id}','delete')->name('delete');
+        });
+
+        Route::controller(AdRelationsController::class)
+        ->middleware('role_or_permission:superAdmin|Edit AdRelation|Update AdRelation|Show AdRelation|Create AdRelation')
+        ->prefix('adRelation')
+        ->name('adRelations.')
+        ->group(function(){
+            Route::get('/','index')->name('index');
+            Route::post('/update/{id?}','update')->name('update');
+            Route::post('/delete/{id}','delete')->name('delete');
         });
 
         Route::controller(RegionController::class)

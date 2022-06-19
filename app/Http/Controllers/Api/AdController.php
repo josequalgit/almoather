@@ -1619,5 +1619,38 @@ class AdController extends Controller
         ],200);
     }
 
+    public function get_ads_relation()
+    {
+      // FIND THE RIGHT SETTING TO UPDATED
+      $settings = AppSetting::where('key','ads_relation')->first();
+
+      // IF IT DOSE'T EXIST RETURN AN ERROR MESSAGE
+      if(!$settings)
+      {
+          $settings = AppSetting::create([
+              'key'=>'ads_relation',
+              'value'=>json_encode(array())
+          ]);
+      };
+      
+       // IF THE SETTING EXIST MAKE THE STRING VALUE TO ARRAY
+       $relation_array = (array)json_decode($settings->value);
+
+       return response()->json([
+        'msg'=>trans($this->trans_dir.'all_relation'),
+        'data'=>(array)$this->object_to_array_recursive($relation_array),
+        'status'=>config('global.OK_STATUS')
+    ],config('global.OK_STATUS'));
+    }
+
+    private function object_to_array_recursive($object, $assoc=TRUE, $empty='')
+    {
+        $array = [];
+        foreach ($object as $obj) {
+            array_push($array,$obj->{app()->getLocale()});
+         }
+        return $array;
+    }
+    
     
 }
