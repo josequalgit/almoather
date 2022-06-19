@@ -338,6 +338,11 @@ class Ad extends Model implements HasMedia
     {
         return strpos($this->attributes['store_link'], "http") ? $this->attributes['store_link'] : 'https://' . $this->attributes['store_link'];
     }
+
+    public function AdSocialMediaAccounts()
+    {
+        return $this->belongsToMany(SocialMedia::class,'social_media_id','ad_id','social_media_id')->withPivot('link');
+    }
    
 
 }

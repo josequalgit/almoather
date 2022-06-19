@@ -16,7 +16,6 @@ trait AdResponse {
           return $this->userDataResponse([],null,$item->users->id);
         }):null;
 
-		
       $basicResponse =  [
             'id'=>$ad->id,
             'image'=>$ad->image,
@@ -37,30 +36,31 @@ trait AdResponse {
                 'url'=>$item->image
               ];
             }),
-              'media_accounts'=>$ad->socialMediasAccount()->get()->map(function($item){
+              'media_accounts'=>$ad->AdSocialMediaAccounts->map(function($item){
+        
                 $link = '';
-                switch($item->social_media_id){
+                switch($item->id){
                   case 1:
-                    $link = 'https://facebook.com/' . $item->link;
+                    $link = 'https://facebook.com/' . $item->pivot->link;
                     break;
                   case 2:
-                    $link = 'https://twitter.com/' . $item->link;
+                    $link = 'https://twitter.com/' . $item->pivot->link;
                     break;
                   case 3:
-                    $link = 'https://instagram.com/' . $item->link;
+                    $link = 'https://instagram.com/' . $item->pivot->link;
                     break;
                   case 4:
-                    $link = 'https://snapchat.com/' . $item->link;
+                    $link = 'https://snapchat.com/' . $item->pivot->link;
                     break;
                   case 5:
-                    $link = 'https://youtube.com/' . $item->link;
+                    $link = 'https://youtube.com/' . $item->pivot->link;
                     break;
                   case 6:
-                    $link = 'https://tiktok.com/' . $item->link;
+                    $link = 'https://tiktok.com/' . $item->pivot->link;
                     break;
                 }
                 return [
-                  'id'=>$item->id,
+                  'id'=>$item->id	,
                   'image'=>$item->image,
                   'link' => $link
                 ];
