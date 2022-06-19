@@ -67,7 +67,8 @@ class Influncer extends Model implements HasMedia
         'verify',
         'commercialFiles',
         'taxFiles',
-        'full_name'
+        'full_name',
+        'isBigInfluencer'
     ];
 
     public function users()
@@ -99,10 +100,6 @@ class Influncer extends Model implements HasMedia
         return $this->hasMany(Ad::class,'influncer_id');
     }
 
-    // public function contracts()
-    // {
-    //     return $this->hasMany(Contract::class,'influencer_id');
-    // }
     public function contracts()
     {
         return $this->hasMany(InfluencerContract::class,'influencer_id');
@@ -235,6 +232,10 @@ class Influncer extends Model implements HasMedia
     public function getFullNameAttribute()
     {
         return $this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name;
+    }
+
+    function getIsBigInfluencerAttribute() {
+        return $this->subscribers >= 500000;
     }
 
 

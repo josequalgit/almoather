@@ -76,15 +76,15 @@
                                 <h6>Location</h6>
                                 <div class="border-top pt-1 pb-1">
                                     <b class="me-2">Country:</b> <span
-                                        class="me-2">{{ $data->countries->name }}</span>
+                                        class="me-2">{{ $data->countries ? $data->countries->name : '' }}</span>
                                 </div>
                                 <div class="pt-1 pb-1">
                                     <b class="me-2">City:</b> <span
-                                        class="me-2">{{ $data->cities->name }}</span>
+                                        class="me-2">{{ $data->cities ? $data->cities->name : '' }}</span>
                                 </div>
                                 <div class="pt-1 pb-1">
                                     <b class="me-2">Area:</b> <span
-                                        class="me-2">{{ $data->areas->name }}</span>
+                                        class="me-2">{{ $data->areas ? $data->areas->name : '' }}</span>
                                 </div>
                                 <div class="border-top pt-1 pb-1">
                                     <b class="me-2">On: </b> <span class="me-2">

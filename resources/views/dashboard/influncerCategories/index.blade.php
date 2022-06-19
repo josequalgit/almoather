@@ -59,10 +59,11 @@
                                         </table>
                                     @endcan
                                 </div>
+                                @can('See Category')
+                                {{ $data->links('pagination::bootstrap-5') }}
+                                @endcan
                             </div>
-                            @can('See Influencer Category')
-                            {{ $data->links() }}
-                            @endcan
+                           
                         </div>
                     </div>
                 </div>

@@ -56,6 +56,7 @@ html body {
 
 body {
     color: #000;
+    font-family: "IBM Plex Sans","Tajawal", Helvetica, Arial, serif;
 }
 
 .text-muted {
@@ -837,7 +838,7 @@ footer.footer span i {
 /* Main Navigation */
 
 .navigation {
-    font-family: "Rubik", Helvetica, Arial, serif;
+    font-family: "Rubik","Tajawal", Helvetica, Arial, serif;
     overflow-y: hidden;
     padding-bottom: 20px;
 }

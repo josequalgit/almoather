@@ -27,7 +27,7 @@
                                     <div class="add-section">
                                         <div class="blocks-table d-block influencer-data">
                                             <div class="loader-wrapper">
-                                                <div class="spinner-border" role="status">
+                                                <div class="spinner-border spinner-info" role="status">
                                                     <span class="sr-only">Loading...</span>
                                                 </div>
                                             </div>
@@ -267,7 +267,7 @@
         let countMatches = '{{ count($matches) }}';
         let adStatus = '{{ $data->status }}';
         let isConfirm = false;
-       
+        let totalInfluencers = 0;
 
             var steps = $("#wizard-basic").steps({
                 headerTag: "h3",
@@ -284,7 +284,16 @@
                     $('.actions ul li:nth-child(2)').hide();
                 },
                 onFinishing: function() {
-                    sendStatusRequest('approve');
+                    if(totalInfluencers){
+                        sendStatusRequest('approve');
+                    }else{
+                        Swal.fire(
+                            '',
+                            'There is no influencers found for this campaign',
+                            'error'
+                        )
+                    }
+                    
                 },
                 onStepChanging: function(event, currentIndex, nextIndex) {
                     if (nextIndex == 2) {
@@ -364,13 +373,13 @@
                     $('#rejectedReson').modal('toggle');
                     return;
                 }
-                $('[href="#next"]').attr('disabled',true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Next..')
+                
 
                 let rate = '{{ $data->campaignGoals->profitable }}';
                 let url = '{{ route('dashboard.ads.update', ':id') }}';
                 let fullUrl = url.replace(':id', '{{ $data->id }}');
-                let initValue = document.getElementById('engagement_rate') ? document.getElementById('engagement_rate').value : 0;
-                if ((rate && initValue > 100) || (rate && initValue < 0)) {
+                let engRate = document.getElementById('eng_number') ? document.getElementById('eng_number').value : 0;
+                if ((rate && engRate > 100) || (rate && engRate < 0)) {
                     return alert('please add correct amout of rate')
                 }
                 if (status == 'approve') {
@@ -386,7 +395,7 @@
                         status: status,
                         note: document.getElementById('rejectedNote').value,
                         category_id: document.getElementById('ad-category').value,
-                        engagement_rate: initValue,
+                        engagement_rate: engRate,
                         change: notChange,
                         onSite: '{{ $data->onSite }}',
                         adBudget: '{{ $data->budget }}',
@@ -394,16 +403,30 @@
                         confirm:status == 'approve'?true:false
 
                     },
+                    beforeSend: () => {
+                        totalInfluencers = 0;
+                        $('.influencer-data').html(`<div class="blocks-table d-block influencer-data">
+                                            <div class="loader-wrapper">
+                                                <div class="spinner-border spinner-info" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                            </div>
+                                        </div>`);
+                        $('[href="#next"]').attr('disabled',true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Next..')
+                    },
                     success: (res) => {
                         if(status == 'approve')
                         {
                             location.reload()
                         }
+                        totalInfluencers = res.totalInfluencers;
                         $('.influencer-data').html(res.data);
+                        $('[href="#next"]').attr('disabled',false).html('Next');
                     },
                     error: (err) => {
                         console.log("updateding error: ", err);
                         alert('something wrong with updateing the ad');
+                        $('[href="#next"]').attr('disabled',false).html('Next');
                     }
                 })
           }
