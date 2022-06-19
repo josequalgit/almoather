@@ -8,6 +8,7 @@ use App\Models\InfluencerContract;
 
 trait AdResponse {
 
+  private $trans_dir = 'messages.api.';
 
     public function adResponse($ad)
     {
@@ -15,21 +16,17 @@ trait AdResponse {
           return $this->userDataResponse([],null,$item->users->id);
         }):null;
 
-		
       $basicResponse =  [
             'id'=>$ad->id,
             'image'=>$ad->image,
             'videos'=>$ad->videos,
             'cr_certificate'=>$ad->document,
             'cr_image'=>$ad->crImage,
-            'campaign_goal'=>[
+            'campaign_goal'=>$ad->campaignGoals?[
               'id'=>$ad->campaignGoals->id,
               'title'=>$ad->campaignGoals->title
-            ],
+            ]:null,
             'logo'=>$ad->logo,
-            // 'locations'=>$ad->storeLocation?$ad->storeLocations()->get()->map(function($item){
-            //   return $item->cities->name.','.$item->areas->name.','.$item->countries->name;
-            // }):null,
             'store_name'=>$ad->store,
             'marouf_num'=>$ad->marouf_num,
             'store_link'=>$ad->store_link,
@@ -39,13 +36,35 @@ trait AdResponse {
                 'url'=>$item->image
               ];
             }),
-              'media_accounts'=>$ad->socialMediasAccount()->get()->map(function($item){
-              return [
-                'id'=>$item->id,
-                'image'=>$item->image,
-              ];
+              'media_accounts'=>$ad->AdSocialMediaAccounts->map(function($item){
+        
+                $link = '';
+                switch($item->id){
+                  case 1:
+                    $link = 'https://facebook.com/' . $item->pivot->link;
+                    break;
+                  case 2:
+                    $link = 'https://twitter.com/' . $item->pivot->link;
+                    break;
+                  case 3:
+                    $link = 'https://instagram.com/' . $item->pivot->link;
+                    break;
+                  case 4:
+                    $link = 'https://snapchat.com/' . $item->pivot->link;
+                    break;
+                  case 5:
+                    $link = 'https://youtube.com/' . $item->pivot->link;
+                    break;
+                  case 6:
+                    $link = 'https://tiktok.com/' . $item->pivot->link;
+                    break;
+                }
+                return [
+                  'id'=>$item->id	,
+                  'image'=>$item->image,
+                  'link' => $link
+                ];
             }),
-            'media_accounts_with_link'=>$ad->socialMediaWithAccount(),
             'cr_num'=>$ad->cr_num,
             'about'=>$ad->about,
             'relation'=>$ad->relation,
@@ -59,18 +78,18 @@ trait AdResponse {
             // 'nearest_location'=>$ad->nearest_location,
             'website_link'=>$ad->website_link,
             'about_product'=>$ad->about_product,
-            'country'=>[
+            'country'=>$ad->countries?[
               'id'=>$ad->countries->id,
               'name'=>$ad->countries->name
-             ],
+             ]:null,
             'city'=>$ad->cities?[
               'id'=>$ad->cities->id,
               'name'=>$ad->cities->name
             ]:null,
-            'area'=>[
+            'area'=>$ad->areas?[
               'id'=>$ad->areas->id,
               'name'=>$ad->areas->name
-            ],
+            ]:null,
             'customer_id'=>$ad->customers->id,
             'isVat'=>$ad->is_vat,
             'discount_code'=>$ad->discount_code,
@@ -85,6 +104,12 @@ trait AdResponse {
       {
         $data =  Contract::select('content')->where([['customer_id',Auth::guard('api')->user()->customers->id],['ad_id',$ad->id]])->first();
         $basicResponse['contract'] = $data?$data->content:null;
+      }
+      if(Auth::guard('api')->user()->influncers)
+      {
+        $basicResponse['contract'] = InfluencerContract::select('id','content','date')->where(['influencer_id'=>Auth::guard('api')->user()->influncers->id])
+        ->where(['ad_id'=>$ad->id])
+        ->first();
       }
 
       if(Auth::guard('api')->user()->customers&&$ad->status !== 'pending'&&$ad->status !== 'approve'&&$ad->status !== 'prepay'&&$ad->status !== 'rejected')
@@ -135,8 +160,56 @@ trait AdResponse {
       
         $basicResponse['status']=$ad->status;
       }
+      else
+      {
+        $basicResponse['status']= $this->getStatusForInf($ad);
+      }
+      $basicResponse['messages']=[
+        'label_text'=>$this->getLabelTextResponse($ad->status),
+        'button_text'=>$this->getButtonTextResponse($ad->is_all_accepted()?'inf_list':$ad->status)
+      ];
 
-      
       return $basicResponse;
+    }
+
+    private function getLabelTextResponse($status)
+    {
+      $array = 
+      [
+        'pending'=>trans($this->trans_dir.'status_response_label.pending'),
+        'approve'=>trans($this->trans_dir.'status_response_label.approve'),
+        'choosing_influencer'=>trans($this->trans_dir.'status_response_label.choosing_influencer'),
+        'prepay'=>trans($this->trans_dir.'status_response_label.choosing_influencer'),
+        'fullpayment'=>trans($this->trans_dir.'status_response_label.choosing_influencer'),
+      ];
+
+      return $array[$status]??null;
+    }
+
+    private function getButtonTextResponse($status)
+    {
+      $array = 
+      [
+        'approve'=>trans($this->trans_dir.'status_response_button_text.approve'),
+        'inf_list'=>trans($this->trans_dir.'status_response_button_text.inf_list'),
+        'prepay'=>trans($this->trans_dir.'status_response_button_text.inf_list'),
+        'choosing_influencer'=>trans($this->trans_dir.'status_response_button_text.choosing_influencer'),
+      ];
+
+      return $array[$status]??null;
+    }
+
+    private function getStatusForInf($ad)
+    {
+      $contract = $ad->getInfAdContract(Auth::guard('api')->user()->influncers->id);
+      if(!$contract) return null;
+      if($contract->is_accepted  == 2) return 'Rejected';
+    
+      if($contract->is_accepted == 1) return 'Progress';
+      if($contract->is_accepted == 0 ) return 'Pending';
+      if($contract->status == 1&&$contract->status == 0 ) return 'waiting admin approve';
+      if($contract->is_accepted == 2 && $contract->admin_status == 1 ) return 'Completed';
+      return null;
+      
     }
 }

@@ -12,12 +12,14 @@ use Auth , DB;
 
 class NotificationController extends Controller
 {
+    private $trans_dir = 'messages.api.';
+
     public function index($type = null)
     {
         $user = Auth::guard('api')->user();
         $data = [];
         if(!$user) return response()->json([
-            'msg'=>'user is not found',
+            'msg'=>trans($this->trans_dir.'user_was_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
@@ -35,7 +37,7 @@ class NotificationController extends Controller
             }
             });
         return response()->json([
-            'msg'=>'user notification',
+            'msg'=>trans($this->trans_dir.'user_notification'),
             'data'=>$data,
             'type'=>$type,
             'status'=>config('global.OK_STATUS')
@@ -48,7 +50,7 @@ class NotificationController extends Controller
         $data = DB::table('notifications')->where('id',$id)->first();
 
         if(!$data)  return response()->json([
-             'err'=>'wrong notification id',
+             'err'=>trans($this->trans_dir.'wrong_notification_id'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
         $UpdateData = DB::table('notifications')->where('id',$id)->update([
@@ -63,18 +65,15 @@ class NotificationController extends Controller
             if(!$ad)
             {
                 return response()->json([
-                    'err'=>'the ad was not found',
+                    'err'=>trans($this->trans_dir.'ad_not_found'),
                     'status'=>config('global.NOT_FOUND_STATUS')
                 ],config('global.NOT_FOUND_STATUS'));
             }
             else
             {
                 $data->read_at = Carbon::now();
-                // $data->update([
-                //     'read_at'=>Carbon::now()
-                // ]);
                 return response()->json([
-                    'msg'=>'data was found',
+                    'msg'=>trans($this->trans_dir.'data_not_found'),
                     'type'=>'Ad',
                     'id'=>$ad->id
                 ],config('global.OK_STATUS'));
@@ -88,7 +87,7 @@ class NotificationController extends Controller
             if(!$user)
             {
                 return response()->json([
-                    'err'=>'user was not found',
+                    'err'=>trans($this->trans_dir.'user_not_found'),
                     'status'=>config('global.NOT_FOUND_STATUS')
                 ],config('global.NOT_FOUND_STATUS'));
             }
@@ -98,7 +97,7 @@ class NotificationController extends Controller
                 {
                    
                     return response()->json([
-                        'msg'=>'data was found',
+                        'msg'=>trans($this->trans_dir.'data_was_found'),
                        'data'=>[
                         'type'=>'Influencers',
                         'id'=>$user->influncers->id,
@@ -110,7 +109,7 @@ class NotificationController extends Controller
                 {
                    
                     return response()->json([
-                        'msg'=>'data was found',
+                        'msg'=>trans($this->trans_dir.'data_was_found'),
                         'data'=>[
                             'type'=>'Customer',
                         'id'=>$user->customers->id,

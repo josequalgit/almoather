@@ -3,71 +3,36 @@
 @section('content')
 
 <div class="app-content content">
-    <div class="content-overlay"></div>
     <div class="content-wrapper">
-        <div class="content-header row">
-            <div class="content-header-left col-12 mb-2 mt-1">
-                <div class="breadcrumbs-top">
-                    <h5 class="content-header-title float-left pr-1 mb-0">Tabs</h5>
-                    <div class="breadcrumb-wrapper d-none d-sm-block">
-                        <ol class="breadcrumb p-0 mb-0 pl-1">
-                            <li class="breadcrumb-item"><a href="index.html"><i class="bx bx-home-alt"></i></a>
-                            </li>
-                            <li class="breadcrumb-item"><a href="#">Dashboard</a>
-                            </li>
-                            <li class="breadcrumb-item active">Customer {{ $customer->first_name }}
-                            </li>
-                        </ol>
-                        {{-- @can('Create Influncer')
-                            <a href="{{ route('dashboard.customers.create') }}" class=" btn btn-primary float-right">Create</a>                            
-                        @endcan --}}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="content-body mt-5">
+        <div class="content-body">
             <!-- Basic tabs start -->
             @can('See Customer')
-            <div class="row">
-                <div class="col-12 col-sm-7">
-                    <div class="media mb-2">
-                        {{-- @php
-                            dd($customer->users->image['url']);
-                        @endphp --}}
-                        <a class="mr-1" href="javascript:void(0);">
-                            <img src="{{ $customer->users->image['url'] }}" alt="users view avatar" class="users-avatar-shadow rounded-circle" height="64" width="64">
-                        </a>
-                        <div class="media-body pt-25">
-                            <h4 class="media-heading"><span class="users-view-name">{{ $customer->first_name }} {{ $customer->last_name }}</h4>
-                            <span>Type:</span>
-                            <span class="users-view-id">Customer</span>
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="card-title" style="display: flex;justify-content: center;align-items: center;">
+                        <img src="{{ $customer->users->image['url'] }}" alt="users view avatar" class="users-avatar-shadow rounded-circle mr-2" height="64" width="64">
+                        <div>
+                            <p class="mb-0">{{ $customer->first_name }} {{ $customer->last_name }}</p>   
+                            <small class="text-muted mb-0">Customer</small>
                         </div>
                     </div>
+                    
+                    <div class="section-right">
+                        <div class="col-12 col-sm-5 px-0 d-flex justify-content-end align-items-center px-1 mb-2">
+                            <a href="{{ route('dashboard.customers.edit',$customer->id) }}" class="btn btn-primary">Edit</a>
+                        </div>
+                    </div>
+                    <hr class="w-100">
                 </div>
-                <div class="col-12 col-sm-5 px-0 d-flex justify-content-end align-items-center px-1 mb-2">
-                    {{-- <a href="javascript:void(0);" class="btn btn-sm mr-25 border"><i class="bx bx-envelope font-small-3"></i></a>
-                    <a href="javascript:void(0);" class="btn btn-sm mr-25 border">Profile</a> --}}
-                    <a href="{{ route('dashboard.customers.edit',$customer->id) }}" class="btn btn-sm btn-primary">Edit</a>
-                </div>
-            </div>
-            <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-md-4">
-                            <table class="table table-borderless">
+                            <table class="table zero-configuration">
                                 <tbody>
                                     <tr>
                                         <td>Registered:</td>
                                         <td>{{ $customer->created_at->isoFormat('D/M/Y') }}</td>
                                     </tr>
-                                    {{-- <tr>
-                                        <td>Latest Activity:</td>
-                                        <td class="users-view-latest-activity">30/04/2019</td>
-                                    </tr> --}}
-                                    {{-- <tr>
-                                        <td>Verified:</td>
-                                        <td class="users-view-verified">Yes</td>
-                                    </tr> --}}
                                     <tr>
                                         <td>Role:</td>
                                         <td class="users-view-role">Customer</td>
@@ -81,7 +46,7 @@
                         </div>
                         <div class="col-12 col-md-8">
                             <div class="table-responsive">
-                                <table class="table mb-0">
+                                <table class="table zero-configuration mb-0">
                                     <thead>
                                         <tr>
                                             <th>Type</th>
@@ -123,14 +88,12 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Ads</h4>
+                                <div class="card-title">
+                                    <p class="mb-0">Ads</p>   
+                                    <small class="text-muted mb-0">There are {{ $counter }} Ads</small>
+                                </div>
                             </div>
                             <div class="card-body card-dashboard">
-                                @can('See Customer')
-                                 <p class="card-text">
-                                    There is {{ $counter }} Ad/'s
-                                </p>
-                                @endcan
                                 <div class="table-responsive">
                                     @can('See Customer')
                                     <table class="table zero-configuration">

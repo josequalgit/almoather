@@ -27,6 +27,7 @@ class InfluncerCategoryController extends Controller
 
     public function store(InfluncerCategoryRequest $request)
     {
+
         $addTranslate = [
             'name'=>[
                 'ar'=>$request->name_ar,
@@ -34,9 +35,13 @@ class InfluncerCategoryController extends Controller
             ],
             'type'=>$request->type,
         ];
-       $data =  InfluncerCategory::create($addTranslate);
-       $data->addMedia($request->file('image'))
-       ->toMediaCollection('influncerCategories');
+        
+        $data =  InfluncerCategory::create($addTranslate);
+        
+        if($request->hasFile('image')){
+            $data->addMedia($request->file('image'))->toMediaCollection('influncerCategories');
+        }
+       
         activity()->log('Admin "'.Auth::user()->name.'" Added "'. $data->name .'" Influncer Category');
         Alert::toast('Influncer Category was added', 'success');
 
@@ -46,14 +51,23 @@ class InfluncerCategoryController extends Controller
     public function update(InfluncerCategoryRequest $request,$id)
     {
         $data = InfluncerCategory::find($id);
-        $data->update($request->all());   
+
+        $addTranslate = [
+            'name'=>[
+                'ar'=>$request->name_ar,
+                'en'=>$request->name_en,
+            ],
+            'type'=>$request->type,
+        ];
+
+        $data->update($addTranslate);   
+       
         if($request->hasFile('image'))
         {
-            $data
-            ->clearMediaCollection('influncerCategories')
-            ->addMedia($request->file('image'))
-            ->toMediaCollection('influncerCategories');
-        }        
+            $data->clearMediaCollection('influncerCategories')
+            ->addMedia($request->file('image'))->toMediaCollection('influncerCategories');
+        }
+
         activity()->log('Admin "'.Auth::user()->name.'" update "'. $data->name .'" Influncer Category');
         Alert::toast('Influncer Category was updated', 'success');
         return redirect()->route('dashboard.influencerCategories.index');

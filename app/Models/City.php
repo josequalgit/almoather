@@ -4,16 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Translatable\HasTranslations;
 
 class City extends Model
 {
-    use HasFactory;
+    use HasFactory ,SoftDeletes,HasTranslations;
 
     protected $fillable = [
         'name',
         'country_id',
         'region_id'
     ];
+
+    public $translatable = ['name'];
+
 
     public function customers()
     {
@@ -37,7 +42,7 @@ class City extends Model
 
     public function regions()
     {
-        return $this->belongs(Region::class,'region_id');
+        return $this->belongsTo(Region::class,'region_id');
     } 
 
     public function storeLocations()

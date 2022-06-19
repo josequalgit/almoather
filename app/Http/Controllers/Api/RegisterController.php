@@ -26,6 +26,7 @@ use App\Http\Traits\UserResponse;
 class RegisterController extends Controller
 {
     use UserResponse;
+    private $trans_dir = 'messages.api.';
 
     public function registerInfluncer(InfluncerRequest $request)
     {
@@ -110,8 +111,8 @@ class RegisterController extends Controller
        $data->addMedia($request->file('image'))
        ->toMediaCollection('influncers');
        
-    //    $newInfluncer->addMedia($request->file('snap_video'))
-    //    ->toMediaCollection('snap_video');
+        //    $newInfluncer->addMedia($request->file('snap_video'))
+        //    ->toMediaCollection('snap_video');
 
        if($request->hasFile('cr_file'))
        {
@@ -148,7 +149,7 @@ class RegisterController extends Controller
         $token = Auth::guard('api')->attempt(['email' => $request->email,'password' => $request->password]);
 
         return response()->json([
-            'msg'       => 'Influncer was created',
+            'msg'       => trans($this->trans_dir.'influncer_was_created'),
             'data'      => $this->userDataResponse($data , $token,$data->id),
             'status'    => config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
@@ -208,7 +209,7 @@ class RegisterController extends Controller
         $token = Auth::guard('api')->attempt(['email'=>$request->email,'password'=>$request->password]);
 
         return response()->json([
-            'msg'=>'Customer was created',
+            'msg'=>trans($this->trans_dir.'customer_was_created'),
             'data'=>$this->userDataResponse($data , $token,$data->id),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
@@ -220,13 +221,13 @@ class RegisterController extends Controller
         
         # IF THE USER IS NOT FOUND 
         if(!$data) return response()->json([
-            'err'=>'user not found',
+            'err'=>trans($this->trans_dir.'user_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         #IF THE USER ALREADY VERIFIED
         if($data->email_verified_at) return response()->json([
-            'err'=>'user already verified',
+            'err'=>trans($this->trans_dir.'user_already_verified'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
@@ -237,7 +238,7 @@ class RegisterController extends Controller
 
         #RETURN WITH 200 STATUS CODE
         return response()->json([
-            'msg'=>'user is verified',
+            'msg'=>trans($this->trans_dir.'user_is_verified'),
             'data'=>$this->userDataResponse(null , null ,Auth::guard('api')->user()->id ),
             'type'=>Auth::guard('api')->user()->customers?'customer':'Influencer',
             'status'=>config('global.OK_STATUS')
@@ -249,25 +250,25 @@ class RegisterController extends Controller
         if($request->country_id||$request->nationality_id)
         {
             $data = Country::find($request->country_id??$request->nationality_id);
-            if(!$data) return 'country not found';
+            if(!$data) return trans($this->trans_dir.'country_not_found');
         }
         if($request->influncer_category_id)
         {
             $data = InfluncerCategory::find($request->influncer_category_id);
-            if(!$data) return 'category not found';
+            if(!$data) return trans($this->trans_dir.'category_not_found');
         }
         if($request->city_id)
         {
             $data = City::find($request->city_id);
-            if(!$data) return 'city not found';
+            if(!$data) return trans($this->trans_dir.'city_not_found');
         }
         if((isset($request->categories)&&count($request->categories) < 3) || (isset($request->categories)&&count($request->categories) > 3))
         {
-            return 'should be 3 categories for the influencer';
+            return trans($this->trans_dir.'should_categories_influencer');
         }
         if(isset($request->isVat)&&!$request->tax_registration_number)
         {
-            return 'Tax registration number is required';
+            return trans($this->trans_dir.'tax_registration_number_required');
         }
 
         return null;
@@ -319,7 +320,7 @@ class RegisterController extends Controller
         $token = Auth::guard('api')->attempt(['email'=>$request->email,'password'=>$request->password]);
 
         return response()->json([
-            'msg'=>'Customer was updated',
+            'msg'=>trans($this->trans_dir.'customer_was_updated'),
             'data'=>$this->userDataResponse($data , $token,$data->id),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
@@ -334,21 +335,21 @@ class RegisterController extends Controller
         if($checkEmail)
         {
             return response()->json([
-                'msg'=>'email already exist',
+                'msg'=>trans($this->trans_dir.'email_already_exist'),
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
         if($checkPhone)
         {
             return response()->json([
-                'msg'=>'phone number already exist',
+                'msg'=>trans($this->trans_dir.'phone_number_already_exist'),
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
 
         return response()->json([
-            'msg'=>'email and phone available',
+            'msg'=>trans($this->trans_dir.'email_and_phone_available'),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
       

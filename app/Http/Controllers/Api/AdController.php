@@ -38,16 +38,17 @@ class AdController extends Controller
 
     use ApiPaginator , UserResponse , AdResponse , SendNotification;
 
+    private $trans_dir = 'messages.api.';
+
     public function index($status)
     {
-
         $user_id = Auth::guard('api')->user()->influncers ? Auth::guard('api')->user()->influncers->id :Auth::guard('api')->user()->customers->id;
-
+      
         if(Auth::guard('api')->user()->influncers)
         {
             if(!in_array($status,config('global.INFLUENCER_ADS_STATUS'))){
                 return response()->json([
-                    'err'=>'influencer is not authorized to get ads with this status',
+                    'err'=>trans($this->trans_dir.'inf_wrong_status'),
                     'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
                 ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
             }
@@ -59,43 +60,18 @@ class AdController extends Controller
                 'Active'    => 1
             ];
 
-            $data = Auth::guard('api')->user()->influncers->contracts();
+            $data = Auth::guard('api')->user()->influncers->contracts()->whereHas('ads');
 
             if($status == 'Completed'){
-                $itemsPaginated =  $data
-                ->where('status',1)
-                ->where('is_accepted',$statusCode[$status])
-                ->paginate(10);
+                $itemsPaginated =  $data->where('status',1)->where('is_accepted',$statusCode[$status]);
             }
-            elseif($status == 'Active')
+            elseif($status == 'Active' || $status == 'Pending' || $status == 'Rejected')
             {
-                $itemsPaginated =  $data
-                ->where('status',0)
-                ->where('is_accepted',$statusCode[$status])
-                ->paginate(10);
+                $itemsPaginated =  $data->where('status',0)->where('is_accepted',$statusCode[$status]);
             }
-            elseif($status == 'Pending')
-            {
-                $itemsPaginated =  $data
-                ->where('status',0)
-                ->where('is_accepted',$statusCode[$status])
-                ->paginate(10);
-            }
-            elseif($status == 'Rejected')
-            {
-                $itemsPaginated =  $data
-                ->where('status',0)
-                ->where('is_accepted',$statusCode[$status])
-                ->paginate(10);
-            }
-            else
-            {
-                $itemsPaginated = $data->paginate(10);
-            };
           
-
+            $itemsPaginated = $itemsPaginated->orderBy('created_at','desc')->paginate(10);
             $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($status){
-              //  dd($item->id);
                 $data =  $this->adResponse($item->ads);
                 $data['status']         = $status;
                 $data['contract_id']    = $item->id;
@@ -106,7 +82,7 @@ class AdController extends Controller
             })->toArray();
 
             return response()->json([
-                'msg'=>'get all ads with the status',
+                'msg'=>trans($this->trans_dir.'get_all_ads'),
                 'data'=>$this->formate($itemsTransformed , $itemsPaginated),
                 'status'=>config('global.OK_STATUS')
             ],config('global.OK_STATUS'));
@@ -116,7 +92,7 @@ class AdController extends Controller
         else
         {
             if(!in_array($status,config('global.CUSTOMER_ADS_STATUS'))) return response()->json([
-                'err'=>'customer is not authorized to get ads with this status',
+                'err'=>trans($this->trans_dir.'customer_wrong_status'),
                 'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
             ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
 
@@ -128,11 +104,11 @@ class AdController extends Controller
 
             if(in_array($status,array_keys($statusCode)))
             {
-                $itemsPaginated = Ad::where('customer_id',$user_id)->whereIn('status',$statusCode[$status])->paginate(10);
+                $itemsPaginated = Ad::where('customer_id',$user_id)->orderBy('created_at','desc')->whereIn('status',$statusCode[$status])->paginate(10);
             }
             else
             {
-                $itemsPaginated = Ad::where([['customer_id',$user_id],['status',$status]])->paginate(10);
+                $itemsPaginated = Ad::where([['customer_id',$user_id],['status',$status]])->orderBy('created_at','desc')->paginate(10);
             }
 
             $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($user_id){
@@ -141,7 +117,7 @@ class AdController extends Controller
         }
 
         return response()->json([
-            'msg'=>'get all ads with the status',
+            'msg'=>trans($this->trans_dir.'get_ads_with_status'),
             'data'=>$this->formate($itemsTransformed , $itemsPaginated),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
@@ -153,7 +129,7 @@ class AdController extends Controller
         if(!$request->hasFile('commercial_doc')&&!$request->has_marouf_num)
         {
             return response()->json([
-                'err'=>'please upload a document or add the authentication number',
+                'err'=>trans($this->trans_dir.'upload_doc_or_add_auth_num'),
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
@@ -175,7 +151,7 @@ class AdController extends Controller
         $this->create_customer_contract($data->id,Auth::guard('api')->user()->customers);
          #CHECK IF THERE IS A CONTRACT IN THE DATABASE
          if(!$this->create_contract($data->id,Auth::guard('api')->user()->customers)) return response()->json([
-            'err'=>'There is no contract in the system',
+            'err'=>trans($this->trans_dir.'no_contract_in_system'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
@@ -219,7 +195,7 @@ class AdController extends Controller
         })->get();
 
         $info =[
-            'msg'=>'Customer "'.Auth::guard('api')->user()->customers->first_name.'" added new ad',
+            'msg'=>trans($this->trans_dir.'customer').'"'.Auth::guard('api')->user()->customers->first_name.''.trans($this->trans_dir.'added_new_ad'),
             'id'=>$data->id,
             'type'=>'Ad'
         ];
@@ -229,7 +205,7 @@ class AdController extends Controller
        // $c_not = Notification::send($getAdmin, new AddInfluencer($info));
 
         return response()->json([
-            'msg'=>'ad was created',
+            'msg'=>trans($this->trans_dir.'ad_was_created'),
             'data'=>$this->adResponse($data),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
@@ -240,12 +216,12 @@ class AdController extends Controller
         $data = Ad::find($id);
 
         if(!$data) return response()->json([
-            'err'=>'ad not found',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         return response()->json([
-            'msg'=>'ad details',
+            'msg'=>trans($this->trans_dir.'ad_details'),
             'data'=>$this->adResponse($data),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
@@ -255,21 +231,21 @@ class AdController extends Controller
     {
         $ad = Ad::find($ad_id);
         if(!$ad) return response()->json([
-            'err'=>'ad was not',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         if(!$ad||$ad->status == 'pending'||$ad->status == 'rejected') return response()->json([
-            'err'=>'there is no contract for the ad because ad status is '.$ad->status,
+            'err'=>trans($this->trans_dir,'no_contract_for_ad').' '.$ad->status,
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
         $data = CampaignContract::select(['content'])->find($ad->contacts->id);
         if(!$data) return response()->json([
-            'err'=>'contract not found',
+            'err'=>trans($this->trans_dir.'contract_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
         return response()->json([
-            'msg'=>'ad contract',
+            'msg'=>trans($this->trans_dir.'ad_contract'),
             'data'=>$data->content,
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
@@ -280,61 +256,49 @@ class AdController extends Controller
         $data = InfluencerContract::find($contract_id);
 
         if(!$data) return response()->json([
-            'err'=>'contract not found',
+            'err'=>trans($this->trans_dir.'contract_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        
         $data->is_accepted = $request->status == 0?2:$request->status;
         $data->rejectNote = $request->reject_note;
         $data->save();
-       
+
         if($request->status == 0&&$request->rejectNote)
         {
             $influencer = Influncer::find($data->influencer_id);
             $name = $influencer->first_name.' '.$influencer->middle_name.' '.$influencer->last_name;
             
             $info =[
-                'msg'=>'Influencer "'.$name.'" rejected the contract because of "'.$data->rejectNote.'" ad',
+                'msg'=>trans($this->trans_dir.'influencer').'"'.$name.'"'. trans($this->trans_dir.'reject_contract') .'"'.$data->rejectNote.'"'.' '.trans($this->trans_dir.'ad_small'),
                 'id'=>$influencer->users->id,
                 'type'=>'Influencer'
             ];
-          
-           
-         
+
             $this->sendAdminNotification('contract_manager_notification',$info);
-            
+
             $getContactManagers = User::whereHas('roles',function($q){
                 $q->where('name','Contracts Manager')
                 ->orWhere('name','superAdmin');
             })->get();
-    
+
             Notification::send($getContactManagers, new AddInfluencer($info));
-            
 
         }
 
         return response()->json([
-            'msg'=>'data was updated',
+            'msg'=>trans($this->trans_dir.'data_was_updated'),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
 
     public function search($query)
     {
-
         $user_id = Auth::guard('api')->user()->influncers ? Auth::guard('api')->user()->influncers->id :Auth::guard('api')->user()->customers->id;
 
         if(Auth::guard('api')->user()->influncers)
         {
             $data = Auth::guard('api')->user()->influncers->ads()->where([['store','LIKE',"%{$query}%"]])->paginate(10);
-            // $data = Auth::guard('api')->user()->influncers
-            // ->join('ad', 'ad.ad_id', '=', 'influncer.influencer_id')
-            // ->whereHas('ad_matches',function($q) use($query){
-            //     $q->ads()->where([['store','LIKE',"%{$query}%"]]);
-            // })->get();
-            // dd($data);
-
         }
         else
         {
@@ -344,10 +308,8 @@ class AdController extends Controller
         $data->getCollection()->transform(function($item){
              return $this->adResponse($item);
         });
-
-
         return response()->json([
-            'msg'=>'the search result',
+            'msg'=>trans($this->trans_dir.'search_result'),
             'data'=>$data,
             'status'=>config('global.OK_STATUS')
         ]);
@@ -358,7 +320,7 @@ class AdController extends Controller
         $data = Influncer::find($influencer_id);
         $itemsPaginated  = [];
         if(!$data) return response()->json([
-            'err'=>'influencer not found',
+            'err'=>trans($this->trans_dir.'inf_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
@@ -380,7 +342,7 @@ class AdController extends Controller
 
 
         return response()->json([
-            'msg'=>'all influencer ads',
+            'msg'=>trans($this->trans_dir.'all_inf_ads'),
             'data'=>$this->formate($itemsTransformed , $itemsPaginated),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
@@ -391,7 +353,7 @@ class AdController extends Controller
         $data = Customer::find($customer_id);
         $itemsPaginated  = [];
         if(!$data) return response()->json([
-            'err'=>'customer not found',
+            'err'=>trans($this->trans_dir.'customer_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
@@ -405,14 +367,12 @@ class AdController extends Controller
             $itemsPaginated  = $data->ads()->paginate(config('global.PAGINATION_NUMBER'));
         }
 
-
         $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item){
             return $this->adResponse($item);
         })->toArray();
 
-
         return response()->json([
-            'msg'=>'all customer ads',
+            'msg'=>trans($this->trans_dir.'all_customer_ads'),
             'data'=>$this->formate($itemsTransformed , $itemsPaginated),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
@@ -422,7 +382,7 @@ class AdController extends Controller
     {
         $data = Ad::findOrFail($id);
         if($data->status !== 'prepay') return response()->json([
-            'err'=>'ad dosent have the right status',
+            'err'=>trans($this->trans_dir.'ad_dont_have_right_status'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
         $infData = $data->matches()->where('chosen',1)->get()->map(function($item){
@@ -434,7 +394,7 @@ class AdController extends Controller
         });
 
         return response()->json([
-            'msg'=>'all matched under budget influencer',
+            'msg'=>trans($this->trans_dir.'all_matched_under_budget'),
             'data'=>$infData,
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
@@ -446,7 +406,7 @@ class AdController extends Controller
         $info = Influncer::find($removed_inf_id);
 
         if(!$data) return response()->json([
-            'err'=>'ad not found',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
@@ -475,19 +435,19 @@ class AdController extends Controller
             });
 
             return response()->json([
-                'msg'=>'all matched under budget influencer',
+                'msg'=>trans($this->trans_dir.'all_matched_under_budget'),
                 'data'=>$infData,
                 'status'=>config('global.OK_STATUS')
             ],config('global.OK_STATUS'));
         }
 
         if(!$info) return response()->json([
-            'err'=>'user not found',
+            'err'=>trans($this->trans_dir.'inf_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
       
-        if(!$replace_permission&&$data->status !== 'prepay') return response()->json([
-            'err'=>'ad dosent have the right status',
+        if(!$replace_permission&&$data->status !== 'prepay'&&$data->status !== 'choosing_influencer') return response()->json([
+            'err'=>trans($this->trans_dir.'ad_dont_have_right_status'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
@@ -516,12 +476,12 @@ class AdController extends Controller
 			$counter = $counter +1;
 			
 
-            return $this->match_influencer_with_eligible_status($item->influencers,$item->match,$counter == 2?:$currentBudget,$item->status);
+            return $this->match_influencer_with_eligible_status($item->influencers,$item,$counter == 2?:$currentBudget,$item->status);
             
         });
 
         return response()->json([
-            'msg'=>'all matched under budget influencer',
+            'msg'=>trans($this->trans_dir.'all_matched_under_budget'),
             'data'=>$infData,
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
@@ -532,7 +492,7 @@ class AdController extends Controller
         $removeFromChosen = AdsInfluencerMatch::where([['ad_id',$id],['influencer_id',$removed_influencer]])->first();
 
         if(!$removeFromChosen) return response()->json([
-            'err'=>'data not found',
+            'err'=>trans($this->trans_dir.'data_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 		
@@ -541,7 +501,7 @@ class AdController extends Controller
 
         $addToChosen = AdsInfluencerMatch::where([['ad_id',$id],['influencer_id',$chosen_influencer]])->first();
         if(!$addToChosen) return response()->json([
-            'err'=>'data not found',
+            'err'=>trans($this->trans_dir.'data_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
@@ -550,16 +510,19 @@ class AdController extends Controller
         $addToChosen->save();
         $data = Ad::findOrFail($id);
 
-        return response()->json([
-            'msg'=>'data was updated',
-			'data'=>[
-                'id'=>$data->id,
-				'type'=>$data->type,
-				'category'=>$data->categories->name,
-				'budget'=>$data->budget,
-				'match'=>$this->get_ad_influencers_matchs($data),
-                'status'=>config('global.OK_STATUS')
-        ],config('global.OK_STATUS')]);
+        return $this->match_response($data);
+
+        //     return response()->json([
+        //         'msg'=>trans($this->trans_dir.'data_was_updated'),
+        // 		'data'=>[
+        //             'id'=>$data->id,
+        // 			'type'=>$data->type,
+        // 			'category'=>$data->categories->name,
+        // 			'budget'=>$data->budget,
+        // 			'match'=>$this->get_ad_influencers_matchs($data)
+        //         ],
+        //     'status'=>config('global.OK_STATUS')
+        //    ],config('global.OK_STATUS'));
 
 
     }
@@ -569,21 +532,21 @@ class AdController extends Controller
         $data = Ad::find($id);
         
         if(!$data) return response()->json([
-            'err'=>'ad was not found',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         $cal = $data->budget*5.5/100;
 
         if($data->status !== 'approve') return response()->json([
-            'err'=>'ad dosent have the right status',
+            'err'=>trans($this->trans_dir.'ad_dont_have_right_status'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
-       // dd(Auth::user()->customers);
+        // dd(Auth::user()->customers);
         $name = Auth::guard('api')->user()->customers->first_name.' '.Auth::guard('api')->user()->customers->middle_name.' '.Auth::guard('api')->user()->customers->last_name;
         $info =[
-            'msg'=>'Customer "'.$name.'" payed 5% ('.$cal.') for "'.$data->store.'" ',
+            'msg'=>trans($this->trans_dir.'customer').' '.'."'.$name.'"'.trans($this->trans_dir.'payed_five_percent').'('.$cal.')'. trans($this->trans_dir.'for') .'"'.$data->store.'" ',
             'id'=>$data->id,
             'type'=>'Ad'
         ];
@@ -597,17 +560,42 @@ class AdController extends Controller
 
         // Notification::send($getContactManagers, new AddInfluencer($info));
         
-        
+        $isProfitable =  $data->campaignGoals->profitable;
+        $isOnSite = $data->ad_type;
 
         return response()->json([
-            'msg'=>'all matches blurred',
+            'msg'=>trans($this->trans_dir.'all_matched_blurred'),
             'data'=>[
                 'type'=>$data->type,
                 'category'=>$data->categories ? $data->categories->name : null,
                 'price'=>$cal,
                 'budget'=>$data->budget,
-                'matches'=>$data->matches()->where('status','!=','deleted')->get()->map(function($item){
-                    return $item->match;
+                'matches'=>$data->matches()->where('status','!=','deleted')->get()->map(function($item) use($isProfitable,$isOnSite){
+                   
+                    $response = [
+                        'id'=>$item->influencers->id,
+                        'match'=>$item->match,
+                        'gender'=>$item->influencers->gender,
+                        'is_primary'=>$item->status == 'basic'?true:false,
+                        'budget'=>$isOnSite?$item->influencers->ad_onsite_price:$item->influencers->ad_price,
+                    ];
+
+                    $response['ROAS'] = null;
+                    $response['engagement_rate'] = null;
+                    $response['aoaf'] = null;
+                    
+                    if($isProfitable)
+                    {
+                        $response['ROAS'] = $item->match;
+                    }
+                    else
+                    {
+                        $response['engagement_rate'] = $item->match;
+                        $response['AOAF'] = $item->AOAF;
+                    }
+        
+
+                    return $response;
                 })
             ],
             'status'=>config('global.OK_STATUS')
@@ -619,19 +607,19 @@ class AdController extends Controller
     { 
         $data = Ad::find($id);
         if(!$data) return response()->json([
-            'err'=>'ad was not found',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         if($data->status !== 'approve'&&$data->status !=='prepay') return response()->json([
-            'err'=>'ad dosent have the right status',
+            'err'=>trans($this->trans_dir.'ad_dont_have_right_status'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
         
         $cal = $data->budget*5.5/100;
 
         return response()->json([
-            'msg'=>'all matches',
+            'msg'=>trans($this->trans_dir.'all_matched'),
             'data'=>[
 				'id'=>$data->id,
                 'type'=>$data->type,
@@ -658,12 +646,12 @@ class AdController extends Controller
         $user = User::find($removed_inf);
 
         if(!$data) return response()->json([
-            'err'=>'ad was not found',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         if(!$user||!$user->influncers) return response()->json([
-            'err'=>'influencer was not found',
+            'err'=>trans($this->trans_dir.'inf_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 		
@@ -681,7 +669,7 @@ class AdController extends Controller
             ];
         });
         return response()->json([
-            'msg'=>'unchosen match',
+            'msg'=>trans($this->trans_dir.'unchosen_match'),
             'data'=>$alldata,
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
@@ -693,12 +681,12 @@ class AdController extends Controller
     {
         $ad = Ad::find($ad_id);
         if(!$ad) return response()->json([
-            'err'=>'ad was not found',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
         
         if($ad->status !== 'prepay') return response()->json([
-            'err'=>'ad dosent have the right status',
+            'err'=>trans($this->trans_dir.'ad_dont_have_right_status'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
@@ -707,7 +695,7 @@ class AdController extends Controller
 
         $name = Auth::guard('api')->user()->customers->first_name.' '.Auth::guard('api')->user()->customers->middle_name.' '.Auth::guard('api')->user()->customers->last_name;
         $info =[
-            'msg'=>'Customer "'.$name.'" payed full payment ('.$ad->budget.') for "'.$ad->store.'" ',
+            'msg'=>trans($this->trans.'customer').' "'.$name.'"'.' '.trans($this->trans.'payed_full_payment').'('.$ad->budget.') for "'.$ad->store.'" ',
             'id'=>$ad->id,
             'type'=>'Ad'
         ];
@@ -723,7 +711,7 @@ class AdController extends Controller
         
 
         return response()->json([
-            'msg'=>'ad status was changed to '.$ad->status.'',
+            'msg'=>trans($this->trans_dir.'ad_status_was_changed').$ad->status.'',
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
 
@@ -737,7 +725,7 @@ class AdController extends Controller
         $data = InfluencerContract::find($contract_id);
 
         if(!$data) return response()->json([
-            'msg'=>'contract not found',
+            'msg'=>trans($this->trans_dir.'contract_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
@@ -746,22 +734,22 @@ class AdController extends Controller
         $influencer = Influncer::find($data->influencer_id);
 
         if(!$influencer) return response()->json([
-            'msg'=>'influencer not found',
+            'msg'=>trans($this->trans_dir.'inf_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         /** FIND THE AD  */
         $ad = Ad::find($data->ad_id);
         
-        if(!$influencer&&!$ad) return response()->json([
-            'msg'=>'something wrong',
+        if(!$ad) return response()->json([
+            'msg'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
 
         $name = $influencer->first_name.' '.$influencer->middle_name.' '.$influencer->last_name;
         $info =[
-            'msg'=>'Influencer "'.$name.'" completed "'.$ad->store.'" ad',
+            'msg'=>trans($this->trans_dir.'influencer').' "'.$name.'"'. trans($this->trans_dir.'completed_small') .'"'.$ad->store.'" ad',
             'id'=>$ad->id,
             'type'=>'Ad'
         ];
@@ -780,7 +768,7 @@ class AdController extends Controller
         $data->save();
 
         return response()->json([
-            'msg'=>'data was updated',
+            'msg'=>trans($this->trans_dir.'data_was_updated'),
             'status'=>config('global.OK_STATUS'),
         ],config('global.OK_STATUS'));
     }
@@ -789,11 +777,11 @@ class AdController extends Controller
     {
         $data = CampaignContract::find($contract_id);
         if(!$data) return response()->json([
-            'err'=>'contract not found',
+            'err'=>trans($this->trans_dir.'contract_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
         if($request->status == 0&&!$request->rejectNote) return response()->json([
-            'err'=>'please add reject note',
+            'err'=>trans($this->trans_dir.'please_add_reject_note'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
@@ -802,7 +790,7 @@ class AdController extends Controller
         $data->save();
     
         return response()->json([
-            'msg'=>'data was updated',
+            'msg'=>trans($this->trans_dir.'data_was_updated'),
             'status'=>config('global.OK_STATUS'),
         ],config('global.OK_STATUS'));
     }
@@ -812,13 +800,13 @@ class AdController extends Controller
         $data = AdsInfluencerMatch::where([['ad_id',$request->ad_id],['influencer_id',$request->influncer_id]])->first();
         $addInf = Influncer::find($request->influncer_id);
         if(!$data) return response()->json([
-            'err'=>'influencer match was not found',
+            'err'=>trans($this->trans_dir.'influencer_match_was_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         $ad = Ad::find($request->ad_id);
         if(!$ad) return response()->json([
-            'err'=>'ad was not found',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
@@ -829,7 +817,7 @@ class AdController extends Controller
         foreach ($matches as $value) {
            $inf = Influncer::find($value->influencer_id);
            if(!$inf) return response()->json([
-            'err'=>'one of the matches was not found',
+            'err'=>trans($this->trans_dir.'one_of_the_matches_was_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
             ],config('global.NOT_FOUND_STATUS'));
 
@@ -839,7 +827,7 @@ class AdController extends Controller
         $chosenInfBudget = $ad->type == 'onsite'?$addInf->ad_onsite_price:$addInf->ad_price;
         $allInfPrices = $allInfPrices + $chosenInfBudget;
         if($allInfPrices > $budget) return response()->json([
-            'msg'=>'you have passed the budget',
+            'msg'=>trans($this->trans_dir.'you_have_passed_the_budget'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         $data->chosen = 1;
@@ -856,7 +844,7 @@ class AdController extends Controller
         $ad = Ad::findOrFail($request->ad_id);
         
         if(!$ad) return response()->json([
-            'err'=>'ad was not found',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
@@ -864,7 +852,7 @@ class AdController extends Controller
         $data = AdsInfluencerMatch::where([['ad_id',$request->ad_id],['influencer_id',$request->influncer_id]])->first();
 
         if(!$data) return response()->json([
-            'err'=>'match was not found',
+            'err'=>trans($this->trans_dir.'match_was_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
@@ -879,13 +867,13 @@ class AdController extends Controller
     {
         $data = Ad::find($ad_id);
         if(!$data) return response()->json([
-            'err'=>'ad was not found',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
         $cal = $data->budget * 5.5/100;
 
         return response()->json([
-            'msg'=>'all matches',
+            'msg'=>trans($this->trans_dir.'all_matched'),
             'data'=>[
                 'id'=>$data->id,
                 'type'=>$data->type,
@@ -937,19 +925,18 @@ class AdController extends Controller
     {
         $data = Ad::find($ad_id);
         if(!$data) return response()->json([
-            'err'=>'ad was not found',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
         $cal = $data->budget * 5.5/100;
 
         return response()->json([
-            'msg'=>'all matches',
+            'msg'=>trans($this->trans_dir.'all_matched'),
             'data'=>[
                 'id'=>$data->id,
                 'type'=>$data->type,
                 'status'=>$data->status,
-                // 'influncers_status'=>$data->is_all_accepted(),
-                'influncers_status'=>true,
+                'influncers_status'=>$data->is_all_accepted(),
                 'category'=>$data->categories?$data->categories->name:null,
                 'price'=>$data->budget - $cal,
                 'budget'=>$data->budget,
@@ -966,7 +953,7 @@ class AdController extends Controller
     {
         $data = Ad::find($ad_id);
         if(!$data) return response()->json([
-            'err'=>'ad was not found',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
        // return dd('here');
@@ -988,7 +975,7 @@ class AdController extends Controller
             ]);
 			
              return response()->json([
-                'err'=>'payment failed',
+                'err'=>trans($this->trans_dir.'payment_failed'),
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
@@ -1059,48 +1046,16 @@ class AdController extends Controller
 					'status_code' => $request->ResponseCode,
 					'type' => $request->type,
             	]);
-				 $cal = $data->budget * 5.5/100;
-
-                 if($data->status == 'approve')
-                 {
-                     $data->status = 'prepay';
-                 }
-                 else
-                 {
-                    $data->status = 'fullpayment';
-                 }
-                    $data->save();
 
                  return response()->json([
-                     'msg'=>'payment successfully',
+                     'msg'=>trans($this->trans_dir.'payment_successfully'),
                      'ad_status'=>$data->status,
                      'status'=>config('global.OK_STATUS'),
                  ],config('global.OK_STATUS'));
-
-				// return response()->json([
-				// 	'msg'=>'all matches',
-				// 	'data'=>[
-				// 		'id'=>$data->id,
-				// 		'type'=>$data->type,
-				// 		'category'=>$data->categories?$data->categories->name:null,
-				// 		'price'=>$data->budget - $cal,
-				// 		'budget'=>$data->budget,
-				// 		'match'=> $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
-				// 				return [
-				// 					'id'=>$item->influencers->id,
-				// 					'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
-				// 					'image'=>$item->influencers->users->InfulncerImage?$item->influencers->users->InfulncerImage:null,
-				// 					'match'=>$item->match,
-				// 					'status'=>$item->status
-				// 				];
-				// 			})
-				// 	],
-				// 	'status'=>config('global.OK_STATUS')
-				// ],config('global.OK_STATUS'));
 			}
 		
 			return response()->json([
-                'err'=>'payment failed',
+                'err'=>trans($this->trans_dir.'payment_failed'),
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
     }
@@ -1109,14 +1064,14 @@ class AdController extends Controller
     {
         $data = Ad::find($ad_id);
         if(!$data) return response()->json([
-            'err'=>'ad was not found',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         if($data->status != 'prepay')
         {
             return response()->json([
-                'err'=>"ad dose't have the right status",
+                'err'=>trans($this->trans_dir.'ad_dont_have_right_status'),
                 'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
             ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
         }
@@ -1126,7 +1081,7 @@ class AdController extends Controller
 
         return response()->json([
             'status'=>config('global.OK_STATUS'),
-            'msg'=>'data was updated'
+            'msg'=>trans($this->trans_dir.'data_was_updated')
         ],config('global.OK_STATUS'));
 
     }
@@ -1136,7 +1091,7 @@ class AdController extends Controller
         #GET THE AD AND CHECK IF THE AD EXIST
         $data = Ad::find($ad_id);
         if(!$data) return response()->json([
-            'err'=>'ad was not found',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
@@ -1159,7 +1114,7 @@ class AdController extends Controller
         if($data->update($arr))
         {
             return response()->json([
-                'msg'=>'ad was updated',
+                'msg'=>trans($this->trans_dir.'ad_was_updated'),
                 'data'=>$data,
                 'status'=>config('global.OK_STATUS')
             ],config('global.OK_STATUS'));
@@ -1167,7 +1122,7 @@ class AdController extends Controller
         else
         {
             return response()->json([
-                'err'=>'something wrong',
+                'err'=>trans($this->trans_dir.'something_wrong'),
                 'status'=>config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
@@ -1178,7 +1133,7 @@ class AdController extends Controller
         #GET THE AD AND CHECK IF THE AD EXIST
         $data = Ad::find($ad_id);
         if(!$data) return response()->json([
-            'err'=>'ad was not found',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
@@ -1191,7 +1146,7 @@ class AdController extends Controller
     private function match_response($ad)
     {
         return response()->json([
-            'msg'=>'data was updated',
+            'msg'=>trans($this->trans_dir.'data_was_updated'),
             'status'=>config('global.OK_STATUS'),
 			'data'=>[
 				'id'=>$ad->id,
@@ -1209,7 +1164,9 @@ class AdController extends Controller
     private function get_ad_influncers_with_status($ad)
     {
         return $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($ad){
-                $contract = InfluencerContract::where('influencer_id',$item->influencer_id)->first();
+                $contract = InfluencerContract::where('influencer_id',$item->influencer_id)
+                ->where('ad_id',$ad->id)
+                ->first();
 
                 $status = null;
             
@@ -1223,10 +1180,23 @@ class AdController extends Controller
                     {
                         $status = 'completed';
                     }
-                else
-                {
-                    $status = 'progress';
-                }
+                    elseif($contract->status == 1&&$contract->status == 0)
+                    {
+                        $status = 'waiting admin approve';
+                    }
+                    elseif($contract->is_accepted == 1)
+                    {
+                        $status = 'Progress';
+                    }
+                    elseif($contract->is_accepted == 0)
+                    {
+                        $status = 'pending';
+                    }
+                    else
+                    {
+                        $status = 'progress';
+                    }
+
                 }
                 else
                 {
@@ -1261,7 +1231,7 @@ class AdController extends Controller
             $response['ROAS'] = null;
             $response['engagement_rate'] = null;
             $response['aoaf'] = null;
-    
+
             if($isProfitable)
             {
                 $response['ROAS'] = $item->match;
@@ -1313,7 +1283,7 @@ class AdController extends Controller
     {
         $ad = Ad::find($item->ad_id);
         if(!$ad) return response()->json([
-            'err'=>'ad was not found',
+            'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
@@ -1352,39 +1322,39 @@ class AdController extends Controller
     {
         if($request->has_marouf_num&&!$request->marouf_num)
         {
-            return 'Please add a marouf  number';
+            return trans($this->trans_dir.'please_add_a_marouf');
         }
         elseif(!$request->has_marouf_num&&!$request->cr_num)
         {
-            return 'Please add a cr number';
+            return trans($this->trans_dir.'please_add_cr_number');
         }
         elseif(!$request->has_marouf_num&&!$request->cr_image)
         {
-            return 'Please add a cr image';
+            return trans($this->trans_dir.'please_add_cr_image');
         }
         elseif($request->has_online_store&&!$request->store_link)
         {
-            return 'Please add a store link';
+            return trans($this->trans_dir.'please_add_store_link');
         }
 		  elseif($request->has_offer&&!$request->offer > 0)
         {
-            return 'Please add an offer';
+            return trans($this->trans_dir.'please_add_offer');
         }
 		  elseif(!$request->prefered_media_id)
         {
-            return 'Please add an prefered media id';
+            return trans($this->trans_dir.'please_add_an_prefered_media_id');
         }
 		  elseif($request->has_marouf_num == 1&&!$request->marouf_num)
         {
-            return 'Please add marouf number';
+            return trans($this->trans_dir.'please_add_an_marouf_number');
         }
 		  elseif($request->has_marouf_num == 0&&!$request->cr_num)
         {
-            return 'Please add cr number';
+            return trans($this->trans_dir.'please_add_an_cr_number');
         }
 		  elseif($request->has_marouf_num == 0&&!$request->cr_image)
         {
-            return 'Please add cr image';
+            return trans($this->trans_dir.'please_add_an_cr_image');
         }
 
 
@@ -1458,14 +1428,14 @@ class AdController extends Controller
             if(!$request->ad_id)
             {
                 return response()->json([
-                    'err'=>'please add the ad id',
+                    'err'=>trans($this->trans_dir.'please_add_th_ad_id'),
                     'status'=>config('global.WRONG_VALIDATION_STATUS')
                 ],config('global.WRONG_VALIDATION_STATUS'));
             }
             if(!$request->file_type)
             {
                 return response()->json([
-                    'err'=>"please add the type of file's your adding",
+                    'err'=>trans($this->trans_dir.'please_add_the_file_type'),
                     'status'=>config('global.WRONG_VALIDATION_STATUS')
                 ],config('global.WRONG_VALIDATION_STATUS'));
             }
@@ -1511,7 +1481,7 @@ class AdController extends Controller
             if(!$ad)
             {
                 return response()->json([
-                    'err'=>'ad was not found',
+                    'err'=>trans($this->trans_dir.'ad_not_found'),
                     'status'=>config('global.NOT_FOUND_STATUS')
                 ],config('global.NOT_FOUND_STATUS'));
             }
@@ -1536,7 +1506,7 @@ class AdController extends Controller
            $ad = Ad::find($request->ad_id);
            
             if(!$ad) return response()->json([
-                'err'=>'ad was not found',
+                'err'=>trans($this->trans_dir.'ad_not_found'),
                 'status'=>config('global.NOT_FOUND_STATUS')
             ],config('global.NOT_FOUND_STATUS'));
 
@@ -1573,13 +1543,13 @@ class AdController extends Controller
         $influencer = Auth::guard('api')->user()->influncers;
         if(!$influencer){
             return response()->json([
-                'msg'       =>'You don\'t have permission to add media',
+                'msg'       =>trans($this->trans_dir.'you_dont_have_permission'),
                 'status'    => false,
             ],400);
         }
 
         return response()->json([
-            'msg'       => 'Media returned Successfully',
+            'msg'       => trans($this->trans_dir.'media_returned_successfully'),
             'data'      => $influencer->gallery,
             'status'    => true,
         ],200);
@@ -1591,7 +1561,7 @@ class AdController extends Controller
     function deleteGalleryMedia($id){
         $media = DB::table('media')->where('id',$id)->where('model_type','App\Models\Influncer')->first();
         if(!$media)return response()->json([
-            'err'=>'file not found',
+            'err'=>trans($this->trans_dir.'file_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
@@ -1600,7 +1570,7 @@ class AdController extends Controller
         $model->deleteMedia($media->id);
 
         return response()->json([
-            'msg'       => 'Media deleted Successfully',
+            'msg'       => trans($this->trans_dir.'media_deleted_successfully'),
             'status'    => true,
         ],200);
     }

@@ -23,12 +23,6 @@ class InfluncerCategory extends Model implements HasMedia
 
     public $translatable = ['name'];
 
-
-    // public function categories()
-    // {
-    //     return $this->belongsToMany(Category::class,'influncer_category_id');
-    // }
-
     public function influncers()
     {
         return $this->belongsToMany(Influncer::class);
@@ -41,8 +35,11 @@ class InfluncerCategory extends Model implements HasMedia
 
 
     public function getImageAttribute() {
-        $mediaItems = $this->getMedia('influncerCategories');
-        $publicFullUrl = $mediaItems[0]->getFullUrl();
-        return $publicFullUrl;
+        $mediaItems = $this->getMedia('influncerCategories')->first();
+        if($mediaItems){
+            return $mediaItems->getFullUrl();
+        }
+
+        return asset('img/no-image.jpg');
    }
 }

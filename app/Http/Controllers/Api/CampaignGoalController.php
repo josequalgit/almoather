@@ -11,6 +11,7 @@ use App\Http\Traits\ApiPaginator;
 class CampaignGoalController extends Controller
 {
     use ApiPaginator;
+    private $trans_dir = 'messages.api.';
 
    public function index()
    {
@@ -22,7 +23,7 @@ class CampaignGoalController extends Controller
     });
 
     return response()->json([
-        'msg'=>'all campaign goals',
+        'msg'=>trans($this->trans_dir.'all_campaign_goals'),
         'data'=>$itemsPaginated,
         'status'=>config('global.OK_STATUS')
     ],config('global.OK_STATUS'));

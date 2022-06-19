@@ -31,27 +31,22 @@ class AdController extends Controller
     use SendNotification;
     public function index($status = null)
     {
-
-      
-
-
-
         if ($status == 'All') {
             $data = Ad::orderBy('created_at', 'desc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
             $counter = Ad::count();
         }else{
 
             $statusCode = [
-                'Pending'           => ['approve','pending','prepay','choosing_influencer'],
+                'UnderReview'       => ['pending'],
+                'Pending'           => ['approve','prepay','choosing_influencer'],
                 'Active'            => ['fullpayment','active','progress'],
                 'Finished'          => ['complete'],
                 'Rejected'          => ['reject']
             ];
 
-            $data = Ad::whereIn('status',$statusCode[$status])->orderBy('created_at', 'asc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
+            $data = Ad::whereIn('status',$statusCode[$status])->orderBy('created_at', 'desc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));
             $counter = Ad::whereIn('status',$statusCode[$status])->count();
         }
-
 
         return view('dashboard.ads.index', compact('data', 'counter'));
     }
@@ -61,11 +56,15 @@ class AdController extends Controller
         $data = Ad::findOrFail($id);
         $matches = $data->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
         $unMatched = $data->matches()->where('chosen', 0)->get();
-        // dd($unMatched);
-        $categories = Category::get();
+        $serviceCategories = Category::where('type','service')->get();
+        $productCategories = Category::where('type','product')->get();
         $goals = CampaignGoal::select('title')->get();
         $countries = Country::get();
-        return view('dashboard.ads.edit', compact('data', 'matches', 'unMatched', 'categories', 'editable', 'countries'));
+
+        if($data->status != 'pending') return view('dashboard.ads.showAd',compact('data','matches','productCategories','serviceCategories','unMatched'));
+        //  return view('dashboard.ads.showAd',compact('data','matches','productCategories','serviceCategories','unMatched'));
+        
+        return view('dashboard.ads.edit', compact('data', 'matches', 'unMatched', 'serviceCategories','productCategories', 'editable', 'countries'));
     }
 
     public function update(Request $request, $id , $confirm = null)
@@ -99,6 +98,7 @@ class AdController extends Controller
         {
             $ad->status = $request->status;
             $ad->category_id = $request->category_id;
+            $ad->eng_number = $request->eng_number ?? 0;
             $ad->reject_note = $request->note ?? null;
             $ad->save();
 
@@ -141,13 +141,14 @@ class AdController extends Controller
         {
             $ad->category_id = $request->category_id;
             $ad->reject_note = $request->note ?? null;
+            $ad->eng_number = $request->eng_number ?? 0;
             $ad->save();
         }
 
         if(!$confirm)
         {
 
-            DB::table('ads_influencer_matches')->where('ad_id',$ad->id)->delete();
+            $ad->matches()->delete();
         }
 
 
@@ -166,23 +167,23 @@ class AdController extends Controller
         /** NEW WAY */
         Alert::toast('Add was updated', 'success');
 
-
-
-
         /** END WAY */
         if (!$ad->campaignGoals->profitable) {
-            $allInfluencer = $this->calculateNonProfitableAds($request, $ad, $data);
+            $noInfluencerReasons = $this->calculateNonProfitableAds($request, $ad, $data);
         } else {
-            $allInfluencer = $this->calculateProfitableAds($request, $ad, $data);
+            $noInfluencerReasons = $this->calculateProfitableAds($request, $ad, $data);
         }
 
-        /** GET THE LOW ENGAGEMENT INFLUENCER*/
 
+        $allInfluencer = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
+
+        $influencer = view('dashboard.ads.include.influencer_table', compact('allInfluencer','ad','noInfluencerReasons'))->render();
         return response()->json([
             'msg' => 'status was changed',
-           // 'data' => $allInfluencer,
-            'status' => 200,
-        ], 200);
+            'data' => $influencer,
+            'totalInfluencers' => $allInfluencer->count(),
+            'status' => config('global.OK_STATUS'),
+        ], config('global.OK_STATUS'));
     }
 
     private function calculateProfitableAds($request, $ad, $data){
@@ -277,6 +278,8 @@ class AdController extends Controller
     private function calculateNonProfitableAds($request, $ad, $data)
     {
 
+        $noInfluencerReasons = [];
+
         /**  BUDGET PERCENTAGE CALCULATION */
         $appPercentage = 0.15 * $ad->budget;
         $percentForBigInf = 100 - $request->engagement_rate;
@@ -287,105 +290,106 @@ class AdController extends Controller
 
         $chosenSubscribers = [];
         $notChosenInfluencer = [];
+
+        $hasInfluencerInCategory = Influncer::where('status', 'accepted')->whereNotIn('id', $data)->count();
+        if($hasInfluencerInCategory == 0){
+            $noInfluencerReasons[] = "All influencers have been taken away from the campaign category";
+        }
        
         $allSmallInfluencer = Influncer::where('status', 'accepted')->whereNotIn('id', $data)->where('subscribers', '<', 500000)->where('subscribers', '>', 0);
+        
         if ($ad->ad_type == 'onsite') {
             $allSmallInfluencer = $allSmallInfluencer->where(function ($query) use ($ad) {
                 $query->where('ads_out_country', 1)
                     ->orWhere('city_id', $ad->city_id);
             });
         }
-        $allSmallInfluencer = $allSmallInfluencer->get();
+        $allSmallInfluencer = $allSmallInfluencer->get()->map(function($item){
+            $getLastMonthAds = $item->contracts()->orderBy('created_at', 'desc')->take(30)->sum('af');
+            $getLastMonthAdsCount = $item->contracts()->orderBy('created_at', 'desc')->take(30)->count();
+           
+            $item->AOAF = $getLastMonthAdsCount ? $getLastMonthAds / $getLastMonthAdsCount : 0;
+            $item->eng_rate = $item->AOAF / $item->subscribers;
 
-        foreach ($allSmallInfluencer as $key => $influencer) {
-            $getLastMonthAds = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->sum('af');
-            $getLastMonthAdsCount = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->count();
-
-            $AOAF = $getLastMonthAdsCount ? $getLastMonthAds / $getLastMonthAdsCount : 0;
-
-            $eng_rate = $AOAF / $influencer->subscribers;
-            $allSmallInfluencer[$key]->eng_rate = $eng_rate;
-            $allSmallInfluencer[$key]->AOAF = $AOAF;
-        }
+            return $item;
+        });
 
         $allSmallInfluencer = collect($allSmallInfluencer)->sortByDesc('eng_rate');
+
+        if($allSmallInfluencer->count() == 0){
+            $noInfluencerReasons[] = "There are no small influencers found that have subscribers of less than 500000";
+        }
 
         $isOverBudge = 0;
         #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
         foreach ($allSmallInfluencer as $key => $influencer) {
             $price = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
             $isOverBudge += $price;
-            if ($isOverBudge <= $budgetForSmallInfluencer) {
-                array_push($chosenSubscribers, $influencer);
-                AdsInfluencerMatch::create([
-                    'ad_id'=>$ad->id,
-                    'influencer_id'=>$influencer->id,
-                    'chosen'=>1,
-                    'match'=> $influencer->eng_rate,
-                    'AOAF' => $influencer->AOAF,
-                ]);
-            } else {
-                array_push($notChosenInfluencer, $influencer);
-                AdsInfluencerMatch::create([
-                    'ad_id'=>$ad->id,
-                    'influencer_id'=>$influencer->id,
-                    'chosen'=>0,
-                    'match'=>$influencer->eng_rate,
-                    'AOAF' => $influencer->AOAF,
-                ]);
-            }
+            
+            $chosen = $isOverBudge <= $budgetForSmallInfluencer ? 1 : 0;
+            AdsInfluencerMatch::updateOrCreate([
+                'ad_id'=>$ad->id,
+                'influencer_id'=>$influencer->id,
+            ],[
+                'chosen'=> $chosen,
+                'match'=> $influencer->eng_rate,
+                'AOAF' => $influencer->AOAF,
+            ]);
+        }
+
+        $allInfluencer = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->count();
+        if($allInfluencer == 0){
+            $noInfluencerReasons[] = "All influencers are over the campaign budget or the engagement rate for small influencers is set to 0";
         }
 
         /** GET BIG INFLUENCERS */
         $allBigInfluencer = Influncer::where('status', 'accepted')->whereNotIn('id', $data)->where('subscribers', '>=', 500000);
-
         if ($ad->ad_type == 'onsite') {
             $allBigInfluencer = $allBigInfluencer->where(function ($query) use ($ad) {
                 $query->where('ads_out_country', 1)
                     ->orWhere('city_id', $ad->city_id);
             });
         }
-        $allBigInfluencer = $allBigInfluencer->get();
 
-        foreach ($allBigInfluencer as $key => $influencer) {
+        $allBigInfluencer = $allBigInfluencer->get()->map(function($item){
+            $getLastMonthAds = $item->contracts()->orderBy('created_at', 'desc')->take(30)->sum('af');
+            $getLastMonthAdsCount = $item->contracts()->orderBy('created_at', 'desc')->take(30)->count();
+            $item->AOAF = $getLastMonthAdsCount ? $getLastMonthAds / $getLastMonthAdsCount : 0;
 
-            $getLastMonthAds = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->sum('af');
-            $getLastMonthAdsCount = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->count();
-
-            $AOAF = $getLastMonthAdsCount ? $getLastMonthAds / $getLastMonthAdsCount : 0;
-
-            $allBigInfluencer[$key]->AOAF = $AOAF;
-        }
+            return $item;
+        });
 
         $allBigInfluencer = collect($allBigInfluencer)->sortByDesc('AOAF');
+        if($allBigInfluencer->count() == 0){
+            $noInfluencerReasons[] = "There are no big influencers found that have subscribers of more than 500000";
+        }
+
         #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
         $isOverBudge = 0;
         foreach ($allBigInfluencer as $key => $influencer) {
             $price = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
 
             $isOverBudge += $price;
-            if ($isOverBudge <= $budgetForSmallInfluencer) {
-                array_push($chosenSubscribers, $influencer);
-                AdsInfluencerMatch::create([
-                    'ad_id'=>$ad->id,
-                    'influencer_id'=>$influencer->id,
-                    'chosen'=>1,
-                    'match'=>$influencer->AOAF
-                ]);
-            } else {
-                array_push($notChosenInfluencer, $influencer);
-                AdsInfluencerMatch::create([
-                    'ad_id'=>$ad->id,
-                    'influencer_id'=>$influencer->id,
-                    'chosen'=>0,
-                    'match'=>$influencer->AOAF
-                ]);
-            }
+
+            $chosen = $isOverBudge <= $budgeForBigInfluencer ? 1 : 0;
+            
+            AdsInfluencerMatch::updateOrCreate([
+                'ad_id'=>$ad->id,
+                'influencer_id'=>$influencer->id,
+            ],[
+                'chosen'=> $chosen,
+                'match'=> $influencer->AOAF,
+                'AOAF' => $influencer->AOAF,
+            ]);
         }
 
+        $allInfluencer = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->count();
+        if($allInfluencer == 0){
+            $noInfluencerReasons[] = "All influencers is over the campaign budget or engagement rate is set to 100";
+        }
 
-        /** MERGE THE TOW THE BIG AND THE SMALL INFLUENCER */
-        return ['chosenInfluencer' => $chosenSubscribers,'notChosenInfluencer' => $notChosenInfluencer];
+        return $noInfluencerReasons;
+        
     }
 
     public function changeMatch($ad_id, $removed_inf, $chosen_inf)
@@ -484,15 +488,42 @@ class AdController extends Controller
             ], config('global.NOT_FOUND_STATUS'));
         }
 
-        $data = new InfluencerContract;
-        $data->content = $contract->content;
-        $data->influencer_id = $request->influncers_id;
-        $data->date = $request->date;
-        $data->is_accepted = 0;
-        $data->ad_id = $ad_id;
-        $data->scenario = $request->scenario;
-        $data->af = 0;
-        $data->save();
+        if($request->send_to_all)
+        {
+            $allMatches = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
+            foreach($allMatches as $match)
+            {
+                $data = new InfluencerContract;
+                $data->content = $contract->content;
+                $data->influencer_id = $match->influencer_id;
+                $data->date = $request->date;
+                $data->is_accepted = 0;
+                $data->ad_id = $ad_id;
+                $data->scenario = $request->scenario;
+                $data->af = 0;
+                $data->save();
+
+
+                $influencer = Influncer::find($match->influencer_id);
+                $name = $influencer->first_name . ' ' . $influencer->middle_name . ' ' . $influencer->last_name;
+        
+                $info = [
+                    'msg' => 'New Contract for ad "' . $ad->store . '"',
+                    'type' => 'Ad',
+                    'id' => $ad->id,
+                ];
+
+                Notification::send($influencer->users, new AddInfluencer($info));
+
+
+            }
+
+            return response()->json([
+                'msg' => 'contract was sent',
+                'status' => config('global.OK_STATUS'),
+            ], config('global.OK_STATUS'));
+        }
+
 
         $influencer = Influncer::find($request->influncers_id);
         $name = $influencer->first_name . ' ' . $influencer->middle_name . ' ' . $influencer->last_name;

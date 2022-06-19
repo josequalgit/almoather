@@ -28,18 +28,18 @@
                                         <table class="table zero-configuration">
                                             <thead>
                                                 <tr>
-                                                    <th>Image</th>
-                                                    <th>Name</th>
+                                                    <th>Name English</th>
+                                                    <th>Name Arabic</th>
+                                                    <th>Type</th>
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($data as $item)
                                                         <tr>
-                                                            <td>
-                                                                <img class="cateImage"  src="{{ $item->image }}" />
-                                                            </td>
-                                                            <td>{{ $item->name }}</td>
+                                                            <td>{{ $item->getTranslation('name','en') }}</td>
+                                                            <td>{{ $item->getTranslation('name','ar') }}</td>
+                                                            <td>{{ ucfirst($item->type) }}</td>
                                                             
                                                             <td>
                                                                 @can('Delete Category')
@@ -61,10 +61,11 @@
                                         </table>
                                     @endcan
                                 </div>
+                                @can('See Category')
+                                {{ $data->links('pagination::bootstrap-5') }}
+                                @endcan
                             </div>
-                            @can('See Category')
-                            {{ $data->links() }}
-                            @endcan
+                            
                         </div>
                     </div>
                 </div>

@@ -15,34 +15,29 @@
                                 <div class="card-title">
                                     <p class="mb-0">Influencer Categories</p>
                                 </div>
-                                {{-- <div class="section-right">
-                                    <a href="{{ route('dashboard.campaignGoals.create') }}" class="btn btn-secondary">Create</a>
+                                <div class="section-right">
+                                    <a href="{{ route('dashboard.influencerCategories.create') }}" class="btn btn-primary">Create</a>
                                 </div>
-                                <hr class="w-100 my-1"> --}}
+                                <hr class="w-100">
                             </div>
                             
                             <div class="card-body card-dashboard">
-                                {{-- <p class="card-text">
-                                    There is 40 doctor added
-                                </p> --}}
                              
                                 <div class="table-responsive">
                                     @can('See Influencer Category')
                                         <table class="table zero-configuration">
                                             <thead>
                                                 <tr>
-                                                    <th>Image</th>
-                                                    <th>Name</th>
+                                                    <th>Name English</th>
+                                                    <th>Name Arabic</th>
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($data as $item)
                                                         <tr>
-                                                            <td>
-                                                                <img class="cateImage" src="{{ $item->image }}" />
-                                                            </td>
-                                                            <td>{{ $item->name }}</td>
+                                                            <td>{{ $item->getTranslation('name','en') }}</td>
+                                                            <td>{{ $item->getTranslation('name','ar') }}</td>
                                                             
                                                             <td>
                                                                 @can('Edit Influencer Category')
@@ -64,10 +59,11 @@
                                         </table>
                                     @endcan
                                 </div>
+                                @can('See Category')
+                                {{ $data->links('pagination::bootstrap-5') }}
+                                @endcan
                             </div>
-                            @can('See Influencer Category')
-                            {{ $data->links() }}
-                            @endcan
+                           
                         </div>
                     </div>
                 </div>

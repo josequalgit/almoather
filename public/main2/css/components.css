@@ -56,6 +56,7 @@ html body {
 
 body {
     color: #000;
+    font-family: "IBM Plex Sans","Tajawal", Helvetica, Arial, serif;
 }
 
 .text-muted {
@@ -607,12 +608,12 @@ footer.footer span i {
     background-color: inherit;
 }
 
-.main-menu.menu-light .navigation > li ul .active {
-  background: rgba(152,134,170,0.13);
+.main-menu.menu-light .navigation>li ul .active {
+    background: rgba(152, 134, 170, 0.13);
 }
 
-.main-menu.menu-light .navigation > li ul .active > a {
-  color: #9886aa;
+.main-menu.menu-light .navigation>li ul .active>a {
+    color: #9886aa;
 }
 
 .main-menu.menu-light .navigation>li>ul>li:first-child>a {
@@ -837,7 +838,7 @@ footer.footer span i {
 /* Main Navigation */
 
 .navigation {
-    font-family: "Rubik", Helvetica, Arial, serif;
+    font-family: "Rubik","Tajawal", Helvetica, Arial, serif;
     overflow-y: hidden;
     padding-bottom: 20px;
 }
@@ -4397,4 +4398,13 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 .accept_ad_contract_body {
     height: 26vh !important;
     overflow-y: auto;
+}
+
+.form-check-inline {
+    margin-bottom: 2%;
+}
+
+.downloadFilesMessages {
+    width: 50px;
+    height: 50px;
 }

@@ -144,12 +144,11 @@ class User extends Authenticatable implements JWTSubject , HasMedia
             'id' => 0,
             'url' => 'https://cdn5.vectorstock.com/i/1000x1000/51/99/icon-of-user-avatar-for-web-site-or-mobile-app-vector-3125199.jpg'
         ];
-        
         if($mediaItems)
         {
             $publicFullUrl = [
-                'id'=>$mediaItems[0]->id,
-                'url'=>$mediaItems[0]->getFullUrl()
+                'id'=>$mediaItems->id,
+                'url'=>$mediaItems->getFullUrl()
             ];
         }
         return $publicFullUrl;

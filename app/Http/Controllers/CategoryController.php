@@ -48,8 +48,11 @@ class CategoryController extends Controller
             'type'=>$request->type,
         ];
        $data =  Category::create($addTranslate);
-       $data->addMedia($request->file('image'))
-       ->toMediaCollection('categories');
+
+       if($request->hasFile('image')){
+            $data->addMedia($request->file('image'))->toMediaCollection('categories');
+       }
+       
 
        $data->excludeCategories()->sync($request->exclude_categories);
 

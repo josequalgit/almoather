@@ -12,7 +12,10 @@
     <title>Al Muaathir Dashboard</title>
     <link rel="apple-touch-icon" href="{{ asset('main2/images/ico/apple-icon-120.png') }}">
     <link rel="icon" type="image/x-icon" href="{{ asset('main2/images/logo/logo.png') }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,600%7CIBM+Plex+Sans:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
@@ -38,6 +41,7 @@
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->
+    @yield('style')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
     <!-- END: Custom CSS-->
 
@@ -91,7 +95,7 @@
                             <a class="dropdown-toggle nav-link dropdown-user-link" href="javascript:void(0);" data-toggle="dropdown">
                                 <div class="user-nav d-sm-flex d-none m-0">
                                     <div class="avatar avatar-lg">
-                                        <img src="https://pixinvent.com/demo/frest-bootstrap-laravel-admin-dashboard-template/demo/assets/img/avatars/1.png" alt="" class="rounded-circle">
+                                        <img src="{{ auth()->user()->adminImage['url'] }}" alt="" class="rounded-circle">
                                     </div>
                                 </div>
                             </a>

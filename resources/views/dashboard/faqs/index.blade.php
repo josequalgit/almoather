@@ -29,11 +29,7 @@
                                     <a href="{{ route('dashboard.faqs.create') }}" class="btn btn-secondary">Create</a>
                                 </div>
                                 <hr class="w-100 my-1">
-                            <div class="card-body card-dashboard">
-                                {{-- <p class="card-text">
-                                    There is 40 doctor added
-                                </p> --}}
-                             
+                            <div class="w-100 card-dashboard">                             
                                 <div class="table-responsive">
                                     @can('See Faq')
                                         <table class="table zero-configuration">

@@ -26,6 +26,16 @@ class SuperAdminRequest extends FormRequest
         return [
             'name'=>'required',
             'email'=>'required',
+            'password'=>'same:con_password',
+        ];
+    }
+
+
+   
+    public function messages()
+    {
+        return [
+            'password.same' => 'password mismatch',
         ];
     }
 }

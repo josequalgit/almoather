@@ -25,8 +25,7 @@ class InfluncerCategoryRequest extends FormRequest
     {
         return [
             'name_ar'=>'required',
-            'name_en'=>'required',
-            'image'=>'required'
+            'name_en'=>'required'
         ];
     }
 }

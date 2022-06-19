@@ -9,7 +9,12 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Create Faq</h4>
+                           
+                            <div class="card-title">
+                                <p class="mb-0">Create Faq</p>
+                            </div>
+                            <hr class="w-100 my-1">
+
                         </div>
                         <div class="card-body">
                             @if($errors->any())

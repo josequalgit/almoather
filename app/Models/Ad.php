@@ -41,7 +41,8 @@ class Ad extends Model implements HasMedia
         'is_added_tax',
         'is_vat',
         'about_product',
-        'tax_value'
+        'tax_value',
+        'eng_number',
     ];
 
     protected $append = 
@@ -177,6 +178,7 @@ class Ad extends Model implements HasMedia
     public function getDocumentAttribute() {
         $mediaItems = $this->getMedia('commercial_docs');
         $publicFullUrl = [];
+        $obj = [];
         if(count($mediaItems) > 0)
         {
 			foreach($mediaItems as $item)
@@ -190,11 +192,13 @@ class Ad extends Model implements HasMedia
 			}
            
         }
+     //   return $publicFullUrl;
         return $publicFullUrl;
    }
     public function getCrImageAttribute() {
         $mediaItems = $this->getMedia('document');
         $obj = [];
+        $array = [];
         if(count($mediaItems) > 0)
         {
 			
@@ -202,6 +206,7 @@ class Ad extends Model implements HasMedia
                     'id'=>$mediaItems[0]->id,
                     'url'=>$mediaItems[0]->getFullUrl()
                 ];
+                array_push($array,$obj);
 				// $publicFullUrl = $item->getFullUrl();
 			
 			
@@ -256,8 +261,7 @@ class Ad extends Model implements HasMedia
 
    public function getInfAdContract($inf_id)
    {
-        
-       return Contract::where(['influencer_id'=>$inf_id])
+       return InfluencerContract::where(['influencer_id'=>$inf_id])
         ->where(['ad_id'=>$this->id])
         ->first();
    }
@@ -324,6 +328,16 @@ class Ad extends Model implements HasMedia
                  'link'=>$item->link,
              ];
          });
+    }
+
+    public function getStoreLinkAttribute()
+    {
+        return strpos($this->attributes['store_link'], "http") ? $this->attributes['store_link'] : 'https://' . $this->attributes['store_link'];
+    }
+
+    public function AdSocialMediaAccounts()
+    {
+        return $this->belongsToMany(SocialMedia::class,'social_media_id','ad_id','social_media_id')->withPivot('link');
     }
    
 
