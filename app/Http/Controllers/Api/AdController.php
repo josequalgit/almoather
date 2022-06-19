@@ -65,6 +65,9 @@ class AdController extends Controller
             if($status == 'Completed'){
                 $itemsPaginated =  $data
                 ->where('status',1)
+                ->with(['ads'=>function($q){
+                    $q->where('status','fullpayment');
+                }])
                 ->orderBy('created_at','desc')
                 ->where('is_accepted',$statusCode[$status])
                 ->paginate(10);
@@ -73,6 +76,9 @@ class AdController extends Controller
             {
                 $itemsPaginated =  $data
                 ->where('status',0)
+                ->with(['ads'=>function($q){
+                    $q->where('status','fullpayment');
+                }])
                 ->orderBy('created_at','desc')
                 ->where('is_accepted',$statusCode[$status])
                 ->paginate(10);
@@ -81,6 +87,9 @@ class AdController extends Controller
             {
                 $itemsPaginated =  $data
                 ->where('status',0)
+                ->with(['ads'=>function($q){
+                    $q->where('status','fullpayment');
+                }])
                 ->where('is_accepted',$statusCode[$status])
                 ->orderBy('created_at','desc')
                 ->paginate(10);
@@ -89,6 +98,9 @@ class AdController extends Controller
             {
                 $itemsPaginated =  $data
                 ->where('status',0)
+                ->with(['ads'=>function($q){
+                    $q->where('status','fullpayment');
+                }])
                 ->orderBy('created_at','desc')
                 ->where('is_accepted',$statusCode[$status])
                 ->paginate(10);
@@ -96,6 +108,9 @@ class AdController extends Controller
             else
             {
                 $itemsPaginated = $data->orderBy('created_at','desc')
+                ->with(['ads'=>function($q){
+                    $q->where('status','fullpayment');
+                }])
                 ->paginate(10);
             };
           
@@ -541,17 +556,17 @@ class AdController extends Controller
 
         return $this->match_response($data);
 
-    //     return response()->json([
-    //         'msg'=>trans($this->trans_dir.'data_was_updated'),
-	// 		'data'=>[
-    //             'id'=>$data->id,
-	// 			'type'=>$data->type,
-	// 			'category'=>$data->categories->name,
-	// 			'budget'=>$data->budget,
-	// 			'match'=>$this->get_ad_influencers_matchs($data)
-    //         ],
-    //     'status'=>config('global.OK_STATUS')
-    //    ],config('global.OK_STATUS'));
+        //     return response()->json([
+        //         'msg'=>trans($this->trans_dir.'data_was_updated'),
+        // 		'data'=>[
+        //             'id'=>$data->id,
+        // 			'type'=>$data->type,
+        // 			'category'=>$data->categories->name,
+        // 			'budget'=>$data->budget,
+        // 			'match'=>$this->get_ad_influencers_matchs($data)
+        //         ],
+        //     'status'=>config('global.OK_STATUS')
+        //    ],config('global.OK_STATUS'));
 
 
     }
@@ -572,7 +587,7 @@ class AdController extends Controller
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
-       // dd(Auth::user()->customers);
+        // dd(Auth::user()->customers);
         $name = Auth::guard('api')->user()->customers->first_name.' '.Auth::guard('api')->user()->customers->middle_name.' '.Auth::guard('api')->user()->customers->last_name;
         $info =[
             'msg'=>trans($this->trans_dir.'customer').' '.'."'.$name.'"'.trans($this->trans_dir.'payed_five_percent').'('.$cal.')'. trans($this->trans_dir.'for') .'"'.$data->store.'" ',
@@ -589,7 +604,8 @@ class AdController extends Controller
 
         // Notification::send($getContactManagers, new AddInfluencer($info));
         
-        
+        $isProfitable =  $data->campaignGoals->profitable;
+        $isOnSite = $data->ad_type;
 
         return response()->json([
             'msg'=>trans($this->trans_dir.'all_matched_blurred'),
@@ -598,8 +614,17 @@ class AdController extends Controller
                 'category'=>$data->categories ? $data->categories->name : null,
                 'price'=>$cal,
                 'budget'=>$data->budget,
-                'matches'=>$data->matches()->where('status','!=','deleted')->get()->map(function($item){
-                    return $item->match;
+                'matches'=>$data->matches()->where('status','!=','deleted')->get()->map(function($item) use($isProfitable,$isOnSite){
+                   
+                    $response = [
+                        'id'=>$item->influencers->id,
+                        'match'=>$item->match,
+                        'gender'=>$item->influencers->gender,
+                        'is_primary'=>$item->status == 'basic'?true:false,
+                        'budget'=>$isOnSite?$item->influencers->ad_onsite_price:$item->influencers->ad_price,
+                    ];
+
+                    return $response;
                 })
             ],
             'status'=>config('global.OK_STATUS')
