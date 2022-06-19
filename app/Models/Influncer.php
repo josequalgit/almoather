@@ -20,6 +20,7 @@ class Influncer extends Model implements HasMedia
 
 
     protected $fillable = [
+        'voluum_id',
         'first_name',
         'middle_name',
         'last_name',
