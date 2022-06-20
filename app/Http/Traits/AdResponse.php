@@ -16,7 +16,6 @@ trait AdResponse {
           return $this->userDataResponse([],null,$item->users->id);
         }):null;
 
-		
       $basicResponse =  [
             'id'=>$ad->id,
             'image'=>$ad->image,
@@ -28,9 +27,6 @@ trait AdResponse {
               'title'=>$ad->campaignGoals->title
             ]:null,
             'logo'=>$ad->logo,
-            // 'locations'=>$ad->storeLocation?$ad->storeLocations()->get()->map(function($item){
-            //   return $item->cities->name.','.$item->areas->name.','.$item->countries->name;
-            // }):null,
             'store_name'=>$ad->store,
             'marouf_num'=>$ad->marouf_num,
             'store_link'=>$ad->store_link,
@@ -40,13 +36,35 @@ trait AdResponse {
                 'url'=>$item->image
               ];
             }),
-              'media_accounts'=>$ad->socialMediasAccount()->get()->map(function($item){
-              return [
-                'id'=>$item->id,
-                'image'=>$item->image,
-              ];
+              'media_accounts'=>$ad->AdSocialMediaAccounts->map(function($item){
+        
+                $link = '';
+                switch($item->id){
+                  case 1:
+                    $link = 'https://facebook.com/' . $item->pivot->link;
+                    break;
+                  case 2:
+                    $link = 'https://twitter.com/' . $item->pivot->link;
+                    break;
+                  case 3:
+                    $link = 'https://instagram.com/' . $item->pivot->link;
+                    break;
+                  case 4:
+                    $link = 'https://snapchat.com/' . $item->pivot->link;
+                    break;
+                  case 5:
+                    $link = 'https://youtube.com/' . $item->pivot->link;
+                    break;
+                  case 6:
+                    $link = 'https://tiktok.com/' . $item->pivot->link;
+                    break;
+                }
+                return [
+                  'id'=>$item->id	,
+                  'image'=>$item->image,
+                  'link' => $link
+                ];
             }),
-            'media_accounts_with_link'=>$ad->socialMediaWithAccount(),
             'cr_num'=>$ad->cr_num,
             'about'=>$ad->about,
             'relation'=>$ad->relation,

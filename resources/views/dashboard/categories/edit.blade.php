@@ -25,7 +25,7 @@
                     
                         <div class="row">
                             <div class="col-12">
-                                <fieldset class="form-group d-flex justify-content-center">
+                                {{-- <fieldset class="form-group d-flex justify-content-center">
                                    
                                     <div class="imgUp col-lg-4 col-md-7 col-12">
                                         <div class="imagePreview"></div>
@@ -34,7 +34,7 @@
                                                     </label>
                                       </div>
                                     
-                                </fieldset>
+                                </fieldset> --}}
                                 <fieldset class="form-group">
                                     <label for="basicInput">Name EN</label>
                                     <input id="name" value="{{ old('name_en')?old('name_en'):$data->getTranslations('name')['en'] }}" type="text" class="form-control"  name="name_en" placeholder="Enter name" />

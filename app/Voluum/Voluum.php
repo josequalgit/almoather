@@ -23,7 +23,7 @@ class Voluum{
 
     public function auth(){
         if($this->checkAuth()){
-            return $this->getAuthStorage();
+            return $this;
         }
 
         $headers = [
@@ -86,11 +86,9 @@ class Voluum{
     }
 
     private function getRequest(){
-        dd($this->getHeaders());
         $response = Http::withHeaders($this->getHeaders())->get($this->getEndpoint(), $this->getParams());
         $response->onError(function($error){
             $this->log($error);
-            dd($error);
             return $error;
         });
         $response->throw();
@@ -98,7 +96,6 @@ class Voluum{
     }
 
     private function postRequest(){
-        
         $response = Http::withHeaders($this->getHeaders())->post($this->getEndpoint(), $this->getParams());
         $response->onError(function($error){
             $this->log($error);

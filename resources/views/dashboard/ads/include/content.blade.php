@@ -43,7 +43,7 @@
                             </div>
                             <div id="videoSection" class="row video-section p-1">
                                 @foreach ($data->videos as $key => $item)
-                                    <div class="col-md-2 col-6 h-25 mt-2">
+                                    <div class="col-md-4 col-6 mt-2">
                                         <div class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
                                             <a href="{{ $item->url }}" target="_blank" rel="noopener noreferrer">
                                                 <img src="{{ asset('img/icons/misc/mp4.jpg') }}" width="40" />
@@ -65,7 +65,7 @@
                             </div>
                             <div id="imageSection" class="row video-section p-1 mb-2">
                                 @foreach ($data->image as $key => $item)
-                                    <div class="col-md-2 col-6 h-25 mt-2">
+                                    <div class="col-md-4 col-6 mt-2">
                                         <div class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
                                             <a href="{{ $item->url }}" target="_blank" rel="noopener noreferrer">
                                                 <img src="{{ asset('img/icons/misc/img.png') }}" width="40" />

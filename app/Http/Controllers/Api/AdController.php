@@ -60,61 +60,17 @@ class AdController extends Controller
                 'Active'    => 1
             ];
 
-            $data = Auth::guard('api')->user()->influncers->contracts();
+            $data = Auth::guard('api')->user()->influncers->contracts()->whereHas('ads');
 
             if($status == 'Completed'){
-                $itemsPaginated =  $data
-                ->where('status',1)
-                ->with(['ads'=>function($q){
-                    $q->where('status','fullpayment');
-                }])
-                ->orderBy('created_at','desc')
-                ->where('is_accepted',$statusCode[$status])
-                ->paginate(10);
+                $itemsPaginated =  $data->where('status',1)->where('is_accepted',$statusCode[$status]);
             }
-            elseif($status == 'Active')
+            elseif($status == 'Active' || $status == 'Pending' || $status == 'Rejected')
             {
-                $itemsPaginated =  $data
-                ->where('status',0)
-                ->with(['ads'=>function($q){
-                    $q->where('status','fullpayment');
-                }])
-                ->orderBy('created_at','desc')
-                ->where('is_accepted',$statusCode[$status])
-                ->paginate(10);
+                $itemsPaginated =  $data->where('status',0)->where('is_accepted',$statusCode[$status]);
             }
-            elseif($status == 'Pending')
-            {
-                $itemsPaginated =  $data
-                ->where('status',0)
-                ->with(['ads'=>function($q){
-                    $q->where('status','fullpayment');
-                }])
-                ->where('is_accepted',$statusCode[$status])
-                ->orderBy('created_at','desc')
-                ->paginate(10);
-            }
-            elseif($status == 'Rejected')
-            {
-                $itemsPaginated =  $data
-                ->where('status',0)
-                ->with(['ads'=>function($q){
-                    $q->where('status','fullpayment');
-                }])
-                ->orderBy('created_at','desc')
-                ->where('is_accepted',$statusCode[$status])
-                ->paginate(10);
-            }
-            else
-            {
-                $itemsPaginated = $data->orderBy('created_at','desc')
-                ->with(['ads'=>function($q){
-                    $q->where('status','fullpayment');
-                }])
-                ->paginate(10);
-            };
           
-
+            $itemsPaginated = $itemsPaginated->orderBy('created_at','desc')->paginate(10);
             $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item) use($status){
                 $data =  $this->adResponse($item->ads);
                 $data['status']         = $status;
@@ -1275,7 +1231,7 @@ class AdController extends Controller
             $response['ROAS'] = null;
             $response['engagement_rate'] = null;
             $response['aoaf'] = null;
-    
+
             if($isProfitable)
             {
                 $response['ROAS'] = $item->match;

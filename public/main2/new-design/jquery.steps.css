@@ -147,13 +147,6 @@
     color: #fff;
 }
 
-.wizard>.steps .error a,
-.wizard>.steps .error a:hover,
-.wizard>.steps .error a:active {
-    background: #ff3111;
-    color: #fff;
-}
-
 .wizard>.content {
 
     display: block;

@@ -136,6 +136,8 @@ Route::group(['middleware' => 'language'],function(){
                 Route::post('/ads/contract/influencers/{ad_id}','sendContractToInfluencer')->name('sendContractToInfluncer');
                 Route::post('/ads/contract/customers/{contract_id}','sendContractToCustomer')->name('sendContractToCustomer');
                 Route::get('/ads/contract/customers/seeInfluncer/{contract_id}','seeContractInfluencer')->name('seeContractInfluencer');
+                Route::get('/ads/get-unmatched-influencers/{ad_id}/{influencer_id}','getUnmatchedInfluencers')->name('getUnmatchedInfluencers');
+                Route::delete('/ads/delete-match-influencers/{ad_id}/{influencer_id}','deleteMatchInfluencers')->name('deleteMatchInfluencers');
             });
 
             Route::middleware('role_or_permission:superAdmin|Edit Slide|See Slide|Create Slide|Delete Slide')->name('slides.')->controller(SlideController::class)->group(function(){

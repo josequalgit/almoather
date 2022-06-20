@@ -27,14 +27,14 @@
                                 <div class="row">
                                     <div class="col-12">
                                     
-                                        <fieldset class="form-group d-flex justify-content-center">
+                                        {{-- <fieldset class="form-group d-flex justify-content-center">
                                             <div class="imgUp col-lg-4 col-md-7 col-12">
                                                 <div class="imagePreview"></div>
                                                 <label class="btn btn-primary">
                                                     Upload<input name="image" type="file" class="uploadFile img" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;">
                                                 </label>
                                             </div><!-- col-2 -->
-                                        </fieldset>
+                                        </fieldset> --}}
                                         <fieldset class="form-group">
                                             <label for="basicInput">Name EN</label>
                                             <input id="name" value="{{ old('name_en') }}" type="text" class="form-control"  name="name_en" placeholder="Enter name" />

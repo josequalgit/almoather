@@ -261,10 +261,6 @@ class Ad extends Model implements HasMedia
 
    public function getInfAdContract($inf_id)
    {
-        
-    //    return Contract::where(['influencer_id'=>$inf_id])
-    //     ->where(['ad_id'=>$this->id])
-    //     ->first();
        return InfluencerContract::where(['influencer_id'=>$inf_id])
         ->where(['ad_id'=>$this->id])
         ->first();
@@ -347,6 +343,10 @@ class Ad extends Model implements HasMedia
        if($isMarouf_num) return 'This marouf number was registered before';
        return null;
        
+
+    public function AdSocialMediaAccounts()
+    {
+        return $this->belongsToMany(SocialMedia::class,'social_media_id','ad_id','social_media_id')->withPivot('link');
     }
    
 
