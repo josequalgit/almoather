@@ -291,6 +291,8 @@
                   </a>
                 </li>
                 @endcanany
+                
+             
 
                 @canany(['Edit SocialMedias','Create SocialMedia','See SocialMedia'])
                 <li class="menu-item
@@ -313,6 +315,14 @@
                   </a>
                 </li>
                 @endcanany
+
+                <li class="menu-item
+                {{ ($name == 'dashboard.terms.index'|| $name == 'dashboard.terms.create'|| $name == 'dashboard.terms.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.terms.index') }}" class="menu-link">
+                    <div data-i18n="List">Privacy</div>
+                  </a>
+                </li>
                 
 
                 @canany(['Edit Slide','Create Slide','See Slide'])

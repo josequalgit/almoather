@@ -13,6 +13,12 @@ use Auth;
 
 class ContactUsController extends Controller
 {
+
+    public function index()
+    {
+        $data = Privacy::get();
+        return view('dashboard.terms.index',compact('data'));
+    }
     public function edit()
     {
         $data = ContactUs::find(1);
@@ -26,7 +32,6 @@ class ContactUsController extends Controller
         ContactUs::find(1)->update($request->all());
         activity()->log('Admin "'.Auth::user()->name.'" updated the contact us page');
         Alert::toast('Page was updated', 'success');
-
         return back();
     }
 

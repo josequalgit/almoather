@@ -120,7 +120,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
     #GET CAMPAIGN GOALS
     Route::controller(CampaignGoalController::class)->prefix('campaignGoals')->group(function(){
         Route::get('/','index');
-        Route::get('/rejectReasons','rejectReasons');
+        Route::get('/rejectReasons/{type?}','rejectReasons');
     });
 
     
