@@ -47,7 +47,6 @@
                     <button type="button" onclick="removeInfluencer(this,'{{ $item->influencers->id }}')" class="btn btn-danger">
                         <i class="fas fa-user-times"></i>
                     </button>
-                   
                 </td>
             </tr>
         @endforeach

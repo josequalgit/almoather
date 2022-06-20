@@ -135,6 +135,7 @@ Route::group(['middleware' => 'language'],function(){
                 Route::post('/ads/contract/customers/{contract_id}','sendContractToCustomer')->name('sendContractToCustomer');
                 Route::get('/ads/contract/customers/seeInfluncer/{contract_id}','seeContractInfluencer')->name('seeContractInfluencer');
                 Route::get('/ads/get-unmatched-influencers/{ad_id}/{influencer_id}','getUnmatchedInfluencers')->name('getUnmatchedInfluencers');
+                Route::delete('/ads/approve-influencers-list/{ad_id}','approveInfluencersList')->name('approveInfluencersList');
                 Route::delete('/ads/delete-match-influencers/{ad_id}/{influencer_id}','deleteMatchInfluencers')->name('deleteMatchInfluencers');
             });
 

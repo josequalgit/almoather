@@ -28,7 +28,7 @@
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="exampleFormControlSelect1">Engagement rate</label>
-                                                <input id="eng_number" class="form-control" type="number" value="0" min='0' max='100' />
+                                                <input id="eng_number" class="form-control" type="number" value="0" min='0' max='100' value="{{$data->eng_number}}" />
                                             </div>
                                         </div>
                                     @endif

@@ -62,7 +62,6 @@ class AdController extends Controller
         $countries = Country::get();
 
         if($data->status != 'pending') return view('dashboard.ads.showAd',compact('data','matchedInfluencers','productCategories','serviceCategories','unMatched'));
-        //  return view('dashboard.ads.showAd',compact('data','matches','productCategories','serviceCategories','unMatched'));
         
         return view('dashboard.ads.edit', compact('data', 'matchedInfluencers', 'unMatched', 'serviceCategories','productCategories', 'editable', 'countries'));
     }
@@ -98,7 +97,7 @@ class AdController extends Controller
         {
             $ad->status = $request->status;
             $ad->category_id = $request->category_id;
-            $ad->eng_number = $request->eng_number ?? 0;
+            $ad->eng_number = $request->engagement_rate;
             $ad->reject_note = $request->note ?? null;
             $ad->save();
 
@@ -142,7 +141,7 @@ class AdController extends Controller
         {
             $ad->category_id = $request->category_id;
             $ad->reject_note = $request->note ?? null;
-            $ad->eng_number = $request->eng_number ?? 0;
+            $ad->eng_number = $request->engagement_rate;
             $ad->save();
         }
 
@@ -321,14 +320,18 @@ class AdController extends Controller
         if($allSmallInfluencer->count() == 0){
             $noInfluencerReasons[] = "There are no small influencers found that have subscribers of less than 500000";
         }
-
+        
         $isOverBudge = 0;
+        $totalForSmallInfluencers = 0;
         #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
         foreach ($allSmallInfluencer as $key => $influencer) {
             $price = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
             $isOverBudge += $price;
             
             $chosen = $isOverBudge <= $budgetForSmallInfluencer ? 1 : 0;
+            if($chosen){
+                $totalForSmallInfluencers += $price;
+            }
             AdsInfluencerMatch::updateOrCreate([
                 'ad_id'=>$ad->id,
                 'influencer_id'=>$influencer->id,
@@ -343,6 +346,8 @@ class AdController extends Controller
         if($allInfluencer == 0){
             $noInfluencerReasons[] = "All influencers are over the campaign budget or the engagement rate for small influencers is set to 0";
         }
+       
+        $budgeForBigInfluencer = $budgeForBigInfluencer + ($budgetForSmallInfluencer - $totalForSmallInfluencers);
 
         /** GET BIG INFLUENCERS */
         $allBigInfluencer = Influncer::where('status', 'accepted')->whereNotIn('id', $data)->where('subscribers', '>=', 500000);
@@ -475,6 +480,23 @@ class AdController extends Controller
             'status' => true,
         ], 200);
 
+    }
+
+    function approveInfluencersList($campaign_id){
+        $ad = Ad::find($campaign_id);
+        if (!$ad) {
+            return response()->json([
+                'msg' => 'Campaign not found',
+                'status' => false,
+            ], config('global.NOT_FOUND_STATUS'));
+        }
+
+        $ad->update(['admin_approved_influencers' => 1]);
+
+        return response()->json([
+            'msg'=>'status was changed',
+            'status'=> true
+        ],config('global.OK_STATUS'));
     }
 
     public function getUnmatchedInfluencers($campaign_id,$influencer_id)

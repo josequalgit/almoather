@@ -43,8 +43,11 @@
                             <td>{{ $item->influencers->isBigInfluencer ? 'Big Influencer' : 'Small Influencer' }}</td>
                             <td>{{ ucwords(str_replace('_',' ',$item->status)) }}</td>
                             <td>
-                                <button type="button" onclick="getUnchosenInfulncers('{{ $item->influencers->id }}')" class="btn btn-secondary">
+                                <button type="button" onclick="getUnchosenInfulncers(this,'{{ $item->influencers->id }}')" class="btn btn-secondary">
                                     <i class="bx bx-transfer"></i>
+                                </button>
+                                <button type="button" onclick="removeInfluencer(this,'{{ $item->influencers->id }}')" class="btn btn-danger">
+                                    <i class="fas fa-user-times"></i>
                                 </button>
                                
                             </td>
@@ -53,6 +56,34 @@
                    
                 </tbody>
             </table>
+            <div class="row">
+                <div class="col-lg-6 col-md-12 p-2">
+                    <div class="count-box list">
+                        <span> <i class="bx bx-user"></i>Total Influencers:</span><span class="numbers"><b>{{ number_format($matchedInfluencers->count()) }}</b></span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 p-2">
+                    <div class="count-box list">
+                        <span> <i class="bx bx-money"></i>Total Budget:</span><span class="numbers"><b>{{ number_format($data->budget - (0.15 * $data->budget)) }}</b></span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 p-2">
+                    <div class="count-box list">
+                        <span> <i class="bx bx-money"></i>Influncers Toal Price:</span><span class="numbers"><b>{{ number_format($totalPrice) }}</b></span>
+                    </div>
+                </div>
+            
+                <div class="col-lg-6 col-md-12 p-2">
+                    <div class="count-box list">
+                        <span> <i class="bx bx-money"></i>Remaining Budget:</span><span class="numbers"><b>{{ number_format($data->budget - (0.15 * $data->budget) - $totalPrice) }}</b></span>
+                    </div>
+                </div>
+            </div>
+            @if ($data->status == 'choosing_influencer' && $data->admin_approved_influencers == 0)
+                <div class="d-flex justify-content-center">
+                    <button  type="button" onclick="approveInfluencersList(this)" class="btn btn-primary w-25">Approve Influencers List</button>
+                </div>  
+            @endif
         </div>
     </div>
 </section>

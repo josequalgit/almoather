@@ -43,6 +43,7 @@ class Ad extends Model implements HasMedia
         'about_product',
         'tax_value',
         'eng_number',
+        'admin_approved_influencers'
     ];
 
     protected $append = 
