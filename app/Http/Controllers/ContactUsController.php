@@ -16,9 +16,32 @@ class ContactUsController extends Controller
 
     public function index()
     {
-        $data = Privacy::get();
+        $data = Privacy::find(1);
+        return view('dashboard.privacy.index',compact('data'));
+    }
+    public function indexTerms()
+    {
+        $data = Terms::find(1);
         return view('dashboard.terms.index',compact('data'));
     }
+
+    public function updatePrivacy(Request $request)
+    {
+        $data = Privacy::find(1);
+        if(!$data) return response()->json([
+            'msg'=>'data not found',
+            'status'=>config('global.OK_STATUS'),
+        ],config('global.OK_STATUS'));
+        $updateRequest = array_merge($request->all(),[
+            'text'=>[
+                'ar'=>$request->text_ar,
+                'en'=>$request->text_en,
+            ]
+            ]);
+        $data->update($updateRequest);
+       return back();
+    }
+
     public function edit()
     {
         $data = ContactUs::find(1);
@@ -55,7 +78,7 @@ class ContactUsController extends Controller
         return back();
     }
 
-    public function updatePrivacy(UpdateTermsRequest $request)
+    public function updatePrivacys(UpdateTermsRequest $request)
     {
         if(!$request->text_ar||!$request->text_en){
             Alert::toast('Please fill the privacy section', 'error');

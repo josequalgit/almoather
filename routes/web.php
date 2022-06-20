@@ -117,6 +117,7 @@ Route::group(['middleware' => 'language'],function(){
             Route::middleware('role_or_permission:superAdmin|Edit Contact Us')->name('contactUs.')->controller(ContactUsController::class)->group(function(){
                 Route::get('/contactUs/edit','edit')->name('edit')->middleware('permission:Edit Contact Us');
                 Route::post('/contactUs/update','update')->name('update')->middleware('permission:Edit Contact Us');
+                Route::post('/contactUs/updatePrivacy','updatePrivacy')->name('updatePrivacy')->middleware('permission:Edit Contact Us');
             });
 
             Route::middleware('role_or_permission:superAdmin|Edit Ads|See Ads')->name('ads.')->controller(AdController::class)->group(function(){
@@ -152,13 +153,16 @@ Route::group(['middleware' => 'language'],function(){
             });
 
             Route::middleware('role_or_permission:superAdmin|Edit Terms|Show Terms')->name('terms.')->controller(ContactUsController::class)->group(function(){
-                Route::get('/terms','index')->name('index')->middleware('role_or_permission:superAdmin|Show Terms');
-                Route::post('/terms/update','updateTerms')->name('update')->middleware('role_or_permission:superAdmin|Edit Terms');
+                Route::get('/privacy','index')->name('index')->middleware('role_or_permission:superAdmin|Show Privacy');
+                Route::post('/privacy/update','updatePrivacy')->name('update')->middleware('role_or_permission:superAdmin|Edit Privacy');
+                Route::get('/terms','indexTerms')->name('indexTerms')->middleware('role_or_permission:superAdmin|Show Terms');
+                Route::post('/terms/updateTerms','updateTerms')->name('updateTerms')->middleware('role_or_permission:superAdmin|Edit Terms');
+                // Route::post('/terms/update','updateTerms')->name('update')->middleware('role_or_permission:superAdmin|Edit Terms');
             });
 
-            Route::middleware('role_or_permission:superAdmin|Edit Privacy')->name('privacy.')->controller(ContactUsController::class)->group(function(){
-                Route::post('/privacy/update','updatePrivacy')->name('update')->middleware('permission:Edit Terms');
-            });
+            // Route::middleware('role_or_permission:superAdmin|Edit Privacy')->name('privacy.')->controller(ContactUsController::class)->group(function(){
+            //     Route::post('/privacy/update','updatePrivacy')->name('update')->middleware('permission:Edit Terms');
+            // });
 
             Route::middleware('role_or_permission:superAdmin|Edit Faq|Create Faq|See Faq|Delete Faq')->name('faqs.')->controller(FaqController::class)->group(function(){
                 Route::get('/Faq','index')->name('index')->middleware('permission:Edit Faq|Create Faq|See Faq|Delete Faq');

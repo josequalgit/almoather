@@ -24,8 +24,8 @@ class UpdateTermsRequest extends FormRequest
     public function rules()
     {
         return [
-            'text_ar'=>'',
-            'text_en'=>'',
+            'text_ar'=>'required',
+            'text_en'=>'required',
         ];
     }
 }

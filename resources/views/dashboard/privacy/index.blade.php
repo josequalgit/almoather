@@ -4,7 +4,7 @@
 <div class="content-wrapper">
     <section id="basic-input">
         @can('Edit Contact Us')
-        <form method="post" enctype="multipart/form-data" action="{{ route('dashboard.terms.updateTerms') }}">
+        <form method="post" enctype="multipart/form-data" action="{{ route('dashboard.contactUs.updatePrivacy') }}">
             @csrf
         <div class="row">
             <div class="col-md-12">

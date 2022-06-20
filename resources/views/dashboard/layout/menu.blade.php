@@ -323,6 +323,13 @@
                     <div data-i18n="List">Privacy</div>
                   </a>
                 </li>
+                <li class="menu-item
+                {{ ($name == 'dashboard.terms.indexTerms'|| $name == 'dashboard.indexTerms.updateTerms'|| $name == 'dashboard.indexTerms.updateTerms') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.terms.indexTerms') }}" class="menu-link">
+                    <div data-i18n="List">Termis</div>
+                  </a>
+                </li>
                 
 
                 @canany(['Edit Slide','Create Slide','See Slide'])
