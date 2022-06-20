@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="app-content content chat-application">
-    <div class="content-area-wrapper">
+    <section id="basic-input " class="content-wrapper content-area-wrapper d-flex">
         <div class="sidebar-left">
             <div class="sidebar">
                 <!-- app chat sidebar start -->
@@ -152,7 +152,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
 @endsection

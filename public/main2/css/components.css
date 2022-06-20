@@ -102,13 +102,6 @@ html .content.app-content .content-overlay {
     z-index: -1;
 }
 
-html .content.app-content .content-area-wrapper {
-    height: calc(100% - 5rem);
-    margin: calc(5rem) 2.2rem 0;
-    display: flex;
-    position: relative;
-}
-
 html .content.app-content .content-area-wrapper .content-wrapper {
     margin-top: 0;
     height: calc(100vh - 9rem);
@@ -1693,6 +1686,10 @@ footer.footer span i {
     text-align: center;
 }
 
+
+div.avatar{
+    position: relative;
+}
 .dropdown-divider {
     margin: 0;
 }
