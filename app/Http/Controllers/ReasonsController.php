@@ -18,18 +18,12 @@ class ReasonsController extends Controller
 
     public function store(Request $request)
     {
-        $setting = AppSetting::where('key','reasons')->first();
-        if(!$setting)
-        {
-          $setting =  AppSetting::create([
-                'key'=>'reasons',
-                'value'=>json_encode([])
-            ]);
-        }
-        $changeToArray = json_decode($setting->value);
-        array_push($changeToArray,$request->text);
-        $setting->value = json_encode($changeToArray);
-        $setting->save();
+        $data = array_merge($request->all(),['text'=>[
+            'ar'=>$request->reason_ar,
+            'en'=>$request->reason_en,
+        ]]);
+        Reason::create($data);
+        
         Alert::toast('Reason Was added', 'success');
         return response()->json([
             'msg'=>'reason was added',
