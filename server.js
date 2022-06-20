@@ -5,8 +5,8 @@ if (config.environment == "https") {
     const fs = require('fs');
 
     const options = {
-        key: fs.readFileSync('/usr/local/psa/var/certificates/scfgAIOSS'),
-        cert: fs.readFileSync('/usr/local/psa/var/certificates/scfgAIOSS'),
+        key: fs.readFileSync('scfgAIOSS'),
+        cert: fs.readFileSync('scfgAIOSS'),
     };
 
     server = https.createServer(options).listen(config.server.port, () => {
