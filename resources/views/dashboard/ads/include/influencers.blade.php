@@ -43,12 +43,17 @@
                             <td>{{ $item->influencers->isBigInfluencer ? 'Big Influencer' : 'Small Influencer' }}</td>
                             <td>{{ ucwords(str_replace('_',' ',$item->status)) }}</td>
                             <td>
-                                <button type="button" onclick="getUnchosenInfulncers(this,'{{ $item->influencers->id }}')" class="btn btn-secondary">
+                                <button type="button" onclick="getUnchosenInfulncers(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm mb-1">
                                     <i class="bx bx-transfer"></i>
                                 </button>
-                                <button type="button" onclick="removeInfluencer(this,'{{ $item->influencers->id }}')" class="btn btn-danger">
+                                <button type="button" onclick="removeInfluencer(this,'{{ $item->influencers->id }}')" class="btn btn-danger btn-sm mb-1">
                                     <i class="fas fa-user-times"></i>
                                 </button>
+                                @if ($data->status == 'choosing_influencer' && $data->admin_approved_influencers == 0)
+                                    <div class="d-flex justify-content-center">
+                                        <button  type="button" onclick="seeContract(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm"><i class="fas fa-file-signature"></i></button>
+                                    </div>
+                                @endif
                                
                             </td>
                         </tr>
@@ -82,7 +87,8 @@
             @if ($data->status == 'choosing_influencer' && $data->admin_approved_influencers == 0)
                 <div class="d-flex justify-content-center">
                     <button  type="button" onclick="approveInfluencersList(this)" class="btn btn-primary w-25">Approve Influencers List</button>
-                </div>  
+                </div> 
+                
             @endif
         </div>
     </div>

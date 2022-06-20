@@ -49,28 +49,25 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Contract</h5>
+                            <h5 class="modal-title">Influencer Campaign data</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <textarea name="content" id="contractContent" rows="10" cols="80"></textarea>
                             <div class="form-group">
                                 <label for="exampleFormControlSelect1">Scenario</label>
                                 <textarea class="form-control" name="content" id="scenario" rows="10" cols="80"></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlSelect1">Date</label>
-                                <input id="contractDate" value="" name="website_link" type="date" class="form-control"
+                                <input id="contractDate" value="" name="influencer_date" type="date" class="form-control"
                                     id="inputAddress2" placeholder="date">
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-secondary text-center align-middle" onclick="sendContract()">
-                                Send
-                            </button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button class="btn btn-secondary text-center align-middle" onclick="sendContract()">Save</button>
+                            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
@@ -255,11 +252,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        CKEDITOR.replace('contractContent', {
-            extraPlugins: 'placeholder',
-            height: 220,
-            removeButtons: 'PasteFromWord'
-        });
+        
         let fileType = null;
         let deletetedFileId = null;
 
@@ -401,12 +394,8 @@
         }
 
 
-        function seeContract(content, inf_id) {
+        function seeContract($this,inf_id) {
             choosen_inf_id = inf_id;
-            $('#contractContent').empty();
-            let obj = CKEDITOR.instances['contractContent'];
-            obj.setData(content)
-
             $('#seeContract').modal('toggle');
         }
 
@@ -417,13 +406,12 @@
                 url: addId,
                 data: {
                     influncers_id: choosen_inf_id,
-                    date: document.getElementById('contractDate').value,
                     scenario: document.getElementById('scenario').value,
+                    date: document.getElementById('contractDate').value,
                     send_to_all: sendToAll,
                 },
                 type: 'POST',
                 success: (res) => {
-                    document.getElementById('contractContent').value = '';
                     location.reload();
                     $('#seeContract').modal('toggle');
                 },

@@ -221,9 +221,14 @@ class AdController extends Controller
         $notChosenInfluencer = [];
         foreach ($allInfluencer as $key => $influencer) {
             $price = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
-            $budgetSum += $price;
             
-            $chosen = $budgetSum <= $budgetAfterCutPercentage ? 1 : 0;
+            if(($budgetSum + $price) <= $budgetAfterCutPercentage){
+                $chosen = 1;
+                $budgetSum += $price;
+            }else{
+                $chosen = 0;
+            }
+
             AdsInfluencerMatch::updateOrCreate([
                 'ad_id' => $ad->id,
                 'influencer_id' => $influencer->id,
@@ -322,8 +327,9 @@ class AdController extends Controller
         #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
         foreach ($engagementInfluencers as $key => $influencer) {
             $price = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
-            $isOverBudge += $price;
-            if($isOverBudge <= $budgetForSmallInfluencer){
+            
+            if(($isOverBudge + $price) <= $budgetForSmallInfluencer){
+                $isOverBudge += $price;
                 $totalForSmallInfluencers += $price;
                 $chosenInfluencers[] = $influencer->id;
                 AdsInfluencerMatch::updateOrCreate([
@@ -334,7 +340,9 @@ class AdController extends Controller
                     'match'=> $influencer->eng_rate,
                     'AOAF' => $influencer->AOAF,
                 ]);
-            }else{
+            }
+            
+            if($totalForSmallInfluencers > $budgetForSmallInfluencer){
                 break;
             }
            
@@ -360,10 +368,13 @@ class AdController extends Controller
         foreach ($allBigInfluencer as $key => $influencer) {
             $price = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
 
-            $isOverBudge += $price;
+            if(($isOverBudge + $price) <= $budgeForBigInfluencer){
+                $chosen = 1;
+                $isOverBudge += $price;
+            }else{
+                $chosen = 0;
+            }
 
-            $chosen = $isOverBudge <= $budgeForBigInfluencer ? 1 : 0;
-            
             AdsInfluencerMatch::updateOrCreate([
                 'ad_id'=>$ad->id,
                 'influencer_id'=>$influencer->id,
@@ -372,6 +383,7 @@ class AdController extends Controller
                 'match'=> $influencer->AOAF,
                 'AOAF' => $influencer->AOAF,
             ]);
+            
         }
 
         $allInfluencer = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->count();

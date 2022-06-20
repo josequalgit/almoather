@@ -102,7 +102,7 @@
                                         <div class="followers text-center col-12 mb-1">
                                             <div class="count-box">
                                                 <span><i class="fas fa-plane-slash"></i> Campaign Type</span>
-                                                <span class="numbers">{{ $item->ad_type }}</span>
+                                                <span class="numbers">{{ ucwords(str_replace('_',' ',$item->ad_type)) }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -119,29 +119,50 @@
                         <table class="table zero-configuration table-influencers col-12" >
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    <th>Image</th>
                                     <th>Name</th>
-                                    <th>Country</th>
-                                    <th>Followers</th>
-                                    <th>Engagement</th>
-                                    <th>AOAF</th>
-                                    <th>ROAS</th>
+                                    <th>Category</th>
+                                    <th>Budget</th>
+                                    <th>Goal</th>
+                                    <th>Type</th>
+                                    <th>Campaign Type</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($data as $item)
                                         <tr>
-                                            <td><img src="{{ $item->customers?$item->customers->users->image['url']:null }}" alt="{{ $item->customers->full_name }}"></td>
-                                            <td>{{ $item->customers->full_name  }}</td>
-                                            <td><div class="d-flex justify-content-center align-items-center"><div class="contry-name">{{$item->countries->name}}</div> <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->country_code) }}.png" alt="{{$item->countries->name}}"></div></div></td>
-                                            <td>100,000</td>
-                                            <td>87%</td>
-                                            <td>77%</td>
-                                            <td>55,000</td>
+                                            <td><img src="{{ $item->logo['url']  }}" alt="{{ $item->store }}" alt="{{ $item->store }}"></td>
+                                            <td>{{ $item->store }}</td>
                                             <td>
-                                                <a class="btn btn-secondary" href="{{ route('dashboard.ads.edit',$item->id) }}">
-                                                    <i class="bx bx-show"></i>
+                                                @if($item->categories)
+                                                <div class="categories text-center">
+                                                    @foreach($item->categories()->pluck('name')->toArray() as $cat)
+                                                    <span class="desc badge bg-info mt-1 d-block">{{$cat}}</span>
+                                                    @endforeach
+                                                </div>
+                                                @else
+                                                <span class="desc badge bg-info mt-1">No category choosen</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ number_format($item->budget); }}</td>
+                                            <td>{{ $item->campaignGoals->title; }}</td>
+                                            <td>{{ $item->type ? $item->type : 'Not selected yet' }}</td>
+                                            <td>{{ ucwords(str_replace('_',' ',$item->ad_type)) }}</td>
+                                            <td>{{ $item->status }}</td>
+                                            <td>{{ $item->created_at->diffForHumans() }}</td>
+                                            <td>
+                                                <button class="btn btn-secondary btn-sm mb-1" onclick="openModalSeeContract('{{ $item->contacts?$item->contacts->content:'No data avalibale' }}')">
+                                                    <i class="bx bx-printer list-item-icon"></i>
+                                                </button>
+
+                                                <button class="btn btn-secondary btn-sm mb-1" onclick="seeMatched('{{$item->id}}')">
+                                                    <i class="bx bx-user list-item-icon"></i>
+                                                </button>
+                                                <a class="btn btn-secondary btn-sm" href="{{ route("dashboard.ads.edit",$item->id) }}" >
+                                                    <i class="bx bx-book-content list-item-icon"></i>
                                                 </a>
                                             </td>
                                         </tr>
