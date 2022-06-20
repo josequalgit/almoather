@@ -102,7 +102,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 id="modalTitle" class="modal-title">Add Reason!</h5>
+              <h5 id="ModalmodalTitle" class="modal-title">Add Reason!</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -128,7 +128,7 @@
                         
             </div>
             <div class="modal-footer">
-              <button onclick="createReason()" type="button" class="btn btn-primary">Add</button>
+              <button id="addButton" onclick="createReason()" type="button" class="btn btn-primary">Add</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
           </div>
@@ -163,13 +163,17 @@
 
     function openCreateModal(id,reason_ar = null,reason_en = null,type = null)
     {
-        
+          
         if(reason_ar)
         {
             reason_id = id;
 
             $('#reason_ar').val(reason_ar);
             $('#reason_en').val(reason_en);
+            $('#ModalmodalTitle').empty();
+            $('#ModalmodalTitle').append('Update Reason');
+            $('#addButton').empty();
+            $('#addButton').append('Update');
             $('#type').val(type);
         }
         else
@@ -178,6 +182,11 @@
             $('#reason_ar').val('');
             $('#reason_en').val('');
             $('#type').val('');
+            $('#ModalmodalTitle').empty();
+            $('#ModalmodalTitle').append('Create Reason');
+            $('#addButton').empty();
+
+            $('#addButton').append('Create');
         }
         $('#createModal').modal('toggle');
     }
