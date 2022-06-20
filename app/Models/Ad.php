@@ -338,6 +338,16 @@ class Ad extends Model implements HasMedia
     {
         return strpos($this->attributes['store_link'], "http") ? $this->attributes['store_link'] : 'https://' . $this->attributes['store_link'];
     }
+
+    public function checkIfNumberExist()
+    {
+       $isCrNumber =  $this->where('id','!=',$this->id)->where('cr_num','!=',null)->where('cr_num',$this->cr_num)->first();
+       $isMarouf_num =  $this->where('id','!=',$this->id)->where('cr_num','!=',null)->where('marouf_num',$this->marouf_num)->first();
+       if($isCrNumber) return 'This certificate number was registered before';
+       if($isMarouf_num) return 'This marouf number was registered before';
+       return null;
+       
+    }
    
 
 }

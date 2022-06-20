@@ -266,6 +266,15 @@
                
                 @canany(['Edit Influencer Category','Create Influencer Category','See Influencer Category','Delete Influencer Category'])
                 <li class="menu-item
+                {{ ($name == 'dashboard.generals.index'|| $name == 'dashboard.generals.create'|| $name == 'dashboard.generals.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.generals.index') }}" class="menu-link">
+                    <div data-i18n="List">General</div>
+                  </a>
+                </li>
+                @endcanany
+                @canany(['Edit Influencer Category','Create Influencer Category','See Influencer Category','Delete Influencer Category'])
+                <li class="menu-item
                 {{ ($name == 'dashboard.faqs.index'|| $name == 'dashboard.faqs.create'|| $name == 'dashboard.faqs.edit') ? 'active':''  }}
                 ">
                   <a href="{{ route('dashboard.faqs.index') }}" class="menu-link">

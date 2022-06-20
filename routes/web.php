@@ -27,6 +27,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\AdRelationsController;
+use App\Http\Controllers\GeneralController;
 
 Route::group(['middleware' => 'language'],function(){
     Route::redirect('/','/dashboard/admins')->name('home');
@@ -347,6 +348,16 @@ Route::group(['middleware' => 'language'],function(){
             Route::post('/update/{id?}','update')->name('update');
             Route::post('/delete/{id}','delete')->name('delete');
         });
+
+        Route::controller(GeneralController::class)
+        ->middleware('role_or_permission:superAdmin|Edit General|Update General|Show General|Create General')
+        ->prefix('general')
+        ->name('generals.')
+        ->group(function(){
+            Route::get('/','index')->name('index');
+            Route::post('/','update')->name('update');
+        });
+
 
         Route::controller(RegionController::class)
         ->prefix('regions')
