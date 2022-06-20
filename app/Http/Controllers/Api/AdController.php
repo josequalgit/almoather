@@ -568,8 +568,8 @@ class AdController extends Controller
             'data'=>[
                 'type'=>$data->type,
                 'category'=>$data->categories ? $data->categories->name : null,
-                'formate_price'=>$this->formateMoneyNumber($cal),
-                'formate_budget'=>$this->formateMoneyNumber($data->budget),
+                'format_price'=>$this->formateMoneyNumber($cal),
+                'format_budget'=>$this->formateMoneyNumber($data->budget),
                 'price'=>$cal,
                 'budget'=>$data->budget,
                 'matches'=>$data->matches()->where('status','!=','deleted')->get()->map(function($item) use($isProfitable,$isOnSite){
@@ -880,8 +880,8 @@ class AdController extends Controller
                 'id'=>$data->id,
                 'type'=>$data->type,
                 'category'=>$data->categories?$data->categories->name:null,
-                'formate_price'=>$this->formateMoneyNumber($data->budget - $cal),
-                'formate_budget'=>$this->formateMoneyNumber($data->budget),
+                'format_price'=>$this->formateMoneyNumber($data->budget - $cal),
+                'format_budget'=>$this->formateMoneyNumber($data->budget),
                 'price'=>$data->budget - $cal,
                 'budget'=>$data->budget,
                 'match'=> $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
@@ -942,8 +942,10 @@ class AdController extends Controller
                 'status'=>$data->status,
                 'influncers_status'=>$data->is_all_accepted(),
                 'category'=>$data->categories?$data->categories->name:null,
-                'price'=>$this->formateMoneyNumber($data->budget - $cal),
-                'budget'=>$this->formateMoneyNumber($data->budget),
+                'price'=>$data->budget - $cal,
+                'budget'=>$data->budget,
+                'format_price'=>$this->formateMoneyNumber($data->budget - $cal),
+                'format_budget'=>$this->formateMoneyNumber($data->budget),
                 'price'=>$data->budget - $cal,
                 'budget'=>$data->budget,
 
@@ -1161,7 +1163,7 @@ class AdController extends Controller
                 'influncers_status'=>$ad->is_all_accepted(),
 				'category'=>$ad->categories->name,
 				'budget'=>$this->formateMoneyNumber($ad->budget),
-				'formate_budget'=>$ad->budget,
+				'format_budget'=>$ad->budget,
 				'match'=>$this->get_ad_influencers_matchs($ad)
             ]
             ],config('global.OK_STATUS')

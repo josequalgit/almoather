@@ -33,7 +33,7 @@
                             </div>
                             <div class="card-body card-dashboard">
                                 <div class="table-responsive">
-                                    @can('See Role')
+                                    {{-- @can('See Reasons') --}}
                                         <table class="table zero-configuration">
                                             <thead>
                                                 <tr>
@@ -49,7 +49,12 @@
                                                             <td>{{ $item->getTranslation('text','en') }}</td>
                                                             <td>
                                                                 @can('Delete Reasons')
-                                                                    <button class="btn btn-danger" onclick="openModal('{{ $key }}','{{ $item }}')">
+                                                                    <button class="btn btn-secondary" onclick="openCreateModal('{{ $item->id }}','{{ $item->getTranslation('text','ar') }}','{{ $item->getTranslation('text','en') }}','{{ $item->type }}')">
+                                                                        <i class="bx bx-edit  deleteIcon"></i>
+                                                                    </button>
+                                                                @endcan
+                                                                @can('Delete Reasons')
+                                                                    <button class="btn btn-danger" onclick="openModal('{{ $item->id }}','{{ $item->getTranslation('text','en') }}')">
                                                                         <i class="bx bx-trash  deleteIcon"></i>
                                                                     </button>
                                                                 @endcan
@@ -60,14 +65,14 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
-                                    @endcan
+                                    {{-- @endcan --}}
                                 </div>
                             </div>
-                            @can('See Role')
+                            {{-- @can('See Reasons') --}}
                             <div class="p-1">
                                 {{ $data->links('pagination::bootstrap-5') }}
                             </div>
-                            @endcan
+                            {{-- @endcan --}}
                         </div>
                     </div>
                 </div>
@@ -97,7 +102,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Add Reason!</h5>
+              <h5 id="ModalmodalTitle" class="modal-title">Add Reason!</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -123,7 +128,7 @@
                         
             </div>
             <div class="modal-footer">
-              <button onclick="createReason()" type="button" class="btn btn-primary">Add</button>
+              <button id="addButton" onclick="createReason()" type="button" class="btn btn-primary">Add</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
           </div>
@@ -135,7 +140,7 @@
 @section('scripts')
 
 <script>
-    let role_id = null;
+    let reason_id = null;
     const Toast = Swal.mixin({
           toast: true,
           position: 'top-end',
@@ -150,21 +155,51 @@
 
     function openModal(id,name)
     {
-        role_id = id;
+        reason_id = id;
         $('#roleName').empty();
         $('#roleName').append(name);
         $('#deleteModal').modal('toggle');
     };
 
-    function openCreateModal()
+    function openCreateModal(id,reason_ar = null,reason_en = null,type = null)
     {
+          
+        if(reason_ar)
+        {
+            reason_id = id;
+
+            $('#reason_ar').val(reason_ar);
+            $('#reason_en').val(reason_en);
+            $('#ModalmodalTitle').empty();
+            $('#ModalmodalTitle').append('Update Reason');
+            $('#addButton').empty();
+            $('#addButton').append('Update');
+            $('#type').val(type);
+        }
+        else
+        {
+            reason_id = null;
+            $('#reason_ar').val('');
+            $('#reason_en').val('');
+            $('#type').val('');
+            $('#ModalmodalTitle').empty();
+            $('#ModalmodalTitle').append('Create Reason');
+            $('#addButton').empty();
+
+            $('#addButton').append('Create');
+        }
         $('#createModal').modal('toggle');
     }
 
     function createReason()
     {
-        alert('d')
-        let route = '{{ route("dashboard.reasons.store") }}'
+        let route = '{{ route("dashboard.reasons.store") }}';
+        if(reason_id)
+        {
+            route = '{{ route("dashboard.reasons.update",":id") }}'
+            route = route.replace(':id',reason_id);
+        }
+       
         $.ajax({
             url:route,
             type:'POST',
@@ -186,7 +221,7 @@
     function deleteApi()
     {
         let url = '{{ route("dashboard.reasons.delete",":id") }}';
-        let updatedUrl = url.replace(':id',role_id);
+        let updatedUrl = url.replace(':id',reason_id);
         $.ajax({
             type:'GET',
             url:updatedUrl,

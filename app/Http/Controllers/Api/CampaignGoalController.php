@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\CampaignGoal;
+use App\Models\Reason;
 use Illuminate\Support\Facades\App;
 use App\Http\Traits\ApiPaginator;
 
@@ -29,17 +30,15 @@ class CampaignGoalController extends Controller
     ],config('global.OK_STATUS'));
    }
 
-   public function rejectReasons()
+   public function rejectReasons($type='customer')
    {
+        $data = Reason::where('type',$type)->get()->map(function($item){
+            return $item->text;
+        });
        return response()->json([
            'msg'=>'reasons',
-           'data'=>[
-               'reasons 1',
-               'reasons 2',
-               'reasons 3',
-               'reasons 4',
-               'reasons 5',
-           ],
+           'data'=>$data,
+           'status'=>config('global.OK_STATUS')
        ],config('global.OK_STATUS'));
    }
 }

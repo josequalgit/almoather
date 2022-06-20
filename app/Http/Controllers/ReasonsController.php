@@ -31,15 +31,37 @@ class ReasonsController extends Controller
         ],config('global.OK_STATUS'));
     }
 
+
+    public function update(Request $request,$id)
+    {
+        $request_data = array_merge($request->all(),['text'=>[
+            'ar'=>$request->reason_ar,
+            'en'=>$request->reason_en,
+        ]]);
+        $data = Reason::findOrFail($id);
+
+        $data->update($request_data);
+        
+        Alert::toast('Reason Was updated', 'success');
+        return response()->json([
+            'msg'=>'reason was updated',
+            'status'=>config('global.OK_STATUS'),
+        ],config('global.OK_STATUS'));
+    }
+
+
+
     public function delete($id)
     {
-        $setting = AppSetting::where('key','reasons')->first();
-        $changeToArray = json_decode($setting->value);
-        unset($changeToArray[$id]);
-        $setting->value = json_encode($changeToArray);
-
-        $setting->save();
+ 
+        $data = Reason::find($id);
+        if(!$data) return response()->json([
+            'msg'=>'data not found',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+        $data->delete();
         Alert::toast('Reason Was deleted', 'success');
+
         return response()->json([
             'msg'=>'reason was deleted',
             'status'=>config('global.OK_STATUS'),
