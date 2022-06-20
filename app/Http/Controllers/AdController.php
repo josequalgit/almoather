@@ -292,20 +292,19 @@ class AdController extends Controller
         $chosenSubscribers = [];
         $notChosenInfluencer = [];
 
-        $hasInfluencerInCategory = Influncer::where('status', 'accepted')->whereNotIn('id', $data)->count();
-        if($hasInfluencerInCategory == 0){
+        $influencers = Influncer::where('status', 'accepted')->whereNotIn('id', $data);
+        if($influencers->count() == 0){
             $noInfluencerReasons[] = "All influencers have been taken away from the campaign category";
         }
-       
-        $allSmallInfluencer = Influncer::where('status', 'accepted')->whereNotIn('id', $data)->where('subscribers', '<', 500000)->where('subscribers', '>', 0);
         
         if ($ad->ad_type == 'onsite') {
-            $allSmallInfluencer = $allSmallInfluencer->where(function ($query) use ($ad) {
+            $influencers = $influencers->where(function ($query) use ($ad) {
                 $query->where('ads_out_country', 1)
                     ->orWhere('city_id', $ad->city_id);
             });
         }
-        $allSmallInfluencer = $allSmallInfluencer->get()->map(function($item){
+
+        $engagementInfluencers = $influencers->get()->map(function($item){
             $getLastMonthAds = $item->contracts()->orderBy('created_at', 'desc')->take(30)->sum('af');
             $getLastMonthAdsCount = $item->contracts()->orderBy('created_at', 'desc')->take(30)->count();
            
@@ -314,51 +313,36 @@ class AdController extends Controller
 
             return $item;
         });
+        $engagementInfluencers = collect($engagementInfluencers)->sortByDesc('eng_rate');
 
-        $allSmallInfluencer = collect($allSmallInfluencer)->sortByDesc('eng_rate');
-
-        if($allSmallInfluencer->count() == 0){
-            $noInfluencerReasons[] = "There are no small influencers found that have subscribers of less than 500000";
-        }
-        
         $isOverBudge = 0;
         $totalForSmallInfluencers = 0;
+        $chosenInfluencers = [];
+
         #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
-        foreach ($allSmallInfluencer as $key => $influencer) {
+        foreach ($engagementInfluencers as $key => $influencer) {
             $price = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
             $isOverBudge += $price;
-            
-            $chosen = $isOverBudge <= $budgetForSmallInfluencer ? 1 : 0;
-            if($chosen){
+            if($isOverBudge <= $budgetForSmallInfluencer){
                 $totalForSmallInfluencers += $price;
+                $chosenInfluencers[] = $influencer->id;
+                AdsInfluencerMatch::updateOrCreate([
+                    'ad_id' => $ad->id,
+                    'influencer_id' => $influencer->id,
+                ],[
+                    'chosen'=> 1,
+                    'match'=> $influencer->eng_rate,
+                    'AOAF' => $influencer->AOAF,
+                ]);
+            }else{
+                break;
             }
-            AdsInfluencerMatch::updateOrCreate([
-                'ad_id'=>$ad->id,
-                'influencer_id'=>$influencer->id,
-            ],[
-                'chosen'=> $chosen,
-                'match'=> $influencer->eng_rate,
-                'AOAF' => $influencer->AOAF,
-            ]);
-        }
-
-        $allInfluencer = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->count();
-        if($allInfluencer == 0){
-            $noInfluencerReasons[] = "All influencers are over the campaign budget or the engagement rate for small influencers is set to 0";
+           
         }
        
         $budgeForBigInfluencer = $budgeForBigInfluencer + ($budgetForSmallInfluencer - $totalForSmallInfluencers);
 
-        /** GET BIG INFLUENCERS */
-        $allBigInfluencer = Influncer::where('status', 'accepted')->whereNotIn('id', $data)->where('subscribers', '>=', 500000);
-        if ($ad->ad_type == 'onsite') {
-            $allBigInfluencer = $allBigInfluencer->where(function ($query) use ($ad) {
-                $query->where('ads_out_country', 1)
-                    ->orWhere('city_id', $ad->city_id);
-            });
-        }
-
-        $allBigInfluencer = $allBigInfluencer->get()->map(function($item){
+        $allBigInfluencer = $influencers->whereNotIn('id',$chosenInfluencers)->get()->map(function($item){
             $getLastMonthAds = $item->contracts()->orderBy('created_at', 'desc')->take(30)->sum('af');
             $getLastMonthAdsCount = $item->contracts()->orderBy('created_at', 'desc')->take(30)->count();
             $item->AOAF = $getLastMonthAdsCount ? $getLastMonthAds / $getLastMonthAdsCount : 0;
@@ -368,7 +352,7 @@ class AdController extends Controller
 
         $allBigInfluencer = collect($allBigInfluencer)->sortByDesc('AOAF');
         if($allBigInfluencer->count() == 0){
-            $noInfluencerReasons[] = "There are no big influencers found that have subscribers of more than 500000";
+            $noInfluencerReasons[] = "There are no influencers found";
         }
 
         #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
@@ -392,7 +376,7 @@ class AdController extends Controller
 
         $allInfluencer = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->count();
         if($allInfluencer == 0){
-            $noInfluencerReasons[] = "All influencers is over the campaign budget or engagement rate is set to 100";
+            $noInfluencerReasons[] = "All influencers is over the campaign budget";
         }
 
         return $noInfluencerReasons;
