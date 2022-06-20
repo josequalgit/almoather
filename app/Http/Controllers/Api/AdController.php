@@ -568,8 +568,10 @@ class AdController extends Controller
             'data'=>[
                 'type'=>$data->type,
                 'category'=>$data->categories ? $data->categories->name : null,
-                'price'=>$this->formateMoneyNumber($cal),
-                'budget'=>$this->formateMoneyNumber($data->budget),
+                'formate_price'=>$this->formateMoneyNumber($cal),
+                'formate_budget'=>$this->formateMoneyNumber($data->budget),
+                'price'=>$cal,
+                'budget'=>$data->budget,
                 'matches'=>$data->matches()->where('status','!=','deleted')->get()->map(function($item) use($isProfitable,$isOnSite){
                    
                     $response = [
@@ -878,8 +880,10 @@ class AdController extends Controller
                 'id'=>$data->id,
                 'type'=>$data->type,
                 'category'=>$data->categories?$data->categories->name:null,
-                'price'=>$this->formateMoneyNumber($data->budget - $cal),
-                'budget'=>$this->formateMoneyNumber($data->budget),
+                'formate_price'=>$this->formateMoneyNumber($data->budget - $cal),
+                'formate_budget'=>$this->formateMoneyNumber($data->budget),
+                'price'=>$data->budget - $cal,
+                'budget'=>$data->budget,
                 'match'=> $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
                     $contract = InfluencerContract::where('influencer_id',$item->influencer_id)->first();
 
@@ -940,6 +944,8 @@ class AdController extends Controller
                 'category'=>$data->categories?$data->categories->name:null,
                 'price'=>$this->formateMoneyNumber($data->budget - $cal),
                 'budget'=>$this->formateMoneyNumber($data->budget),
+                'price'=>$data->budget - $cal,
+                'budget'=>$data->budget,
 
                 'match'=> $data->status == 'prepay'?$this->get_ad_influencers_matchs($data):$this->get_ad_influncers_with_status($data)
             ],
@@ -1155,6 +1161,7 @@ class AdController extends Controller
                 'influncers_status'=>$ad->is_all_accepted(),
 				'category'=>$ad->categories->name,
 				'budget'=>$this->formateMoneyNumber($ad->budget),
+				'formate_budget'=>$ad->budget,
 				'match'=>$this->get_ad_influencers_matchs($ad)
             ]
             ],config('global.OK_STATUS')

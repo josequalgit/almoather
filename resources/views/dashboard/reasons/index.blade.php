@@ -13,26 +13,6 @@
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
-        {{-- <div class="content-header row">
-            <div class="content-header-left col-12 mb-2 mt-1">
-                <div class="breadcrumbs-top">
-                    <h5 class="content-header-title float-left pr-1 mb-0">Tabs</h5>
-                    <div class="breadcrumb-wrapper d-none d-sm-block">
-                        <ol class="breadcrumb p-0 mb-0 pl-1">
-                            <li class="breadcrumb-item"><a href="index.html"><i class="bx bx-home-alt"></i></a>
-                            </li>
-                            <li class="breadcrumb-item"><a href="#">Dashboard</a>
-                            </li>
-                            <li class="breadcrumb-item active">Reasons
-                            </li>
-                        </ol>
-                        @can('Create Reasons')
-                         <button onclick="openCreateModal()" class=" btn btn-primary float-right">Create</button>                            
-                        @endcan
-                    </div>
-                </div>
-            </div>
-        </div> --}}
         <div class="content-body">
             <!-- Basic tabs start -->
             <section id="basic-datatable">
@@ -43,9 +23,6 @@
                                 <div class="card-title">
                                     <p class="mb-0">Reasons</p>
                                 </div>
-                                {{-- <div class="section-right">
-                                    <a href="{{ route('dashboard.slides.create') }}" class="btn btn-secondary">Create</a>
-                                </div> --}}
                                 @can('Create Reasons')
                                 <div class="section-right">
                                     <button onclick="openCreateModal()" class=" btn btn-primary float-right">Create</button>                            
@@ -55,30 +32,22 @@
 
                             </div>
                             <div class="card-body card-dashboard">
-                                {{-- <p class="card-text">
-                                    There is 40 doctor added
-                                </p> --}}
-                             
                                 <div class="table-responsive">
                                     @can('See Role')
                                         <table class="table zero-configuration">
                                             <thead>
                                                 <tr>
-                                                    <th>Title</th>
+                                                    <th>Title Ar</th>
+                                                    <th>Title EN</th>
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($data as $key => $item)
                                                         <tr>
-                                                            <td>{{ $item }}</td>
-                                                            
+                                                            <td>{{ $item->getTranslation('text','ar') }}</td>
+                                                            <td>{{ $item->getTranslation('text','en') }}</td>
                                                             <td>
-                                                                {{-- @can('Edit Reasons')
-                                                                    <a class="btn btn-secondary" href="{{ route('dashboard.roles.edit',$item->id) }}">
-                                                                        <i class="bx bx-edit"></i>
-                                                                    </a>
-                                                                @endcan --}}
                                                                 @can('Delete Reasons')
                                                                     <button class="btn btn-danger" onclick="openModal('{{ $key }}','{{ $item }}')">
                                                                         <i class="bx bx-trash  deleteIcon"></i>
@@ -94,11 +63,11 @@
                                     @endcan
                                 </div>
                             </div>
-                            {{-- @can('See Role')
+                            @can('See Role')
                             <div class="p-1">
                                 {{ $data->links('pagination::bootstrap-5') }}
                             </div>
-                            @endcan --}}
+                            @endcan
                         </div>
                     </div>
                 </div>
@@ -134,7 +103,24 @@
               </button>
             </div>
             <div class="modal-body">
-             <input id="reason" placeholder="enter reason" class="form-control" />
+             {{-- <input id="reason" placeholder="enter reason" class="form-control" /> --}}
+             <div class="form-group">
+                <label for="exampleInputEmail1">Text Ar</label>
+                <input id="reason_ar" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter text">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Text En</label>
+                <input id="reason_en" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter text">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Type</label>
+                <select id="type" class="form-control form-select form-select-lg" aria-label="Default select example">
+                    <option value="influencer" >Influncer</option>
+                    <option value="customer" >Customer</option>
+                  </select>
+                  
+              </div>
+                        
             </div>
             <div class="modal-footer">
               <button onclick="createReason()" type="button" class="btn btn-primary">Add</button>
@@ -177,13 +163,16 @@
 
     function createReason()
     {
+        alert('d')
         let route = '{{ route("dashboard.reasons.store") }}'
         $.ajax({
             url:route,
             type:'POST',
             data:{
                 _token:'{{csrf_token()}}',
-                text:document.getElementById('reason').value
+                reason_ar:document.getElementById('reason_ar').value,
+                reason_en:document.getElementById('reason_en').value,
+                type:document.getElementById('type').value
             },
             success:(res)=>{
                 location.reload();
