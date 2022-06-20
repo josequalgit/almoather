@@ -1162,8 +1162,8 @@ class AdController extends Controller
 				'status'=>$ad->status,
                 'influncers_status'=>$ad->is_all_accepted(),
 				'category'=>$ad->categories->name,
-				'budget'=>$this->formateMoneyNumber($ad->budget),
-				'format_budget'=>$ad->budget,
+				'format_budget'=>$this->formateMoneyNumber($ad->budget),
+				'budget'=>$ad->budget,
 				'match'=>$this->get_ad_influencers_matchs($ad)
             ]
             ],config('global.OK_STATUS')
