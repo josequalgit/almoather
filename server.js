@@ -13,6 +13,7 @@ if (config.environment == "https") {
         console.log('listening on port ' + config.server.port);
     });
 } else {
+    console.log('test env:')
     server = require('http').Server();
 
     server.listen(config.server.port, () => {
