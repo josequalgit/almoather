@@ -72,7 +72,7 @@ trait AdResponse {
             'scenario'=>$ad->scenario,
             'videos'=>$ad->videos,
             'influencer'=> $info ? $info : null,
-            'budget'=>number_format($ad->budget),
+            'budget'=>$ad->budget,
             'date'=>$ad->date,
             'type'=>$ad->ad_type,
             // 'nearest_location'=>$ad->nearest_location,
