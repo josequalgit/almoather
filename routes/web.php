@@ -241,6 +241,7 @@ Route::group(['middleware' => 'language'],function(){
             ->group(function(){
                 Route::get('/','index')->name('index');
                 Route::post('/store','store')->name('store');
+                Route::post('/update/{id}','update')->name('update');
                 Route::get('/delete/{id}','delete')->name('delete');
             });
 
@@ -332,15 +333,16 @@ Route::group(['middleware' => 'language'],function(){
             Route::post('delete/{id}','delete')->name('delete');
         });
 
-        Route::controller(ReasonsController::class)
-        ->middleware('role_or_permission:superAdmin|Edit Reason|Update Reason|Show Reason|Create Reason')
-        ->prefix('reasons')
-        ->name('reasons.')
-        ->group(function(){
-            Route::get('/','index')->name('index');
-            Route::post('/store','store')->name('store');
-            Route::get('/delete/{id}','delete')->name('delete');
-        });
+        // Route::controller(ReasonsController::class)
+        // ->middleware('role_or_permission:superAdmin|Edit Reason|Update Reason|Show Reason|Create Reason')
+        // ->prefix('reasons')
+        // ->name('reasons.')
+        // ->group(function(){
+        //     Route::get('/','index')->name('index');
+        //     Route::post('/store','store')->name('store');
+        //     // Route::post('/update/{id}','update')->name('update');
+        //     Route::get('/delete/{id}','delete')->name('delete');
+        // });
 
         Route::controller(AdRelationsController::class)
         ->middleware('role_or_permission:superAdmin|Edit AdRelation|Update AdRelation|Show AdRelation|Create AdRelation')
