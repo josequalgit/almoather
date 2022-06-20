@@ -222,7 +222,7 @@
            
             
                {{-- @canany(['Create City|Edit City|Delete City|Create Country|Edit Country|Delete Country|Create Area|Delete Area|Update Area']) --}}
-               <li class="menu-item  {{ ($name == 'dashboard.socialMedia.index'|| $name == 'dashboard.socialMedia.create'|| $name == 'dashboard.socialMedia.edit'||$name == 'dashboard.faqs.index'||$name == 'dashboard.faqs.edit'||$name == 'dashboard.faqs.create'||$name == 'dashboard.editContactUs.index'||$name == 'dashboard.editContactUs.edit'||$name == 'dashboard.editContactUs.create') ? 'open active':''  }} ">
+               <li class="menu-item  {{ ($name == 'dashboard.cities.index'|| $name == 'dashboard.cities.create'|| $name == 'dashboard.cities.edit'||$name == 'dashboard.countries.index'||$name == 'dashboard.countries.edit'||$name == 'dashboard.countries.create'||$name == 'dashboard.editContactUs.create'||$name == 'dashboard.editContactUs.create'||$name == 'dashboard.editContactUs.create') ? 'open active':''  }} ">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                   <i class="menu-icon tf-icons bx bx-location-plus"></i>
                   <div data-i18n="Invoice">Locations</div>
@@ -264,6 +264,15 @@
               </a>
               <ul class="menu-sub">
                
+                @canany(['Edit Influencer Category','Create Influencer Category','See Influencer Category','Delete Influencer Category'])
+                <li class="menu-item
+                {{ ($name == 'dashboard.generals.index'|| $name == 'dashboard.generals.create'|| $name == 'dashboard.generals.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.generals.index') }}" class="menu-link">
+                    <div data-i18n="List">General</div>
+                  </a>
+                </li>
+                @endcanany
                 @canany(['Edit Influencer Category','Create Influencer Category','See Influencer Category','Delete Influencer Category'])
                 <li class="menu-item
                 {{ ($name == 'dashboard.faqs.index'|| $name == 'dashboard.faqs.create'|| $name == 'dashboard.faqs.edit') ? 'active':''  }}
@@ -335,6 +344,16 @@
                   </a>
                 </li>
                 @endcanany
+
+                {{-- @canany(['Edit AdRelation','Create AdRelation','See AdRelation']) --}}
+                <li class="menu-item
+                {{ ($name == 'dashboard.adRelations.index'|| $name == 'dashboard.adRelations.create'|| $name == 'dashboard.adRelations.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.adRelations.index') }}" class="menu-link">
+                    <div data-i18n="List">Ad Relations</div>
+                  </a>
+                </li>
+                {{-- @endcanany --}}
               </ul>
             </li>
 

@@ -111,17 +111,17 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="inputAddress2">Country</label>
-                                        <input disabled value="{{ old('country_id') ? old('country_id') : $data->countries->name }}" name="country_id"
+                                        <input disabled value="{{ old('country_id') ? old('country_id') : $data->countries?->name }}" name="country_id"
                                             type="text" class="form-control" id="inputAddress2" placeholder="country_id">
                                     </div>
                                     <div class="form-group">
                                         <label for="inputAddress2">Region</label>
-                                        <input disabled value="{{ old('region_id') ? old('region_id') : $data->regions->name }}" name="region_id"
+                                        <input disabled value="{{ old('region_id') ? old('region_id') : $data->regions?->name }}" name="region_id"
                                             type="text" class="form-control" id="inputAddress2" placeholder="region_id">
                                     </div>
                                     <div class="form-group">
                                         <label for="inputAddress2">City</label>
-                                        <input disabled value="{{ old('city_id') ? old('city_id') : $data->citys->name }}" name="city_id" type="text"
+                                        <input disabled value="{{ old('city_id') ? old('city_id') : $data->citys?->name }}" name="city_id" type="text"
                                             class="form-control" id="inputAddress2" placeholder="city_id">
                                     </div>
                                     <div class="form-group">

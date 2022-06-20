@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             ContactUsSeeder::class,
             SocialMediaSeeder::class,
             PrivaciesTermsSeeder::class,
-            CountrySeeder::class,
+            // CountrySeeder::class,
             CitySeeder::class,
             AreaSeeder::class,
             CategorySeeder::class,
@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             RattingSeeder::class,
             SettingSeeder::class,
             CampaignGoalsSeeder::class,
+            CountriesSeed::class
             // CustomerSeeder::class,
             // AdSeeder::class,
             // InfulencerSeeder::class,

@@ -568,8 +568,8 @@ class AdController extends Controller
             'data'=>[
                 'type'=>$data->type,
                 'category'=>$data->categories ? $data->categories->name : null,
-                'price'=>$cal,
-                'budget'=>$data->budget,
+                'price'=>$this->formateMoneyNumber($cal),
+                'budget'=>$this->formateMoneyNumber($data->budget),
                 'matches'=>$data->matches()->where('status','!=','deleted')->get()->map(function($item) use($isProfitable,$isOnSite){
                    
                     $response = [
@@ -878,8 +878,8 @@ class AdController extends Controller
                 'id'=>$data->id,
                 'type'=>$data->type,
                 'category'=>$data->categories?$data->categories->name:null,
-                'price'=>$data->budget - $cal,
-                'budget'=>$data->budget,
+                'price'=>$this->formateMoneyNumber($data->budget - $cal),
+                'budget'=>$this->formateMoneyNumber($data->budget),
                 'match'=> $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
                     $contract = InfluencerContract::where('influencer_id',$item->influencer_id)->first();
 
@@ -938,8 +938,8 @@ class AdController extends Controller
                 'status'=>$data->status,
                 'influncers_status'=>$data->is_all_accepted(),
                 'category'=>$data->categories?$data->categories->name:null,
-                'price'=>$data->budget - $cal,
-                'budget'=>$data->budget,
+                'price'=>$this->formateMoneyNumber($data->budget - $cal),
+                'budget'=>$this->formateMoneyNumber($data->budget),
 
                 'match'=> $data->status == 'prepay'?$this->get_ad_influencers_matchs($data):$this->get_ad_influncers_with_status($data)
             ],
@@ -1154,7 +1154,7 @@ class AdController extends Controller
 				'status'=>$ad->status,
                 'influncers_status'=>$ad->is_all_accepted(),
 				'category'=>$ad->categories->name,
-				'budget'=>$ad->budget,
+				'budget'=>$this->formateMoneyNumber($ad->budget),
 				'match'=>$this->get_ad_influencers_matchs($ad)
             ]
             ],config('global.OK_STATUS')
@@ -1575,5 +1575,43 @@ class AdController extends Controller
         ],200);
     }
 
+    public function get_ads_relation()
+    {
+      // FIND THE RIGHT SETTING TO UPDATED
+      $settings = AppSetting::where('key','ads_relation')->first();
+
+      // IF IT DOSE'T EXIST RETURN AN ERROR MESSAGE
+      if(!$settings)
+      {
+          $settings = AppSetting::create([
+              'key'=>'ads_relation',
+              'value'=>json_encode(array())
+          ]);
+      };
+      
+       // IF THE SETTING EXIST MAKE THE STRING VALUE TO ARRAY
+       $relation_array = (array)json_decode($settings->value);
+
+       return response()->json([
+        'msg'=>trans($this->trans_dir.'all_relation'),
+        'data'=>(array)$this->object_to_array_recursive($relation_array),
+        'status'=>config('global.OK_STATUS')
+    ],config('global.OK_STATUS'));
+    }
+
+    private function object_to_array_recursive($object, $assoc=TRUE, $empty='')
+    {
+        $array = [];
+        foreach ($object as $obj) {
+            array_push($array,$obj->{app()->getLocale()});
+         }
+        return $array;
+    }
+
+    private function formateMoneyNumber($number)
+    {
+        return number_format($number,0,'.',',');
+    }
+    
     
 }

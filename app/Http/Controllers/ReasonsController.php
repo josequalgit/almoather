@@ -4,21 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AppSetting;
+use App\Models\Reason;
 use Alert;
 
 class ReasonsController extends Controller
 {
     public function index()
     {
-        $setting = AppSetting::where('key','reasons')->first();
-        if($setting)
-        {
-            $data = json_decode($setting->value);
-        }
-        else
-        {
-            $data = [];
-        }
+        $data = Reason::paginate(10);
         return view('dashboard.reasons.index',compact('data'));
     }
 
@@ -50,7 +43,6 @@ class ReasonsController extends Controller
         $changeToArray = json_decode($setting->value);
         unset($changeToArray[$id]);
         $setting->value = json_encode($changeToArray);
-     //   dd($setting);
 
         $setting->save();
         Alert::toast('Reason Was deleted', 'success');

@@ -10,7 +10,7 @@ use App\Models\User;
 use App\Models\Contract;
 use App\Models\Influncer;
 use App\Http\Traits\SendNotification;
-
+use App\Models\AppSetting;
 use Illuminate\Support\Facades\Notification;
 
 class CheckAdsCommand extends Command
@@ -49,9 +49,19 @@ class CheckAdsCommand extends Command
 
     public function handle()
     {   
-            $ads = Ad::get();
-            $canceledDaysPeriod = config('global.CANCELED_DAYS_PERIOD');
+            $setting = AppSetting::where('key','expired_info')->first();
             $warningDaysPeriod = config('global.WARNING_DAYS_PERIOD');
+            $canceledDaysPeriod = config('global.CANCELED_DAYS_PERIOD');
+            if($setting)
+            {
+                $ser = json_decode($setting->value);
+                $data = unserialize($ser);
+                $warningDaysPeriod = $data['warning_days_period'];
+                $canceledDaysPeriod = $data['canceled_days_period'];
+            }
+            $ads = Ad::get();
+            $canceledDaysPeriod = $warningDaysPeriod;
+            $warningDaysPeriod = $warningDaysPeriod;
             $cDate = Carbon::parse()->now();
 
             foreach($ads as $item)

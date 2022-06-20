@@ -15,10 +15,16 @@ class AppSetting extends Model
     ];
 
     protected $append = [
-        'campaignGoal'
+        'campaignGoal',
+        'getAdRelation'
     ];
 
     public function getCampaignGoalAttribute()
+    {
+        return json_decode($this->value);
+    }
+
+    public function getGetAdRelation()
     {
         return json_decode($this->value);
     }
