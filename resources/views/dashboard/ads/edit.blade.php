@@ -4,7 +4,7 @@
   <link rel="stylesheet" href="{{ asset('main2/new-design/style.css') }}">
   @endsection
   @section('content')
-      <div class="app-content content">
+      <div class="app-content content pending-campaign">
 
           <section id="basic-input" class="content-wrapper">
 
@@ -22,7 +22,7 @@
                             <div class="col" id="wizard-basic">
                                 @include('dashboard.ads.include.campaigns')
                                 @include('dashboard.ads.include.content')
-                                <h3 class="f-16 ad-title">LIVE</h3>
+                                <h3 class="f-16 ad-title">Influencers</h3>
                                 <section>
                                     <div class="add-section">
                                         <div class="blocks-table d-block influencer-data">
@@ -53,35 +53,26 @@
                               <textarea class="form-control" id="rejectedNote" rows="12"></textarea>
                           </div>
                           <div class="modal-footer">
-                              <button onclick="sendStatusRequest()" type="button" class="btn btn-primary">Save
-                                  changes</button>
+                              <button onclick="sendStatusRequest()" type="button" class="btn btn-primary">Save changes</button>
                               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                           </div>
                       </div>
                   </div>
               </div>
 
-              <div id="unchosen_inf" class="modal" tabindex="-1" role="dialog">
-                  <div class="modal-dialog" role="document">
-                      <div class="modal-content">
+              <div id="unchosen_inf" class="modal fade" tabindex="-1" role="dialog">
+                  <div class="modal-dialog full-modal-dialog" role="document">
+                      <div class="modal-content full-modal-content">
                           <div class="modal-header">
-                              <h5 class="modal-title">Matched Inulncers</h5>
+                              <h5 class="modal-title">Replace Influencer</h5>
                               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                   <span aria-hidden="true">&times;</span>
                               </button>
                           </div>
                           <div class="modal-body">
-                              <div class="col">
-                                  <div class="user-dashboard-info-box table-responsive mb-0 bg-white  shadow-sm">
-                                      
-                                  </div>
-                              </div>
-
-
-
                           </div>
                           <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
                           </div>
                       </div>
                   </div>
@@ -210,7 +201,7 @@
                         if (res.status == 200) {
                             if (res.data.added_video) {
                                 $('#videoSection').append(`
-                                    <div class="col-3 h-25 mt-2">
+                                    <div class="col-md-4 col-6 mt-2">
                                     <div class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
                                         <a href="${res.data.added_video.url}" target="_blank" rel="noopener noreferrer">
                                             <img src="{{ asset('img/icons/misc/mp4.jpg') }}" width="40" />
@@ -224,7 +215,7 @@
                                 `);
                             } else {
                                 $('#imageSection').append(`
-                                    <div class="col-3 h-25 mt-2">
+                                    <div class="col-md-4 col-6 mt-2">
                                     <div class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
                                         <a href="${res.data.added_image.url}" target="_blank" rel="noopener noreferrer">
                                             <img src="{{ asset('img/icons/misc/img.png') }}" width="40" />
@@ -264,7 +255,6 @@
             });
         });
         // to know whate steps the user currently in
-        let countMatches = '{{ count($matches) }}';
         let adStatus = '{{ $data->status }}';
         let isConfirm = false;
         let totalInfluencers = 0;
@@ -289,7 +279,7 @@
                     }else{
                         Swal.fire(
                             '',
-                            'There is no influencers found for this campaign',
+                            'There are no influencers found for this campaign',
                             'error'
                         )
                     }
@@ -300,8 +290,13 @@
                         let rate = '{{ $data->campaignGoals->profitable }}';
                         let initValue = document.getElementById('engagement_rate') ? document.getElementById('engagement_rate').value : 0;
 
-                        if ((rate && initValue > 100) || (rate && initValue < 0)) {
-                            alert('please add correct amout of rate')
+                        if ((rate && initValue > 100) || (rate && initValue < 0)) 
+                        {
+                            Swal.fire(
+                                '',
+                                'Please set the engagement rate amount between 0 - 100',
+                                'error'
+                            );
                             return false;
                         }
                         sendStatusRequest();
@@ -366,99 +361,173 @@
           let deletetedFileId = null;
 
 
-          function sendStatusRequest(status = null) {
-                status = status || false;
+            function sendStatusRequest(status = null) {
+                    status = status || false;
 
-                if (status == 'rejected') {
-                    $('#rejectedReson').modal('toggle');
-                    return;
-                }
-                
-
-                let rate = '{{ $data->campaignGoals->profitable }}';
-                let url = '{{ route('dashboard.ads.update', ':id') }}';
-                let fullUrl = url.replace(':id', '{{ $data->id }}');
-                let engRate = document.getElementById('eng_number') ? document.getElementById('eng_number').value : 0;
-                if ((rate && engRate > 100) || (rate && engRate < 0)) {
-                    return alert('please add correct amout of rate')
-                }
-                if (status == 'approve') {
-                    url = '{{ route('dashboard.ads.update', [':id', ':confirm']) }}';
-                    urlWithId = url.replace(':id', '{{ $data->id }}');
-                    fullUrl = urlWithId.replace(':confirm', 1);
-                }
-               
-                $.ajax({
-                    url: fullUrl,
-                    type: 'POST',
-                    data: {
-                        status: status,
-                        note: document.getElementById('rejectedNote').value,
-                        category_id: document.getElementById('ad-category').value,
-                        engagement_rate: engRate,
-                        change: notChange,
-                        onSite: '{{ $data->onSite }}',
-                        adBudget: '{{ $data->budget }}',
-                        _token: '{{ csrf_token() }}',
-                        confirm:status == 'approve'?true:false
-
-                    },
-                    beforeSend: () => {
-                        totalInfluencers = 0;
-                        $('.influencer-data').html(`<div class="blocks-table d-block influencer-data">
-                                            <div class="loader-wrapper">
-                                                <div class="spinner-border spinner-info" role="status">
-                                                    <span class="sr-only">Loading...</span>
-                                                </div>
-                                            </div>
-                                        </div>`);
-                        $('[href="#next"]').attr('disabled',true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Next..')
-                    },
-                    success: (res) => {
-                        if(status == 'approve')
-                        {
-                            location.reload()
-                        }
-                        totalInfluencers = res.totalInfluencers;
-                        $('.influencer-data').html(res.data);
-                        $('[href="#next"]').attr('disabled',false).html('Next');
-                    },
-                    error: (err) => {
-                        console.log("updateding error: ", err);
-                        alert('something wrong with updateing the ad');
-                        $('[href="#next"]').attr('disabled',false).html('Next');
+                    if (status == 'rejected') {
+                        $('#rejectedReson').modal('toggle');
+                        return;
                     }
-                })
-          }
+                    
+
+                    let rate = '{{ $data->campaignGoals->profitable }}';
+                    let url = '{{ route('dashboard.ads.update', ':id') }}';
+                    let fullUrl = url.replace(':id', '{{ $data->id }}');
+                    let engRate = document.getElementById('eng_number') ? document.getElementById('eng_number').value : 0;
+                    if ((rate && engRate > 100) || (rate && engRate < 0)) {
+                        return alert('please add correct amout of rate')
+                    }
+                    if (status == 'approve') {
+                        url = '{{ route('dashboard.ads.update', [':id', ':confirm']) }}';
+                        urlWithId = url.replace(':id', '{{ $data->id }}');
+                        fullUrl = urlWithId.replace(':confirm', 1);
+                    }
+                
+                    $.ajax({
+                        url: fullUrl,
+                        type: 'POST',
+                        data: {
+                            status: status,
+                            note: document.getElementById('rejectedNote').value,
+                            category_id: document.getElementById('ad-category').value,
+                            engagement_rate: engRate,
+                            change: notChange,
+                            onSite: '{{ $data->onSite }}',
+                            adBudget: '{{ $data->budget }}',
+                            _token: '{{ csrf_token() }}',
+                            confirm:status == 'approve'?true:false
+
+                        },
+                        beforeSend: () => {
+                            totalInfluencers = 0;
+                            $('.influencer-data').html(`<div class="blocks-table d-block influencer-data">
+                                                <div class="loader-wrapper">
+                                                    <div class="spinner-border spinner-info" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                </div>
+                                            </div>`);
+                            $('[href="#next"]').attr('disabled',true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Next..')
+                        },
+                        success: (res) => {
+                            if(status == 'approve')
+                            {
+                                location.reload()
+                            }
+                            totalInfluencers = res.totalInfluencers;
+                            $('.influencer-data').html(res.data);
+                            $('[href="#next"]').attr('disabled',false).html('Next');
+                        },
+                        error: (err) => {
+                            console.log("updateding error: ", err);
+                            alert('something wrong with updateing the ad');
+                            $('[href="#next"]').attr('disabled',false).html('Next');
+                        }
+                    })
+            }
 
 
-          function getUnchosenInfulncers(inf_id) {
-              removed_inf = inf_id;
-
-              return $('#unchosen_inf').modal('toggle');
-          }
-
-          function replaceInfluncer(inf_id, ) {
-              let url = '{{ route('dashboard.ads.changeMatch', [':id', ':removed_inf', ':chosen_inf']) }}';
-              let changeId = url.replace(':id', '{{ $data->id }}');
-              let changeInf = changeId.replace(':removed_inf', removed_inf);
-              let chosenInf = changeInf.replace(':chosen_inf', inf_id)
-
-              $.ajax({
+            function getUnchosenInfulncers($this,inf_id) {
+                removed_inf = inf_id;
+                let url = '{{ route("dashboard.ads.getUnmatchedInfluencers",["ad_id" => $data->id,"influencer_id" => ":inf_id"]) }}';
+                url = url.replace(':inf_id',inf_id);
+                $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i>`);
+                $.ajax({
                   type: 'GET',
-                  url: chosenInf,
+                  url: url,
+                  dataType: 'json',
                   success: (res) => {
-                      if (res.status != 200) {
-                          return alert(res.msg)
-                      }
-                      location.reload();
+                    if(res.count){
+                        $('#unchosen_inf .modal-body').html(res.influencers);
+                        $('#unchosen_inf').modal('show');
+                    }else{
+                        Swal.fire(
+                            '',
+                            'No influencers found in unmatched list',
+                            'error'
+                        )
+                    }
+                    $($this).attr('disabled',false).html(`<i class="bx bx-transfer"></i>`);
+                    console.log(res);
                   },
                   error: (err) => {
-                      console.log('delete admin Error')
+                     console.log(err);
+                     $($this).attr('disabled',false).html(`<i class="bx bx-transfer"></i>`);
                   }
               });
+                
+            }
 
-          }
+            function removeInfluencer($this,inf_id) {
+                
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let url = '{{ route("dashboard.ads.deleteMatchInfluencers",["ad_id" => $data->id,"influencer_id" => ":inf_id"]) }}';
+                        url = url.replace(':inf_id',inf_id);
+                        $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i>`);
+                        $.ajax({
+                            type: 'DELETE',
+                            url: url,
+                            dataType: 'json',
+                            success: (res) => {
+                                totalInfluencers = res.totalInfluencers;
+                                $('.influencer-data').html(res.data);
+                                $($this).attr('disabled',false).html(`<i class="fas fa-user-times"></i>`);
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Influencer has been deleted.',
+                                    'success'
+                                )
+                            },
+                            error: (err) => {
+                                console.log(err);
+                                $($this).attr('disabled',false).html(`<i class="fas fa-user-times"></i>`);
+                            }
+                        });
+                        
+                    }
+                })
+               
+                
+            }
+
+            function replaceInfluncer($this,inf_id) {
+                let url = "{{ route('dashboard.ads.changeMatch', [$data->id, ':removed_inf', ':chosen_inf']) }}";
+                url = url.replace(':removed_inf', removed_inf);
+                url = url.replace(':chosen_inf', inf_id)
+
+                $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i>`);
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    success: (res) => {
+                        if(res.status){
+                            $('.influencer-data').html(res.data);
+                        }else{
+                            Swal.fire(
+                                '',
+                                res.error,
+                                'error'
+                            )
+                        }
+                        $('#unchosen_inf').modal('hide');
+                        $($this).attr('disabled',false).html(`<i class="bx bx-check"></i>`);
+                    },
+                    error: (err) => {
+                        console.log(err);
+                        $($this).attr('disabled',false).html(`<i class="bx bx-check"></i>`);
+                    }
+                });
+
+            }
 
           function seeContract(content, inf_id) {
               choosen_inf_id = inf_id;

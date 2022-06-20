@@ -8,34 +8,49 @@
 
         <section id="basic-input" class="content-wrapper">
 
-          <div class="card">
-              <div class="card-header pb-0">
-                  <div class="card-title">
-                      <p class="mb-0">Ad Details</p>
-                  </div>
-                  <hr class="w-100 mt-1">
-              </div>
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="card-title">
+                        <p class="mb-0">Ad Details</p>
+                    </div>
+                    <hr class="w-100 mt-1">
+                </div>
 
-              <div class="card-body">
-                  <form id="ad_details_from" action="/" class="campaign-form">
-                        <div class="row">
-                            <div class="col" id="wizard-basic">
-                                @include('dashboard.ads.include.campaigns')
-                                @include('dashboard.ads.include.content')
-                                @include('dashboard.ads.include.influencers')
-                                @if ($data->status == 'choosing_influencer')
-                                <div class="d-flex justify-content-center">
-                                    <button  type="button" onclick="seeContract(true)" class="btn btn-primary w-25">
-                                        Send Contract To All
-                                    </button>
-                                </div>
-                                    
-                                @endif
-                            </div>
-                        </div>
-                  </form>
-              </div>
-          </div>
+                <div class="card-body">
+                    @include('dashboard.ads.include.campaigns')
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="card-title">
+                        <p class="mb-0">Content</p>
+                    </div>
+                    <hr class="w-100 mt-1">
+                </div>
+                <div class="card-body">
+                    @include('dashboard.ads.include.content')
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="card-title">
+                        <p class="mb-0">Influencers</p>
+                    </div>
+                    <hr class="w-100 mt-1">
+                </div>
+                <div class="card-body">
+                    @include('dashboard.ads.include.influencers')
+                    @if ($data->status == 'choosing_influencer')
+                        <div class="d-flex justify-content-center">
+                            <button  type="button" onclick="seeContract(true)" class="btn btn-primary w-25">
+                                Send Contract To All
+                            </button>
+                        </div>  
+                    @endif
+                </div>
+            </div>
 
             <div id="unchosen_inf" class="modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
@@ -275,18 +290,7 @@
               });
           });
       });
-      // to know whate steps the user currently in
-      let userCurrentStep = 0;
-      let countMatches = '{{ count($matches) }}';
-      let adStatus = '{{ $data->status }}';
-      let isConfirm = false;
-      if (adStatus != 'pending') {
-          userCurrentStep = 1;
-      }
-      if (countMatches > 0) {
-          userCurrentStep = 2
-      }
-     
+
 
       $('#addressSection').hide();
       let ad_id = '{{ $data->id }}';

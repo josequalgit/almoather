@@ -752,6 +752,7 @@ span.numbers {
 table.zero-configuration {
     border-collapse: separate;
     border-spacing: 0 1em;
+    table-layout: fixed;
 }
 
 table.zero-configuration tr td {
@@ -1070,4 +1071,33 @@ ul.dropdown-menu.p-1.border.show {
 .loader-wrapper .spinner-border{
     width: 3rem;
     height: 3rem;
+}
+
+.full-modal-dialog {
+    min-width: 90% !important;
+}
+
+.modal .modal-content .modal-header .modal-title {
+    font-family: "Rubik",'Tajawal', Helvetica, Arial, serif;
+    font-weight: normal;
+    font-size: 1.2rem;
+}
+.modal-title {
+    margin-bottom: 0;
+    line-height: 1.4;
+}
+h5, .h5 {
+    font-size: 1.3rem;
+}
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: "Rubik",'Tajawal', Helvetica, Arial, serif;
+    color: #000000;
+}
+
+.ad-title{
+    display: none;
+}
+
+.pending-campaign .ad-title{
+    display: block;
 }

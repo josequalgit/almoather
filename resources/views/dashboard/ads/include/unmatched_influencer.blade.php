@@ -1,36 +1,52 @@
-<table class="table manage-candidates-top mb-0">
-
-    <tbody>
-        
+<table class="table zero-configuration table-influencers mb-1">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Nickname</th>
+            <th>Price</th>
+            @if($ad->campaignGoals->profitable)
+            <th>ROAS</th>
+            @else
+            <th>Engagment Rate</th>
+            <th>AOAF</th>
+            @endif
+            <th>Influencer Type</th>
+            <th>Choose Type</th>
+            <th>Over Budget</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="table-body">
         @foreach ($unMatched as $item)
-            <tr class="candidates-list bg-dnager">
-                <td class="title">
+            @php 
+            $price = $ad->ad_type == 'online' ? $item->influencers->ad_price : $item->influencers->ad_onsite_price;
+            @endphp
+            <tr>
+                <td>
                     <div class="thumb">
-                        <img class="img-fluid" src="{{ $item->influencers->users->infulncerImage ? $item->influencers->users->infulncerImage['url'] : null }}" alt="">
+                        <img class="img-fluid inf-image" src="{{ $item->influencers->users ? $item->influencers->users->infulncerImage['url'] : null }}" alt="">
                     </div>
-                    <div class="candidate-list-details">
-                        <div class="candidate-list-info">
-                            <div class="candidate-list-title">
-                                <h5 class="mb-0">
-                                    {{ $item->influencers->first_name }}
-                                    {{ $item->influencers->middle_name }}
-                                    {{ $item->influencers->last_name }}</h5>
-                                <span
-                                    style="font-size:12px;">{{ $item->match }}%</span><br />
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col">
-                        <button style="background:none; border:none;"
-                            onclick="replaceInfluncer('{{ $item->influencers->id }}',)"
-                            class="float-right" href="http://" target="_blank"
-                            rel="noopener noreferrer">
-                            <h5>chose</i></h5>
-                        </button>
-                    </div>
+                </td>
+                <td>{{ $item->influencers->nick_name }}</td>
+                <td>{{ $price }}</td>
+                @if($ad->campaignGoals->profitable)
+                    <td>{{ $item->match ?? 0 }}%</td>
+                @else
+                    <td>{{ $item->match ?? 0 }}%</td>
+                    <td>{{ $item->AOAF ?? 0 }}%</td>
+                @endif
+                <td>{{ $item->influencers->isBigInfluencer ? 'Big Influencer' : 'Small Influencer' }}</td>
+                <td>{{ ucwords(str_replace('_',' ',$item->status)) }}</td>
+                <td>{{ $price <= $influencerPrice ? 'No' : 'Yes'  }}</td>
+                <td>
+                    @if ($price <= $influencerPrice)
+                    <button class="btn btn-secondary" onclick="replaceInfluncer(this,'{{ $item->influencers->id }}')"> <i class="bx bx-check"></i></button>
+                    @else
+                    <button class="btn btn-secondary" disabled><i class="bx bx-check"></i></button>
+                    @endif
                 </td>
             </tr>
         @endforeach
+       
     </tbody>
 </table>

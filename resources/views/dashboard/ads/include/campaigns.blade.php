@@ -109,13 +109,13 @@
                                     <div class="col-lg-6 col-md-12 p-2">
                                         <div class="count-box list">
                                             <span> <i class="bx bx-money"></i>Total Budget:</span><span
-                                                class="numbers">{{ $data->budget }}</span>
+                                                class="numbers">{{ $data->budget - (0.15 * $data->budget) }}</span>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-12 p-2">
                                         <div class="count-box list">
                                             <span> <i class="bx bx-user"></i>Influncer:</span><span
-                                                class="numbers">{{ count($matches) }}</span>
+                                                class="numbers">{{ count($matchedInfluencers) }}</span>
                                         </div>
                                     </div>
                                 </div>
