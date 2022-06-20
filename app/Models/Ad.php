@@ -343,7 +343,7 @@ class Ad extends Model implements HasMedia
        if($isCrNumber) return 'This certificate number was registered before';
        if($isMarouf_num) return 'This marouf number was registered before';
        return null;
-       
+    }
 
     public function AdSocialMediaAccounts()
     {
