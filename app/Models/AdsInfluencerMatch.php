@@ -15,7 +15,8 @@ class AdsInfluencerMatch extends Model
         'influencer_id',
         'match',
         'chosen',
-        'AOAF'
+        'AOAF',
+        'scenario'
     ];
 
     protected $append = [

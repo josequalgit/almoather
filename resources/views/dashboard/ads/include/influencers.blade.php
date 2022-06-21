@@ -1,4 +1,8 @@
 <h3 class="f-16 ad-title">LIVE</h3>
+@php 
+$totalPrice = 0;
+$notShowSinarioStatuses = ['prepay','pending','cancelled','approved',];  
+@endphp
 <section>
     <div class="add-section">
         <div class="blocks-table d-block">
@@ -14,19 +18,24 @@
                         <th>Engagment Rate</th>
                         <th>AOAF</th>
                         @endif
+                        @if(!in_array($data->status,$notShowSinarioStatuses))
+                        <th>Date</th>
+                        <th>Sinario</th>
+                        @endif
                         <th>Type</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody id="table-body">
-                    @php $totalPrice = 0; @endphp
+                   
                     @foreach ($matchedInfluencers as $item)
                         @php 
                         $price = $data->ad_type == 'online' ? $item->influencers->ad_price : $item->influencers->ad_onsite_price;
                         $totalPrice += $price;
+                        $contract = $item->contract;
                         @endphp
-                        <tr>
+                        <tr data-id="{{ $item->influencers->id }}">
                             <td>
                                 <div class="thumb">
                                     <img class="img-fluid inf-image" src="{{ $item->influencers->users ? $item->influencers->users->infulncerImage['url'] : null }}" alt="">
@@ -40,6 +49,10 @@
                                 <td>{{ $item->match ?? 0 }}%</td>
                                 <td>{{ $item->AOAF ?? 0 }}%</td>
                             @endif
+                            @if(!in_array($data->status,$notShowSinarioStatuses))
+                                <td class="date {{ $contract ? 'has-content' : ''}}">{{ $contract ? $contract->date : 'Not set' }}</td>
+                                <td class="sinario {{ $contract ? 'has-content' : ''}}">{{ $contract ? $contract->scenario : 'Not set' }}</td>
+                            @endif
                             <td>{{ $item->influencers->isBigInfluencer ? 'Big Influencer' : 'Small Influencer' }}</td>
                             <td>{{ ucwords(str_replace('_',' ',$item->status)) }}</td>
                             <td>
@@ -50,9 +63,7 @@
                                     <i class="fas fa-user-times"></i>
                                 </button>
                                 @if ($data->status == 'choosing_influencer' && $data->admin_approved_influencers == 0)
-                                    <div class="d-flex justify-content-center">
-                                        <button  type="button" onclick="seeContract(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm"><i class="fas fa-file-signature"></i></button>
-                                    </div>
+                                    <button  type="button" onclick="seeContract(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm"><i class="fas fa-file-signature"></i></button>
                                 @endif
                                
                             </td>
@@ -61,7 +72,12 @@
                    
                 </tbody>
             </table>
-            <div class="row">
+            @if ($data->status == 'choosing_influencer' && $data->admin_approved_influencers == 0)
+                <div class="d-flex justify-content-center">
+                    <button  type="button" onclick="approveInfluencersList(this)" class="btn btn-secondary">Approve Influencers List</button>
+                </div> 
+            @endif
+            <div class="row mt-2">
                 <div class="col-lg-6 col-md-12 p-2">
                     <div class="count-box list">
                         <span> <i class="bx bx-user"></i>Total Influencers:</span><span class="numbers"><b>{{ number_format($matchedInfluencers->count()) }}</b></span>
@@ -84,12 +100,7 @@
                     </div>
                 </div>
             </div>
-            @if ($data->status == 'choosing_influencer' && $data->admin_approved_influencers == 0)
-                <div class="d-flex justify-content-center">
-                    <button  type="button" onclick="approveInfluencersList(this)" class="btn btn-primary w-25">Approve Influencers List</button>
-                </div> 
-                
-            @endif
+            
         </div>
     </div>
 </section>

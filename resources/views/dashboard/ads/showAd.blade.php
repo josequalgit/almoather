@@ -66,7 +66,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-secondary text-center align-middle" onclick="sendContract()">Save</button>
+                            <button class="btn btn-secondary text-center align-middle" onclick="sendContract(this)">Save</button>
                             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -335,15 +335,24 @@
                         url: url,
                         dataType: 'json',
                         success: (res) => {
-                            totalInfluencers = res.totalInfluencers;
-                            $('.influencer-data').html(res.data);
+                            if(res.status){
+                                Swal.fire(
+                                    'Confirmed!',
+                                    'Influencers have been confirmed.',
+                                    'success'
+                                );
+                                $($this).parent().remove();
+                            }else{
+                                Swal.fire(
+                                    'Error!',
+                                    res.msg,
+                                    'error'
+                                );
+                            }
+                            
+                            
+
                             $($this).attr('disabled',false).html(`Approve Influencers List`);
-                            Swal.fire(
-                                'Confirmed!',
-                                'Influencers have been confirmed.',
-                                'success'
-                            );
-                            $($this).parent().remove();
                         },
                         error: (err) => {
                             console.log(err);
@@ -396,27 +405,66 @@
 
         function seeContract($this,inf_id) {
             choosen_inf_id = inf_id;
+            $('#scenario,#contractDate').val('');
+            if($('tr[data-id="'+choosen_inf_id+'"] .sinario').hasClass('has-content')){
+                $('#scenario').val($('tr[data-id="'+choosen_inf_id+'"] .sinario').text());
+            }
+            if($('tr[data-id="'+choosen_inf_id+'"] .date').hasClass('has-content')){
+                $('#contractDate').val($('tr[data-id="'+choosen_inf_id+'"] .date').text());
+            }
             $('#seeContract').modal('toggle');
         }
 
-        function sendContract(sendToAll = false) {
+        function sendContract($this) {
             let url = '{{ route('dashboard.ads.sendContractToInfluncer', ':id') }}';
             let addId = url.replace(':id', '{{ $data->id }}');
+
+            if($('#scenario').val().trim() == '' || $('#contractDate').val().trim() == ''){
+                Swal.fire(
+                    'Error!',
+                    'Please fill all fields',
+                    'error'
+                );
+                return false;
+            }
+
+            $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i> ` + $($this).text());
             $.ajax({
                 url: addId,
                 data: {
                     influncers_id: choosen_inf_id,
                     scenario: document.getElementById('scenario').value,
-                    date: document.getElementById('contractDate').value,
-                    send_to_all: sendToAll,
+                    date: document.getElementById('contractDate').value
                 },
                 type: 'POST',
                 success: (res) => {
-                    location.reload();
-                    $('#seeContract').modal('toggle');
+                    if(res.status){
+                        Swal.fire(
+                            'Saved!',
+                            'Influencer data was saved successfully',
+                            'success'
+                        );
+                        $('tr[data-id="'+choosen_inf_id+'"] .sinario').text(document.getElementById('scenario').value).addClass('has-content');
+                        $('tr[data-id="'+choosen_inf_id+'"] .date').text(document.getElementById('contractDate').value).addClass('has-content');
+                    }else{
+                        Swal.fire(
+                            'Error!',
+                            res.message,
+                            'error'
+                        );
+                    }
+                    
+                    $('#seeContract').modal('hide');
+                    $($this).attr('disabled',false).html($($this).text());
                 },
                 error: (err) => {
+                    Swal.fire(
+                        'Error!',
+                        err.responseJSON.message,
+                        'error'
+                    );
                     console.log('error: ', err);
+                    $($this).attr('disabled',false).html($($this).text());
                 }
             })
 

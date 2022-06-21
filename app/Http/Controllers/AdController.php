@@ -487,6 +487,24 @@ class AdController extends Controller
             ], config('global.NOT_FOUND_STATUS'));
         }
 
+        $matches = $ad->matches()->where('chosen', 1)->where('status','!=','deleted')->get();
+        $hasInfluencerError = false;
+        $message = '<p>These influencers has no scenario or date</p><ol>';
+        foreach($matches as $match){
+            if(!$match->contract || !$match->contract->date || !$match->contract->scenario){
+                $hasInfluencerError = true;
+                $message .= '<li>' . $match->influencers->full_name . '</li>';
+            }
+        }
+        $message .= '</ol>';
+
+        if($hasInfluencerError){
+            return response()->json([
+                'msg'=>$message,
+                'status'=> false
+            ],config('global.OK_STATUS'));
+        }
+
         $ad->update(['admin_approved_influencers' => 1]);
 
         return response()->json([
@@ -597,66 +615,34 @@ class AdController extends Controller
 
     public function sendContractToInfluencer(Request $request, $ad_id)
     {
+        $data = $request->validate([
+            "scenario"    => "required",
+            "date"  => "required",
+            "influncers_id"  => "required",
+        ]);
+
         $ad = Ad::find($ad_id);
-        $contract = $ad->contacts;
-        if (!$contract) {
+        if (!$ad) {
             return response()->json([
-                'msg' => 'contract was not found',
-                'status' => config('global.NOT_FOUND_STATUS'),
+                'message' => 'AD not found',
+                'status' => false,
             ], config('global.NOT_FOUND_STATUS'));
         }
 
-        if($request->send_to_all)
-        {
-            $allMatches = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
-            foreach($allMatches as $match)
-            {
-                $data = new InfluencerContract;
-                $data->content = $contract->content;
-                $data->influencer_id = $match->influencer_id;
-                $data->date = $request->date;
-                $data->is_accepted = 0;
-                $data->ad_id = $ad_id;
-                $data->scenario = $request->scenario;
-                $data->af = 0;
-                $data->save();
-
-
-                $influencer = Influncer::find($match->influencer_id);
-                $name = $influencer->first_name . ' ' . $influencer->middle_name . ' ' . $influencer->last_name;
-        
-                $info = [
-                    'msg' => 'New Contract for ad "' . $ad->store . '"',
-                    'type' => 'Ad',
-                    'id' => $ad->id,
-                ];
-
-                Notification::send($influencer->users, new AddInfluencer($info));
-
-
-            }
-
-            return response()->json([
-                'msg' => 'contract was sent',
-                'status' => config('global.OK_STATUS'),
-            ], config('global.OK_STATUS'));
-        }
-
-
-        $influencer = Influncer::find($request->influncers_id);
-        $name = $influencer->first_name . ' ' . $influencer->middle_name . ' ' . $influencer->last_name;
-
-        $info = [
-            'msg' => 'New Contract for ad "' . $ad->store . '"',
-            'type' => 'Ad',
-            'id' => $ad->id,
-        ];
-
-        Notification::send($influencer->users, new AddInfluencer($info));
+        $data = InfluencerContract::updateOrCreate([
+            'ad_id' => $ad_id,
+            'influencer_id' => $data['influncers_id']
+        ],[
+            'date' => $data['date'],
+            'scenario' => $data['scenario'],
+            'is_accepted' => 0,
+            'af' => 0,
+            'content' => '',
+        ]);
 
         return response()->json([
-            'msg' => 'contract was sent',
-            'status' => config('global.OK_STATUS'),
+            'message' => 'Data Saved Successfully',
+            'status' => true,
         ], config('global.OK_STATUS'));
     }
 
