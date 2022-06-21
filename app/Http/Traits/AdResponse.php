@@ -73,6 +73,7 @@ trait AdResponse {
             'videos'=>$ad->videos,
             'influencer'=> $info ? $info : null,
             'budget'=>$ad->budget,
+            'format_budget'=>$this->formateMoneyNumber($ad->budget),
             'date'=>$ad->date,
             'type'=>$ad->ad_type,
             // 'nearest_location'=>$ad->nearest_location,
@@ -212,4 +213,10 @@ trait AdResponse {
       return null;
       
     }
+
+    private function formateMoneyNumber($number)
+    {
+        return number_format($number,0,'.',',');
+    }
+    
 }
