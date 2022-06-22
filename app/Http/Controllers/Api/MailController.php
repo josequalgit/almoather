@@ -29,10 +29,10 @@ class MailController extends Controller
         $user->save();
         $data = array('email'=>$request->email,'code'=>$user->code);
      
-        Mail::send(['text'=>'mail'], $data, function($message) use($data){
-           $message->to($data['email'], 'Test Email')->subject
-              ('Password Reset');
-           $message->from('qusai@josequal.com','Josequal');
+        @Mail::send(['text'=>'mail'], $data, function($message) use($data){
+           $message->to($data['email'], 'Reset Password')->subject
+              ('Reset Password');
+           $message->from('info@almuaathir.com','Almuaathir');
         });
        // echo "Basic Email Sent. Check your inbox.";
         return response()->json([

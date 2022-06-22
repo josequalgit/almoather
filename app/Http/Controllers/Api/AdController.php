@@ -1018,54 +1018,75 @@ class AdController extends Controller
             'requestHash' => $requestHash1
         );
         
+        $apiFieldsString = json_encode($apiFields);
         
-            $apiFieldsString = json_encode($apiFields);
-            
-            $url = "https://payments-dev.urway-tech.com/URWAYPGService/transaction/jsonProcess/JSONrequest";
-            $ch  = curl_init($url);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $apiFieldsString);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($apiFieldsString)
-            ));
-            curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-            
-            //execute post
-            $apiResult = curl_exec($ch);
-		
-			$apiResult = json_decode($apiResult);
+        $url = "https://payments-dev.urway-tech.com/URWAYPGService/transaction/jsonProcess/JSONrequest";
+        $ch  = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $apiFieldsString);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($apiFieldsString)
+        ));
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        
+        //execute post
+        $apiResult = curl_exec($ch);
+    
+        $apiResult = json_decode($apiResult);
 
-			if($apiResult->result == 'Successful' || $apiResult->responseCode == '000'){
-				
-				if($request->type == 'sub_payment'){
-					$data->update(['status' => 'prepay']);
-				}else if($request->type == 'full_payment'){
-					$data->update(['status' => 'fullpayment']);
-				}
-				
-				Payment::create([
-					'ad_id' => $ad_id,
-					'trans_id' => $request->TranId,
-					'amount' => $request->amount,
-					'status' => $request->result,
-					'status_code' => $request->ResponseCode,
-					'type' => $request->type,
-            	]);
+        if($apiResult->result == 'Successful' || $apiResult->responseCode == '000'){
+            
+            if($request->type == 'sub_payment'){
+                $data->update(['status' => 'prepay']);
+            }else if($request->type == 'full_payment'){
+                $data->update(['status' => 'fullpayment']);
 
-                 return response()->json([
-                     'msg'=>trans($this->trans_dir.'payment_successfully'),
-                     'ad_status'=>$data->status,
-                     'status'=>config('global.OK_STATUS'),
-                 ],config('global.OK_STATUS'));
-			}
-		
-			return response()->json([
-                'err'=>trans($this->trans_dir.'payment_failed'),
-                'status'=>config('global.WRONG_VALIDATION_STATUS')
-            ],config('global.WRONG_VALIDATION_STATUS'));
+                $tokens = [];
+                foreach($data->matches as $match){
+                    $tokens[] = $match->influencers->token;
+                }
+
+                if(!empty($tokens)){
+                    $title = trans($this->trans_dir.'new_campaign_request');
+                    $msg = trans($this->trans_dir.'new_campaign_request_msg',[":name" => $data->store]);
+                
+                    $data = [
+                        "title"     => $title,
+                        "body"      => $msg,
+                        "type"      => 'Ad',
+                        'target_id' => $data->id
+                    ];
+    
+                    $this->sendNotifications($tokens,$data);
+                }
+                
+            }
+            
+            Payment::create([
+                'ad_id' => $ad_id,
+                'trans_id' => $request->TranId,
+                'amount' => $request->amount,
+                'status' => $request->result,
+                'status_code' => $request->ResponseCode,
+                'type' => $request->type,
+            ]);
+
+
+
+            return response()->json([
+                'msg'=>trans($this->trans_dir.'payment_successfully'),
+                'ad_status'=>$data->status,
+                'status'=>config('global.OK_STATUS'),
+            ],config('global.OK_STATUS'));
+        }
+    
+        return response()->json([
+            'err'=>trans($this->trans_dir.'payment_failed'),
+            'status'=>config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
     }
 
     public function confirm_matches($ad_id)
