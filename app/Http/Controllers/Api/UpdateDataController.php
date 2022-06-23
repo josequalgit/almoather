@@ -138,7 +138,7 @@ class UpdateDataController extends Controller
         if($request->hasFile('image'))
         {
 
-            $data->clearCollection('customers')
+            $data->clearMediaCollection('customers')
             ->addMedia($request->file('image'))
             ->toMediaCollection('influncers');
         }
@@ -146,7 +146,7 @@ class UpdateDataController extends Controller
         if($request->hasFile('commercial_registration_no_files'))
         {
 
-            $data->clearCollection('customers')
+            $data->clearMediaCollection('customers')
             ->addMedia($request->file('commercial_registration_no_files'))
             ->toMediaCollection('commercial_registration_no_files');
         }
@@ -154,7 +154,7 @@ class UpdateDataController extends Controller
         if($request->hasFile('tax_registration_number_file'))
         {
 
-            $data->clearCollection('customers')
+            $data->clearMediaCollection('customers')
             ->addMedia($request->file('tax_registration_number_file'))
             ->toMediaCollection('tax_registration_number_file');
         }
@@ -162,7 +162,7 @@ class UpdateDataController extends Controller
         if($request->snap_chat_video)
         {
 
-            $data->clearCollection('snapchat_videos');
+            $data->clearMediaCollection('snapchat_videos');
         }
 
         if($request->snap_chat_video)

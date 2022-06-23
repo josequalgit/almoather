@@ -56,7 +56,7 @@ html body {
 
 body {
     color: #000;
-    font-family: "IBM Plex Sans","Tajawal", Helvetica, Arial, serif;
+    font-family: "IBM Plex Sans", "Tajawal", Helvetica, Arial, serif;
 }
 
 .text-muted {
@@ -838,7 +838,7 @@ footer.footer span i {
 /* Main Navigation */
 
 .navigation {
-    font-family: "Rubik","Tajawal", Helvetica, Arial, serif;
+    font-family: "Rubik", "Tajawal", Helvetica, Arial, serif;
     overflow-y: hidden;
     padding-bottom: 20px;
 }
@@ -4263,6 +4263,10 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 .picker .picker__day--today:before,
 .picker .picker__button--today:before {
     border-top-color: #5A8DEE;
+}
+
+.fit-image {
+    object-fit: contain;
 }
 
 .picker .picker__nav--prev:before,

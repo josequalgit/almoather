@@ -130,7 +130,7 @@ class AdController extends Controller
             ];
 
             Notification::send($users, new AddInfluencer($info));
-            Alert::toast('Add was updated', 'success');
+            Alert::toast('Ad was updated', 'success');
 
             return response()->json([
                 'msg' => 'status was changed',

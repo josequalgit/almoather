@@ -291,7 +291,7 @@ class RegisterController extends Controller
         $data = User::find($id);
         $data->update($comingRequest);
         if($request->hasFile('image')){
-            $data->clearCollection('customers')
+            $data->clearMediaCollection('customers')
             ->addMedia($request->file('image'))
             ->toMediaCollection('customers');
         }

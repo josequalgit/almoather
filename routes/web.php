@@ -28,10 +28,35 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\AdRelationsController;
 use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\ContactMessagesController;
+use App\Http\Controllers\FrontEndSettingController;
+use App\Http\Controllers\FrontEnd\HomeController as FrontEndHomeController;
+use App\Http\Controllers\FrontEnd\AuthController as FrontEndAuthController;
+use App\Http\Controllers\FrontEnd\ContactController as FrontContactController;
 
 Route::group(['middleware' => 'language'],function(){
-    Route::redirect('/','/dashboard/admins')->name('home');
+    // Route::redirect('/','/dashboard/admins')->name('home');
     Route::get('/test-msg',[ChatController::class,'sendMessageTo'])->name('test');
+
+    /** GROUP FRONT END */
+    Route::group([],function(){
+
+        Route::name('auth.')->prefix('auth')->controller(FrontEndAuthController::class)->group(function(){
+            Route::get('/login','login')->name('login');
+            Route::post('/login_submit','login_submit')->name('login_submit');
+            Route::get('/register_type','register_type')->name('register_type');
+            Route::get('/customer/register','customer_register')->name('customer_register');
+        });
+
+        Route::name('contact.')->prefix('contact')->controller(FrontContactController::class)->group(function(){
+            Route::get('/','index')->name('index');
+            Route::post('/','store_contact_messages')->name('store_contact_messages');
+        });
+
+
+        Route::get('/',[FrontEndHomeController::class,'index'])->name('frontEnd.index');
+    });
+
 
 
     Route::middleware('checkLogin')->controller(LoginController::class)->group(function(){
@@ -268,115 +293,143 @@ Route::group(['middleware' => 'language'],function(){
                 Route::get('/details/{id}','details')->name('details');
             });
 
+            
+
         
-        Route::middleware('role_or_permission:superAdmin|Contracts Manager|Edit Contract|Create Contract|See Contract|Delete Contract')->name('contracts.')->controller(ContractController::class)->group(function(){
-            Route::get('/contract','index')->name('index')->middleware('permission:Edit Contract|Create Contract|See Contract|Delete Contract');
-            Route::get('/contract/edit','edit')->name('edit')->middleware('permission:Edit Contract');
-            Route::post('/contract/update/{type}','update')->name('update')->middleware('permission:Edit Contract');
-            Route::get('/contract/create','create')->name('create')->middleware('permission:Create Contract');
-            Route::post('/contract/store','store')->name('store')->middleware('permission:Create Contract');
-            Route::get('/contract/delete/{id}','delete')->name('delete')->middleware('permission:Delete Contract');
-            Route::get('/contract/active','get_active_contracts')->name('activeContract')->middleware('role:Contracts Manager|superAdmin');
-            Route::post('/contract/changeStatus/{id}/{status}','change_status_contracts')->name('changeStatus')->middleware('role:Contracts Manager|superAdmin');
-            Route::get('/contract/customers','customer_contracts')->name('customerContracts')->middleware('role:Contracts Manager|superAdmin');
+            Route::middleware('role_or_permission:superAdmin|Contracts Manager|Edit Contract|Create Contract|See Contract|Delete Contract')->name('contracts.')->controller(ContractController::class)->group(function(){
+                Route::get('/contract','index')->name('index')->middleware('permission:Edit Contract|Create Contract|See Contract|Delete Contract');
+                Route::get('/contract/edit','edit')->name('edit')->middleware('permission:Edit Contract');
+                Route::post('/contract/update/{type}','update')->name('update')->middleware('permission:Edit Contract');
+                Route::get('/contract/create','create')->name('create')->middleware('permission:Create Contract');
+                Route::post('/contract/store','store')->name('store')->middleware('permission:Create Contract');
+                Route::get('/contract/delete/{id}','delete')->name('delete')->middleware('permission:Delete Contract');
+                Route::get('/contract/active','get_active_contracts')->name('activeContract')->middleware('role:Contracts Manager|superAdmin');
+                Route::post('/contract/changeStatus/{id}/{status}','change_status_contracts')->name('changeStatus')->middleware('role:Contracts Manager|superAdmin');
+                Route::get('/contract/customers','customer_contracts')->name('customerContracts')->middleware('role:Contracts Manager|superAdmin');
+            });
+
+            Route::middleware('role_or_permission:superAdmin|See Notification|Create Notification|Edit Notification|Delete Notification')
+            ->name('notifications.')
+            ->controller(NotificationController::class)
+            ->group(function(){
+                Route::get('/notifications','index')->middleware('permission:See Notification')->name('index');
+                Route::get('/notifications/create','create')->middleware('permission:Create Notification')->name('create');
+                Route::post('/notifications/store','store')->middleware('permission:Create Notification')->name('store');
+                Route::get('/notifications/edit/{id}','edit')->middleware('permission:Edit Notification')->name('edit');
+                Route::post('/notifications/update/{id}','update')->middleware('permission:Edit Notification')->name('update');
+                Route::get('/notifications/delete/{id}','delete')->middleware('permission:Delete Notification')->name('delete');
+            });
+
+
+            Route::middleware('role_or_permission:superAdmin|See Campaign Goal|Create Campaign Goal|Edit Campaign Goal|Delete Campaign Goal')
+            ->name('campaignGoals.')
+            ->controller(CampaignGoalController::class)
+            ->group(function(){
+                Route::get('/campaignGoals','index')->middleware('permission:See Campaign Goal')->name('index');
+                Route::get('/campaignGoals/create','create')->middleware('permission:Create Campaign Goal')->name('create');
+                Route::post('/campaignGoals/store','store')->middleware('permission:Create Campaign Goal')->name('store');
+                Route::get('/campaignGoals/edit/{id}','edit')->middleware('permission:Edit Campaign Goal')->name('edit');
+                Route::post('/campaignGoals/update/{id}','update')->middleware('permission:Edit Campaign Goal')->name('update');
+                Route::get('/campaignGoals/delete/{id}','delete')->middleware('permission:Delete Campaign Goal')->name('delete');
+            });
+
+
+            Route::middleware('role_or_permission:superAdmin|Business Manager')
+            ->name('businessManager.')
+            ->prefix('businessManager')
+            ->controller(BusinessManagerController::class)
+            ->group(function(){
+                Route::get('/canceled','canceledContract')->name('canceledContract');
+                Route::get('/rejectedAds','rejectedAds')->name('rejectedAds');
+            });
+
+            Route::controller(CountryController::class)
+            ->prefix('countries')
+            ->name('countries.')
+            ->group(function(){
+                Route::get('/Area/{id}','get_city_according_to_area')->name('index');
+                Route::get('/all','all')->name('all');
+                Route::post('store','store')->name('store');
+                Route::post('update/{id}','update')->name('update');
+                Route::post('delete/{id}','delete')->name('delete');
+            });
+
+            Route::controller(CityController::class)
+            ->prefix('cities')
+            ->name('cities.')
+            ->group(function(){
+                Route::get('/all','index')->name('all');
+                Route::get('/Area/{id}','get_city_according_to_area')->name('index');
+                Route::post('store','store')->name('store');
+                Route::post('update/{id}','update')->name('update');
+                Route::post('delete/{id}','delete')->name('delete');
+            });
+
+            // Route::controller(ReasonsController::class)
+            // ->middleware('role_or_permission:superAdmin|Edit Reason|Update Reason|Show Reason|Create Reason')
+            // ->prefix('reasons')
+            // ->name('reasons.')
+            // ->group(function(){
+            //     Route::get('/','index')->name('index');
+            //     Route::post('/store','store')->name('store');
+            //     // Route::post('/update/{id}','update')->name('update');
+            //     Route::get('/delete/{id}','delete')->name('delete');
+            // });
+
+            Route::controller(AdRelationsController::class)
+            ->middleware('role_or_permission:superAdmin|Edit AdRelation|Update AdRelation|Show AdRelation|Create AdRelation')
+            ->prefix('adRelation')
+            ->name('adRelations.')
+            ->group(function(){
+                Route::get('/','index')->name('index');
+                Route::post('/update/{id?}','update')->name('update');
+                Route::post('/delete/{id}','delete')->name('delete');
+            });
+
+            Route::controller(GeneralController::class)
+            ->middleware('role_or_permission:superAdmin|Edit General|Update General|Show General|Create General')
+            ->prefix('general')
+            ->name('generals.')
+            ->group(function(){
+                Route::get('/','index')->name('index');
+                Route::post('/','update')->name('update');
+            });
+
+
+            Route::controller(RegionController::class)
+            ->prefix('regions')
+            ->name('regions.')
+            ->group(function(){
+                Route::get('/{country_id}','index')->name('index');
+            });
+
+            Route::controller(ContactMessagesController::class)
+            ->prefix('tickets')
+            ->name('tickets.')
+            ->group(function(){
+                Route::get('/','index')->name('index');
+                Route::post('/delete/{id}','delete')->name('delete');
+            });
+
+            Route::controller(FrontEndSettingController::class)
+            ->prefix('frontEndSettings')
+            ->name('frontEndSettings.')
+            ->group(function(){
+                Route::get('/{type?}','index')->name('index')
+                ->where(['type'=>'welcome_page|about_us|faq|contact_info|website_description|login_text|register_type|get_touch|location']);
+                Route::post('/update','updateWelcomePage')->name('update');
+                Route::post('/update/updateBriefAboutUs','updateBriefAboutUs')->name('updateBriefAboutUs');
+                Route::post('/update/faq','updateFaq')->name('updateFaq');
+                Route::post('/update/contact_us','updateContactUs')->name('updateContactUs');
+                Route::post('/update/updateWebsiteDescription','updateWebsiteDescription')->name('updateWebsiteDescription');
+                Route::post('/update/updateLoginText','updateLoginText')->name('updateLoginText');
+                Route::post('/update/registerType','registerType')->name('registerType');
+                Route::post('/update/updateMapLink','updateMapLink')->name('updateMapLink');
+            });
+
         });
 
-        Route::middleware('role_or_permission:superAdmin|See Notification|Create Notification|Edit Notification|Delete Notification')
-        ->name('notifications.')
-        ->controller(NotificationController::class)
-        ->group(function(){
-            Route::get('/notifications','index')->middleware('permission:See Notification')->name('index');
-            Route::get('/notifications/create','create')->middleware('permission:Create Notification')->name('create');
-            Route::post('/notifications/store','store')->middleware('permission:Create Notification')->name('store');
-            Route::get('/notifications/edit/{id}','edit')->middleware('permission:Edit Notification')->name('edit');
-            Route::post('/notifications/update/{id}','update')->middleware('permission:Edit Notification')->name('update');
-            Route::get('/notifications/delete/{id}','delete')->middleware('permission:Delete Notification')->name('delete');
-        });
-
-
-        Route::middleware('role_or_permission:superAdmin|See Campaign Goal|Create Campaign Goal|Edit Campaign Goal|Delete Campaign Goal')
-        ->name('campaignGoals.')
-        ->controller(CampaignGoalController::class)
-        ->group(function(){
-            Route::get('/campaignGoals','index')->middleware('permission:See Campaign Goal')->name('index');
-            Route::get('/campaignGoals/create','create')->middleware('permission:Create Campaign Goal')->name('create');
-            Route::post('/campaignGoals/store','store')->middleware('permission:Create Campaign Goal')->name('store');
-            Route::get('/campaignGoals/edit/{id}','edit')->middleware('permission:Edit Campaign Goal')->name('edit');
-            Route::post('/campaignGoals/update/{id}','update')->middleware('permission:Edit Campaign Goal')->name('update');
-            Route::get('/campaignGoals/delete/{id}','delete')->middleware('permission:Delete Campaign Goal')->name('delete');
-        });
-
-
-        Route::middleware('role_or_permission:superAdmin|Business Manager')
-        ->name('businessManager.')
-        ->prefix('businessManager')
-        ->controller(BusinessManagerController::class)
-        ->group(function(){
-            Route::get('/canceled','canceledContract')->name('canceledContract');
-            Route::get('/rejectedAds','rejectedAds')->name('rejectedAds');
-        });
-
-        Route::controller(CountryController::class)
-        ->prefix('countries')
-        ->name('countries.')
-        ->group(function(){
-            Route::get('/Area/{id}','get_city_according_to_area')->name('index');
-            Route::get('/all','all')->name('all');
-            Route::post('store','store')->name('store');
-            Route::post('update/{id}','update')->name('update');
-            Route::post('delete/{id}','delete')->name('delete');
-        });
-
-        Route::controller(CityController::class)
-        ->prefix('cities')
-        ->name('cities.')
-        ->group(function(){
-            Route::get('/all','index')->name('all');
-            Route::get('/Area/{id}','get_city_according_to_area')->name('index');
-            Route::post('store','store')->name('store');
-            Route::post('update/{id}','update')->name('update');
-            Route::post('delete/{id}','delete')->name('delete');
-        });
-
-        // Route::controller(ReasonsController::class)
-        // ->middleware('role_or_permission:superAdmin|Edit Reason|Update Reason|Show Reason|Create Reason')
-        // ->prefix('reasons')
-        // ->name('reasons.')
-        // ->group(function(){
-        //     Route::get('/','index')->name('index');
-        //     Route::post('/store','store')->name('store');
-        //     // Route::post('/update/{id}','update')->name('update');
-        //     Route::get('/delete/{id}','delete')->name('delete');
-        // });
-
-        Route::controller(AdRelationsController::class)
-        ->middleware('role_or_permission:superAdmin|Edit AdRelation|Update AdRelation|Show AdRelation|Create AdRelation')
-        ->prefix('adRelation')
-        ->name('adRelations.')
-        ->group(function(){
-            Route::get('/','index')->name('index');
-            Route::post('/update/{id?}','update')->name('update');
-            Route::post('/delete/{id}','delete')->name('delete');
-        });
-
-        Route::controller(GeneralController::class)
-        ->middleware('role_or_permission:superAdmin|Edit General|Update General|Show General|Create General')
-        ->prefix('general')
-        ->name('generals.')
-        ->group(function(){
-            Route::get('/','index')->name('index');
-            Route::post('/','update')->name('update');
-        });
-
-
-        Route::controller(RegionController::class)
-        ->prefix('regions')
-        ->name('regions.')
-        ->group(function(){
-            Route::get('/{country_id}','index')->name('index');
-        });
-
-        });
+      
     
         Route::get('/logout',[HomeController::class,'logout'])->name('dashboard.logout');    
     });
