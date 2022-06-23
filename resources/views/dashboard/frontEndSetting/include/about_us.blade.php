@@ -14,7 +14,7 @@
                     <div class="form-group text-center">
                         
                       {{-- <label for="title_ar">Image</label> --}}
-                      <img class="avatar mb-2 rounded fit-image" width="150px" height="150px" src="{{ $data->image }}" alt="">
+                      <img class="avatar mb-2 rounded fit-image" width="150px" height="150px" src="{{ $data?$data->image:null }}" alt="">
                       <input type="file" class="form-control" name="image" id="title_ar" aria-describedby="emailHelp" placeholder="title">
                     </div>
 
