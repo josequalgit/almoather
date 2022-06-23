@@ -12,6 +12,8 @@ use App\Http\Requests\Api\UploadAdMedia;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\AddInfluencer;
 use App\Models\User;
+use App\Models\Country;
+use App\Models\City;
 use App\Models\Influncer;
 use App\Models\Customer;
 use App\Models\Contract;
@@ -134,7 +136,17 @@ class AdController extends Controller
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
+        if($this->checkIfDataAvailable($request))
+        {
+            return response()->json([
+                'err'=>$this->checkIfDataAvailable($request),
+                'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
+        }
+        
+
         $data = array_merge($request->all(),['customer_id'=>Auth::guard('api')->user()->customers->id]);
+
 
         if($request->ad_type == 'onsite')
         {
@@ -209,6 +221,35 @@ class AdController extends Controller
             'data'=>$this->adResponse($data),
             'status'=>config('global.CREATED_STATUS')
         ],config('global.CREATED_STATUS'));
+    }
+
+    private function checkIfDataAvailable($request)
+    {
+        if($request->country_id||$request->nationality_id)
+        {
+            $data = Country::find($request->country_id??$request->nationality_id);
+            if(!$data) return trans($this->trans_dir.'country_not_found');
+        }
+        if($request->influncer_category_id)
+        {
+            $data = InfluncerCategory::find($request->influncer_category_id);
+            if(!$data) return trans($this->trans_dir.'category_not_found');
+        }
+        if($request->city_id)
+        {
+            $data = City::find($request->city_id);
+            if(!$data) return trans($this->trans_dir.'city_not_found');
+        }
+        if((isset($request->categories)&&count($request->categories) < 3) || (isset($request->categories)&&count($request->categories) > 3))
+        {
+            return trans($this->trans_dir.'should_categories_influencer');
+        }
+        if(isset($request->isVat)&&!$request->tax_registration_number)
+        {
+            return trans($this->trans_dir.'tax_registration_number_required');
+        }
+
+        return null;
     }
 
     public function details($id)

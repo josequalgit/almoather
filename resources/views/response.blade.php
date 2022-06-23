@@ -1,0 +1,1 @@
+{!! $data->getTranslation('text',app()->getLocale() !!}

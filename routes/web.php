@@ -382,6 +382,7 @@ Route::group(['middleware' => 'language'],function(){
             ->name('adRelations.')
             ->group(function(){
                 Route::get('/','index')->name('index');
+                Route::post('create','store')->name('store');
                 Route::post('/update/{id?}','update')->name('update');
                 Route::post('/delete/{id}','delete')->name('delete');
             });
@@ -426,6 +427,8 @@ Route::group(['middleware' => 'language'],function(){
                 Route::post('/update/registerType','registerType')->name('registerType');
                 Route::post('/update/updateMapLink','updateMapLink')->name('updateMapLink');
             });
+
+         
 
         });
 

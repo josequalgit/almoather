@@ -318,6 +318,16 @@
                 </li>
                 @endcanany
 
+                {{-- @canany(['Edit SocialMedias','Create SocialMedia','See SocialMedia']) --}}
+                {{-- <li class="menu-item
+                {{ ($name == 'dashboard.adRelation.index'|| $name == 'dashboard.adRelation.create'|| $name == 'dashboard.adRelation.edit') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.adRelation.index') }}" class="menu-link">
+                    <div data-i18n="List">Ad Relation</div>
+                  </a>
+                </li> --}}
+                {{-- @endcanany --}}
+
              
 
                 @canany(['Edit Contact Us'])
