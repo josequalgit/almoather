@@ -27,6 +27,10 @@ class HomeController extends Controller
             ];
 
         }
+        else
+        {
+            $welcome_page_setting = (object)[];
+        }
         $data = [
             'welcome_message'=>$welcome_page_setting
         ];
