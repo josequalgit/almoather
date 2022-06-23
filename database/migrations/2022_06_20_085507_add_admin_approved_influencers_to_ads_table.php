@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('ads', function (Blueprint $table) {
-            $table->boolean('admin_approved_influencers')->nullable()->default(0)->after('status');
+            // $table->boolean('admin_approved_influencers')->nullable()->default(0)->after('status');
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('ads', function (Blueprint $table) {
-            $table->dropColumn('column');
+            $table->dropColumn('admin_approved_influencers');
         });
     }
 };
