@@ -26,10 +26,10 @@ class CountriesSeed extends Seeder
             Country::create([
                 'name'=>[
                     'ar'=>'',
-                    'en'=>$value->name
+                    'en'=>$value['name']
                 ],
                 'country_code'=>'000',
-                'code'=>$value->code,
+                'code'=>$value['code'],
                 'is_location'=>1
             ]);
         }
