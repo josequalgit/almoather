@@ -16,7 +16,12 @@ class CountriesSeed extends Seeder
      */
     public function run()
     {
-        $json = file_get_contents(Request::url().'/countries.json');
+        
+            $json = str_replace('\r\n','',file_get_contents(Request::url().'/countries.json'));
+            $json = json_decode($json,JSON_THROW_ON_ERROR);
+         
+         
+        
         foreach ($json as $value) {
             Country::create([
                 'name'=>[

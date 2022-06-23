@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\AppSetting;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,7 +15,17 @@ class AppServiceProvider extends ServiceProvider
     
     public function register()
     {
-       
+        view()->composer('*', function ($view)
+        {
+            $contact = AppSetting::where('key','contact_info')->first();
+            $contact_info = json_decode($contact->value);
+
+            $website_des_info = AppSetting::where('key','website_description')->first();
+            $website_des = json_decode($website_des_info->value);
+            // dd($website_des);
+            $view->with('contact_info', $contact_info ?? null);
+            $view->with('website_des', $website_des ?? null);
+        });
     }
 
     /**

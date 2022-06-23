@@ -179,11 +179,25 @@
             </li>
             @endcanany
 
-            @canany(['Edit Ads',])
+            {{-- @canany(['Edit Ads']) --}}
             <li class="menue-item {{ ($name == 'dashboard.payments.index'|| $name == 'dashboard.payments.create'|| $name == 'dashboard.payments.edit') ? 'open active':''  }}">
               <a href="{{ route('dashboard.payments.index') }}"><i class="bx bx-credit-card"></i><span class="menu-title text-truncate" data-i18n="notifications">Payment</span></a>
             </li>
-            @endcan
+            {{-- @endcan --}}
+
+            {{-- @canany(['Edit Ads']) --}}
+            <li class="menue-item {{ ($name == 'dashboard.tickets.index'|| $name == 'dashboard.tickets.create'|| $name == 'dashboard.tickets.edit') ? 'open active':''  }}">
+              <a href="{{ route('dashboard.tickets.index') }}"><i class="bx bx-confused"></i><span class="menu-title text-truncate" data-i18n="notifications">Tickets</span></a>
+            </li>
+            {{-- @endcan --}}
+
+            {{-- @canany(['Edit Ads',]) --}}
+            <li class="menue-item {{ ($name == 'dashboard.frontEndSettings.index'|| $name == 'dashboard.frontEndSettings.create'|| $name == 'dashboard.frontEndSettings.edit') ? 'open active':''  }}">
+             
+              <a href="{{ route('dashboard.frontEndSettings.index') }}"><i class="bx bx-home-heart"></i><span class="menu-title text-truncate" data-i18n="notifications">Front End</span></a>
+
+            </li>
+            {{-- @endcan --}}
 
 
             @canany(['Edit Category','Create Category','See Category','Delete Category','Edit Influencer Category','Create Influencer Category','See Influencer Category','Delete Influencer Category'])
@@ -371,6 +385,8 @@
                   </a>
                 </li>
                 {{-- @endcanany --}}
+
+             
               </ul>
             </li>
 
