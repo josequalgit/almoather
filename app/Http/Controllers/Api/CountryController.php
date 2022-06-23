@@ -12,7 +12,15 @@ class CountryController extends Controller
 
     public function index()
     {
-        $data = Country::where('is_location',1)->get()->map(function($item){
+        $countries = Country::where('is_location',1)->get()->map(function($item){
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'code' => $item->code
+            ];
+        });
+
+        $nationalities = Country::where('is_location',0)->get()->map(function($item){
             return [
                 'id' => $item->id,
                 'name' => $item->name,
@@ -21,7 +29,8 @@ class CountryController extends Controller
         });
         return response()->json([
             'msg'=>trans($this->trans_dir.'all_the_countries_available'),
-            'data'=>$data,
+            'countries'=>$countries,
+            'nationalities'=>$nationalities,
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }

@@ -76,6 +76,7 @@ trait AdResponse {
             'format_budget'=>$this->formateMoneyNumber($ad->budget),
             'date'=>$ad->date,
             'type'=>$ad->ad_type,
+            'price'=>$ad->price,
             // 'nearest_location'=>$ad->nearest_location,
             'website_link'=>$ad->website_link,
             'about_product'=>$ad->about_product,
