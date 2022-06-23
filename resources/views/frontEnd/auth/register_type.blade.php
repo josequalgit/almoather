@@ -4,9 +4,9 @@
     <title>Al-Muaathir</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap && Css -->
-    <link rel="stylesheet" href="{{ asset('FrontEnd/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('FrontEnd/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('FrontEnd/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontEnd/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontEnd/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontEnd/css/all.min.css') }}">
   </head>
   <!-- All Images In Regular Size Are Hidden For Responsive Size (600 / 990) -->
   <body class="body">
@@ -22,7 +22,7 @@
                            <div class="left-side">
                                <div class="col-12">
                                    <div >
-                                    <img src="{{ asset('FrontEnd/img/Rectangle_16251-r.png') }}"  alt="">
+                                    <img src="{{ asset('frontEnd/img/Rectangle_16251-r.png') }}"  alt="">
                                 </div>
                                </div>
                                <div class="col-8 mt-3">
@@ -33,12 +33,12 @@
                                    </div>
                            </div>
                        </div>
-                       <img class="arrow-img2" src="{{ asset('FrontEnd/img/Group 50667.png') }}" alt="">
+                       <img class="arrow-img2" src="{{ asset('frontEnd/img/Group 50667.png') }}" alt="">
                        <div class="col-md-6 col-12 text-center">
                            <div>
                                <div class="title">
                                    <div class="icon">
-                                       <img src="{{ asset('FrontEnd/img/logo.png') }}" width="150px" height="150px" alt="">
+                                       <img src="{{ asset('frontEnd/img/logo.png') }}" width="150px" height="150px" alt="">
                                    </div>
                                    <h3>Choose membership</h3>
                                </div>
@@ -48,7 +48,7 @@
                                            <label class="Advertiser" for="user_type">
                                                <input type="radio" name="user_type" class="d-none" value="www.google.com">
                                                <div class="px-3 py-4">
-                                                   <img src="{{ asset('FrontEnd/img/omnichannel.png') }}" alt=""height="50px">
+                                                   <img src="{{ asset('frontEnd/img/omnichannel.png') }}" alt=""height="50px">
                                                </div>
                                                <h3>Influencer</h3>
                                            </label>
@@ -57,7 +57,7 @@
                                            <label class="Advertiser" for="user_type">
                                                <input type="radio" name="user_type" class="d-none" value="{{ route('auth.customer_register') }}">
                                                <div class="px-3 py-4">
-                                                   <img src="{{ asset('FrontEnd/img/influencer.png') }}" alt="" height="50px">
+                                                   <img src="{{ asset('frontEnd/img/influencer.png') }}" alt="" height="50px">
                                                </div>
                                                <h3>Advertiser</h3>
                                            </label>
@@ -81,10 +81,10 @@
      
       <!-- End Footer -->
      <!--JAVASCRIPT-->
-     <script type='text/javascript' src='{{ asset('FrontEnd/js/jquery-3.6.0.min.js') }}'></script>
-     <script type='text/javascript' src='{{ asset('FrontEnd/js/bootstrap.min.js') }}'></script>
-     <script type='text/javascript' src='{{ asset('FrontEnd/js/all.min.js') }}'></script>
-     <script type='text/javascript' src='{{ asset('FrontEnd/js/main.js') }}'></script>
+     <script type='text/javascript' src='{{ asset('frontEnd/js/jquery-3.6.0.min.js') }}'></script>
+     <script type='text/javascript' src='{{ asset('frontEnd/js/bootstrap.min.js') }}'></script>
+     <script type='text/javascript' src='{{ asset('frontEnd/js/all.min.js') }}'></script>
+     <script type='text/javascript' src='{{ asset('frontEnd/js/main.js') }}'></script>
      <!--End JAVASCRIPT-->
  </body>
 </html>

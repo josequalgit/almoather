@@ -6,7 +6,7 @@
     <!-- Footer -->
     <section class="footer-section">
         <div class="right-flowo">
-            <img src="{{ asset('FrontEnd/img/group_footer.png') }}" width="200px" height="200px" alt="">
+            <img src="{{ asset('frontEnd/img/group_footer.png') }}" width="200px" height="200px" alt="">
         </div>
 
         <footer class="footer pb-5">
@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="col-12 col-md-4 col-lg-4 mt-5">
                         <div class="footer_logo">
-                            <img src="{{ asset('FrontEnd/img/logo.png') }}" alt="footer_logo">
+                            <img src="{{ asset('frontEnd/img/logo.png') }}" alt="footer_logo">
                         </div>
                         <div class="footer-details">
                             <h4>AL Muaathir</h5>

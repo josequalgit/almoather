@@ -4,9 +4,9 @@
     <title>Al-Muaathir</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap && Css -->
-    <link rel="stylesheet" href="{{ asset('FrontEnd/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('FrontEnd/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('FrontEnd/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontEnd/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontEnd/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontEnd/css/all.min.css') }}">
   </head>
   <!-- All Images In Regular Size Are Hidden For Responsive Size (600 / 990) -->
 ​
@@ -19,14 +19,14 @@
            <div class="row">
                <form class="login-adv p-md-5 text-center">
                    <div class="left-path">
-                       <img src="{{ asset('FrontEnd/img/Path 143035.png') }}" alt="" height="100px" width="250px">
+                       <img src="{{ asset('frontEnd/img/Path 143035.png') }}" alt="" height="100px" width="250px">
                    </div>
                    <div class="left-snapchat">
-                    <img src="{{ asset('FrontEnd/img/Icon awesome-snapchat.png') }}" alt="" height="150px" width="150px">
+                    <img src="{{ asset('frontEnd/img/Icon awesome-snapchat.png') }}" alt="" height="150px" width="150px">
                 </div>
                     <div class="container">
                         <div>
-                            <img class="back-ground-advertiser" src="{{ asset('FrontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt="">
+                            <img class="back-ground-advertiser" src="{{ asset('frontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt="">
                         </div>
                         <h3 class="mt-3">Advertiser information</h3>
                         <div class="row input-adv mt-5">
@@ -49,7 +49,7 @@
                             </div>
                         </div>
                         <div class="right-facebook">
-                            <img src="{{ asset('FrontEnd/img/Group 55637.png') }}" alt="" width="200px" height="200px">
+                            <img src="{{ asset('frontEnd/img/Group 55637.png') }}" alt="" width="200px" height="200px">
                         </div>
                         <div class="row input-adv">
                             <div class="col-md-6 col-12  mt-3">
@@ -104,7 +104,7 @@
                            
                         </div>
                         <div class="left-instagram">
-                            <img src="{{ asset('FrontEnd/img/Icon awesome-instagram.png') }}" alt="" width="150px" height="150px">
+                            <img src="{{ asset('frontEnd/img/Icon awesome-instagram.png') }}" alt="" width="150px" height="150px">
                         </div>
                     </div>
                </form>
@@ -119,8 +119,8 @@
      
       <!-- End Footer -->
      <!--JAVASCRIPT-->
-     <script type='text/javascript' src='{{ asset('FrontEnd/js/jquery-3.6.0.min.js') }}'></script>
-     <script type='text/javascript' src='{{ asset('FrontEnd/js/bootstrap.min.js') }}'></script>
+     <script type='text/javascript' src='{{ asset('frontEnd/js/jquery-3.6.0.min.js') }}'></script>
+     <script type='text/javascript' src='{{ asset('frontEnd/js/bootstrap.min.js') }}'></script>
      <!--End JAVASCRIPT-->
 ​
  </body>

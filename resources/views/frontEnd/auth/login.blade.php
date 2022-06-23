@@ -4,9 +4,9 @@
     <title>Al-Muaathir</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap && Css -->
-    <link rel="stylesheet" href="{{ asset('FrontEnd/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('FrontEnd/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('FrontEnd/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontEnd/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontEnd/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontEnd/css/all.min.css') }}">
   </head>
   <!-- All Images In Regular Size Are Hidden For Responsive Size (600 / 990) -->
 
@@ -27,21 +27,21 @@
                                 </p>
                                 <div class="d-flex flex-wrap align-items-center">
                                     <div class="circle-images d-flex">
-                                        <div class="circle-img"><img src="{{ asset('FrontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt=""></div>
-                                        <div class="circle-img"><img src="{{ asset('FrontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt=""></div>
-                                        <div class="circle-img"><img src="{{ asset('FrontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt=""></div>
-                                        <div class="circle-img"><img src="{{ asset('FrontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt=""></div>
-                                        <div class="circle-img"><img src="{{ asset('FrontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt=""></div>
+                                        <div class="circle-img"><img src="{{ asset('frontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt=""></div>
+                                        <div class="circle-img"><img src="{{ asset('frontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt=""></div>
+                                        <div class="circle-img"><img src="{{ asset('frontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt=""></div>
+                                        <div class="circle-img"><img src="{{ asset('frontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt=""></div>
+                                        <div class="circle-img"><img src="{{ asset('frontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt=""></div>
                                     </div>
                                     <p class="ps-4 m-0">Join 60.000 + users</p>
                                 </div>
                             </div>
-                            <img class="arrow-img" src="{{ asset('FrontEnd/img/Group 50667.png') }}" alt="">
+                            <img class="arrow-img" src="{{ asset('frontEnd/img/Group 50667.png') }}" alt="">
                             <div class="col-md-6 col-12 text-center">
                                 <div>
                                     <div class="title">
                                         <div class="icon">
-                                           <img src="{{ asset('FrontEnd/img/logo.png') }}" width="150px" height="150px" alt="">
+                                           <img src="{{ asset('frontEnd/img/logo.png') }}" width="150px" height="150px" alt="">
                                         </div>
                                         <h3>Welcome Back</h3>
                                         <span>Enter the required data</span>
@@ -82,9 +82,9 @@
      <!--JAVASCRIPT-->
      @include('sweetalert::alert')
 
-     <script type='text/javascript' src='{{ asset('FrontEnd/js/jquery-3.6.0.min.js') }}'></script>
-     <script type='text/javascript' src='{{ asset('FrontEnd/js/bootstrap.min.js') }}'></script>
-     <script type='text/javascript' src='{{ asset('FrontEnd/js/all.min.js') }}'></script>
+     <script type='text/javascript' src='{{ asset('frontEnd/js/jquery-3.6.0.min.js') }}'></script>
+     <script type='text/javascript' src='{{ asset('frontEnd/js/bootstrap.min.js') }}'></script>
+     <script type='text/javascript' src='{{ asset('frontEnd/js/all.min.js') }}'></script>
      <!--End JAVASCRIPT-->
 
  </body>
