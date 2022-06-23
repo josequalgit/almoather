@@ -18,10 +18,10 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('*', function ($view)
         {
             $contact = AppSetting::where('key','contact_info')->first();
-            $contact_info = $contact?json_decode($contact->value):null;
+            $contact_info = $contact?json_decode($contact->value):[];
 
             $website_des_info = AppSetting::where('key','website_description')->first();
-            $website_des = $website_des_info?json_decode($website_des_info->value):null;
+            $website_des = $website_des_info?json_decode($website_des_info->value):[];
             // dd($website_des);
             $view->with('contact_info', $contact_info ?? null);
             $view->with('website_des', $website_des ?? null);
