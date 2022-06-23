@@ -54,17 +54,17 @@
                                                     @foreach($data as $key => $item)
                                                         <tr>
                                                          
-                                                            <td>{{ $item->ar }}</td>
-                                                            <td>{{ $item->en }}</td>
+                                                            <td>{{ $item->getTranslation('title','ar') }}</td>
+                                                            <td>{{ $item->getTranslation('title','en') }}</td>
                                                             <td>
                                                                 {{-- @can('Edit City') --}}
-                                                                    <button onclick="getUserData('{{ $key }}','{{$item->ar }}','{{ $item->en }}')" class="btn btn-secondary">
+                                                                    <button onclick="getUserData('{{ $key }}','{{$item->getTranslation('title','ar') }}','{{ $item->getTranslation('title','en') }}')" class="btn btn-secondary">
                                                                         <i class="bx bx-edit"></i>
                                                                     </button>
                                                                 {{-- @endcan --}}
                                                                 {{-- @can('Delete City') --}}
                                                                     <button class="btn btn-danger"
-                                                                        onclick="openModal('{{ $key }}','{{ $item->ar }}')">
+                                                                        onclick="openModal('{{ $item->id }}','{{$item->getTranslation('title','ar') }}')">
                                                                         <i class="bx bx-trash buttonIcon"></i>
                                                                     </button>
                                                                 {{-- @endcan --}}
@@ -109,6 +109,11 @@
                     <div class="mb-2">
                         <label for="name_ar" class="form-label">Name Ar</label>
                         <input type="text" class="form-control" id="name_ar" placeholder="please add the relation name in arabic">
+                      </div>
+                      
+                    <div class="mb-2">
+                        <label for="app_profit" class="form-label">Profit</label>
+                        <input type="number" class="form-control" id="app_profit" placeholder="please add the profit number">
                       </div>
                       
                 </div>
@@ -167,21 +172,17 @@
 
     function createAdRelation()
     {
-        let url = '{{ route("dashboard.adRelations.update") }}';
-        if(editId){
-            url = '{{ route("dashboard.adRelations.update",":id") }}';
-            url = url.replace(':id',editId)
-        };
+        let url = '{{ route("dashboard.adRelations.store") }}';
+       
         
         $.ajax({
             type:'POST',
-           url,
+           url:url,
             data:{
                 _token:'{{ csrf_token() }}',
-                relation:{
-                    ar:document.getElementById('name_ar').value,
-                    en:document.getElementById('name_en').value
-                }
+                relation_ar:document.getElementById('name_ar').value,
+                relation_en:document.getElementById('name_en').value,
+                app_profit:document.getElementById('app_profit').value
             },
             success:(res)=>{
                 editId = null;

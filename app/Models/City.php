@@ -18,6 +18,9 @@ class City extends Model
     ];
 
     public $translatable = ['name'];
+    
+    protected $table = 'cities';
+
 
 
     public function customers()

@@ -141,6 +141,11 @@ class Ad extends Model implements HasMedia
         return $this->hasMany(Payment::class,'ad_id');
     }
 
+    public function relations()
+    {
+        return $this->belongsTo(Relation::class,'relation_id');
+    }
+
     public function getImageAttribute() {
         $mediaItems = $this->getMedia('adImage');
         $publicFullUrl = [];

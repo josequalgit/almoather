@@ -4,21 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AppSetting;
+use App\Models\Relation;
 use Alert;
 
 class AdRelationsController extends Controller
 {
     public function index()
     {
-        $data = [];
-        $setting = AppSetting::where('key','ads_relation')->first();
-        if($setting){
-            $data = $setting->campaignGoal;
-        }
-        else
-        {
-            $data = [];
-        };
+
+        $data = Relation::paginate(10);      
         return view('dashboard.adsRelations.index',compact('data'));
     }
 
@@ -87,5 +81,18 @@ class AdRelationsController extends Controller
             'status'=>config('global.UPDATED_STATUS')
         ],config('global.UPDATED_STATUS'));
 
+    }
+
+    public function store(Request $request)
+    {
+        Relation::create([
+            'title'=>[
+                'ar'=>$request->relation_ar,
+                'en'=>$request->relation_en
+            ],
+            'app_profit'=>$request->app_profit
+        ]);
+
+        return back();
     }
 }
