@@ -647,7 +647,7 @@ input[type="radio"] .styled:checked+label::after {
 .list-item .block-top .back-grey {
     position: absolute;
     border-radius: 12px 12px 0px 0px;
-    background-image: linear-gradient(to right, #e9b96f, #cba068, #b88452) !important;
+    background: #daa047;
     left: 0;
     right: 0;
     bottom: 50%;
@@ -1100,4 +1100,15 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 .pending-campaign .ad-title{
     display: block;
+}
+
+.list-item-custom a{
+    display: inline-block;
+}
+
+.categories span{
+    width: 100;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

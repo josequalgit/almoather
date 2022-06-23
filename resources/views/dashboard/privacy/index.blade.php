@@ -64,15 +64,17 @@
 
 @section('scripts')
 <script>
-     CKEDITOR.replace('text_ar', {
-      extraPlugins: 'placeholder',
-      height: 220,
-      removeButtons: 'PasteFromWord'
+    CKEDITOR.replace('text_ar', {
+        removeButtons: 'PasteFromWord',
+        contentsLangDirection: 'rtl',
+        height: '600',
+        extraPlugins: 'justify,placeholder'
     });
-     CKEDITOR.replace('text_en', {
-      extraPlugins: 'placeholder',
-      height: 220,
-      removeButtons: 'PasteFromWord'
+    CKEDITOR.replace('text_en', {
+        extraPlugins: 'placeholder',
+        removeButtons: 'PasteFromWord',
+        height: '600',
+        extraPlugins: 'justify,placeholder'
     });
 </script>
 @endsection

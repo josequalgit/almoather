@@ -25,19 +25,17 @@
                         </div>
                         @endif
                     
-                                <div class="form-group col">
+                                <div class="form-group col" style="direction: rtl">
                                   <label for="inputEmail4">Text Ar</label>
                                   <textarea name="text_ar" class="form-control" id="text_ar" rows="3">
                                       {{ $data->getTranslation('text','ar') }}
                                   </textarea>
-                                  {{-- <input value="{{ old('name')?old('name'):$data->name }}" name="name" type="text" class="form-control" id="inputEmail4" placeholder="Enter Name"> --}}
                                 </div>
                                 <div class="form-group col">
                                   <label for="inputPassword4">Text EN</label>
                                   <textarea name="text_en" class="form-control" id="text_en" rows="3">
                                     {{ $data->getTranslation('text','en') }}
                                   </textarea>
-                                  {{-- <input value="{{ old('title')?old('title'):$data->title }}" name="title" type="text" class="form-control" id="inputPassword4" placeholder="Enter Title"> --}}
                                 </div>
                              
                              
@@ -64,15 +62,19 @@
 
 @section('scripts')
 <script>
-     CKEDITOR.replace('text_ar', {
-      extraPlugins: 'placeholder',
-      height: 220,
-      removeButtons: 'PasteFromWord'
+    CKEDITOR.replace('text_ar', {
+        height: 220,
+        removeButtons: 'PasteFromWord',
+        contentsLangDirection: 'rtl',
+        height: '600px',
+        extraPlugins: 'justify,placeholder'
     });
-     CKEDITOR.replace('text_en', {
-      extraPlugins: 'placeholder',
-      height: 220,
-      removeButtons: 'PasteFromWord'
+    CKEDITOR.replace('text_en', {
+        extraPlugins: 'placeholder',
+        height: 220,
+        removeButtons: 'PasteFromWord',
+        height: '600px',
+        extraPlugins: 'justify,placeholder'
     });
 </script>
 @endsection

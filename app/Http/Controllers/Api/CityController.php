@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Area;
 use App\Models\Region;
 
+
 class CityController extends Controller
 {
     private $trans_dir = 'messages.api.';

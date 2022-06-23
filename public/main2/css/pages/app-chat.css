@@ -5,8 +5,7 @@
 }
 
 .chat-application .content-area-wrapper {
-  border: 1px solid #DFE3E7;
-  border-radius: 0.25rem;
+  border-radius: 15px;
 }
 
 .chat-application .chat-user-profile {
@@ -67,6 +66,8 @@
   padding: 0.4rem 1rem;
   border-bottom: 1px solid #DFE3E7;
   width: 290px;
+  background-color: #fff;
+  z-index: 1;
 }
 
 .chat-application .chat-sidebar .chat-sidebar-search input.form-control {

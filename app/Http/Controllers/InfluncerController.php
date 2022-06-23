@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Influncer;
+use App\Models\Country;
 use App\Models\InfluncerCategory;
 use Alert,Auth;
 use Carbon\Carbon;
@@ -41,13 +42,15 @@ class InfluncerController extends Controller
         $data = Influncer::findOrFail($id);
         $infCategories = $data->InfluncerCategories->pluck('id')->toArray();
         $categories = InfluncerCategory::get();
-        //return $infCategories;
-        return view('dashboard.influncers.edit',compact('data','categories','infCategories'));
+        $nationalities = Country::get();
+        $countries = Country::where('is_location',1)->get();
+
+        return view('dashboard.influncers.edit',compact('data','categories','infCategories','nationalities','countries'));
     }
 
     public function updateStatus(Request $request , $id)
     {
-     //   return $request->categories;
+
         $data = Influncer::find($id);
         if(!$data) return response()->json([
             'err'=>'Influncer not found',

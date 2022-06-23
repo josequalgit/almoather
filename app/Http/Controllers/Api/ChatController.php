@@ -46,6 +46,9 @@ class ChatController extends Controller
         }
         else
         {
+            $sender_id = Auth::guard('api')->user()->id;
+            $receiver_id = 1;
+           
             //$user = Auth::guard('api')->user()->influncers;
             $receiver_id = Auth::guard('api')->user()->influncers?Auth::guard('api')->user()->influncers->users->id:Auth::guard('api')->user()->customers->users->id;
             $data = Message::where([['receiver_id',Auth::guard('api')->user()->id],['type',$type]])
@@ -63,14 +66,12 @@ class ChatController extends Controller
             'data'=>$data,
             'status'=>config('global.OK_STATUS'),
             'msg'=>trans($this->trans_dir.'data_was_return'),
-            'receiver_id'=>1,
-            'sender_id'=>$receiver_id,
+            'receiver_id'=> $receiver_id,
+            'sender_id'=> $sender_id,
         ];
         if($type == 'app')
         {
             $response['channel'] = $channel;
-
-            // $response['influencer_id'] = (int) $user_id;
         }
 
         return response()->json($response,config('global.OK_STATUS'));

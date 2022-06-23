@@ -1,6 +1,7 @@
 {
     "private": true,
     "scripts": {
+        "start" : "/opt/plesk/node/18/bin/node server.js",
         "dev": "npm run development",
         "development": "mix",
         "watch": "mix watch",

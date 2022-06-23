@@ -92,8 +92,8 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
     });
 
     #GET CITIES
-    Route::controller(CityController::class)->prefix('cities')->group(function(){
-        Route::get('/{country_id}','index');
+    Route::controller(CityController::class)->prefix('cities')->name('cities.')->group(function(){
+        Route::get('/{country_id}','index')->name('getCities');;
     });
 
     #GET AREAS
@@ -102,8 +102,8 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
     });
 
     #GET REGIONS
-    Route::controller(RegionController::class)->prefix('regions')->group(function(){
-        Route::get('/{country_id}','index');
+    Route::controller(RegionController::class)->prefix('regions')->name('regions.')->group(function(){
+        Route::get('/{country_id}','index')->name('getRegion');
     });
 
      #CATEGORIES ROUTES

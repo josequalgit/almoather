@@ -221,9 +221,14 @@ class AdController extends Controller
         $notChosenInfluencer = [];
         foreach ($allInfluencer as $key => $influencer) {
             $price = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
-            $budgetSum += $price;
             
-            $chosen = $budgetSum <= $budgetAfterCutPercentage ? 1 : 0;
+            if(($budgetSum + $price) <= $budgetAfterCutPercentage){
+                $chosen = 1;
+                $budgetSum += $price;
+            }else{
+                $chosen = 0;
+            }
+
             AdsInfluencerMatch::updateOrCreate([
                 'ad_id' => $ad->id,
                 'influencer_id' => $influencer->id,
@@ -292,20 +297,19 @@ class AdController extends Controller
         $chosenSubscribers = [];
         $notChosenInfluencer = [];
 
-        $hasInfluencerInCategory = Influncer::where('status', 'accepted')->whereNotIn('id', $data)->count();
-        if($hasInfluencerInCategory == 0){
+        $influencers = Influncer::where('status', 'accepted')->whereNotIn('id', $data);
+        if($influencers->count() == 0){
             $noInfluencerReasons[] = "All influencers have been taken away from the campaign category";
         }
-       
-        $allSmallInfluencer = Influncer::where('status', 'accepted')->whereNotIn('id', $data)->where('subscribers', '<', 500000)->where('subscribers', '>', 0);
         
         if ($ad->ad_type == 'onsite') {
-            $allSmallInfluencer = $allSmallInfluencer->where(function ($query) use ($ad) {
+            $influencers = $influencers->where(function ($query) use ($ad) {
                 $query->where('ads_out_country', 1)
                     ->orWhere('city_id', $ad->city_id);
             });
         }
-        $allSmallInfluencer = $allSmallInfluencer->get()->map(function($item){
+
+        $engagementInfluencers = $influencers->get()->map(function($item){
             $getLastMonthAds = $item->contracts()->orderBy('created_at', 'desc')->take(30)->sum('af');
             $getLastMonthAdsCount = $item->contracts()->orderBy('created_at', 'desc')->take(30)->count();
            
@@ -314,51 +318,39 @@ class AdController extends Controller
 
             return $item;
         });
+        $engagementInfluencers = collect($engagementInfluencers)->sortByDesc('eng_rate');
 
-        $allSmallInfluencer = collect($allSmallInfluencer)->sortByDesc('eng_rate');
-
-        if($allSmallInfluencer->count() == 0){
-            $noInfluencerReasons[] = "There are no small influencers found that have subscribers of less than 500000";
-        }
-        
         $isOverBudge = 0;
         $totalForSmallInfluencers = 0;
-        #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
-        foreach ($allSmallInfluencer as $key => $influencer) {
-            $price = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
-            $isOverBudge += $price;
-            
-            $chosen = $isOverBudge <= $budgetForSmallInfluencer ? 1 : 0;
-            if($chosen){
-                $totalForSmallInfluencers += $price;
-            }
-            AdsInfluencerMatch::updateOrCreate([
-                'ad_id'=>$ad->id,
-                'influencer_id'=>$influencer->id,
-            ],[
-                'chosen'=> $chosen,
-                'match'=> $influencer->eng_rate,
-                'AOAF' => $influencer->AOAF,
-            ]);
-        }
+        $chosenInfluencers = [];
 
-        $allInfluencer = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->count();
-        if($allInfluencer == 0){
-            $noInfluencerReasons[] = "All influencers are over the campaign budget or the engagement rate for small influencers is set to 0";
+        #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
+        foreach ($engagementInfluencers as $key => $influencer) {
+            $price = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
+            
+            if(($isOverBudge + $price) <= $budgetForSmallInfluencer){
+                $isOverBudge += $price;
+                $totalForSmallInfluencers += $price;
+                $chosenInfluencers[] = $influencer->id;
+                AdsInfluencerMatch::updateOrCreate([
+                    'ad_id' => $ad->id,
+                    'influencer_id' => $influencer->id,
+                ],[
+                    'chosen'=> 1,
+                    'match'=> $influencer->eng_rate,
+                    'AOAF' => $influencer->AOAF,
+                ]);
+            }
+            
+            if($totalForSmallInfluencers > $budgetForSmallInfluencer){
+                break;
+            }
+           
         }
        
         $budgeForBigInfluencer = $budgeForBigInfluencer + ($budgetForSmallInfluencer - $totalForSmallInfluencers);
 
-        /** GET BIG INFLUENCERS */
-        $allBigInfluencer = Influncer::where('status', 'accepted')->whereNotIn('id', $data)->where('subscribers', '>=', 500000);
-        if ($ad->ad_type == 'onsite') {
-            $allBigInfluencer = $allBigInfluencer->where(function ($query) use ($ad) {
-                $query->where('ads_out_country', 1)
-                    ->orWhere('city_id', $ad->city_id);
-            });
-        }
-
-        $allBigInfluencer = $allBigInfluencer->get()->map(function($item){
+        $allBigInfluencer = $influencers->whereNotIn('id',$chosenInfluencers)->get()->map(function($item){
             $getLastMonthAds = $item->contracts()->orderBy('created_at', 'desc')->take(30)->sum('af');
             $getLastMonthAdsCount = $item->contracts()->orderBy('created_at', 'desc')->take(30)->count();
             $item->AOAF = $getLastMonthAdsCount ? $getLastMonthAds / $getLastMonthAdsCount : 0;
@@ -368,7 +360,7 @@ class AdController extends Controller
 
         $allBigInfluencer = collect($allBigInfluencer)->sortByDesc('AOAF');
         if($allBigInfluencer->count() == 0){
-            $noInfluencerReasons[] = "There are no big influencers found that have subscribers of more than 500000";
+            $noInfluencerReasons[] = "There are no influencers found";
         }
 
         #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
@@ -376,10 +368,13 @@ class AdController extends Controller
         foreach ($allBigInfluencer as $key => $influencer) {
             $price = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
 
-            $isOverBudge += $price;
+            if(($isOverBudge + $price) <= $budgeForBigInfluencer){
+                $chosen = 1;
+                $isOverBudge += $price;
+            }else{
+                $chosen = 0;
+            }
 
-            $chosen = $isOverBudge <= $budgeForBigInfluencer ? 1 : 0;
-            
             AdsInfluencerMatch::updateOrCreate([
                 'ad_id'=>$ad->id,
                 'influencer_id'=>$influencer->id,
@@ -388,11 +383,12 @@ class AdController extends Controller
                 'match'=> $influencer->AOAF,
                 'AOAF' => $influencer->AOAF,
             ]);
+            
         }
 
         $allInfluencer = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->count();
         if($allInfluencer == 0){
-            $noInfluencerReasons[] = "All influencers is over the campaign budget or engagement rate is set to 100";
+            $noInfluencerReasons[] = "All influencers is over the campaign budget";
         }
 
         return $noInfluencerReasons;
@@ -489,6 +485,24 @@ class AdController extends Controller
                 'msg' => 'Campaign not found',
                 'status' => false,
             ], config('global.NOT_FOUND_STATUS'));
+        }
+
+        $matches = $ad->matches()->where('chosen', 1)->where('status','!=','deleted')->get();
+        $hasInfluencerError = false;
+        $message = '<p>These influencers has no scenario or date</p><ol>';
+        foreach($matches as $match){
+            if(!$match->contract || !$match->contract->date || !$match->contract->scenario){
+                $hasInfluencerError = true;
+                $message .= '<li>' . $match->influencers->full_name . '</li>';
+            }
+        }
+        $message .= '</ol>';
+
+        if($hasInfluencerError){
+            return response()->json([
+                'msg'=>$message,
+                'status'=> false
+            ],config('global.OK_STATUS'));
         }
 
         $ad->update(['admin_approved_influencers' => 1]);
@@ -601,66 +615,34 @@ class AdController extends Controller
 
     public function sendContractToInfluencer(Request $request, $ad_id)
     {
+        $data = $request->validate([
+            "scenario"    => "required",
+            "date"  => "required",
+            "influncers_id"  => "required",
+        ]);
+
         $ad = Ad::find($ad_id);
-        $contract = $ad->contacts;
-        if (!$contract) {
+        if (!$ad) {
             return response()->json([
-                'msg' => 'contract was not found',
-                'status' => config('global.NOT_FOUND_STATUS'),
+                'message' => 'AD not found',
+                'status' => false,
             ], config('global.NOT_FOUND_STATUS'));
         }
 
-        if($request->send_to_all)
-        {
-            $allMatches = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
-            foreach($allMatches as $match)
-            {
-                $data = new InfluencerContract;
-                $data->content = $contract->content;
-                $data->influencer_id = $match->influencer_id;
-                $data->date = $request->date;
-                $data->is_accepted = 0;
-                $data->ad_id = $ad_id;
-                $data->scenario = $request->scenario;
-                $data->af = 0;
-                $data->save();
-
-
-                $influencer = Influncer::find($match->influencer_id);
-                $name = $influencer->first_name . ' ' . $influencer->middle_name . ' ' . $influencer->last_name;
-        
-                $info = [
-                    'msg' => 'New Contract for ad "' . $ad->store . '"',
-                    'type' => 'Ad',
-                    'id' => $ad->id,
-                ];
-
-                Notification::send($influencer->users, new AddInfluencer($info));
-
-
-            }
-
-            return response()->json([
-                'msg' => 'contract was sent',
-                'status' => config('global.OK_STATUS'),
-            ], config('global.OK_STATUS'));
-        }
-
-
-        $influencer = Influncer::find($request->influncers_id);
-        $name = $influencer->first_name . ' ' . $influencer->middle_name . ' ' . $influencer->last_name;
-
-        $info = [
-            'msg' => 'New Contract for ad "' . $ad->store . '"',
-            'type' => 'Ad',
-            'id' => $ad->id,
-        ];
-
-        Notification::send($influencer->users, new AddInfluencer($info));
+        $data = InfluencerContract::updateOrCreate([
+            'ad_id' => $ad_id,
+            'influencer_id' => $data['influncers_id']
+        ],[
+            'date' => $data['date'],
+            'scenario' => $data['scenario'],
+            'is_accepted' => 0,
+            'af' => 0,
+            'content' => '',
+        ]);
 
         return response()->json([
-            'msg' => 'contract was sent',
-            'status' => config('global.OK_STATUS'),
+            'message' => 'Data Saved Successfully',
+            'status' => true,
         ], config('global.OK_STATUS'));
     }
 
