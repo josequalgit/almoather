@@ -12,8 +12,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $setting = AppSetting::where('key','welcome_page')->first();
-        $test_info = AppSetting::where('key','contact_info')->first();
+        $setting = AppSetting::where('key','welcome_page')->first()??null;
+        $test_info = AppSetting::where('key','contact_info')->first()??null;
         $about_us =  Page::where('slug','about_us')->first();
         $contact_us = Page::where('slug','contact_us')->first();
         $faq = Page::where('slug','faq')->first();
