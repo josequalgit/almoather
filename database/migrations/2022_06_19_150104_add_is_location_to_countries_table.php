@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('countries', function (Blueprint $table) {
-            $table->boolean('is_location')->default(0);
+            // $table->boolean('is_location')->default(0);
         });
     }
 
