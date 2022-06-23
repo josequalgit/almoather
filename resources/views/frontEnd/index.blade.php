@@ -158,14 +158,14 @@
 
                 </div>
                 <div class="col-6 col-md-6 col-lg-6">
-                    <img id="radius-image" src="{{asset('FrontEnd/img/d1.png')}}" alt="">
+                    <img id="radius-image" src="{{asset('frontEnd/img/d1.png')}}" alt="">
                 </div>
             </div>
 
         </div>
     </div>
     <div class="left-contact">
-        <img src="{{ asset('FrontEnd/img/contact.png') }}" width="200px" height="200px" alt="">
+        <img src="{{ asset('frontEnd/img/contact.png') }}" width="200px" height="200px" alt="">
     </div>
 </section>
 
@@ -206,14 +206,14 @@
                 </div>
             </div>
             <div class="col-lg-6 col-md-12 col-sm-12">
-                <img id="phone" src="{{ asset('FrontEnd/img/phone.png') }}" alt="">
+                <img id="phone" src="{{ asset('frontEnd/img/phone.png') }}" alt="">
             </div>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 text-center read-more-contact"><a href="#">READ MORE <i
         class="fa-solid fa-arrow-right"></i></a></div>
     </div>
     <div class="right-face">
-        <img src="{{ asset('FrontEnd/img/Icon3.png') }}" width="200px" height="200px" alt="">
+        <img src="{{ asset('frontEnd/img/Icon3.png') }}" width="200px" height="200px" alt="">
     </div>
 </section>
 @endsection

@@ -3,7 +3,7 @@
 @section('content')
 <section class="section section2">
     <div class="right-img-page2">
-      <img  src="{{ asset('FrontEnd/img/Group50.png') }}" width="200px" height="200px" alt="">
+      <img  src="{{ asset('frontEnd/img/Group50.png') }}" width="200px" height="200px" alt="">
     </div>
     <div class="container">
       <div class="row">
@@ -39,7 +39,7 @@
             </div>
           </div>
           <div class="person col-lg-6 col-md-12 col-sm-12 position-relative">
-            <img class="position-absolute" src="{{ asset('FrontEnd/img/person.png') }}" alt="">
+            <img class="position-absolute" src="{{ asset('frontEnd/img/person.png') }}" alt="">
           </div>
         </div>
        
@@ -59,10 +59,10 @@
 
       <section class="map position-relative">
         <div class="left-phone">
-          <img  src="{{ asset('FrontEnd/img/Icon awesome-phone-square-alt.png') }}" width="200px" height="200px" alt="">
+          <img  src="{{ asset('frontEnd/img/Icon awesome-phone-square-alt.png') }}" width="200px" height="200px" alt="">
         </div>
         <div class="left-dotted">
-          <img  src="{{ asset('FrontEnd/img/Group 50196.png') }}" width="300px" height="300px" alt="">
+          <img  src="{{ asset('frontEnd/img/Group 50196.png') }}" width="300px" height="300px" alt="">
         </div>
         <div class="container">
           <div class="row">
@@ -102,10 +102,10 @@
              
               <div class="col-lg-4 col-md-12 col-sm-12 mt-md-5">
                 <div class="right-mail">
-                  <img  src="{{ asset('FrontEnd/img/Icon ionic-ios-mail.png') }}" width="150px" height="150px" alt="">
+                  <img  src="{{ asset('frontEnd/img/Icon ionic-ios-mail.png') }}" width="150px" height="150px" alt="">
                 </div>
                 <div class="right-dotted-social">
-                  <img  src="{{ asset('FrontEnd/img/Group2.png') }}" width="300px" height="300px" alt="">
+                  <img  src="{{ asset('frontEnd/img/Group2.png') }}" width="300px" height="300px" alt="">
                 </div>
                 <div  class="contact-form-wrapper p-2 position-relative">
                   <div  class="contact-form1 text-left">
