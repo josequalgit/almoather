@@ -24,6 +24,7 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\ReasonsController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\BankController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\AdRelationsController;
@@ -165,6 +166,9 @@ Route::group(['middleware' => 'language'],function(){
                 Route::get('/ads/get-unmatched-influencers/{ad_id}/{influencer_id}','getUnmatchedInfluencers')->name('getUnmatchedInfluencers');
                 Route::delete('/ads/approve-influencers-list/{ad_id}','approveInfluencersList')->name('approveInfluencersList');
                 Route::delete('/ads/delete-match-influencers/{ad_id}/{influencer_id}','deleteMatchInfluencers')->name('deleteMatchInfluencers');
+                Route::get('/update_info/{id}','update_info_view')->name('update_info_view');
+                Route::get('/view-contract/{id}','show_contract')->name('show_contract');
+                Route::post('/update_info_submit/{id}','update_info_submit')->name('update_info_submit');
             });
 
             Route::middleware('role_or_permission:superAdmin|Edit Slide|See Slide|Create Slide|Delete Slide')->name('slides.')->controller(SlideController::class)->group(function(){
@@ -426,6 +430,16 @@ Route::group(['middleware' => 'language'],function(){
                 Route::post('/update/updateLoginText','updateLoginText')->name('updateLoginText');
                 Route::post('/update/registerType','registerType')->name('registerType');
                 Route::post('/update/updateMapLink','updateMapLink')->name('updateMapLink');
+            });
+
+            Route::controller(BankController::class)
+            ->prefix('banks')
+            ->name('banks.')
+            ->group(function(){
+                Route::get('/','index')->name('index');
+                Route::post('/store','store')->name('store');
+                Route::post('/update/{id}','update')->name('update');
+                Route::post('/delete/{id}','delete')->name('delete');
             });
 
          

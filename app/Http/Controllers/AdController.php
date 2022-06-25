@@ -20,6 +20,7 @@ use App\Models\StoreLocation;
 use App\Models\User;
 use App\Notifications\AddInfluencer;
 use App\Http\Traits\SendNotification;
+use App\Models\AppSetting;
 use App\Models\Relation;
 use App\Models\SocialMedia;
 use Auth;
@@ -27,6 +28,7 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class AdController extends Controller
 {
@@ -222,7 +224,7 @@ class AdController extends Controller
         $chosenInfluencer = [];
         $notChosenInfluencer = [];
         foreach ($allInfluencer as $key => $influencer) {
-            $price = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
+            $price = $ad->ad_type == 'online' ? $influencer->ad_with_vat : $influencer->ad_onsite_price_with_vat;
             
             if(($budgetSum + $price) <= $budgetAfterCutPercentage){
                 $chosen = 1;
@@ -326,7 +328,7 @@ class AdController extends Controller
 
         #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
         foreach ($engagementInfluencers as $key => $influencer) {
-            $price = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
+            $price = $ad->ad_type == 'online' ? $influencer->ad_with_vat : $influencer->ad_onsite_price_with_vat;
             
             if(($isOverBudge + $price) <= $budgetForSmallInfluencer){
                 $isOverBudge += $price;
@@ -366,7 +368,7 @@ class AdController extends Controller
         #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
         $isOverBudge = 0;
         foreach ($allBigInfluencer as $key => $influencer) {
-            $price = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
+            $price = $ad->ad_type == 'online' ? $influencer->ad_with_vat : $influencer->ad_onsite_price_with_vat;
 
             if(($isOverBudge + $price) <= $budgeForBigInfluencer){
                 $chosen = 1;
@@ -400,13 +402,13 @@ class AdController extends Controller
         $ad = Ad::find($ad_id);
 
         $chosen_inf = Influncer::find($chosen_inf_id);
-        $chosenInfPrice = $ad->onSite ? $chosen_inf->ad_onsite_price : $chosen_inf->ad_price;
+        $chosenInfPrice = $ad->onSite ? $chosen_inf->ad_onsite_price_with_vat : $chosen_inf->ad_with_vat;
 
         $removed_inf = Influncer::find($removed_inf_id);
-        $oldInfPrice = $ad->onSite ? $removed_inf->ad_onsite_price : $removed_inf->ad_price;
+        $oldInfPrice = $ad->onSite ? $removed_inf->ad_onsite_price_with_vat : $removed_inf->ad_with_vat;
 
         $matchedPriceTotal = 0;
-        $sumColumn = $ad->ad_type ? 'ad_price' : 'ad_onsite_price';
+        $sumColumn = $ad->ad_type ? 'ad_with_vat' : 'ad_onsite_price_with_vat';
         $ad->matches()->where('chosen', 1)->get()->map(function($item) use(&$matchedPriceTotal,$sumColumn){
             $matchedPriceTotal += $item->influencers->{$sumColumn};
         });
@@ -434,6 +436,15 @@ class AdController extends Controller
 
         $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
         $noInfluencerReasons = [];
+
+        if($ad->admin_approved_influencers){
+            $budgetSum = 0;
+            foreach($matchedInfluencers as $match){
+                $price = $ad->ad_type == 'online' ? $match->influencers->ad_with_vat : $match->influencers->ad_onsite_price_with_vat;
+                $budgetSum += $price;
+            }
+            $ad->update(['budget' => $budgetSum]);
+        }
 
         $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons','budget'))->render();
         return response()->json([
@@ -468,6 +479,15 @@ class AdController extends Controller
         $appPercentage = 0.15 * $ad->budget;
         $budget = $ad->budget - $appPercentage;
 
+        if($ad->admin_approved_influencers){
+            $budgetSum = 0;
+            foreach($matchedInfluencers as $match){
+                $price = $ad->ad_type == 'online' ? $match->influencers->ad_with_vat : $match->influencers->ad_onsite_price_with_vat;
+                $budgetSum += $price;
+            }
+            $ad->update(['budget' => $budgetSum]);
+        }
+        
         $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons','budget'))->render();
         return response()->json([
             'msg' => 'data was updated',
@@ -505,7 +525,15 @@ class AdController extends Controller
             ],config('global.OK_STATUS'));
         }
 
-        $ad->update(['admin_approved_influencers' => 1]);
+        $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
+        $budgetSum = 0;
+        foreach($matchedInfluencers as $match){
+            $price = $ad->ad_type == 'online' ? $match->influencers->ad_with_vat : $match->influencers->ad_onsite_price_with_vat;
+            $budgetSum += $price;
+        }
+
+        $ad->update(['admin_approved_influencers' => 1,'budget' => $budgetSum]);
+        $this->create_customer_contract($ad);
 
         return response()->json([
             'msg'=>'status was changed',
@@ -531,7 +559,7 @@ class AdController extends Controller
             ], config('global.NOT_FOUND_STATUS'));
         }
 
-        $sumColumn = $ad->ad_type ? 'ad_price' : 'ad_onsite_price';
+        $sumColumn = $ad->ad_type ? 'ad_with_vat' : 'ad_onsite_price_with_vat';
 
         $unMatched = $ad->matches()->where('chosen', 0)->where('status','!=','deleted')->get();
         $matchedPriceTotal = 0;
@@ -543,7 +571,7 @@ class AdController extends Controller
         $budget = $ad->budget - $appPercentage;
         $remainingBudget = $budget - $matchedPriceTotal;
 
-        $influencerPrice = $ad->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
+        $influencerPrice = $ad->ad_type == 'online' ? $influencer->ad_with_vat : $influencer->ad_onsite_price_with_vat;
         $influencerPrice += $remainingBudget;
 
         $unmatchedInfluencersTable = view('dashboard.ads.include.unmatched_influencer', compact('unMatched','ad','influencer','influencerPrice','budget'))->render();
@@ -580,22 +608,6 @@ class AdController extends Controller
             'data' => $matches,
             'status' => 200,
         ], 200);
-    }
-
-    private function makOneArray($arrayOfArray)
-    {
-        $data = [];
-        foreach ($arrayOfArray as $key => $value) {
-            $insideArray = $arrayOfArray[$key];
-            dd($arrayOfArray);
-            foreach ($insideArray as $value2) {
-                dd($value2);
-
-                array_push($data, $value2);
-            }
-        }
-
-        return $data;
     }
 
     public function editContract($ad_id)
@@ -846,6 +858,61 @@ class AdController extends Controller
         $data->update($request->all());
         Alert::toast('Ad was updated', 'success');
         return back();
+    }
+
+    private function create_customer_contract($ad)
+    {
+        $contractData = AppSetting::where('key', 'Customer Contract')->first();
+        
+        $content = json_decode($contractData->value);
+        $startDate = $ad->InfluencerContract()->orderBy('date','asc')->first();
+        $endDate = $ad->InfluencerContract()->orderBy('date','desc')->first();
+
+        $content = str_replace("[[_LOGO_]]", '<img src="'.asset('img/avatars/logo-almuaather.png').'" height="100" >', $content);
+        
+        $content = str_replace("[[_CONTRACT_NUM_]]", $ad->id, $content);
+       // $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
+        $content = str_replace("[[_CUSTOMER_NAME_]]", $ad->customers->full_name, $content);
+        $content = str_replace("[[_STORE_NAME_]]", $ad->store, $content);
+        $content = str_replace("[[_CUSTOMER_NATIONALITY_]]", $ad->customers->nationalities->getTranslation('name','ar'), $content);
+        $content = str_replace("[[_CR_NUM_]]", $ad->cr_num, $content);
+        $content = str_replace("[[_NATIONAL_NUM_]]", $ad->customers->id_number, $content);
+        $content = str_replace("[[_PHONE_]]", $ad->customers->users->phone, $content);
+        $content = str_replace("[[_EMAIL_]]", $ad->customers->users->email, $content);
+        $content = str_replace("[[_PRICE_WITH_TAX_]]", $ad->adBudgetWithVat, $content);
+        $content = str_replace("[[_PRICE_]]", $ad->budget, $content);
+        $content = str_replace("[[_START_DATE_]]", $startDate->date->format('d/m/Y'), $content);
+        $content = str_replace("[[_END_DATE_]]", $endDate->date->format('d/m/Y'), $content);
+        $content = str_replace("[[_CAMPAIGN_GOAL_]]", $ad->campaignGoals->getTranslation('title','ar'), $content);
+        
+        if ($contractData) {
+            return CampaignContract::updateOrCreate(['ad_id' => $ad->id],[
+                'content' => $content,
+                'is_accepted' => 0,
+            ]);
+        } else {
+            return false;
+        }
+
+    }
+
+    function show_contract($ad_id){
+        $contract = CampaignContract::where('ad_id',$ad_id)->first();
+        if(!$contract){
+            return response()->json([
+                'message' => 'Contract not found',
+                'status' => false,
+            ], 404);
+        }
+
+        $content = $contract->content;
+        $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
+
+        return response()->json([
+            'message' => '',
+            'contract' => mb_convert_encoding( $content, 'UTF-8', 'UTF-8'),
+            'status' => true,
+        ], 200);
     }
 
 }

@@ -123,6 +123,19 @@
                 </div>
             </div>
 
+            <div id="campaign-modal" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog full-modal-dialog" role="document">
+                    <div class="modal-content full-modal-content">
+                        <div class="modal-body contract-modal-body">
+                        </div>
+                        <div class="modal-footer border-0 py-1 justify-content-center">
+                            <button type="button" class="btn btn-secondary" onclick="printContract(this)">Print</button>
+                            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
           </div>
       </section>
@@ -131,6 +144,60 @@
 
 @section('scripts')
     <script>
+
+        function printContract($this){
+            var divContents = $($this).closest('.modal-content').find('.modal-body').html();
+            var a = window.open('', '', 'height=500, width=500');
+            a.document.write('<html>');
+            a.document.write(`<body>
+                <style>
+                @media print {
+                    * {
+                        box-sizing: border-box;
+                    }
+                    @page {
+                        margin-top: 25px;
+                        margin-bottom: 25px;
+                        page-break-after: always;
+                        display: inline-block;
+                        white-space: nowrap;
+                    }
+                    body  {
+                        padding: 5px 15px;
+                        direction: rtl;
+                        text-align: right;
+                        border: 15px solid #8e8ab0;
+                        page-break-after: always;
+                        display: inline-block;
+                        white-space: nowrap;
+                        margin-top: 25px;
+                        margin-bottom: 25px;
+                    }
+
+                    .container{
+                        white-space: normal;
+                    }
+                }
+                * {
+                    box-sizing: border-box;
+                }
+                body  {
+                    padding: 5px 15px;
+                    direction: rtl;
+                    text-align: right;
+                    border: 15px solid #8e8ab0;
+                    page-break-after: always;
+                }
+                .container{
+                    white-space: normal;
+                }
+                </style>
+                `);
+            a.document.write(`<div class="container">${divContents}</div>`);
+            a.document.write('</body></html>');
+            a.document.close();
+            a.print();
+        }
 
         $(function(){
 
@@ -320,7 +387,7 @@
         function approveInfluencersList($this) { 
             Swal.fire({
                 title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                text: "The campaign budget will change to the sum of chosen influencers prices. You won't be able to revert this!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -341,7 +408,11 @@
                                     'Influencers have been confirmed.',
                                     'success'
                                 );
+                                $($this).parent().after(`<div class="d-flex justify-content-center">
+                                                    <button  type="button" onclick="viewContract(this)" class="btn btn-secondary">View Contract</button>
+                                                </div> `);
                                 $($this).parent().remove();
+
                             }else{
                                 Swal.fire(
                                     'Error!',
@@ -349,9 +420,6 @@
                                     'error'
                                 );
                             }
-                            
-                            
-
                             $($this).attr('disabled',false).html(`Approve Influencers List`);
                         },
                         error: (err) => {
@@ -360,6 +428,34 @@
                         }
                     });
                     
+                }
+            });
+        }
+
+
+        function viewContract($this){
+            let url = '{{ route("dashboard.ads.show_contract",["id" => $data->id]) }}';
+            $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i> ` + $($this).text());
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'json',
+                success: (res) => {
+                    if(res.status){
+                        $('#campaign-modal .modal-body').html(res.contract);
+                        $('#campaign-modal').modal('show');
+                    }else{
+                        Swal.fire(
+                            'Error!',
+                            res.message,
+                            'error'
+                        );
+                    }
+                    $($this).attr('disabled',false).html($($this).text());
+                },
+                error: (err) => {
+                    console.log(err);
+                    $($this).attr('disabled',false).html($($this).text());
                 }
             });
         }

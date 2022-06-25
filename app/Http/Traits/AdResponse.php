@@ -241,35 +241,6 @@ trait AdResponse
 
     }
 
-    private function create_customer_contract($ad, $customer)
-    {
-        $contractData = AppSetting::where('key', 'Customer Contract')->first();
-
-        if (!$contractData) {
-            return false;
-        }
-        $content = $contractData->value;
-
-        $content = str_replace("​[[_LOGO_]]​", asset('main2/images/logo/logo.png'), $content);
-        $content = str_replace("[[_CONTRACT_NUM_]]", $ad->id, $content);
-        $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
-        $content = str_replace("[[_CUSTOMER_NAME_]]", $ad->customers->full_name, $content);
-        $content = str_replace("[[_CUSTOMER_NATIONALITY_]]", $ad->customers->nationalities->getTranslate('name','ar'), $content);
-        $content = str_replace("[[_CR_NUM_]]", $ad->cr_num, $content);
-        $content = str_replace("[[_NATIONAL_NUM_]]", $ad->customers->id_number, $content);
-        $content = str_replace("[[_PHONE_]]", $ad->customers->users->phone, $content);
-        $content = str_replace("[[_EMAIL_]]", $ad->customers->users->email, $content);
-        $content = str_replace("[[_PRICE_]]", $ad->budget, $content);
-
-        if ($contractData) {
-            return CampaignContract::updateOrCreate(['ad_id' => $ad_id],[
-                'content' => $replace,
-                'is_accepted' => 0,
-            ]);
-        } else {
-            return false;
-        }
-
-    }
+    
 
 }

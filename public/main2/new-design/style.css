@@ -20,11 +20,6 @@
     overflow-y: initial !important
 }
 
-.modal-body {
-    height: 50vh;
-    overflow-y: auto;
-}
-
 .shadow-sm {
     box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
 }
@@ -73,10 +68,6 @@
 
 .user-dashboard-info-box .candidate-list-favourite-time .candidate-list-favourite {
     margin-bottom: 10px;
-}
-
-.table.manage-candidates-top {
-    /* min-width: 650px; */
 }
 
 .user-dashboard-info-box .candidate-list-details ul {
@@ -266,7 +257,6 @@ i.bx.bx-trash {
 }
 
 #boxclose {
-    float: right;
     cursor: pointer;
     color: #fff;
     border: 1px solid #AEAEAE;

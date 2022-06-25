@@ -11,7 +11,7 @@
             <div class="card">
             <div class="card-header pb-0">
                 <div class="card-title">
-                    <p class="mb-0">Update Ad</p>
+                    <p class="mb-0">Update Campaign</p>
                 </div>
                 <hr class="w-100">
             </div>
@@ -21,60 +21,60 @@
                     @csrf
                     <div class="row">
                         <div class="col-6 mb-1">
-                            <label for="exampleFormControlInput1" class="form-label">Trade Mark Name</label>
-                            <input  name="store" value="{{ old('store')?old('store'):$data->store }}" type="text" class="form-control" id="exampleFormControlInput1" placeholder="add trade mark">
+                            <label for="store" class="form-label">Trade Mark Name</label>
+                            <input  name="store" value="{{ old('store')?old('store'):$data->store }}" type="text" class="form-control" id="store" placeholder="add trade mark">
                           </div>
                           <div class="col-6 mb-1">
-                            <label for="exampleFormControlInput1" class="form-label">Cr Number</label>
-                            <input name="cr_number" value="{{ old('cr_num')?old('cr_num'):$data->cr_num }}" type="number" class="form-control" id="exampleFormControlInput1" placeholder="add trade mark">
+                            <label for="cr_num" class="form-label">Cr Number</label>
+                            <input name="cr_number" value="{{ old('cr_num')?old('cr_num'):$data->cr_num }}" type="number" class="form-control" id="cr_num" placeholder="CR Number">
                           </div>
                     </div>
                   <div class="row">
                     <div class="mb-1 col-6">
-                        <label for="exampleFormControlInput1" class="form-label">Marouf Number</label>
-                        <input row name="marouf_num" value="{{ old('marouf_num')?old('marouf_num'):$data->marouf_num }}" type="text" class="form-control" id="exampleFormControlInput1" placeholder="add trade mark">
+                        <label for="marouf_num" class="form-label">Marouf Number</label>
+                        <input row name="marouf_num" value="{{ old('marouf_num')?old('marouf_num'):$data->marouf_num }}" type="text" class="form-control" id="marouf_num" placeholder="Marouf Number">
                       </div>
                  
                       <div class="mb-1 col-6">
-                        <label for="exampleFormControlInput1" class="form-label">Budget</label>
-                        <input  name="budget" value="{{ old('budget')?old('budget'):$data->budget }}" type="text" class="form-control" id="exampleFormControlInput1" placeholder="add trade mark">
+                        <label for="budget" class="form-label">Budget</label>
+                        <input  name="budget" value="{{ old('budget')?old('budget'):$data->budget }}" type="text" class="form-control" id="budget" placeholder="Budget">
                       </div>
                   </div>
                   <div class="mb-1">
-                    <label for="exampleFormControlInput1" class="form-label">About</label>
-                    <textarea  rows="6" name="about" type="text" class="form-control" id="exampleFormControlInput1" placeholder="add trade mark">{{ old('about')?old('about'):$data->about }}</textarea>
+                    <label for="about" class="form-label">About</label>
+                    <textarea  rows="6" name="about" type="text" class="form-control" id="about" placeholder="About">{{ old('about')?old('about'):$data->about }}</textarea>
                   </div>
                 
                   <div class="row">
                     <div class="mb-1 col-6">
-                        <label for="exampleFormControlInput1" class="form-label">Tax Number</label>
-                        <input name="tax_value" value="{{ old('tax_value')?old('tax_value'):$data->tax_value }}" type="text" class="form-control" id="exampleFormControlInput1" placeholder="add trade mark">
+                        <label for="tax_value" class="form-label">Tax Number</label>
+                        <input name="tax_value" value="{{ old('tax_value')?old('tax_value'):$data->tax_value }}" type="text" class="form-control" id="tax_value" placeholder="Tax Number">
                       </div>
                       <div class="mb-1 col-6">
-                        <label for="exampleFormControlInput1" class="form-label">Link</label>
-                        <input  name="store_link" value="{{ old('store_link')?old('store_link'):$data->store_link }}" type="text" class="form-control" id="exampleFormControlInput1" placeholder="add trade mark">
+                        <label for="store_link" class="form-label">Link</label>
+                        <input  name="store_link" value="{{ old('store_link')?old('store_link'):$data->store_link }}" type="text" class="form-control" id="store_link" placeholder="Link">
                       </div>
                   </div>
 
                   <div class="row">
                     <div class="mb-1 col-6">
-                        <label for="exampleFormControlInput1" class="form-label">Relation</label>
-                        <select name="relation_id" class="form-control" aria-label="Default select example">
+                        <label for="relation_id" class="form-label">Relation</label>
+                        <select name="relation_id" class="form-control" aria-label="Default select example" id="relation_id">
                             @foreach ($realations as $item)
                             <option {{ $data->relation_id == $item->id?'selected':'' }} value="owner">{{ $item->title }}</option>
                             @endforeach
                           </select>
                       </div>
                       <div class="mb-1 col-6">
-                        <label for="formFile" class="form-label">Logo</label>
-                        <input name="logo" class="form-control" type="file" id="formFile">                      
+                        <label for="logo" class="form-label">Logo</label>
+                        <input name="logo" class="form-control" type="file" id="formFile" id="logo">                      
                       </div>
                   </div>
                  
                  
                   <div class="mb-1">
-                    <label for="exampleFormControlInput1" class="form-label">About product</label>
-                    <textarea  rows="6" name="about_product" type="text" class="form-control" id="exampleFormControlInput1" placeholder="add trade mark">{{ old('about_product')?old('about_product'):$data->about_product }}</textarea>
+                    <label for="about_product" class="form-label">About product</label>
+                    <textarea  rows="6" name="about_product" type="text" class="form-control" id="about_product" placeholder="About product">{{ old('about_product')?old('about_product'):$data->about_product }}</textarea>
                   </div>
                  
                   <label for="country_id">Location</label>
@@ -98,8 +98,8 @@
                     </div>
                   </div>
                   <div class="mb-1">
-                    <label for="exampleFormControlInput1" class="form-label">Campaign Goals</label>
-                    <select name="campaign_goals_id" class="form-control" aria-label="Default select example">
+                    <label for="campaign_goals_id" class="form-label">Campaign Goals</label>
+                    <select name="campaign_goals_id" class="form-control" aria-label="Default select example" id="campaign_goals_id">
                         @foreach ($goals as $item)
                         <option {{ $item->campaign_goals_id == $item->id?'selected':'' }} value="{{ $item->id }}">{{ $item->title }}</option>
                         @endforeach
@@ -159,15 +159,11 @@
               $.get(route,function(res) {
                   if(res.status == 200){
                       let options = ``;
-                      let optionsDelivery = ``;
                       let value = $('#city_id').attr('data-value');
-                      let valueDelivert = $('#rep_city').attr('data-value');
                       res.data.forEach((item, index)=>{
                           options += `<option value="${item.id}" ${ value == item.id ? 'selected' : '' }>${item.name}</option>`;
-                          optionsDelivery += `<option value="${item.id}" ${ valueDelivert == item.id ? 'selected' : '' }>${item.name}</option>`;
                       });
                       $('#city_id').html(options);
-                      $('#rep_city').html(optionsDelivery);
                   }
               },'json');
           });

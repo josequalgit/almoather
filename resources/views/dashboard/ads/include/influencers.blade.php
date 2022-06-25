@@ -1,7 +1,8 @@
 <h3 class="f-16 ad-title">LIVE</h3>
 @php 
 $totalPrice = 0;
-$notShowSinarioStatuses = ['prepay','pending','cancelled','approved',];  
+$notShowSinarioStatuses = ['prepay','pending','cancelled','approved'];  
+$notShowfluencersActions = ['progress','cancelled','complete'];  
 @endphp
 <section>
     <div class="add-section">
@@ -44,10 +45,10 @@ $notShowSinarioStatuses = ['prepay','pending','cancelled','approved',];
                             <td>{{ $item->influencers->nick_name }}</td>
                             <td>{{ $price }}</td>
                             @if($data->campaignGoals->profitable)
-                                <td>{{ $item->match ?? 0 }}%</td>
+                                <td>{{ $item->match ?? 0 }}</td>
                             @else
                                 <td>{{ $item->match ?? 0 }}%</td>
-                                <td>{{ $item->AOAF ?? 0 }}%</td>
+                                <td>{{ $item->AOAF ?? 0 }}</td>
                             @endif
                             @if(!in_array($data->status,$notShowSinarioStatuses))
                                 <td class="date {{ $contract ? 'has-content' : ''}}">{{ $contract ? $contract->date : 'Not set' }}</td>
@@ -56,12 +57,14 @@ $notShowSinarioStatuses = ['prepay','pending','cancelled','approved',];
                             <td>{{ $item->influencers->isBigInfluencer ? 'Big Influencer' : 'Small Influencer' }}</td>
                             <td>{{ ucwords(str_replace('_',' ',$item->status)) }}</td>
                             <td>
+                                @if(!in_array($data->status,$notShowfluencersActions))
                                 <button type="button" onclick="getUnchosenInfulncers(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm mb-1">
                                     <i class="bx bx-transfer"></i>
                                 </button>
                                 <button type="button" onclick="removeInfluencer(this,'{{ $item->influencers->id }}')" class="btn btn-danger btn-sm mb-1">
                                     <i class="fas fa-user-times"></i>
                                 </button>
+                                @endif
                                 @if ($data->status == 'choosing_influencer' && $data->admin_approved_influencers == 0)
                                     <button  type="button" onclick="seeContract(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm"><i class="fas fa-file-signature"></i></button>
                                 @endif
@@ -75,6 +78,11 @@ $notShowSinarioStatuses = ['prepay','pending','cancelled','approved',];
             @if ($data->status == 'choosing_influencer' && $data->admin_approved_influencers == 0)
                 <div class="d-flex justify-content-center">
                     <button  type="button" onclick="approveInfluencersList(this)" class="btn btn-secondary">Approve Influencers List</button>
+                </div> 
+            @endif
+            @if ($data->admin_approved_influencers == 1)
+                <div class="d-flex justify-content-center">
+                    <button  type="button" onclick="viewContract(this)" class="btn btn-secondary">View Contract</button>
                 </div> 
             @endif
             <div class="row mt-2">

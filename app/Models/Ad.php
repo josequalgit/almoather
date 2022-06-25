@@ -52,7 +52,8 @@ class Ad extends Model implements HasMedia
         'image',
         'document',
         'crImage',
-        'logo'
+        'logo',
+        'adBudgetWithVat'
     ];
 
     public function socialMedias()
@@ -104,6 +105,11 @@ class Ad extends Model implements HasMedia
     public function customerAdRateings()
     {
         return $this->hasMany(CustomerAdRating::class,'ad_id');
+    }
+
+    public function InfluencerContract()
+    {
+        return $this->hasMany(InfluencerContract::class,'ad_id');
     }
 
     public function influencerRatting()
@@ -353,6 +359,16 @@ class Ad extends Model implements HasMedia
     public function AdSocialMediaAccounts()
     {
         return $this->belongsToMany(SocialMedia::class,'social_media_id','ad_id','social_media_id')->withPivot('link');
+    }
+
+    function getAdBudgetWithVatAttribute(){
+        $budget = $this->budget;
+        $tax = AppSetting::where('key', 'tax')->first();
+        if($tax){
+            $tax = $tax->value;
+            $budget = $this->budget + ($this->budget * ($tax / 100));
+        }
+        return $budget;
     }
    
 

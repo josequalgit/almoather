@@ -22,6 +22,10 @@ class InfluencerContract extends Model
         'scenario',
     ];
 
+    protected $casts = [
+        'date' => 'datetime:Y-m-d',
+     ];
+
     public function ads()
     {
         return $this->belongsTo(Ad::class,'ad_id');

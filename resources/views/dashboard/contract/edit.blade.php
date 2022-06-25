@@ -98,13 +98,13 @@
 @section('scripts')
     <script>
    CKEDITOR.replace('editor1', {
-        extraPlugins: 'justify,placeholder,colorbutton,font',
+        extraPlugins: 'justify,placeholder,colorbutton,font,indent,indentblock,indentlist',
       height: 600,
       contentsLangDirection: 'rtl',
       removeButtons: 'PasteFromWord'
     });
    CKEDITOR.replace('editor2', {
-        extraPlugins: 'justify,placeholder,colorbutton,font',
+        extraPlugins: 'justify,placeholder,colorbutton,font,indent,indentblock,indentlist',
       contentsLangDirection: 'rtl',
       height: 600,
       removeButtons: 'PasteFromWord'
