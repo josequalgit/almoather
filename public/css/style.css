@@ -752,7 +752,6 @@ span.numbers {
 table.zero-configuration {
     border-collapse: separate;
     border-spacing: 0 1em;
-    table-layout: fixed;
 }
 
 table.zero-configuration tr td {
@@ -1116,7 +1115,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .contract-modal-body{
     text-align: right;
     direction: rtl;
-    border: 15px solid #8e8ab0;
 }
 
 .image-preview {
@@ -1127,4 +1125,9 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove{
     border-right: 0;
+}
+
+.categories{
+    max-height: 120px;
+    overflow: hidden;
 }

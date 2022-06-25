@@ -9,7 +9,7 @@
             <div class="card">
                 <div class="card-header pb-0">
                     <div class="card-title">
-                        <p class="mb-0">Categories</p>
+                        <p class="mb-0">Campaigns</p>
                     </div>
 
                     <div class="section-right">
@@ -58,7 +58,7 @@
 
                                                 <li  class="list-item-custom">
                                                     <a class="styleless-button w-100 text-left p-0" href="{{ route("dashboard.ads.update_info_view",$item->id) }}" >
-                                                        <i class="bx bx-edit list-item-icon"></i>
+                                                        <i class="fas fa-edit"></i>
                                                         <span class="list-item-text">Edit</span>
                                                     </a>
                                                 </li>
@@ -123,63 +123,65 @@
                         @endforeach
                     </div>
                     <div class="row list-items mt-2" style="{{ isset($_COOKIE['data-item']) && $_COOKIE['data-item'] == 'list-items' ? '' : 'display: none'}}">
-                        <table class="table zero-configuration table-influencers col-12" >
-                            <thead>
-                                <tr>
-                                    <th>Image</th>
-                                    <th>Name</th>
-                                    <th>Category</th>
-                                    <th>Budget</th>
-                                    <th>Goal</th>
-                                    <th>Type</th>
-                                    <th>Campaign Type</th>
-                                    <th>Status</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($data as $item)
-                                        <tr>
-                                            <td><img src="{{ $item->logo['url']  }}" alt="{{ $item->store }}" alt="{{ $item->store }}"></td>
-                                            <td>{{ $item->store }}</td>
-                                            <td>
-                                                @if($item->categories)
-                                                <div class="categories text-center">
-                                                    @foreach($item->categories()->pluck('name')->toArray() as $cat)
-                                                    <span class="desc badge bg-info mt-1 d-block">{{$cat}}</span>
-                                                    @endforeach
-                                                </div>
-                                                @else
-                                                <span class="desc badge bg-info mt-1">No category choosen</span>
-                                                @endif
-                                            </td>
-                                            <td>{{ number_format($item->budget); }}</td>
-                                            <td>{{ $item->campaignGoals->title; }}</td>
-                                            <td>{{ $item->type ? $item->type : 'Not selected yet' }}</td>
-                                            <td>{{ ucwords(str_replace('_',' ',$item->ad_type)) }}</td>
-                                            <td>{{ $item->status }}</td>
-                                            <td>{{ $item->created_at->diffForHumans() }}</td>
-                                            <td>
-                                                <button class="btn btn-secondary btn-sm mb-1" onclick="openModalSeeContract('{{ $item->contacts?$item->contacts->content:'No data avalibale' }}')">
-                                                    <i class="bx bx-printer list-item-icon"></i>
-                                                </button>
+                        <div class="table-responsive">
+                            <table class="table zero-configuration table-influencers col-12" >
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Category</th>
+                                        <th>Budget</th>
+                                        <th>Goal</th>
+                                        <th>Type</th>
+                                        <th>Campaign Type</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($data as $item)
+                                            <tr>
+                                                <td><img src="{{ $item->logo['url']  }}" alt="{{ $item->store }}" alt="{{ $item->store }}"></td>
+                                                <td>{{ $item->store }}</td>
+                                                <td>
+                                                    @if($item->categories)
+                                                    <div class="categories text-center">
+                                                        @foreach($item->categories()->pluck('name')->toArray() as $cat)
+                                                        <span class="desc badge bg-info mt-1 d-block">{{$cat}}</span>
+                                                        @endforeach
+                                                    </div>
+                                                    @else
+                                                    <span class="desc badge bg-info mt-1">No category choosen</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ number_format($item->budget); }}</td>
+                                                <td>{{ $item->campaignGoals->title; }}</td>
+                                                <td>{{ $item->type ? $item->type : 'Not selected yet' }}</td>
+                                                <td>{{ ucwords(str_replace('_',' ',$item->ad_type)) }}</td>
+                                                <td>{{ $item->status }}</td>
+                                                <td>{{ $item->created_at->diffForHumans() }}</td>
+                                                <td>
+                                                    <button class="btn btn-secondary btn-sm mb-1" onclick="openModalSeeContract('{{ $item->contacts?$item->contacts->content:'No data avalibale' }}')">
+                                                        <i class="bx bx-printer list-item-icon"></i>
+                                                    </button>
 
-                                                <button class="btn btn-secondary btn-sm mb-1" onclick="seeMatched('{{$item->id}}')">
-                                                    <i class="bx bx-user list-item-icon"></i>
-                                                </button>
-                                                <a class="btn btn-secondary btn-sm" href="{{ route("dashboard.ads.edit",$item->id) }}" >
-                                                    <i class="bx bx-book-content list-item-icon"></i>
-                                                </a>
-                                                <a class="btn btn-secondary btn-sm" href="{{ route("dashboard.ads.edit",$item->id) }}" >
-                                                    <i class="bx bx-book-content list-item-icon"></i>
-                                                </a>
-                                                
-                                            </td>
-                                        </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                                    <button class="btn btn-secondary btn-sm mb-1" onclick="seeMatched('{{$item->id}}')">
+                                                        <i class="bx bx-user list-item-icon"></i>
+                                                    </button>
+                                                    <a class="btn btn-secondary btn-sm mb-1" href="{{ route("dashboard.ads.edit",$item->id) }}" >
+                                                        <i class="bx bx-book-content list-item-icon"></i>
+                                                    </a>
+                                                    <a class="btn btn-secondary btn-sm" href="{{ route("dashboard.ads.edit",$item->id) }}" >
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    
+                                                </td>
+                                            </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <div class="mt-1 pagination-wrapper">

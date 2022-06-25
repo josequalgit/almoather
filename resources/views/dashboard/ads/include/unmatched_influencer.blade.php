@@ -1,4 +1,5 @@
-<table class="table zero-configuration table-influencers mb-1">
+<div class="table-responsive">
+<table class="table zero-configuration table-influencers">
     <thead>
         <tr>
             <th>Image</th>
@@ -19,7 +20,7 @@
     <tbody id="table-body">
         @foreach ($unMatched as $item)
             @php 
-            $price = $ad->ad_type == 'online' ? $item->influencers->ad_price : $item->influencers->ad_onsite_price;
+            $price = $ad->ad_type == 'online' ? $item->influencers->ad_with_vat : $item->influencers->ad_onsite_price_with_vat;
             @endphp
             <tr>
                 <td>
@@ -30,12 +31,12 @@
                 <td>{{ $item->influencers->nick_name }}</td>
                 <td>{{ $price }}</td>
                 @if($ad->campaignGoals->profitable)
-                    <td>{{ $item->match ?? 0 }}%</td>
+                    <td>{{ $item->match ?? 0 }}</td>
                 @else
                     <td>{{ $item->match ?? 0 }}%</td>
-                    <td>{{ $item->AOAF ?? 0 }}%</td>
+                    <td>{{ $item->AOAF ?? 0 }}</td>
                 @endif
-                <td>{{ $item->influencers->isBigInfluencer ? 'Big Influencer' : 'Small Influencer' }}</td>
+                <td>{{ $item->influencers->TypeInfluencerSubscriber }}</td>
                 <td>{{ ucwords(str_replace('_',' ',$item->status)) }}</td>
                 <td>{{ $price <= $influencerPrice ? 'No' : 'Yes'  }}</td>
                 <td>
@@ -50,3 +51,4 @@
        
     </tbody>
 </table>
+</div>

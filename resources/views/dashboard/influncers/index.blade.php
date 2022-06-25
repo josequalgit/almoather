@@ -33,11 +33,11 @@
                                         <div class="back-grey"></div>
                                         <div class="block-image"><img src="{{ $item->users->image['url'] }}" alt="{{ $item->full_name }}"></div>
                                     </div>
-                                    <div class="block-info">
+                                    <div class="block-info mw-100">
                                         <span class="name">{{ $item->full_name }}</span>
-                                        <div class="categories text-center">
+                                        <div class="categories mw-100 text-center">
                                             @foreach($item->InfluncerCategories()->pluck('name')->toArray() as $cat)
-                                            <span class="desc badge bg-info mt-1">{{$cat}}</span>
+                                            <span class="desc badge mw-100 bg-info mt-1">{{$cat}}</span>
                                             @endforeach
                                         </div>
                                     
@@ -51,19 +51,19 @@
                                         </div>
                                         <div class="engagement text-center col-6 mb-1">
                                             <div class="count-box">
-                                                <span class="numbers">7.7M</span>
+                                                <span class="numbers">{{ $item->engRate }}%</span>
                                                 <span>Engagement</span>
                                             </div>
                                         </div>
                                         <div class="engagement text-center col-6 mb-1">
                                             <div class="count-box">
-                                                <span class="numbers">7.7M</span>
+                                                <span class="numbers">{{ number_format($item->ROAS) }}</span>
                                                 <span>ROAS</span>
                                             </div>
                                         </div>
                                         <div class="engagement text-center col-6 mb-1">
                                             <div class="count-box">
-                                                <span class="numbers">7.7M</span>
+                                                <span class="numbers">{{ number_format($item->AOAF) }}</span>
                                                 <span>AOAF</span>
                                             </div>
                                         </div>
@@ -97,10 +97,10 @@
                                             <td><img src="{{ $item->users->image['url'] }}" alt="{{ $item->full_name }}"></td>
                                             <td>{{ $item->full_name  }}</td>
                                             <td><div class="d-flex justify-content-center align-items-center"><div class="contry-name">{{$item->countries->name}}</div> <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->code) }}.png" alt="{{$item->countries->name}}"></div></div></td>
-                                            <td>100,000</td>
-                                            <td>87%</td>
-                                            <td>77%</td>
-                                            <td>55,000</td>
+                                            <td>{{ $item->subscribers }}</td>
+                                            <td>{{ $item->engRate }}%</td>
+                                            <td>{{ number_format($item->AOAF) }}</td>
+                                            <td>{{ number_format($item->ROAS) }}</td>
                                             <td>
                                                 <a class="btn btn-secondary" href="{{ route('dashboard.influncers.edit',$item->id) }}">
                                                     <i class="bx bx-show"></i>

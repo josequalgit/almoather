@@ -10,7 +10,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">
-                                <p class="mb-0">Update Contract(Influncer)</p>
+                                <p class="mb-0">Customer Contract</p>
                             </div>
                             <hr class="w-100">
                         <div class="card-body">
@@ -26,12 +26,12 @@
                                 <div class="col-12">
                                  
                                     <fieldset class="form-group">
-                                        <label for="basicInput">Last time was updated {{ $data->updated_at->diffForHumans() }}</label>
+                                        <label for="basicInput">Last time was updated {{ $customerContract->updated_at->diffForHumans() }}</label>
                                     </fieldset>
                                     <fieldset class="form-group">
                                         <label for="basicInput">Data</label>
                                         <textarea name="content" id="editor1" rows="10" cols="80">
-                                            {{ json_decode($data->value) }}
+                                            {{ json_decode($customerContract->value) }}
                                         </textarea>                        
                                     </fieldset>
                                 </div>
@@ -53,7 +53,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">
-                                <p class="mb-0">Update Contract(Cutomer)</p>
+                                <p class="mb-0">Influencer Contract</p>
                             </div>
                             <hr class="w-100">
                         </div>
@@ -71,12 +71,12 @@
                                 <div class="col-12">
                                  
                                     <fieldset class="form-group">
-                                        <label for="basicInput">Last time was updated {{ $data2->updated_at->diffForHumans() }}</label>
+                                        <label for="basicInput">Last time was updated {{ $influencerContract->updated_at->diffForHumans() }}</label>
                                     </fieldset>
                                     <fieldset class="form-group">
                                         <label for="basicInput">Data</label>
                                         <textarea name="content" id="editor2" rows="10" cols="80">
-                                            {{ json_decode($data2->value) }}
+                                            {{ json_decode($influencerContract->value) }}
                                         </textarea>                        
                                     </fieldset>
                                 </div>

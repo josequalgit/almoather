@@ -127,6 +127,9 @@
                 <div class="modal-dialog full-modal-dialog" role="document">
                     <div class="modal-content full-modal-content">
                         <div class="modal-body contract-modal-body">
+                            <form action="{{route('dashboard.ads.editContract',$data->id)}}">
+                                <textarea id="contract-text" name="contract"></textarea>
+                            </form>
                         </div>
                         <div class="modal-footer border-0 py-1 justify-content-center">
                             <button type="button" class="btn btn-secondary" onclick="printContract(this)">Print</button>
@@ -146,7 +149,7 @@
     <script>
 
         function printContract($this){
-            var divContents = $($this).closest('.modal-content').find('.modal-body').html();
+            var divContents = CKEDITOR.instances['contract-text'].getData();
             var a = window.open('', '', 'height=500, width=500');
             a.document.write('<html>');
             a.document.write(`<body>
@@ -200,6 +203,14 @@
         }
 
         $(function(){
+
+            CKEDITOR.replace('contract-text', {
+                extraPlugins: 'justify,placeholder,colorbutton,font,indent,indentblock,indentlist',
+                height: 600,
+                contentsLangDirection: 'rtl',
+                removeButtons: 'PasteFromWord',
+                allowedContent: true
+            });
 
             $('#ad-type').on('change',function(){
                 $('#ad-category').html('');
@@ -398,7 +409,7 @@
                     let url = '{{ route("dashboard.ads.approveInfluencersList",["ad_id" => $data->id]) }}';
                     $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i> Approve Influencers List`);
                     $.ajax({
-                        type: 'DELETE',
+                        type: 'POST',
                         url: url,
                         dataType: 'json',
                         success: (res) => {
@@ -442,7 +453,7 @@
                 dataType: 'json',
                 success: (res) => {
                     if(res.status){
-                        $('#campaign-modal .modal-body').html(res.contract);
+                        CKEDITOR.instances['contract-text'].setData(res.contract);
                         $('#campaign-modal').modal('show');
                     }else{
                         Swal.fire(

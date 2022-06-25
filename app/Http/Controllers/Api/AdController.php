@@ -145,7 +145,7 @@ class AdController extends Controller
         }
         
 
-        $data = array_merge($request->all(),['customer_id'=>Auth::guard('api')->user()->customers->id]);
+        $data = array_merge($request->all(),['customer_id'=>Auth::guard('api')->user()->customers->id,'price_to_pay' => $request->budget]);
 
 
         if($request->ad_type == 'onsite')

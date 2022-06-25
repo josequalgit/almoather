@@ -69,7 +69,11 @@ class Influncer extends Model implements HasMedia
         'commercialFiles',
         'taxFiles',
         'full_name',
-        'isBigInfluencer'
+        'isBigInfluencer',
+        'TypeInfluencerSubscriber',
+        'ROAS',
+        'AOAF',
+        'engRate'
     ];
 
     public function users()
@@ -237,6 +241,38 @@ class Influncer extends Model implements HasMedia
 
     function getIsBigInfluencerAttribute() {
         return $this->subscribers >= 500000;
+    }
+
+    function getTypeInfluencerSubscriberAttribute(){
+        if($this->subscribers < 10000){
+            return 'Micro';
+        }else if($this->subscribers > 10001 && $this->subscribers < 100000){
+            return 'Mid';
+        }else{
+            return 'Macro';
+        }
+    }
+
+    function getROASAttribute(){
+        $influencerContractsRevenue = $this->contracts()->orderBy('created_at', 'desc')->take(30)->get()->map(function($query){
+            return $query->ads->price_to_pay ? $query->revenue / $query->ads->price_to_pay : 0;
+        });
+       
+        $influencerContractsRevenue = $influencerContractsRevenue->sum();
+        $influencerContractsCount = $this->contracts()->orderBy('created_at', 'desc')->take(30)->count();
+
+        return $influencerContractsCount ? $influencerContractsRevenue / $influencerContractsCount : 0;
+    }
+
+    function getAOAFAttribute(){
+        $getLastMonthAds = $this->contracts()->orderBy('created_at', 'desc')->take(30)->sum('af');
+        $getLastMonthAdsCount = $this->contracts()->orderBy('created_at', 'desc')->take(30)->count();
+        
+        return $getLastMonthAdsCount ? $getLastMonthAds / $getLastMonthAdsCount : 0;
+    }
+
+    function getEngRateAttribute(){
+        return $this->AOAF / $this->subscribers;
     }
 
 

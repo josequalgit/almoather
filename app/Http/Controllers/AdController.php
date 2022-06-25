@@ -176,10 +176,9 @@ class AdController extends Controller
 
         $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
 
-        $appPercentage = 0.15 * $ad->budget;
-        $budget = $ad->budget - $appPercentage;
+        $this->calculateCampaignPrice($ad);
 
-        $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons','budget'))->render();
+        $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons'))->render();
         return response()->json([
             'msg' => 'status was changed',
             'data' => $influencersTable,
@@ -190,10 +189,14 @@ class AdController extends Controller
 
     private function calculateProfitableAds($request, $ad, $data){
         $noInfluencerReasons = [];
-        $appPercentage = 0.15 * $ad->budget;
+
+        $tax = AppSetting::where('key', 'tax')->first();
+        $tax = $tax ? $tax->value : config('global.TAX');
+
+        $appPercentage = $tax/100 * $ad->budget;
         $budgetAfterCutPercentage = $ad->budget - $appPercentage;
 
-        $allInfluencer = Influncer::where('status', 'accepted')->whereNotIn('id', $data)->where('subscribers', '>', 0);
+        $allInfluencer = Influncer::where('status', 'accepted')->whereNotIn('id', $data);
         if($allInfluencer->count() == 0){
             $noInfluencerReasons[] = "All influencers have been taken away from the campaign category";
             return $noInfluencerReasons;
@@ -205,20 +208,10 @@ class AdController extends Controller
             });
         }
         
-        $allInfluencer = $allInfluencer->get()->map(function($influencer){
-            $influencerContractsRevenue = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->get()->map(function($query){
-                return $query->ads->budget ? $query->revenue / $query->ads->budget : 0;
-            });
-           
-            $influencerContractsRevenue = $influencerContractsRevenue->sum();
-            $influencerContractsCount = $influencer->contracts()->orderBy('created_at', 'desc')->take(30)->count();
-
-            $influencer->revenue = $influencerContractsCount ? $influencerContractsRevenue / $influencerContractsCount : 0;
-            return $influencer;
-
+        $allInfluencer = $allInfluencer->get()->sortByDesc(function($item){
+            return $item->ROAF;
         });
 
-        $allInfluencer = collect($allInfluencer)->sortByDesc('revenue');
         #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
         $budgetSum = 0;
         $chosenInfluencer = [];
@@ -238,7 +231,7 @@ class AdController extends Controller
                 'influencer_id' => $influencer->id,
             ],[
                 'chosen'=> $chosen,
-                'match'=> $influencer->revenue,
+                'match'=> $influencer->ROAF,
             ]);
         }
 
@@ -289,7 +282,10 @@ class AdController extends Controller
         $noInfluencerReasons = [];
 
         /**  BUDGET PERCENTAGE CALCULATION */
-        $appPercentage = 0.15 * $ad->budget;
+        $tax = AppSetting::where('key', 'tax')->first();
+        $tax = $tax ? $tax->value : config('global.TAX');
+
+        $appPercentage = $tax/100 * $ad->budget;
         $percentForBigInf = 100 - $request->engagement_rate;
         $budgetAfterCutPercentage = $ad->budget - $appPercentage;
         $budgetForSmallInfluencer = $request->engagement_rate / 100 * $budgetAfterCutPercentage;
@@ -311,16 +307,9 @@ class AdController extends Controller
             });
         }
 
-        $engagementInfluencers = $influencers->get()->map(function($item){
-            $getLastMonthAds = $item->contracts()->orderBy('created_at', 'desc')->take(30)->sum('af');
-            $getLastMonthAdsCount = $item->contracts()->orderBy('created_at', 'desc')->take(30)->count();
-           
-            $item->AOAF = $getLastMonthAdsCount ? $getLastMonthAds / $getLastMonthAdsCount : 0;
-            $item->eng_rate = $item->AOAF / $item->subscribers;
-
-            return $item;
+        $engagementInfluencers = $influencers->get()->sortByDesc(function($item){
+            return $item->engRate;
         });
-        $engagementInfluencers = collect($engagementInfluencers)->sortByDesc('eng_rate');
 
         $isOverBudge = 0;
         $totalForSmallInfluencers = 0;
@@ -339,7 +328,7 @@ class AdController extends Controller
                     'influencer_id' => $influencer->id,
                 ],[
                     'chosen'=> 1,
-                    'match'=> $influencer->eng_rate,
+                    'match'=> $influencer->engRate,
                     'AOAF' => $influencer->AOAF,
                 ]);
             }
@@ -352,15 +341,10 @@ class AdController extends Controller
        
         $budgeForBigInfluencer = $budgeForBigInfluencer + ($budgetForSmallInfluencer - $totalForSmallInfluencers);
 
-        $allBigInfluencer = $influencers->whereNotIn('id',$chosenInfluencers)->get()->map(function($item){
-            $getLastMonthAds = $item->contracts()->orderBy('created_at', 'desc')->take(30)->sum('af');
-            $getLastMonthAdsCount = $item->contracts()->orderBy('created_at', 'desc')->take(30)->count();
-            $item->AOAF = $getLastMonthAdsCount ? $getLastMonthAds / $getLastMonthAdsCount : 0;
-
-            return $item;
+        $allBigInfluencer = $influencers->whereNotIn('id',$chosenInfluencers)->get()->sortByDesc(function($item){
+            return $item->AOAF;
         });
 
-        $allBigInfluencer = collect($allBigInfluencer)->sortByDesc('AOAF');
         if($allBigInfluencer->count() == 0){
             $noInfluencerReasons[] = "There are no influencers found";
         }
@@ -413,9 +397,6 @@ class AdController extends Controller
             $matchedPriceTotal += $item->influencers->{$sumColumn};
         });
 
-        $appPercentage = 0.15 * $ad->budget;
-        $budget = $ad->budget - $appPercentage;
-
         $remainingBudget = $budget - $matchedPriceTotal;
         $chosenInfPrice -= $remainingBudget;
 
@@ -437,16 +418,9 @@ class AdController extends Controller
         $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
         $noInfluencerReasons = [];
 
-        if($ad->admin_approved_influencers){
-            $budgetSum = 0;
-            foreach($matchedInfluencers as $match){
-                $price = $ad->ad_type == 'online' ? $match->influencers->ad_with_vat : $match->influencers->ad_onsite_price_with_vat;
-                $budgetSum += $price;
-            }
-            $ad->update(['budget' => $budgetSum]);
-        }
+        $this->calculateCampaignPrice($ad);
 
-        $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons','budget'))->render();
+        $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons'))->render();
         return response()->json([
             'msg' => 'data was updated',
             'data' => $influencersTable,
@@ -476,19 +450,9 @@ class AdController extends Controller
         $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
         $noInfluencerReasons = [];
 
-        $appPercentage = 0.15 * $ad->budget;
-        $budget = $ad->budget - $appPercentage;
-
-        if($ad->admin_approved_influencers){
-            $budgetSum = 0;
-            foreach($matchedInfluencers as $match){
-                $price = $ad->ad_type == 'online' ? $match->influencers->ad_with_vat : $match->influencers->ad_onsite_price_with_vat;
-                $budgetSum += $price;
-            }
-            $ad->update(['budget' => $budgetSum]);
-        }
+        $this->calculateCampaignPrice($ad);
         
-        $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons','budget'))->render();
+        $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons'))->render();
         return response()->json([
             'msg' => 'data was updated',
             'data' => $influencersTable,
@@ -525,6 +489,18 @@ class AdController extends Controller
             ],config('global.OK_STATUS'));
         }
 
+        $this->calculateCampaignPrice($ad);
+
+        $ad->update(['admin_approved_influencers' => 1]);
+        $this->create_customer_contract($ad);
+
+        return response()->json([
+            'msg'=>'status was changed',
+            'status'=> true
+        ],config('global.OK_STATUS'));
+    }
+
+    private function calculateCampaignPrice($ad){
         $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
         $budgetSum = 0;
         foreach($matchedInfluencers as $match){
@@ -532,13 +508,10 @@ class AdController extends Controller
             $budgetSum += $price;
         }
 
-        $ad->update(['admin_approved_influencers' => 1,'budget' => $budgetSum]);
-        $this->create_customer_contract($ad);
-
-        return response()->json([
-            'msg'=>'status was changed',
-            'status'=> true
-        ],config('global.OK_STATUS'));
+        $tax = AppSetting::where('key', 'tax')->first();
+        $tax = $tax ? $tax->value : config('global.TAX');
+        $budgetSum = $budgetSum + ($budgetSum * $tax/100);
+        $ad->update(['price_to_pay' => $budgetSum]);
     }
 
     public function getUnmatchedInfluencers($campaign_id,$influencer_id)
@@ -879,8 +852,8 @@ class AdController extends Controller
         $content = str_replace("[[_NATIONAL_NUM_]]", $ad->customers->id_number, $content);
         $content = str_replace("[[_PHONE_]]", $ad->customers->users->phone, $content);
         $content = str_replace("[[_EMAIL_]]", $ad->customers->users->email, $content);
-        $content = str_replace("[[_PRICE_WITH_TAX_]]", $ad->adBudgetWithVat, $content);
-        $content = str_replace("[[_PRICE_]]", $ad->budget, $content);
+        $content = str_replace("[[_PRICE_WITH_TAX_]]", number_format($ad->adBudgetWithVat), $content);
+        $content = str_replace("[[_PRICE_]]", number_format($ad->budget), $content);
         $content = str_replace("[[_START_DATE_]]", $startDate->date->format('d/m/Y'), $content);
         $content = str_replace("[[_END_DATE_]]", $endDate->date->format('d/m/Y'), $content);
         $content = str_replace("[[_CAMPAIGN_GOAL_]]", $ad->campaignGoals->getTranslation('title','ar'), $content);

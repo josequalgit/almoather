@@ -24,6 +24,7 @@ class Ad extends Model implements HasMedia
         'about',
         'scenario',
         'budget',
+        'price_to_pay',
         'discount_code',
         'social_media_id',
         'country_id',

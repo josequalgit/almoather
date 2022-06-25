@@ -11,10 +11,10 @@ class ContractController extends Controller
 {
     public function edit()
     {
-        $data = AppSetting::where('key','Customer Contract')->first();
-        $data2 = AppSetting::where('key','Influencer Contract')->first();
+        $customerContract = AppSetting::where('key','Customer Contract')->first();
+        $influencerContract = AppSetting::where('key','Influencer Contract')->first();
 
-        return view('dashboard.contract.edit',compact('data','data2'));
+        return view('dashboard.contract.edit',compact('customerContract','influencerContract'));
     }
 
     public function update(UpdateContractRequest $request , $type)
