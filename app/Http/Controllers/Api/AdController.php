@@ -160,12 +160,6 @@ class AdController extends Controller
         }
 
         $data = Ad::create($data);
-        $this->create_customer_contract($data->id,Auth::guard('api')->user()->customers);
-         #CHECK IF THERE IS A CONTRACT IN THE DATABASE
-         if(!$this->create_contract($data->id,Auth::guard('api')->user()->customers)) return response()->json([
-            'err'=>trans($this->trans_dir.'no_contract_in_system'),
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
 
         $data->socialMediasAccount()->attach($request->prefered_media_id);
 		$data->save();
@@ -1431,58 +1425,7 @@ class AdController extends Controller
 
         return false;
     }
-
-    private function create_contract($ad_id = null , $customer)
-    {
-        $contractData = Contract::find(1);
-        
-        if(!$contractData)
-        {
-            return false;
-        }
-
-         $replace = str_replace("[[Name]]",$customer->first_name.' '.$customer->last_name,$contractData->content);
-
-
-        if($contractData)
-        {
-            return Contract::create([
-                'title'=>$contractData->title,
-                'content'=>$replace,
-                'ad_id'=>$ad_id,
-            ]);
-        }
-        else
-        {
-            return false;
-        }
-      
-    }
-    private function create_customer_contract($ad_id = null , $customer)
-    {
-        $contractData = AppSetting::where('key','Customer Contract')->first();
-       
-
-        if(!$contractData) return false;
-        
-         $replace = str_replace("[[Name]]",$customer->first_name.' '.$customer->last_name,json_decode($contractData->value));
-
-        
-        if($contractData)
-        {
-            return CampaignContract::create([
-                'content'=>$replace,
-                'ad_id'=>$ad_id,
-                'is_accepted'=>0
-            ]);
-        }
-        else
-        {
-            return false;
-        }
-      
-    }
-
+    
     public function uploadMedia(UploadAdMedia $request , $file_id , $type){
 
         /**

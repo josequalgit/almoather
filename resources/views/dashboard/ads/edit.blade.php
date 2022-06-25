@@ -352,11 +352,11 @@
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }
           });
-          CKEDITOR.replace('contractContent', {
-              extraPlugins: 'placeholder',
-              height: 220,
-              removeButtons: 'PasteFromWord'
-          });
+            CKEDITOR.replace('contractContent', {
+                extraPlugins: 'justify,placeholder,colorbutton',
+                height: 600,
+                removeButtons: 'PasteFromWord'
+            });
           let fileType = null;
           let deletetedFileId = null;
 

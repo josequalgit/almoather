@@ -105,10 +105,10 @@
 
 @section('scripts')
     <script>
-   CKEDITOR.replace('editor1', {
-      extraPlugins: 'placeholder',
-      height: 220,
-      removeButtons: 'PasteFromWord'
+    CKEDITOR.replace('editor1', {
+        extraPlugins: 'justify,placeholder,colorbutton',
+        height: 600,
+        removeButtons: 'PasteFromWord'
     });
                         
 

@@ -121,7 +121,11 @@ class RegisterController extends Controller
 
        foreach ($request->social_media as $item) {
             $obj = $item;
-           if(!is_object($item)) $obj = (object)$item;
+            if(!is_object($item)) $obj = (object)$item;
+
+            if($obj->type == 4){
+                $influencer->update(['subscribers' => $obj->subscribers]);
+            }
             SocialMediaProfile::create([
                 'link'              => $obj->link,
                 'views'              => $obj->views ?? 0,

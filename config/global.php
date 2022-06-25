@@ -9,7 +9,10 @@ return [
     'UNAUTHORIZED_VALIDATION_STATUS' => 401,
     'PAGINATION_NUMBER'=>10,
     'PAGINATION_NUMBER_DASHBOARD'=>10,
-    'CANCELED_DAYS_PERIOD'=>28,
+    'CAMPAIGN_FIRST_PAYMENT_PERIOD' => 28,
+    'CAMPAIGN_FIRST_PAYMENT_REMINDER' => 23,
+    'CAMPAIGN_FULL_PAYMENT_REMINDER' => 3,
+    'CAMPAIGN_FULL_PAYMENT_PERIOD' => 10,
     'WARNING_DAYS_PERIOD'=>26,
     'LANGS'=>['en','ar'],
     'CUSTOMER_ADS_STATUS'=>['Active','WaitingPayment','Pending','Finished','Rejected'],
@@ -18,6 +21,7 @@ return [
     'PAYMENT_USERNAME'=>'almuu',
     'PAYMENT_PASSWORD'=>'almuu@123',
     'PAYMENT_KEY'=>'almuu',
+    'TAX'=> 15,
 
 ]
 

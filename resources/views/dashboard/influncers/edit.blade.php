@@ -41,6 +41,7 @@
     <script>
 
         $(function(){
+            let tax = parseFloat('{{$tax}}');
             $('#country_id').on('change',function() {
                 $('#region_id').html('');
                 var route = '{{ route("regions.getRegion",":country"); }}';
@@ -75,6 +76,12 @@
                         $('#rep_city').html(optionsDelivery);
                     }
                 },'json');
+            });
+
+            $('#ad_price,#ad_onsite_price').on('input',function(){
+                let value = parseFloat($(this).val());
+                let priceAfterTax = value + (value * tax/100);
+                $('#' + $(this).attr('related-input')).val(priceAfterTax);
             });
 
             $('#status').on('change',function(){
@@ -127,9 +134,16 @@
                 let valid = true; 
                 for(var i = 0; i < inputs.length;i++){
                     if(!$(inputs[i]).val()){
-                        $(inputs[i]).closest('.form-group').append(`<p class="mb-0 error-validation text-danger">This field is required</p>`);
+                        $(inputs[i]).closest('.form-group').append(`<p class="w-100 mb-0 error-validation text-danger">This field is required</p>`);
                         valid = false;
                     }
+                }
+                if(!valid){
+                    Swal.fire(
+                        'Error!',
+                        'Please fill all required field',
+                        'error'
+                    )
                 }
                return valid;
             }
@@ -151,6 +165,9 @@
                             res.message,
                             'success'
                         );
+                        setTimeout(() => {
+                            location.reload();
+                        }, 700);
                     }else{
                         Swal.fire(
                             'Error!',

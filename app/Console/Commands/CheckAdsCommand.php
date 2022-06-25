@@ -55,7 +55,6 @@ class CheckAdsCommand extends Command
             if($setting)
             {
                 $ser = json_decode($setting->value);
-                $data = unserialize($ser);
                 $warningDaysPeriod = $data['warning_days_period'];
                 $canceledDaysPeriod = $data['canceled_days_period'];
             }
@@ -86,12 +85,12 @@ class CheckAdsCommand extends Command
 
                     $adminMessage =[
                         'en'=>[
-                            'msg'=>'Notification was sent to "'.$item->customers->first_name.' '.$item->customers->last_name.'" about canceling "'.$item->store.'" ad',
+                            'msg'=>'Notification was sent to "'.$item->customers->first_name.' '.$item->customers->last_name.'" about canceling "'.$item->store.'" campaign',
                             'type'=>'Ad',
                             'id'=>$item->id
                         ],
                         'ar'=>[
-                            'msg'=>'تم ارسال الاشعار الى "'.$item->customers->first_name.' '.$item->customers->last_name.'" حول الغاء دعاية "'.$item->store.'"',
+                            'msg'=>'تم ارسال الاشعار الى "'.$item->customers->first_name.' '.$item->customers->last_name.'" حول الغاء الحملة "'.$item->store.'"',
                             'type'=>'Ad',
                             'id'=>$item->id
                         ]
