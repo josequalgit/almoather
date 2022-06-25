@@ -29,7 +29,7 @@
                             <div class="item-wrapper">
                                 <div class="list-item profile-block">
                                     <div class="block-top">
-                                        <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->country_code) }}.png" alt="{{$item->countries->name}}"></div>
+                                        <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->code) }}.png" alt="{{$item->countries->name}}"></div>
                                         <div class="back-grey"></div>
                                         <div class="block-image"><img src="{{ $item->users->image['url'] }}" alt="{{ $item->full_name }}"></div>
                                     </div>
@@ -96,7 +96,7 @@
                                         <tr>
                                             <td><img src="{{ $item->users->image['url'] }}" alt="{{ $item->full_name }}"></td>
                                             <td>{{ $item->full_name  }}</td>
-                                            <td><div class="d-flex justify-content-center align-items-center"><div class="contry-name">{{$item->countries->name}}</div> <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->country_code) }}.png" alt="{{$item->countries->name}}"></div></div></td>
+                                            <td><div class="d-flex justify-content-center align-items-center"><div class="contry-name">{{$item->countries->name}}</div> <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->code) }}.png" alt="{{$item->countries->name}}"></div></div></td>
                                             <td>100,000</td>
                                             <td>87%</td>
                                             <td>77%</td>

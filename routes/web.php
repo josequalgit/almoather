@@ -87,7 +87,7 @@ Route::group(['middleware' => 'language'],function(){
                 Route::get('influncer/{status?}','index')->name('index')->middleware('permission:Edit Influncer|See Influncer');
                 Route::get('influncer/edit/{id}','edit')->name('edit')->middleware('permission:Edit Influncer');
                 Route::get('allInfluncerWithViews/','allInfluncerWithViews')->name('allInfluncerWithViews')->middleware('role:Contracts Manager|superAdmin');
-                Route::post('influncer/updateStatus/{id}','updateStatus')->name('updateStatus')->middleware('permission:Edit Influncer');
+                Route::post('influncer/update/{id}','update')->name('updateStatus');
             });
 
             Route::middleware('role_or_permission:superAdmin|Edit Customer|Create Customer|See Customer|Delete Customer')->name('customers.')->controller(CustomerController::class)->group(function(){

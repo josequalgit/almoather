@@ -3993,7 +3993,7 @@ body:after {
 
 .select2-container--classic .select2-selection--multiple .select2-selection__choice,
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-    background-color: #5A8DEE !important;
+    background-color: #dca249 !important;
     border-color: transparent !important;
     color: #FFFFFF !important;
     padding: 0.2rem 0.6rem 0.2rem 0.6rem;

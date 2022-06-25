@@ -131,3 +131,9 @@ function widgetChatMessageDemo(source) {
     $(".widget-chat-demo-scroll").scrollTop($(".widget-chat-demo-scroll > .chat-content").height());
   }
 }
+
+$(function(){
+  $('.select2-init').select2({
+    placeholder: $(this).attr('data-placeholder') || 'Select'
+  });
+});

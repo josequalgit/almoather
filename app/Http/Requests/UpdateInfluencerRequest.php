@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Auth;
 
-class InfluncerRequest extends FormRequest
+class UpdateInfluencerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -16,13 +17,13 @@ class InfluncerRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function rules()
     {
@@ -38,20 +39,12 @@ class InfluncerRequest extends FormRequest
             'city_id'=>'required',
             'country_id'=>'required',
             'nationality_id'=>'required',
-            'email'=>'required|unique:users',
-            'password'=>'required|confirmed',
-            'password_confirmation' => 'required',
-            'image'=>'required',
-            'is_vat'=>'required',
             'ad_price'=>'required',
             'ad_onsite_price'=>'required',
             'categories'=>'required',
             'region_id'=>'required',
-            'dial_code'=>'required',
-            'phone'=>'required|unique:users',
             'ad_with_vat'=>'required',
             'ad_onsite_price_with_vat'=>'required',
-            'social_media'=>'required',
             'bank_id'=>'required',
             'commercial_registration_no'=>'required',
             'bank_account_name'=>'required',
@@ -61,12 +54,12 @@ class InfluncerRequest extends FormRequest
             'street'=>'required',
             'neighborhood'=>'required',
             'rep_full_name'=>'required',
-            'cr_file'=>'required',
-            'country_code'=>'required',
+            'status' => 'required',
+            'rejected_note' => "required_if:status,==,rejected"
         ];
     }
 
-      /**
+       /**
      * Get the error messages for the defined validation rules.
      *
      * @return array
@@ -79,23 +72,17 @@ class InfluncerRequest extends FormRequest
             'country_id.required' => 'Please choose your country',
             'city_id.required' => 'Please choose your city',
             'region_id.required' => 'Please choose your region',
-            'bank.required' => 'Please add your bank name',
-            'ads_out_country.required' => 'Please add if you can make ads outside of your country'
+            'ads_out_country.required' => 'Please add if you can make ads outside of your country',
+            'required_if'=>'Reject Note field is required'
         ];
     }
 
-   
-	
-	
-	   /**
-    * Get the error messages for the defined validation rules.*
-    * @return array
-    */
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-        'err' => $validator->errors()->all()[0],
-        'status' => 422
+        'error' => $validator->errors()->all(),
+        'message' => $validator->errors()->all()[0],
+        'status' => false
         ], 422));
     }
-    }
+}

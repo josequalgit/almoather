@@ -58,7 +58,6 @@ class RegisterController extends Controller
             'last_name',
             'bank_id',
             'nick_name',
-            // 'bank_name',
             'bank_account_number',
             'bio',
             'ads_out_country',
@@ -73,13 +72,11 @@ class RegisterController extends Controller
             'id_number',
             'ad_with_vat',
             'ad_onsite_price_with_vat',
-            // 'birthday',
             'bank',
             'snap_chat_views',
             'snap_chat_video',
             'commercial_registration_no',
             'tax_registration_number',
-          
             'rep_full_name',
             'rep_email_name',
             'rep_phone_number',
@@ -110,9 +107,6 @@ class RegisterController extends Controller
 
        $data->addMedia($request->file('image'))
        ->toMediaCollection('influncers');
-       
-        //    $newInfluncer->addMedia($request->file('snap_video'))
-        //    ->toMediaCollection('snap_video');
 
        if($request->hasFile('cr_file'))
        {

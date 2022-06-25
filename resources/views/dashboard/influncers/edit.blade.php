@@ -4,7 +4,7 @@
     <div class="app-content content">
         <div class="content-wrapper">
             <div class="content-body">
-                <form method="post" enctype="multipart/form-data" action="{{ route('dashboard.admins.edit', $data->id) }}">                  
+                <form method="post" enctype="multipart/form-data" id="influencers-form" action="{{ route('dashboard.influncers.updateStatus', $data->id) }}">                  
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">
@@ -26,38 +26,17 @@
             </div>
         </div>
     </div>
-
-    
-
-    <div id="rejectedReson" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Rejected Note</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <textarea class="form-control" id="rejectedNote" rows="12"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button onclick="sendStatusRequest()" type="button" class="btn btn-primary">Save changes</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 @endsection
 
 @section('style')
 <link rel="stylesheet" href="{{ asset('main2/new-design/jquery.steps.css') }}">
 <link rel="stylesheet" href="{{ asset('main2/new-design/style.css') }}">
+<link rel="stylesheet" href="{{ asset('js/intl-tel-input/css/intlTelInput.min.css') }}">
 @endsection
 
 @section('scripts')
 <script src="{{ asset('main2/js/jquery.steps.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/intl-tel-input/css/intlTelInput-jquery.min.js') }}" type="text/javascript"></script>
 
     <script>
 
@@ -97,6 +76,31 @@
                     }
                 },'json');
             });
+
+            $('#status').on('change',function(){
+                if($(this).val() == 'rejected'){
+                    $('.reject-wrapper').show();
+                }else{
+                    $('.reject-wrapper').hide();
+                }
+            });
+            
+        });
+
+        $(document).on("change",".uploadFile", function(){
+            var uploadFile = $(this);
+            var files = !!this.files ? this.files : [];
+            if (!files.length || !window.FileReader) return;
+    
+            if (/^image/.test( files[0].type)){
+                var reader = new FileReader();
+                reader.readAsDataURL(files[0]);
+    
+                reader.onloadend = function(){
+                    uploadFile.closest(".imgUp").find('.image-preview').attr("src", this.result);
+                }
+            }
+        
         });
         $.ajaxSetup({
             headers: {
@@ -111,35 +115,60 @@
             autoFocus: true,
             enablePagination: true,
             enableAllSteps: true,
-            startIndex: 0,
             onInit: function() {
-                $('.actions ul li:nth-child(2)').hide();
-            },
-            onFinishing: function() {
-                if(totalInfluencers){
-                    changeStatus();
-                }else{
-                    Swal.fire(
-                        '',
-                        'There are no influencers found for this campaign',
-                        'error'
-                    )
-                }
                 
             },
+            onFinishing: function() {
+                saveInfluencersData();
+            },
             onStepChanging: function(event, currentIndex, nextIndex) {
-               return true;
+                let inputs = $('.required:visible');
+                $('.error-validation').remove();
+                let valid = true; 
+                for(var i = 0; i < inputs.length;i++){
+                    if(!$(inputs[i]).val()){
+                        $(inputs[i]).closest('.form-group').append(`<p class="mb-0 error-validation text-danger">This field is required</p>`);
+                        valid = false;
+                    }
+                }
+               return valid;
             }
         });
 
-        function changeStatus() {
-            let statusValue = document.getElementById('status').value;
-
-            if (statusValue == 'rejected') {
-                $('#rejectedReson').modal('toggle');
-            } else {
-                sendStatusRequest();
-            }
+        function saveInfluencersData() {
+            var formData = new FormData($('#influencers-form')[0]);
+            $.ajax({
+                url: $('#influencers-form').attr('action'),
+                type: 'POST',
+                data: formData,
+                cache:false,
+                contentType: false,
+                processData: false,
+                success: (res) => {
+                    if(res.status){
+                        Swal.fire(
+                            'Success!',
+                            res.message,
+                            'success'
+                        );
+                    }else{
+                        Swal.fire(
+                            'Error!',
+                            res.message,
+                            'error'
+                        )
+                    }
+                    
+                },
+                error: (err) => {
+                    console.log(err)
+                    Swal.fire(
+                        'Error!',
+                        err.responseJSON.message,
+                        'error'
+                    )
+                }
+            });
         }
 
         function sendStatusRequest() {
@@ -147,24 +176,7 @@
             $('input[name="categories[]"]:checked').each(function() {
                 cate[cate.length] = (this.checked ? $(this).val() : "");
             });
-            let url = '{{ route('dashboard.influncers.updateStatus', ':id') }}';
-            let urlWithId = url.replace(':id', '{{ $data->id }}');
-            $.ajax({
-                url: urlWithId,
-                type: 'POST',
-                data: {
-                    status: document.getElementById('status').value,
-                    note: document.getElementById('rejectedNote').value,
-                    categories: cate
-                },
-                success: (res) => {
-                    let url = '{{ route('dashboard.influncers.index') }}'
-                    window.location.href = url;
-                },
-                error: (err) => {
-                    alert(err)
-                }
-            })
+            
         }
     </script>
 @endsection
