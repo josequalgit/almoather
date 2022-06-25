@@ -55,7 +55,8 @@ class UpdateInfluencerRequest extends FormRequest
             'neighborhood'=>'required',
             'rep_full_name'=>'required',
             'status' => 'required',
-            'rejected_note' => "required_if:status,==,rejected"
+            'rejected_note' => "required_if:status,==,rejected",
+            'social_media' => 'required|array'
         ];
     }
 

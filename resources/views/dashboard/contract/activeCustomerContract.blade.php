@@ -168,8 +168,8 @@
 
 <script>
     CKEDITOR.replace('contractData', {
-      extraPlugins: 'placeholder',
-      height: 220,
+      extraPlugins: 'justify,placeholder,colorbutton',
+      height: 600,
       removeButtons: 'PasteFromWord'
     });
 

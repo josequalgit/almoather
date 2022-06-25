@@ -262,8 +262,6 @@ class AdController extends Controller
             $data->status = 0;
             $data->link = null;
             $data->rejectNote = $request->rejectNote;
-
-
         }
         else
         {

@@ -11,33 +11,34 @@ class GeneralController extends Controller
     public function index()
     {
         $setting = AppSetting::where('key','expired_info')->first();
-      
-        if(!$setting) {
-            AppSetting::create([
-                'key'=>'expired_info',
-                'value'=>json_encode( serialize([
-                    'canceled_days_period'=>'28',
-                    'warning_days_period'=>'28',
-                    ]))
-                ]);
-                $setting = AppSetting::where('key','expired_info')->first();
+        if($setting->value){
+            $data = json_decode($setting->value);
+        }else{
+            $data = [
+                'campaign_first_payment_period' => config('global.CAMPAIGN_FIRST_PAYMENT_PERIOD'),
+                'campaign_first_payment_reminder' => config('global.CAMPAIGN_FIRST_PAYMENT_REMINDER'),
+                'campaign_full_payment_period' => config('global.CAMPAIGN_FULL_PAYMENT_PERIOD'),
+                'campaign_full_payment_reminder' => config('global.CAMPAIGN_FULL_PAYMENT_REMINDER'),
+            ];
         }
-        $ser = json_decode($setting->value);
-        $data = unserialize($ser);
+        $data = (object) $data;
 
-        return view('dashboard.general.index',compact('data'));
+        $tax = AppSetting::where('key','tax')->first();
+
+        return view('dashboard.general.index',compact('data','tax'));
     }
 
     public function update(Request $request)
     {
-        $setting = AppSetting::where('key','expired_info')->first();
-        $ser = json_decode($setting->value);
-        $data = unserialize($ser);
-        $data['canceled_days_period'] = $request->canceled_days_period;
-        $data['warning_days_period'] = $request->warning_days_period;
-        $setting->update([
-            'value'=>json_encode(serialize($data))
+        $validated = $request->validate([
+            'expired_info' => 'required',
+            "expired_info.*"  => "required|numeric|min:0|max:100",
+            'tax' => 'required',
         ]);
+
+        AppSetting::updateOrCreate(['key' => 'expired_info'],['value' => json_encode($request->expired_info)]);
+        AppSetting::updateOrCreate(['key' => 'tax'],['value' => $request->tax]);
+        
         Alert::toast('Setting was updated', 'success');
 
         return back();

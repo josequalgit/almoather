@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Influncer;
 use App\Models\Country;
+use App\Models\SocialMediaProfile;
+use App\Models\SocialMedia;
+use App\Models\AppSetting;
 use App\Models\Bank;
 use App\Models\InfluncerCategory;
 use Alert,Auth;
@@ -47,8 +50,11 @@ class InfluncerController extends Controller
         $nationalities = Country::get();
         $countries = Country::where('is_location',1)->get();
         $banks = Bank::select(['id','name'])->get();
+        $socialMedia = SocialMedia::get();
+        $settings = AppSetting::where('key','tax')->first();
+        $tax = $settings ? $settings->value : config('global.TAX');
 
-        return view('dashboard.influncers.edit',compact('data','categories','infCategories','nationalities','countries','banks'));
+        return view('dashboard.influncers.edit',compact('data','tax','socialMedia','categories','infCategories','nationalities','countries','banks'));
     }
 
     public function update(UpdateInfluencerRequest $request , $id)
@@ -62,6 +68,7 @@ class InfluncerController extends Controller
             ],404);
         } 
 
+        $oldStatus = $influencer->status;
         $request->rejected_note = $request->status == 'rejected' ? $request->rejected_note : '';
 
         $data = $request->except('image', '_token','categories');
@@ -73,7 +80,29 @@ class InfluncerController extends Controller
 
         $influencer->InfluncerCategories()->sync($request->categories);
 
-        activity()->log('Admin "'.Auth::user()->name.'" changed "'. $influencer->full_name_en .'" influncer status');
+        foreach ($request->social_media as $item) {
+            $obj = (object)$item;
+            if(trim($obj->link)){
+                if($obj->type == 4){
+                    $influencer->update(['subscribers' => $obj->subscribers]);
+                }
+                SocialMediaProfile::updateOrCreate([
+                    'Influncer_id'      => $influencer->id,
+                    'social_media_id'   => $obj->type
+                ],[
+                    'link'              => $obj->link,
+                    'views'              => $obj->subscribers ?? 0,
+                    'Influncer_id'      => $influencer->id
+                ]);
+            }else{
+                SocialMediaProfile::where(['Influncer_id' => $influencer->id,'social_media_id' => $obj->type])->delete();
+            }   
+        }
+
+        if($oldStatus != $influencer->status){
+            activity()->log('Admin "'.Auth::user()->name.'" changed "'. $influencer->full_name_en .'" influencer status');
+        }
+        
         Alert::toast('Influncer status was changed', 'success');
 
         return response()->json([

@@ -67,14 +67,13 @@
         removeButtons: 'PasteFromWord',
         contentsLangDirection: 'rtl',
         height: '600px',
-        extraPlugins: 'justify,placeholder'
+        extraPlugins: 'justify,placeholder,colorbutton'
     });
     CKEDITOR.replace('text_en', {
-        extraPlugins: 'placeholder',
         height: 220,
         removeButtons: 'PasteFromWord',
         height: '600px',
-        extraPlugins: 'justify,placeholder'
+        extraPlugins: 'justify,placeholder,colorbutton'
     });
 </script>
 @endsection

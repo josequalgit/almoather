@@ -9,13 +9,13 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header pb-0">
                         <div class="card-title">
-                            <p class="mb-0">General</p>
+                            <p class="mb-0">General Settings</p>
                         </div>
                     </div>
                     
-                    <hr class="w-100 my-1">
+                    <hr class="w-100">
                     <div class="card-body">
                         @if($errors->any())
                         <div class="alert alert-danger" role="alert"> There is something wrong
@@ -27,16 +27,34 @@
                     
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                  <label for="inputEmail4">Cancel days period</label>
-                                  <input value="{{ old('canceled_days_period')?old('canceled_days_period'):$data['canceled_days_period'] }}" name="canceled_days_period" type="text" class="form-control" id="inputEmail4" placeholder="Enter Name">
+                                    <label for="campaign_first_payment_period">Campaign active days before first payment</label>
+                                    <input value="{{ $data->campaign_first_payment_period ?? config('global.CAMPAIGN_FIRST_PAYMENT_PERIOD') }}" name="expired_info[campaign_first_payment_period]" type="number" class="form-control" id="campaign_first_payment_period" placeholder="Campaign active days before first payment" min="1">
+                                    <div id="campaign_first_payment_periodHelp" class="form-text text-help">The number of days the campaign will remain active before it is canceled if the customer didn't pay the first payment</div>
                                 </div>
                                 <div class="form-group col-md-6">
-                                  <label for="inputPassword4">Warning days period</label>
-                                  <input value="{{ old('warning_days_period')?old('warning_days_period'):$data['warning_days_period'] }}" name="warning_days_period" type="text" class="form-control" id="inputPassword4" placeholder="Enter Title">
+                                    <label for="campaign_first_payment_reminder">Campaign reminder to pay first payment</label>
+                                    <input value="{{ $data->campaign_first_payment_reminder ?? config('global.CAMPAIGN_FIRST_PAYMENT_REMINDER') }}" name="expired_info[campaign_first_payment_reminder]" type="number" class="form-control" id="campaign_first_payment_reminder" placeholder="Campaign reminder to pay first payment" min="1">
+                                    <div id="campaign_first_payment_reminderHelp" class="form-text text-help">After this number of days, the user will receive a daily notification to remind him to pay the first payment</div>
                                 </div>
-                              </div>
-                              <hr/>
-                              <button type="submit" class="btn btn-primary float-right">Update</button>
+                                <div class="form-group col-md-6">
+                                    <label for="campaign_full_payment_period">Campaign active days after full payment</label>
+                                    <input value="{{ $data->campaign_full_payment_period ?? config('global.CAMPAIGN_FULL_PAYMENT_PERIOD') }}" name="expired_info[campaign_full_payment_period]" type="number" class="form-control" id="campaign_full_payment_period" placeholder="Campaign active days before full payment" min="1">
+                                    <div id="campaign_full_payment_periodHelp" class="form-text text-help">The number of days the campaign will remain active before it is canceled if the customer didn't pay the full payment</div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="campaign_full_payment_reminder">Campaign reminder to pay full payment</label>
+                                    <input value="{{ $data->campaign_full_payment_reminder ?? config('global.CAMPAIGN_FIRST_PAYMENT_REMINDER') }}" name="expired_info[campaign_full_payment_reminder]" type="number" class="form-control" id="campaign_full_payment_reminder" placeholder="Campaign reminder to pay full payment" min="1">
+                                    <div id="campaign_full_payment_reminder" class="form-text text-help">After this number of days, the user will receive a daily notification to remind him to pay the full payment</div>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="tax">Tax Value</label>
+                                    <input value="{{ $tax->value ?? config('global.TAX') }}" name="tax" type="number" class="form-control" id="tax" placeholder="Tax Value" min="0" max="100">
+                                </div>
+
+                            </div>
+                            <hr/>
+                              <button type="submit" class="btn btn-secondary float-right">Update</button>
                         </div>
                        
                     </div>

@@ -344,10 +344,16 @@ pre code {
 /*  label css  */
 /*------------*/
 label {
-  color: #475F7B;
+  color: #000;
   font-size: 0.8rem;
   text-transform: uppercase;
   font-weight: 500;
+}
+
+.text-help{
+  font-style: italic;
+  font-size: 11px;
+  color: #888;
 }
 
 .form-control-file:focus {
