@@ -20,6 +20,8 @@ use App\Models\StoreLocation;
 use App\Models\User;
 use App\Notifications\AddInfluencer;
 use App\Http\Traits\SendNotification;
+use App\Models\Relation;
+use App\Models\SocialMedia;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -822,6 +824,30 @@ class AdController extends Controller
             'msg' => 'ad was updated',
             'status' => config('global.OK_STATUS'),
         ], config('global.OK_STATUS'));
+    }
+
+    public function update_info_view($id)
+    {
+        $data = Ad::findOrFail($id);
+        $goals = CampaignGoal::get();
+        $countries = Country::where('is_location',1)->get();
+        $socialMedias = SocialMedia::get();
+        $realations  = Relation::get();
+        return view('dashboard.ads.update',compact('data','goals','countries','socialMedias','realations'));
+    }
+
+
+    public function update_info_submit(Request $request, $id)
+    {
+        $data = Ad::findOrFail($id);
+        if($request->hasFile('logo'))
+        {
+            $data->addMedia($request->file('logo'))
+            ->toMediaCollection('logos');
+        }
+        $data->update($request->all());
+        Alert::toast('Ad was updated', 'success');
+        return back();
     }
 
 }

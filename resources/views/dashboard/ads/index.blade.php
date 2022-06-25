@@ -56,6 +56,13 @@
                                                     </a>
                                                 </li>
 
+                                                <li  class="list-item-custom">
+                                                    <a class="styleless-button w-100 text-left p-0" href="{{ route("dashboard.ads.update_info_view",$item->id) }}" >
+                                                        <i class="bx bx-edit list-item-icon"></i>
+                                                        <span class="list-item-text">Edit</span>
+                                                    </a>
+                                                </li>
+
                                             </ul>
                                           </div>
                                         <div class="back-grey"></div>
@@ -164,6 +171,10 @@
                                                 <a class="btn btn-secondary btn-sm" href="{{ route("dashboard.ads.edit",$item->id) }}" >
                                                     <i class="bx bx-book-content list-item-icon"></i>
                                                 </a>
+                                                <a class="btn btn-secondary btn-sm" href="{{ route("dashboard.ads.edit",$item->id) }}" >
+                                                    <i class="bx bx-book-content list-item-icon"></i>
+                                                </a>
+                                                
                                             </td>
                                         </tr>
                                 @endforeach

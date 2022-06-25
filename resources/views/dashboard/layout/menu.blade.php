@@ -191,6 +191,12 @@
             </li>
             {{-- @endcan --}}
 
+              {{-- @canany(['Edit Ads']) --}}
+              <li class="menue-item {{ ($name == 'dashboard.banks.index'|| $name == 'dashboard.banks.create'|| $name == 'dashboard.banks.edit') ? 'open active':''  }}">
+                <a href="{{ route('dashboard.banks.index') }}"><i class="bx bx-building"></i><span class="menu-title text-truncate" data-i18n="notifications">Banks</span></a>
+              </li>
+              {{-- @endcan --}}
+
             {{-- @canany(['Edit Ads',]) --}}
             <li class="menue-item {{ ($name == 'dashboard.frontEndSettings.index'|| $name == 'dashboard.frontEndSettings.create'|| $name == 'dashboard.frontEndSettings.edit') ? 'open active':''  }}">
              
