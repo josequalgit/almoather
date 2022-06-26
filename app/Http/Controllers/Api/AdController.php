@@ -582,7 +582,7 @@ class AdController extends Controller
         Notification::send($getContactManagers, new AddInfluencer($info));
         
         $isProfitable =  $data->campaignGoals->profitable;
-        $isOnSite = $data->ad_type;
+        $isOnSite = $data->ad_type == 'onsite';
 
         return response()->json([
             'msg'=>trans($this->trans_dir.'all_matched_blurred'),
@@ -594,13 +594,13 @@ class AdController extends Controller
                 'price'=>$cal,
                 'budget'=>$data->budget,
                 'matches'=>$data->matches()->where('status','!=','deleted')->get()->map(function($item) use($isProfitable,$isOnSite){
-                   
+                    $price = $isOnSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
                     $response = [
-                        'id'=>$item->influencers->id,
-                        'match'=>$item->match,
-                        'gender'=>$item->influencers->gender,
-                        'is_primary'=>$item->status == 'basic'?true:false,
-                        'budget'=>$isOnSite?$item->influencers->ad_onsite_price:$item->influencers->ad_price,
+                        'id'            => $item->influencers->id,
+                        'match'         => $item->match,
+                        'gender'        => $item->influencers->gender,
+                        'is_primary'    => $item->status == 'basic'?true:false,
+                        'budget'        => number_format($price)
                     ];
 
                     $response['ROAS'] = null;
@@ -614,7 +614,7 @@ class AdController extends Controller
                     else
                     {
                         $response['engagement_rate'] = $item->match;
-                        $response['AOAF'] = $item->AOAF;
+                        $response['AOAF'] = $response['aoaf'] = $item->AOAF;
                     }
         
 
