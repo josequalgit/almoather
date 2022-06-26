@@ -99,7 +99,7 @@ trait AdResponse
             'is_onSite' => $ad->onSite ? 'Online' : 'Site',
             'tax_value' => $ad->tax_value,
             'reject_note' => $ad->reject_note,
-            'admin_approved_influencers' => $ad->admin_approved_influencers
+            'admin_approved_influencers' => $ad->admin_approved_influencers ? true : false
         ];
 
         if ($ad->status == 'fullpayment' && Auth::guard('api')->user()->customers) {
