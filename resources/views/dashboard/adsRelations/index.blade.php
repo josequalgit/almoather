@@ -58,7 +58,7 @@
                                                             <td>{{ $item->getTranslation('title','en') }}</td>
                                                             <td>
                                                                 {{-- @can('Edit City') --}}
-                                                                    <button onclick="getUserData('{{ $key }}','{{$item->getTranslation('title','ar') }}','{{ $item->getTranslation('title','en') }}')" class="btn btn-secondary">
+                                                                    <button onclick="getUserData('{{ $item->id }}','{{$item->getTranslation('title','ar') }}','{{ $item->getTranslation('title','en') }}','{{ $item->app_profit }}')" class="btn btn-secondary">
                                                                         <i class="bx bx-edit"></i>
                                                                     </button>
                                                                 {{-- @endcan --}}
@@ -77,12 +77,13 @@
                                             </table>
                                         {{-- @endcan --}}
                                     </div>
+                                       {{-- @can('See City') --}}
+                                       <div class="p-1 text-right">
+                                        {{ $data->links('pagination::bootstrap-5') }}
+                                     </div>
+                                 {{-- @endcan --}}
                                 </div>
-                                {{-- @can('See City') --}}
-                                    <div class="p-1">
-                                       
-                                    </div>
-                                {{-- @endcan --}}
+                             
                             </div>
                         </div>
                     </div>
@@ -96,7 +97,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add New Relation</h5>
+                    <h5 class="modal-title">Relation</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -173,7 +174,11 @@
     function createAdRelation()
     {
         let url = '{{ route("dashboard.adRelations.store") }}';
-       
+       if(editId)
+       {
+          let updateUrl = "{{ route('dashboard.adRelations.update',':id') }}";
+          url = updateUrl.replace(':id',editId);
+       }
         
         $.ajax({
             type:'POST',
@@ -192,11 +197,12 @@
         })
     }
 
-    function getUserData(index , name_ar , name_en)
+    function getUserData(id , name_ar , name_en,app_profit)
     {
-        editId = index;
+        editId = id;
         document.getElementById('name_en').value = name_en;
         document.getElementById('name_ar').value = name_ar;
+        document.getElementById('app_profit').value = app_profit;
         $('#createButton').empty();
         $('#createButton').append('Update');
 

@@ -39,7 +39,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
     #REGISTER ROUTES
     Route::controller(RegisterController::class)->prefix('register')->group(function(){
         Route::post('/influncer','registerInfluncer');
-        Route::post('/customer','registerCustomer');
+        Route::post('/customer','registerCustomer')->name('register_customer');
         Route::get('/verify','verify');
         Route::post('/customer/update/{id}',[RegisterController::class,'updateCustomer']);
         Route::post('/checkUnique','checkUniqueData');
@@ -93,7 +93,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
 
     #GET CITIES
     Route::controller(CityController::class)->prefix('cities')->name('cities.')->group(function(){
-        Route::get('/{country_id}','index')->name('getCities');;
+        Route::get('/{region_id}','index')->name('getCities');;
     });
 
     #GET AREAS
@@ -103,7 +103,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
 
     #GET REGIONS
     Route::controller(RegionController::class)->prefix('regions')->name('regions.')->group(function(){
-        Route::get('/{country_id}','index')->name('getRegion');
+        Route::get('/{country_id}','index')->name('index');
     });
 
      #CATEGORIES ROUTES
