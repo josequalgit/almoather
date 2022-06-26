@@ -272,7 +272,12 @@ class Influncer extends Model implements HasMedia
     }
 
     function getEngRateAttribute(){
-        return $this->AOAF / $this->subscribers;
+        if($this->subscribers != 0)
+        {
+            return $this->AOAF / $this->subscribers;
+        }
+        return 0;
+        
     }
 
 
