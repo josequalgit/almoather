@@ -76,6 +76,10 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-6 col-12 mt3">
+                            <label for="country_code" class="mb-1 float-left label-advertiser">Country code</label>
+                            <input id="country_code" type="text" class="form-control" placeholder="please add country code">
+                        </div>
                         <div class="right-facebook">
                             <img src="{{ asset('frontEnd/img/Group 55637.png') }}" alt="" width="200px" height="200px">
                         </div>
@@ -178,12 +182,13 @@
             last_name:document.getElementById('last_name').value,
             gender:document.getElementById('gender').value,
             nationality:document.getElementById('nationality_id').value,
-            country:document.getElementById('country_id').value,
+            country_id:document.getElementById('country_id').value,
             region_id:document.getElementById('region_id').value,
+            country_code:document.getElementById('country_code').value,
             city_id:document.getElementById('city_id').value,
             email:document.getElementById('email').value,
             password:document.getElementById('password').value,
-            password_conformation:document.getElementById('password_conformation').value,
+            password_confirmation:document.getElementById('password_conformation').value,
         }
         let url = '{{ route("register_customer") }}';
         $.ajax({
