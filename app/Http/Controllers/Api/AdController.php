@@ -256,9 +256,9 @@ class AdController extends Controller
         ],config('global.NOT_FOUND_STATUS'));
 
         return response()->json([
-            'msg'=>trans($this->trans_dir.'ad_details'),
-            'data'=>$this->adResponse($data),
-            'status'=>config('global.OK_STATUS')
+            'msg' => trans($this->trans_dir.'ad_details'),
+            'data' => $this->adResponse($data),
+            'status' => config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
 
@@ -302,7 +302,7 @@ class AdController extends Controller
         if($request->status == 0&&$request->rejectNote)
         {
             $influencer = Influncer::find($data->influencer_id);
-            $name = $influencer->first_name.' '.$influencer->middle_name.' '.$influencer->last_name;
+            $name = $influencer->nick_name;
             
             $info =[
                 'msg'=>trans($this->trans_dir.'influencer').'"'.$name.'"'. trans($this->trans_dir.'reject_contract') .'"'.$data->rejectNote.'"'.' '.trans($this->trans_dir.'ad_small'),
@@ -417,14 +417,14 @@ class AdController extends Controller
     {
         $data = Ad::findOrFail($id);
         if($data->status !== 'prepay') return response()->json([
-            'err'=>trans($this->trans_dir.'ad_dont_have_right_status'),
+            'err'=>trans($this->trans_dir.'ad_doesn\'t_have_right_status'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
         $infData = $data->matches()->where('chosen',1)->get()->map(function($item){
             $inf = $item->influencers;
             return [
-                'name'=>$inf->full_name,
-                'match'=>$item->match
+                'name'  => $inf->full_name,
+                'match' => $item->match
             ];
         });
 
@@ -651,11 +651,11 @@ class AdController extends Controller
                 'budget'=>$data->budget,
                 'match'=> $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
                         return [
-							'id'=>$item->influencers->id,
-                            'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
-                            'image'=>$item->influencers->users->InfulncerImage?$item->influencers->users->InfulncerImage:null,
-                            'match'=>$item->match,
-                            'status'=>$item->status
+							'id'        => $item->influencers->id,
+                            'name'      => $item->influencers->nick_name,
+                            'image'     => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
+                            'match'     => $item->match,
+                            'status'    => $item->status
                         ];
                     })
             ],
@@ -770,7 +770,7 @@ class AdController extends Controller
         ],config('global.NOT_FOUND_STATUS'));
 
 
-        $name = $influencer->first_name.' '.$influencer->middle_name.' '.$influencer->last_name;
+        $name = $influencer->nick_name;
         $info =[
             'msg'=>trans($this->trans_dir.'influencer').' "'.$name.'"'. trans($this->trans_dir.'completed_small') .'"'.$ad->store.'" ad',
             'id'=>$ad->id,
@@ -933,11 +933,11 @@ class AdController extends Controller
                     
 
                     return [
-                      'id'=>$item->influencers->id,
-                      'image'=>$item->influencers->users->infulncerImage,
-                      'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
-                      'match'=>$item->match,
-                      'status'=>$status
+                      'id'      => $item->influencers->id,
+                      'image'   => $item->influencers->users->infulncerImage,
+                      'name'    => $item->influencers->nick_name,
+                      'match'   => $item->match,
+                      'status'  => $status
                     ];
                     })
             ],
@@ -1254,8 +1254,8 @@ class AdController extends Controller
 
             $response =  [
                 'id'        => $inf->id,
-                'name'      => $inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
-                'image'     => $inf->users->InfulncerImage?$inf->users->InfulncerImage:null,
+                'name'      => $inf->nick_name,
+                'image'     => $inf->users->InfulncerImage ? $inf->users->InfulncerImage : null,
                 'match'     => $item->match,
                 'gender'    => $item->influencers->gender,
                 'budget'    => number_format($price),
@@ -1274,7 +1274,7 @@ class AdController extends Controller
             else
             {
                 $response['engagement_rate'] = $item->match;
-                $response['AOAF'] = $item->AOAF;
+                $response['AOAF'] = $response['aoaf'] = $item->AOAF;
             }
 
             return $response;
@@ -1306,7 +1306,7 @@ class AdController extends Controller
             else
             {
                 $response['engagement_rate']    = $item->match;
-                $response['AOAF']               = $item->AOAF;
+                $response['AOAF'] = $response['aoaf'] = $item->AOAF;
             }
 
             return $response;
