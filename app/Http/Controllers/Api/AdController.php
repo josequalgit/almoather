@@ -464,7 +464,7 @@ class AdController extends Controller
                 {
                     $currentBudget = ($currentInf->ad_price >= $item->influencers->ad_price)?1:0;
                 }
-                $counter = $counter +1;
+                $counter = $counter + 1;
 
                 return $this->match_influencer_with_eligible_status($item->influencers,$item,$counter == 2?:$currentBudget,$item->status);
             });
@@ -546,20 +546,6 @@ class AdController extends Controller
         $data = Ad::findOrFail($id);
 
         return $this->match_response($data);
-
-        //     return response()->json([
-        //         'msg'=>trans($this->trans_dir.'data_was_updated'),
-        // 		'data'=>[
-        //             'id'=>$data->id,
-        // 			'type'=>$data->type,
-        // 			'category'=>$data->categories->name,
-        // 			'budget'=>$data->budget,
-        // 			'match'=>$this->get_ad_influencers_matchs($data)
-        //         ],
-        //     'status'=>config('global.OK_STATUS')
-        //    ],config('global.OK_STATUS'));
-
-
     }
     
     public function before_payment($id)
@@ -586,14 +572,14 @@ class AdController extends Controller
             'type'=>'Ad'
         ];
 
-        // $this->sendAdminNotification('contract_manager_notification',$info);
+        $this->sendAdminNotification('contract_manager_notification',$info);
 
-        // $getContactManagers = User::whereHas('roles',function($q){
-        //     $q->where('name','Contracts Manager')
-        //     ->orWhere('name','superAdmin');
-        // })->get();
+        $getContactManagers = User::whereHas('roles',function($q){
+            $q->where('name','Contracts Manager')
+            ->orWhere('name','superAdmin');
+        })->get();
 
-        // Notification::send($getContactManagers, new AddInfluencer($info));
+        Notification::send($getContactManagers, new AddInfluencer($info));
         
         $isProfitable =  $data->campaignGoals->profitable;
         $isOnSite = $data->ad_type;
@@ -972,21 +958,18 @@ class AdController extends Controller
         return response()->json([
             'msg'=>trans($this->trans_dir.'all_matched'),
             'data'=>[
-                'id'=>$data->id,
-                'type'=>$data->type,
-                'status'=>$data->status,
-                'influncers_status'=>$data->admin_approved_influencers?true:false,
-                'category'=>$data->categories?$data->categories->name:null,
-                'price'=>$data->budget - $cal,
-                'budget'=>$data->budget,
-                'format_price'=>$this->formateMoneyNumber($data->budget - $cal),
-                'format_budget'=>$this->formateMoneyNumber($data->budget),
-                'price'=>$data->budget - $cal,
-                'budget'=>$data->budget,
-
-                'match'=> $data->status == 'prepay'?$this->get_ad_influencers_matchs($data):$this->get_ad_influncers_with_status($data)
+                'id'                => $data->id,
+                'type'              => $data->type,
+                'status'            => $data->status,
+                'influncers_status' => $data->admin_approved_influencers ? true : false,
+                'category'          => $data->categories?$data->categories->name:null,
+                'price'             => $data->price_to_pay,
+                'budget'            => $data->budget,
+                'format_price'      => $this->formateMoneyNumber($data->budget - $cal),
+                'format_budget'     => $this->formateMoneyNumber($data->budget),
+                'match'             => $data->status == 'prepay' ? $this->get_ad_influencers_matchs($data) : $this->get_ad_influncers_with_status($data)
             ],
-            'status'=>config('global.OK_STATUS')
+            'status' => config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
 
 
@@ -1109,8 +1092,6 @@ class AdController extends Controller
                 'type' => $request->type,
             ]);
 
-
-
             return response()->json([
                 'msg'=>trans($this->trans_dir.'payment_successfully'),
                 'ad_status'=>$data->status,
@@ -1210,88 +1191,77 @@ class AdController extends Controller
     private function match_response($ad)
     {
         return response()->json([
-            'msg'=>trans($this->trans_dir.'data_was_updated'),
-            'status'=>config('global.OK_STATUS'),
-			'data'=>[
-				'id'=>$ad->id,
-				'type'=>$ad->type,
-				'status'=>$ad->status,
-                'influncers_status'=>$ad->admin_approved_influencers?true:false,
-				'category'=>$ad->categories->name,
-				'format_budget'=>$this->formateMoneyNumber($ad->budget),
-				'budget'=>$ad->budget,
-				'match'=>$this->get_ad_influencers_matchs($ad)
+            'msg'       => trans($this->trans_dir.'data_was_updated'),
+            'status'    => config('global.OK_STATUS'),
+			'data' => [
+				'id'                => $ad->id,
+				'type'              => $ad->type,
+				'status'            => $ad->status,
+                'influncers_status' => $ad->admin_approved_influencers?true:false,
+				'category'          => $ad->categories->name,
+				'format_budget'     => $this->formateMoneyNumber($ad->budget),
+				'budget'            => $ad->budget,
+				'match'             => $this->get_ad_influencers_matchs($ad)
             ]
             ],config('global.OK_STATUS')
-    );
+        );
     }
 
     private function get_ad_influncers_with_status($ad)
     {
         return $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($ad){
-                $contract = InfluencerContract::where('influencer_id',$item->influencer_id)
-                ->where('ad_id',$ad->id)
-                ->first();
+            $contract = InfluencerContract::where('influencer_id',$item->influencer_id)->where('ad_id',$ad->id)->first();
 
-                $status = null;
-            
-                if(isset($contract)&&$contract->is_accepted == 2)
+            $status = null;
+        
+            if(isset($contract)&&$contract->is_accepted == 2)
+            {
+                $status = 'rejected';
+            }
+            else if(isset($contract)&&$contract->is_accepted == 1)
+            {
+                if($contract->status == 1&&$contract->admin_status == 1)
                 {
-                    $status = 'rejected';
+                    $status = 'completed';
                 }
-                else if(isset($contract)&&$contract->is_accepted == 1)
+                elseif($contract->status == 1&&$contract->status == 0)
                 {
-                    if($contract->status == 1&&$contract->admin_status == 1)
-                    {
-                        $status = 'completed';
-                    }
-                    elseif($contract->status == 1&&$contract->status == 0)
-                    {
-                        $status = 'waiting admin approve';
-                    }
-                    elseif($contract->is_accepted == 1)
-                    {
-                        $status = 'Progress';
-                    }
-                    elseif($contract->is_accepted == 0)
-                    {
-                        $status = 'pending';
-                    }
-                    else
-                    {
-                        $status = 'progress';
-                    }
-
+                    $status = 'waiting admin approve';
                 }
-                else
+                elseif($contract->is_accepted == 1)
+                {
+                    $status = 'Progress';
+                }
+                elseif($contract->is_accepted == 0)
                 {
                     $status = 'pending';
                 }
+                else
+                {
+                    $status = 'progress';
+                }
+            }
+            else
+            {
+                $status = 'pending';
+            }
 
-                // $response = [
-                //     'id'=>$item->influencers->id,
-                //     'image'=>$item->influencers->users->infulncerImage,
-                //     'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
-                //     'match'=>$item->match,
-                //     'status'=>$status
-                // ];
+            $inf = $item->influencers;
+            $isProfitable =  $ad->campaignGoals->profitable;
+            $isOnSite = $ad->ad_type == 'onsite';
+        
+            $price = $isOnSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
 
-                $inf = $item->influencers;
-                $isProfitable =  $ad->campaignGoals->profitable;
-                $isOnSite = $ad->ad_type;
-         
-
-                $response =  [
-                    'id'=>$inf->id,
-                    'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
-                    'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage:null,
-                    'match'=>$item->match,
-                    'gender'=>$item->influencers->gender,
-                    'budget'=>$isOnSite?$item->influencers->ad_onsite_price:$item->influencers->ad_price,
-                    'status'=>$status
-                    
-                ];
-            // if($eligible != null) $response['eligible'] = $eligible;
+            $response =  [
+                'id'        => $inf->id,
+                'name'      => $inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
+                'image'     => $inf->users->InfulncerImage?$inf->users->InfulncerImage:null,
+                'match'     => $item->match,
+                'gender'    => $item->influencers->gender,
+                'budget'    => number_format($price),
+                'status'    => $status
+                
+            ];
     
             $response['ROAS'] = null;
             $response['engagement_rate'] = null;
@@ -1307,37 +1277,36 @@ class AdController extends Controller
                 $response['AOAF'] = $item->AOAF;
             }
 
-
-                return $response;
-            });
+            return $response;
+        });
     }
 
     private function get_ad_influencers_matchs($ad)
     {
        $isProfitable =  $ad->campaignGoals->profitable;
-       $isOnSite = $ad->ad_type;
+       $isOnSite = $ad->ad_type == 'onsite';
         return $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($isProfitable,$isOnSite){
-                
+            $price = $isOnSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
             $response = [
-                'id'=>$item->influencers->id,
-                'name'=>$item->influencers->first_name.' '.$item->influencers->middle_name.' '.$item->influencers->last_name,
-                'image'=>$item->influencers->users->InfulncerImage?$item->influencers->users->InfulncerImage:null,
-                'gender'=>$item->influencers->gender,
-                'is_primary'=>$item->status == 'basic'?true:false,
-                'budget'=>$isOnSite?$item->influencers->ad_onsite_price:$item->influencers->ad_price,
+                'id'            => $item->influencers->id,
+                'name'          => $item->influencers->nick_name,
+                'image'         => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
+                'gender'        => $item->influencers->gender,
+                'is_primary'    => $item->status == 'basic'? true : false,
+                'budget'        => number_format($price),
             ];
 
-            $response['ROAS'] = null;
-            $response['engagement_rate'] = null;
-            $response['aoaf'] = null;
+            $response['ROAS']               = null;
+            $response['engagement_rate']    = null;
+            $response['aoaf']               = null;
             if($isProfitable)
             {
                 $response['ROAS'] = $item->match;
             }
             else
             {
-                $response['engagement_rate'] = $item->match;
-                $response['AOAF'] = $item->AOAF;
+                $response['engagement_rate']    = $item->match;
+                $response['AOAF']               = $item->AOAF;
             }
 
             return $response;
@@ -1353,15 +1322,16 @@ class AdController extends Controller
         ],config('global.NOT_FOUND_STATUS'));
 
         $isProfitable = $ad->campaignGoals->profitable;
-       $isOnSite = $ad->ad_type;
+        $isOnSite = $ad->ad_type == 'onsite';
+        $price = $isOnSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
         $response =  [
-                'id'=>$inf->id,
-                'name'=>$inf->first_name.' '.$inf->middle_name.' '.$inf->last_name,
-                'image'=>$inf->users->InfulncerImage?$inf->users->InfulncerImage:null,
-                'match'=>$item->match,
-                'gender'=>$item->influencers->gender,
-                'budget'=>$isOnSite?$item->influencers->ad_onsite_price:$item->influencers->ad_price,
-                'status'=>$status
+                'id'        => $inf->id,
+                'name'      => $inf->nick_name,
+                'image'     => $inf->users->InfulncerImage ? $inf->users->InfulncerImage : null,
+                'match'     => $item->match,
+                'gender'    => $item->influencers->gender,
+                'budget'    => number_format($price),
+                'status'    => $status
                 
             ];
         if($eligible != null) $response['eligible'] = $eligible;

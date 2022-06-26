@@ -118,16 +118,16 @@ trait AdResponse
 
                 $status = null;
 
-                if (isset($contract) && $contract->is_accepted == 2) {
+                if ($contract && $contract->is_accepted == 2) {
                     $status = 'rejected';
-                } else if (isset($contract) && $contract->is_accepted == 1) {
+                } else if ($contract && $contract->is_accepted == 1) {
                     if ($contract->status == 1 && $contract->admin_status == 1) {
                         $status = 'completed';
                     } else {
                         $status = 'progress';
                     }
                 } else {
-                    if (isset($contract) && $contract->date) {
+                    if ($contract && $contract->date) {
                         $status = 'was sent';
                     } else {
                         $status = 'not sent';
@@ -136,7 +136,7 @@ trait AdResponse
                 return [
                     'id' => $item->influencers->id,
                     'image' => $item->influencers->users->infulncerImage,
-                    'name' => $item->influencers->first_name . ' ' . $item->influencers->middle_name . ' ' . $item->influencers->last_name,
+                    'name' => $item->influencers->nick_name,
                     'match' => $item->match,
                     'status' => $status,
                 ];

@@ -51,7 +51,7 @@
                         let options = ``;
                         let value = $('region_id').attr('data-value');
                         res.data.forEach((item, index)=>{
-                            options += `<option value="${item.id}" ${ value == item.id ? 'selected' : '' }>${item.name.en}</option>`;
+                            options += `<option value="${item.id}" ${ value == item.id ? 'selected' : '' }>${item.name}</option>`;
                         });
                         $('#region_id').html(options).change();
                     }
