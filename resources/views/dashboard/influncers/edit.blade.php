@@ -158,6 +158,7 @@
                 cache:false,
                 contentType: false,
                 processData: false,
+                enctype: 'multipart/form-data',
                 success: (res) => {
                     if(res.status){
                         Swal.fire(
@@ -166,7 +167,7 @@
                             'success'
                         );
                         setTimeout(() => {
-                            location.reload();
+                          //  location.reload();
                         }, 700);
                     }else{
                         Swal.fire(
