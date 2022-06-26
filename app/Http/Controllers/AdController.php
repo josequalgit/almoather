@@ -190,10 +190,15 @@ class AdController extends Controller
     private function calculateProfitableAds($request, $ad, $data){
         $noInfluencerReasons = [];
 
-        $tax = AppSetting::where('key', 'tax')->first();
-        $tax = $tax ? $tax->value : config('global.TAX');
+        // $tax = AppSetting::where('key', 'tax')->first();
+        // $tax = $tax ? $tax->value : config('global.TAX');
+        // $tax = $tax/100 * $ad->budget;
 
-        $appPercentage = $tax/100 * $ad->budget;
+        $relation = $ad->relations ? $ad->relations->app_profit : 10;
+        $appPercentage = $relation / 100 * $ad->budget;
+
+        // $appPercentage = $tax + $appPercentage;
+
         $budgetAfterCutPercentage = $ad->budget - $appPercentage;
 
         $allInfluencer = Influncer::where('status', 'accepted')->whereNotIn('id', $data);
@@ -209,7 +214,7 @@ class AdController extends Controller
         }
         
         $allInfluencer = $allInfluencer->get()->sortByDesc(function($item){
-            return $item->ROAF;
+            return $item->ROAS;
         });
 
         #CHECK IF THE BUDGET FOR LOW INFLUENCER IS OVER OR NOT
@@ -231,7 +236,7 @@ class AdController extends Controller
                 'influencer_id' => $influencer->id,
             ],[
                 'chosen'=> $chosen,
-                'match'=> $influencer->ROAF,
+                'match'=> $influencer->ROAS,
             ]);
         }
 
@@ -282,10 +287,15 @@ class AdController extends Controller
         $noInfluencerReasons = [];
 
         /**  BUDGET PERCENTAGE CALCULATION */
-        $tax = AppSetting::where('key', 'tax')->first();
-        $tax = $tax ? $tax->value : config('global.TAX');
+        // $tax = AppSetting::where('key', 'tax')->first();
+        // $tax = $tax ? $tax->value : config('global.TAX');
 
-        $appPercentage = $tax/100 * $ad->budget;
+        // $tax = $tax/100 * $ad->budget;
+        $relation = $ad->relations ? $ad->relations->app_profit : 10;
+        $appPercentage = $relation / 100 * $ad->budget;
+
+        // $appPercentage = $tax + $appPercentage;
+
         $percentForBigInf = 100 - $request->engagement_rate;
         $budgetAfterCutPercentage = $ad->budget - $appPercentage;
         $budgetForSmallInfluencer = $request->engagement_rate / 100 * $budgetAfterCutPercentage;
@@ -508,9 +518,14 @@ class AdController extends Controller
             $budgetSum += $price;
         }
 
-        $tax = AppSetting::where('key', 'tax')->first();
-        $tax = $tax ? $tax->value : config('global.TAX');
-        $budgetSum = $budgetSum + ($budgetSum * $tax/100);
+        // $tax = AppSetting::where('key', 'tax')->first();
+        // $tax = $tax ? $tax->value : config('global.TAX');
+
+        $relation = $ad->relations ? $ad->relations->app_profit : 10;
+        $budgetSum += $relation / 100 * $budgetSum;
+
+        // $budgetSum = $budgetSum + ($budgetSum * $tax/100);
+
         $ad->update(['price_to_pay' => $budgetSum]);
     }
 
@@ -886,6 +901,78 @@ class AdController extends Controller
             'contract' => mb_convert_encoding( $content, 'UTF-8', 'UTF-8'),
             'status' => true,
         ], 200);
+    }
+
+    function addCampaignInfluencer($ad_id,$inf_id){
+        $ad = Ad::find($ad_id);
+
+        $matchedPriceTotal = 0;
+        $sumColumn = $ad->ad_type ? 'ad_with_vat' : 'ad_onsite_price_with_vat';
+        $ad->matches()->where('chosen', 1)->get()->map(function($item) use(&$matchedPriceTotal,$sumColumn){
+            $matchedPriceTotal += $item->influencers->{$sumColumn};
+        });
+
+        $remainingBudget = $budget - $matchedPriceTotal;
+        $chosenInfPrice -= $remainingBudget;
+
+        if ($chosenInfPrice > $oldInfPrice) {
+            return response()->json([
+                'msg' => 'please increase your budget',
+                'status' => 401,
+            ], 401);
+        }
+
+        $changeNew = AdsInfluencerMatch::where([['ad_id', $ad->id], ['influencer_id', $chosen_inf_id]])->first();
+        $changeNew->chosen = 1;
+        $changeNew->save();
+
+        $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
+        $noInfluencerReasons = [];
+
+        $this->calculateCampaignPrice($ad);
+
+        $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons'))->render();
+        return response()->json([
+            'msg' => 'data was updated',
+            'data' => $influencersTable,
+            'status' => true,
+        ], 200);
+    }
+
+    private function create_influencer_contract($ad_id = null, $customer)
+    {
+        $contractData = AppSetting::where('key', 'Influencer Contract')->first();
+        
+        $content = json_decode($contractData->value);
+        $startDate = $ad->InfluencerContract()->orderBy('date','asc')->first();
+        $endDate = $ad->InfluencerContract()->orderBy('date','desc')->first();
+
+        $content = str_replace("[[_LOGO_]]", '<img src="'.asset('img/avatars/logo-almuaather.png').'" height="100" >', $content);
+        
+        $content = str_replace("[[_CONTRACT_NUM_]]", $ad->id, $content);
+       // $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
+        $content = str_replace("[[_CUSTOMER_NAME_]]", $ad->customers->full_name, $content);
+        $content = str_replace("[[_STORE_NAME_]]", $ad->store, $content);
+        $content = str_replace("[[_CUSTOMER_NATIONALITY_]]", $ad->customers->nationalities->getTranslation('name','ar'), $content);
+        $content = str_replace("[[_CR_NUM_]]", $ad->cr_num, $content);
+        $content = str_replace("[[_NATIONAL_NUM_]]", $ad->customers->id_number, $content);
+        $content = str_replace("[[_PHONE_]]", $ad->customers->users->phone, $content);
+        $content = str_replace("[[_EMAIL_]]", $ad->customers->users->email, $content);
+        $content = str_replace("[[_PRICE_WITH_TAX_]]", number_format($ad->adBudgetWithVat), $content);
+        $content = str_replace("[[_PRICE_]]", number_format($ad->budget), $content);
+        $content = str_replace("[[_START_DATE_]]", $startDate->date->format('d/m/Y'), $content);
+        $content = str_replace("[[_END_DATE_]]", $endDate->date->format('d/m/Y'), $content);
+        $content = str_replace("[[_CAMPAIGN_GOAL_]]", $ad->campaignGoals->getTranslation('title','ar'), $content);
+        
+        if ($contractData) {
+            return CampaignContract::updateOrCreate(['ad_id' => $ad->id],[
+                'content' => $content,
+                'is_accepted' => 0,
+            ]);
+        } else {
+            return false;
+        }
+
     }
 
 }

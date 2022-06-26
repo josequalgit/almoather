@@ -206,9 +206,9 @@ class AdController extends Controller
             'type'=>'Ad'
         ];
 
-      //  $this->sendAdminNotification('contract_manager_notification',$info);
+       $this->sendAdminNotification('contract_manager_notification',$info);
 
-       // $c_not = Notification::send($getAdmin, new AddInfluencer($info));
+        $c_not = Notification::send($getAdmin, new AddInfluencer($info));
 
         return response()->json([
             'msg'=>trans($this->trans_dir.'ad_was_created'),
@@ -1425,7 +1425,7 @@ class AdController extends Controller
 
         return false;
     }
-    
+
     public function uploadMedia(UploadAdMedia $request , $file_id , $type){
 
         /**

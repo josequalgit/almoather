@@ -99,11 +99,12 @@ trait AdResponse
             'is_onSite' => $ad->onSite ? 'Online' : 'Site',
             'tax_value' => $ad->tax_value,
             'reject_note' => $ad->reject_note,
-
+            'admin_approved_influencers' => $ad->admin_approved_influencers
         ];
 
         if ($ad->status == 'fullpayment' && Auth::guard('api')->user()->customers) {
-            $basicResponse['contract'] = $this->create_customer_contract($ad->id);
+            $contract = CampaignContract::where('ad_id',$ad->id)->first();
+            $basicResponse['contract'] = $contract ? $contract->content : null;
         }
         if (Auth::guard('api')->user()->influncers) {
             $basicResponse['contract'] = InfluencerContract::select('id', 'content', 'date')->where(['influencer_id' => Auth::guard('api')->user()->influncers->id])
@@ -218,29 +219,4 @@ trait AdResponse
     {
         return number_format($number, 0, '.', ',');
     }
-
-    private function create_contract($ad_id = null, $customer)
-    {
-        $contractData = Contract::find(1);
-
-        if (!$contractData) {
-            return false;
-        }
-
-        $replace = str_replace("[[Name]]", $customer->first_name . ' ' . $customer->last_name, $contractData->content);
-
-        if ($contractData) {
-            return Contract::create([
-                'title' => $contractData->title,
-                'content' => $replace,
-                'ad_id' => $ad_id,
-            ]);
-        } else {
-            return false;
-        }
-
-    }
-
-    
-
 }
