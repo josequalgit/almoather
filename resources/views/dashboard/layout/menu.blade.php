@@ -127,7 +127,7 @@
             <li class="menu-item  {{ ($name == 'dashboard.ads.index'|| $name == 'dashboard.ads.create'|| $name == 'dashboard.ads.edit') ? 'open active':''  }} ">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-money"></i>
-                <div data-i18n="Invoice">Campaigns</div>
+                <div data-i18n="Invoice">Campaigns <span class="badge badge-danger">{{ $pending_ads }}</span></div>
               </a>
               <ul class="menu-sub">
 
