@@ -840,6 +840,7 @@ class AdController extends Controller
         $data = Ad::findOrFail($id);
         if($request->hasFile('logo'))
         {
+            $data->clearMediaCollection('logos');
             $data->addMedia($request->file('logo'))
             ->toMediaCollection('logos');
         }

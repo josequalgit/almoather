@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\AppSetting;
 use App\Models\Ad;
+use App\Models\Influncer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,10 +26,12 @@ class AppServiceProvider extends ServiceProvider
             $website_des = $website_des_info?json_decode($website_des_info->value):[];
            
             $pending_ads = Ad::where('status','pending')->get()->count();
+            $pending_influencer = Influncer::where('status','pending')->get()->count();
 
             $view->with('contact_info', $contact_info ?? null);
             $view->with('website_des', $website_des ?? null);
             $view->with('pending_ads',$pending_ads);
+            $view->with('pending_influencer',$pending_influencer);
         });
     }
 

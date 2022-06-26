@@ -8,6 +8,8 @@ use App\Models\AppSetting;
 use App\Http\Request\LoginRequest;
 use Alert;
 use Auth;
+use App\Models\Country;
+
 class AuthController extends Controller
 {
     public function login()
@@ -42,6 +44,8 @@ class AuthController extends Controller
 
     public function customer_register()
     {
-        return view('frontEnd.auth.register_customer');
+        $nationality = Country::get();
+        $countries = Country::where('is_location',1)->get();
+        return view('frontEnd.auth.register_customer',compact('nationality','countries'));
     }
 }

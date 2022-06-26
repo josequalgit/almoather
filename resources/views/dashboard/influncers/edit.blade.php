@@ -44,7 +44,7 @@
             let tax = parseFloat('{{$tax}}');
             $('#country_id').on('change',function() {
                 $('#region_id').html('');
-                var route = '{{ route("regions.getRegion",":country"); }}';
+                var route = '{{ route("regions.index",":country"); }}';
                 route = route.replace(':country',$(this).val());
                 $.get(route,function(res) {
                     if(res.status == 200){

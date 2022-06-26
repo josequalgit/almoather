@@ -138,14 +138,14 @@
 <script>
     $('#country_id').on('change',function() {
               $('#region_id').html('');
-              var route = '{{ route("regions.getRegion",":country"); }}';
+              var route = '{{ route("regions.index",":country"); }}';
               route = route.replace(':country',$(this).val());
               $.get(route,function(res) {
                   if(res.status == 200){
                       let options = ``;
                       let value = $('region_id').attr('data-value');
                       res.data.forEach((item, index)=>{
-                          options += `<option value="${item.id}" ${ value == item.id ? 'selected' : '' }>${item.name.en}</option>`;
+                          options += `<option value="${item.id}" ${ value == item.id ? 'selected' : '' }>${item.name}</option>`;
                       });
                       $('#region_id').html(options).change();
                   }
