@@ -1564,9 +1564,6 @@ class AdController extends Controller
     {
       // FIND THE RIGHT SETTING TO UPDATED
       $relations = Relation::get();
-      
-       // IF THE SETTING EXIST MAKE THE STRING VALUE TO ARRAY
-       $relation_array = (array)json_decode($settings->value);
 
         return response()->json([
             'msg'       =>trans($this->trans_dir.'all_relation'),
