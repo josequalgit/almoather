@@ -1563,7 +1563,12 @@ class AdController extends Controller
     public function get_ads_relation()
     {
       // FIND THE RIGHT SETTING TO UPDATED
-      $relations = Relation::get();
+      $relations = Relation::get()->map(function($item){
+            return [
+                'id' => $item->id,
+                'name' => $item->title
+            ];
+      });
 
         return response()->json([
             'msg'       =>trans($this->trans_dir.'all_relation'),
