@@ -63,7 +63,7 @@ class AdController extends Controller
         $serviceCategories = Category::where('type','service')->get();
         $productCategories = Category::where('type','product')->get();
         $goals = CampaignGoal::select('title')->get();
-        $countries = Country::get();
+        $countries = Country::orderBy('sort')->get();
 
         if($data->status != 'pending') return view('dashboard.ads.showAd',compact('data','matchedInfluencers','productCategories','serviceCategories','unMatched'));
         
@@ -828,7 +828,7 @@ class AdController extends Controller
     {
         $data = Ad::findOrFail($id);
         $goals = CampaignGoal::get();
-        $countries = Country::where('is_location',1)->get();
+        $countries = Country::where('is_location',1)->orderBy('sort')->get();
         $socialMedias = SocialMedia::get();
         $realations  = Relation::get();
         return view('dashboard.ads.update',compact('data','goals','countries','socialMedias','realations'));
