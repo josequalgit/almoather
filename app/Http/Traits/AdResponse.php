@@ -21,7 +21,10 @@ trait AdResponse
         $date = $ad->created_at->format('d/m/Y');
         if($ad->InfluencerContract){
             $date = $ad->InfluencerContract()->orderBy('date','asc')->first();
-            $date = $date->date->format('d/m/Y');
+            if($date){
+                $date = $date->date->format('d/m/Y');
+            }
+            
         }
 
         $basicResponse = [
@@ -151,7 +154,7 @@ trait AdResponse
                 ];
             });
         }
-dd(Auth::guard('api')->user());
+
         if (Auth::guard('api')->user()->customers) {
 
             $basicResponse['status'] = $ad->status;
