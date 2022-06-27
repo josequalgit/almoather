@@ -31,7 +31,7 @@
                                     <div class="block-top">
                                         <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->code) }}.png" alt="{{$item->countries->name}}"></div>
                                         <div class="back-grey"></div>
-                                        <div class="block-image"><img src="{{ $item->users->image['url'] }}" alt="{{ $item->nick_name }}"></div>
+                                        <div class="block-image"><img src="{{ $item->users->infulncerImage['url'] }}" alt="{{ $item->nick_name }}"></div>
                                     </div>
                                     <div class="block-info mw-100">
                                         <span class="name">{{ $item->nick_name }}</span>
@@ -94,7 +94,7 @@
                             <tbody>
                                 @foreach ($data as $item)
                                         <tr>
-                                            <td><img src="{{ $item->users->image['url'] }}" alt="{{ $item->nick_name }}"></td>
+                                            <td><img src="{{ $item->users->infulncerImage['url'] }}" alt="{{ $item->nick_name }}"></td>
                                             <td>{{ $item->nick_name  }}</td>
                                             <td><div class="d-flex justify-content-center align-items-center"><div class="contry-name">{{$item->countries->name}}</div> <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->code) }}.png" alt="{{$item->countries->name}}"></div></div></td>
                                             <td>{{ $item->subscribers }}</td>

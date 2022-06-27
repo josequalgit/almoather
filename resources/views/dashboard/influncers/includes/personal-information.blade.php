@@ -22,7 +22,7 @@
                 <fieldset class="form-group col-md-6">
                                         
                     <div class="imgUp">
-                        <img class="image-preview"  src="{{ $data->users->infulncerImage['url']}}" />
+                        <img class="image-preview"  src="{{ $data->users->infulncerImage['url'] }}" />
                         <label class="btn btn-primary">
                             Upload<input name="image" type="file" class="uploadFile img" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;">
                         </label>
