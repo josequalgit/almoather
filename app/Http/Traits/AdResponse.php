@@ -27,7 +27,7 @@ trait AdResponse
             
         }
 
-        return $basicResponse = [
+        $basicResponse = [
             'id' => $ad->id,
             'image' => $ad->image,
             'videos' => $ad->videos,
