@@ -12,7 +12,7 @@ class CountryController extends Controller
 
     public function index()
     {
-        $countries = Country::where('is_location',1)->get()->map(function($item){
+        $countries = Country::where('is_location',1)->orderBy('sort')->get()->map(function($item){
             return [
                 'id' => $item->id,
                 'name' => $item->name,
@@ -20,7 +20,7 @@ class CountryController extends Controller
             ];
         });
 
-        $nationalities = Country::where('is_location',0)->get()->map(function($item){
+        $nationalities = Country::where('is_location',0)->orderBy('sort')->get()->map(function($item){
             return [
                 'id' => $item->id,
                 'name' => $item->name,
