@@ -21,13 +21,13 @@ trait AdResponse
         $date = $ad->created_at->format('d/m/Y');
         if($ad->InfluencerContract){
             $date = $ad->InfluencerContract()->orderBy('date','asc')->first();
-            if($date){
+            if($date && $date->date){
                 $date = $date->date->format('d/m/Y');
             }
             
         }
 
-        $basicResponse = [
+        return $basicResponse = [
             'id' => $ad->id,
             'image' => $ad->image,
             'videos' => $ad->videos,
