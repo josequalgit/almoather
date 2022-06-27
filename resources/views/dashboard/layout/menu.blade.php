@@ -36,7 +36,7 @@
            <li class="menu-item  {{ ($name == 'dashboard.ads.index'|| $name == 'dashboard.ads.create'|| $name == 'dashboard.ads.edit') ? 'open active':''  }} ">
              <a href="javascript:void(0);" class="menu-link menu-toggle">
                <i class="menu-icon tf-icons bx bx-money"></i>
-               <div data-i18n="Invoice">Campaigns @if($pending_ads > 0)<span class="badge badge-danger">{{ $pending_ads }}</span>@endif</div>
+               <div data-i18n="Invoice" class="d-flex jsutify-content-center align-items-center">Campaigns @if($pending_ads > 0)<span class="badge badge-danger">{{ $pending_ads }}</span>@endif</div>
              </a>
              <ul class="menu-sub">
 
@@ -51,7 +51,7 @@
                {{ (($name == 'dashboard.ads.index'&&$para == 'UnderReview')|| ($name == 'dashboard.ads.create'&&$para == 'UnderReview')||($name == 'dashboard.ads.edit')&&$para == 'UnderReview') ? 'active':''  }}
                ">
                  <a href="{{ route('dashboard.ads.index','UnderReview') }}" class="menu-link">
-                   <div data-i18n="List">Under Review <span class="badge badge-danger">{{ $pending_ads }}</span></div>
+                   <div data-i18n="List" class="d-flex jsutify-content-center align-items-center">Under Review <span class="badge badge-danger">{{ $pending_ads }}</span></div>
                  </a>
                </li>
                <li class="menu-item
@@ -93,7 +93,7 @@
             <li class="menu-item  {{ strpos($name,'dashboard.influncers') !== false ? 'open active' : '' }}">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-user-pin"></i>
-                <div data-i18n="Invoice">Influencers @if($pending_influencer > 0)<span class="badge badge-danger">{{ $pending_influencer }}</span>@endif</div>
+                <div data-i18n="Invoice" class="d-flex jsutify-content-center align-items-center">Influencers @if($pending_influencer > 0)<span class="badge badge-danger">{{ $pending_influencer }}</span>@endif</div>
               </a>
               <ul class="menu-sub">
                 <li class="menu-item {{ strpos($name,'dashboard.influncers') !== false && last(request()->segments()) == 'accepted' ? 'active':''  }}">
@@ -103,7 +103,7 @@
                   <a href="{{ route('dashboard.influncers.index','rejected') }}" class="menu-link"><div data-i18n="List">Rejected Influncers</div></a>
                 </li>
                 <li class="menu-item {{ strpos($name,'dashboard.influncers') !== false && last(request()->segments()) == 'pending' ? 'active':''  }}">
-                  <a href="{{ route('dashboard.influncers.index','pending') }}" class="menu-link"><div data-i18n="List">Pending Influncers  @if($pending_influencer > 0)<span class="badge badge-danger">{{ $pending_influencer }}</span>@endif</div></a>
+                  <a href="{{ route('dashboard.influncers.index','pending') }}" class="menu-link"><div data-i18n="List" class="d-flex jsutify-content-center align-items-center">Pending Influncers  @if($pending_influencer > 0)<span class="badge badge-danger">{{ $pending_influencer }}</span>@endif</div></a>
                 </li>
                 <li class="menu-item {{ strpos($name,'dashboard.influncers') !== false && last(request()->segments()) == 'band' ? 'active':''  }}">
                   <a href="{{ route('dashboard.influncers.index','band') }}" class="menu-link"><div data-i18n="List">Band Influncers</div></a>

@@ -454,6 +454,6 @@ Route::group(['middleware' => 'language'],function(){
 
     Route::get('voluum',function(){
         $voluum = new App\Voluum\Influencer;
-        $voluum->getInfluencer(1);
+        $voluum->updateInfluencer(1);
     });
 });

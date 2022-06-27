@@ -68,8 +68,9 @@ class Voluum{
             $this->log($error);
             return $error;
         });
-        $response->throw();
+        //$response->throw();
         $response = $response->json();
+
         if($response && isset($response['alive'])){
             return $response['alive'];
         }
@@ -83,6 +84,10 @@ class Voluum{
 
     public function post($endPoint,$params = [],$headers = []){
         return $this->auth()->setEndpoint($endPoint)->setHeaders($headers)->setParams($params)->postRequest();
+    }
+
+    public function put($endPoint,$params = [],$headers = []){
+        return $this->auth()->setEndpoint($endPoint)->setHeaders($headers)->setParams($params)->putRequest();
     }
 
     private function getRequest(){
@@ -99,7 +104,16 @@ class Voluum{
         $response = Http::withHeaders($this->getHeaders())->post($this->getEndpoint(), $this->getParams());
         $response->onError(function($error){
             $this->log($error);
-            dd($error);
+            return $error;
+        });
+        $response->throw();
+        return $response->json();
+    }
+
+    private function putRequest(){
+        $response = Http::withHeaders($this->getHeaders())->put($this->getEndpoint(), $this->getParams());
+        $response->onError(function($error){
+            $this->log($error);
             return $error;
         });
         $response->throw();
