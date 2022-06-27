@@ -18,6 +18,12 @@ trait AdResponse
             return $this->userDataResponse([], null, $item->users->id);
         }) : null;
 
+        $date = $ad->created_at->format('d/m/Y');
+        if($ad->InfluencerContract){
+            $date = $ad->InfluencerContract()->orderBy('date','asc')->first();
+            $date = $date->date->format('d/m/Y');
+        }
+
         $basicResponse = [
             'id' => $ad->id,
             'image' => $ad->image,
@@ -76,7 +82,7 @@ trait AdResponse
             'influencer' => $info ? $info : null,
             'budget' => $ad->budget,
             'format_budget' => $this->formateMoneyNumber($ad->budget),
-            'date' => $ad->date,
+            'date' => $date,
             'type' => $ad->ad_type,
             'price' => $ad->price,
             'website_link' => $ad->website_link,
@@ -145,7 +151,7 @@ trait AdResponse
                 ];
             });
         }
-
+dd(Auth::guard('api')->user());
         if (Auth::guard('api')->user()->customers) {
 
             $basicResponse['status'] = $ad->status;
