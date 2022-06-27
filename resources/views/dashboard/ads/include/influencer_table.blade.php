@@ -36,7 +36,7 @@
                         <td>{{ $item->match ?? 0 }}%</td>
                     @else
                         <td>{{ $item->match ?? 0 }}%</td>
-                        <td>{{ $item->AOAF ?? 0 }}%</td>
+                        <td>{{ $item->AOAF ?? 0 }}</td>
                     @endif
                     <td>{{ $item->influencers->TypeInfluencerSubscriber  }}</td>
                     <td>{{ ucwords(str_replace('_',' ',$item->status)) }}</td>

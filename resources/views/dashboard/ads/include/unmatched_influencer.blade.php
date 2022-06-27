@@ -31,7 +31,7 @@
                 <td>{{ $item->influencers->nick_name }}</td>
                 <td>{{ $price }}</td>
                 @if($ad->campaignGoals->profitable)
-                    <td>{{ $item->match ?? 0 }}</td>
+                    <td>{{ $item->match ?? 0 }}%</td>
                 @else
                     <td>{{ $item->match ?? 0 }}%</td>
                     <td>{{ $item->AOAF ?? 0 }}</td>
