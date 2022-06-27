@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\Country;
 use App\Models\City;
 use App\Models\Influncer;
+use App\Models\Relation;
 use App\Models\Customer;
 use App\Models\Contract;
 use App\Models\Payment;
@@ -1562,25 +1563,16 @@ class AdController extends Controller
     public function get_ads_relation()
     {
       // FIND THE RIGHT SETTING TO UPDATED
-      $settings = AppSetting::where('key','ads_relation')->first();
-
-      // IF IT DOSE'T EXIST RETURN AN ERROR MESSAGE
-      if(!$settings)
-      {
-          $settings = AppSetting::create([
-              'key'=>'ads_relation',
-              'value'=>json_encode(array())
-          ]);
-      };
+      $relations = Relation::get();
       
        // IF THE SETTING EXIST MAKE THE STRING VALUE TO ARRAY
        $relation_array = (array)json_decode($settings->value);
 
-       return response()->json([
-        'msg'=>trans($this->trans_dir.'all_relation'),
-        'data'=>(array)$this->object_to_array_recursive($relation_array),
-        'status'=>config('global.OK_STATUS')
-    ],config('global.OK_STATUS'));
+        return response()->json([
+            'msg'       =>trans($this->trans_dir.'all_relation'),
+            'data'      => $relations,
+            'status'    =>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
 
     private function object_to_array_recursive($object, $assoc=TRUE, $empty='')
