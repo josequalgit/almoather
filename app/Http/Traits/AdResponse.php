@@ -19,13 +19,13 @@ trait AdResponse
         }) : null;
 
         $date = $ad->created_at->format('d/m/Y');
-        if($ad->InfluencerContract){
-            $date = $ad->InfluencerContract()->orderBy('date','asc')->first();
-            if($date && $date->date){
-                $date = $date->date->format('d/m/Y');
-            }
+        // if($ad->InfluencerContract){
+        //     $date = $ad->InfluencerContract()->orderBy('date','asc')->first();
+        //     if($date && $date->date){
+        //         $date = $date->date->format('d/m/Y');
+        //     }
             
-        }
+        // }
 
         $basicResponse = [
             'id' => $ad->id,
