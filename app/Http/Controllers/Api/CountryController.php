@@ -20,7 +20,7 @@ class CountryController extends Controller
             ];
         });
 
-        $nationalities = Country::where('is_location',0)->orderBy('sort')->get()->map(function($item){
+        $nationalities = Country::orderBy('sort')->get()->map(function($item){
             return [
                 'id' => $item->id,
                 'name' => $item->name,

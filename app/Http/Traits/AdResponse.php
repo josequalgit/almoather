@@ -92,6 +92,7 @@ trait AdResponse
                 'id' => $ad->areas->id,
                 'name' => $ad->areas->name,
             ] : null,
+            'location' => $ad->location,
             'customer_id' => $ad->customers->id,
             'isVat' => $ad->is_vat,
             'discount_code' => $ad->discount_code,
