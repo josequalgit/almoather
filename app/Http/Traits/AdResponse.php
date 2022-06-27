@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 
+use App\Models\CampaignContract;
 use App\Models\Contract;
 use App\Models\InfluencerContract;
 use Auth;
@@ -113,6 +114,7 @@ trait AdResponse
                 ->first();
         }
 
+        //Return Matches if the status is Full payment / Choosing influencer / Progress
         if (Auth::guard('api')->user()->customers && $ad->status !== 'pending' && $ad->status !== 'approve' && $ad->status !== 'prepay' && $ad->status !== 'rejected') {
             $basicResponse['matches'] = $ad->matches()->where('status', '!=', 'deleted')->where('chosen', 1)->get()->map(function ($item) {
                 $contract = InfluencerContract::where('influencer_id', $item->influencer_id)->first();
