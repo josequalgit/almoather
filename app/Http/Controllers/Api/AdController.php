@@ -461,12 +461,12 @@ class AdController extends Controller
             ],config('global.NOT_FOUND_STATUS'));
         }
 
-        if($ad->status !== 'prepay'){
-            return response()->json([
-                'err'       => trans($this->trans_dir.'ad_dont_have_right_status'),
-                'status'    => config('global.WRONG_VALIDATION_STATUS')
-            ],config('global.WRONG_VALIDATION_STATUS'));
-        }
+        // if($ad->status !== 'prepay' && $ad->status != 'choosing_influencer'){
+        //     return response()->json([
+        //         'err'       => trans($this->trans_dir.'ad_dont_have_right_status'),
+        //         'status'    => config('global.WRONG_VALIDATION_STATUS')
+        //     ],config('global.WRONG_VALIDATION_STATUS'));
+        // }
 
         if($removed_inf_id == -1){
             $infData = $ad->matches()->where([['chosen',0],['status','!=','deleted']])->get()->map(function($item) use($ad){
@@ -477,10 +477,10 @@ class AdController extends Controller
 
                 $response =  [
                     'id'        => $item->id,
-                    'name'      => $item->nick_name,
-                    'image'     => $item->users->InfulncerImage ? $item->users->InfulncerImage : null,
+                    'name'      => $item->influencers->nick_name,
+                    'image'     => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
                     'match'     => $item->match,
-                    'gender'    => $item->influencers->gender,
+                    'gender'    => trans($this->trans_dir.$item->influencers->gender),
                     'budget'    => number_format($influencerPrice),
                     'status'    => $item->status,
                     'eligible'  => $remainingBudget >= $influencerPrice
@@ -499,6 +499,7 @@ class AdController extends Controller
 
                 return $response;
             });
+
 
             return response()->json([
                 'msg'       => trans($this->trans_dir.'all_matched_under_budget'),

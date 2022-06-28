@@ -137,7 +137,8 @@ return [
             "choosing_influencer"=>"Pay The Full Payment",
         ],
         'new_campaign_request' => 'You have a new campaign request',
-        'new_campaign_request_msg' => 'You have a new campaign (:name), Please check the details and reply the request ASAP'
+        'new_campaign_request_msg' => 'You have a new campaign (:name), Please check the details and reply the request ASAP',
+        'Male' => 'Male'
 
     ]
 ];
