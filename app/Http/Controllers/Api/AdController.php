@@ -450,7 +450,7 @@ class AdController extends Controller
     }
 
     // Get unmatched influencers
-    public function getMatchedInfluencersNotChosen($id,$removed_inf_id)
+    public function getMatchedInfluencersNotChosen($campaign_id,$removed_inf_id)
     {
 
         $ad = Ad::find($campaign_id);
@@ -459,6 +459,13 @@ class AdController extends Controller
                 'err'=>trans($this->trans_dir.'ad_not_found'),
                 'status'=>config('global.NOT_FOUND_STATUS')
             ],config('global.NOT_FOUND_STATUS'));
+        }
+
+        if($data->status !== 'choosing_influencer'){
+            return response()->json([
+                'err'       => trans($this->trans_dir.'ad_dont_have_right_status'),
+                'status'    => config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
         if($removed_inf_id == -1){
@@ -477,7 +484,6 @@ class AdController extends Controller
                     'budget'    => number_format($influencerPrice),
                     'status'    => $item->status,
                     'eligible'  => $remainingBudget >= $influencerPrice
-                    
                 ];
                
                 $response['ROAS'] = null;
