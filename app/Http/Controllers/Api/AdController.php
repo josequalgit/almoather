@@ -509,7 +509,7 @@ class AdController extends Controller
         }
 
         $ReplacedInfluencer = Influncer::find($removed_inf_id);
-        if (!$influencer) {
+        if (!$ReplacedInfluencer) {
             return response()->json([
                 'msg' => 'Influencer not found',
                 'status' => false,
@@ -521,12 +521,14 @@ class AdController extends Controller
             $influencerPrice = $ad->ad_type == 'online' ? $ReplacedInfluencer->ad_with_vat : $ReplacedInfluencer->ad_onsite_price_with_vat;
             $influencerPrice += $remainingBudget;
 
+            $isProfitable = $ad->campaignGoals->profitable;
+
             $response =  [
                 'id'        => $item->id,
-                'name'      => $item->nick_name,
-                'image'     => $item->users->InfulncerImage ? $item->users->InfulncerImage : null,
+                'name'      => $item->influencers->nick_name,
+                'image'     => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
                 'match'     => $item->match,
-                'gender'    => $item->influencers->gender,
+                'gender'    => trans($this->trans_dir.$item->influencers->gender),
                 'budget'    => number_format($influencerPrice),
                 'status'    => $item->status,
                 'eligible'  => $remainingBudget >= $influencerPrice
