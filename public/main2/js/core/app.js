@@ -508,26 +508,6 @@
     })
   })
 
-  // Update manual scroller when window is resized
-  $(window).resize(function () {
-    $.app.menu.manualScroller.updateHeight()
-    // To show shadow in main menu when menu scrolls
-    var container = document.getElementsByClassName("main-menu-content")
-    if (container.length > 0) {
-      container[0].addEventListener("ps-scroll-y", function () {
-        if (
-          $(this)
-            .find(".ps__thumb-y")
-            .position().top > 0
-        ) {
-          $(".shadow-bottom").css("display", "block")
-        } else {
-          $(".shadow-bottom").css("display", "none")
-        }
-      })
-    }
-  })
-
   $("#sidebar-page-navigation").on("click", "a.nav-link", function (e) {
     e.preventDefault()
     e.stopPropagation()

@@ -45,7 +45,7 @@ class AdController extends Controller
                 'Pending'           => ['approve','prepay','choosing_influencer'],
                 'Active'            => ['fullpayment','active','progress'],
                 'Finished'          => ['complete'],
-                'Rejected'          => ['reject']
+                'Rejected'          => ['rejected']
             ];
 
             $data = Ad::whereIn('status',$statusCode[$status])->orderBy('created_at', 'desc')->paginate(config('global.PAGINATION_NUMBER_DASHBOARD'));

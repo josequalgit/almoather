@@ -95,12 +95,6 @@
                 <input value="{{ $data->users->dial_code . $data->users->phone }}" disabled type="text"
                     class="form-control required" id="phone" placeholder="Phone">
             </div>
-
-            <div class="form-group col-md-6">
-                <label for="ratting">Ratting</label>
-                <input value="{{ old('ratting') ? old('ratting') : $data->ratting }}" name="ratting" type="text"
-                    class="form-control required" id="ratting" placeholder="ratting" min="0" max="5">
-            </div>
             
 
             @if ($data->videos)
