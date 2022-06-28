@@ -512,13 +512,8 @@ class AdController extends Controller
             $budgetSum += $price;
         }
 
-        // $tax = AppSetting::where('key', 'tax')->first();
-        // $tax = $tax ? $tax->value : config('global.TAX');
-
         $relation = $ad->relations ? $ad->relations->app_profit : 10;
         $budgetSum += $relation / 100 * $budgetSum;
-
-        // $budgetSum = $budgetSum + ($budgetSum * $tax/100);
 
         $ad->update(['price_to_pay' => $budgetSum]);
     }

@@ -5,6 +5,10 @@ return [
         'not_found'=>'Not Found',
         'influencer_not_found'=>'influencer is not authorized to get ads with this status',
         'Male' => 'ذكر',
-        'Female' => 'أنثى'
+        'Female' => 'أنثى',
+        'Service' => 'خدمة',
+        'Product' => 'منتج',
+        'online' => 'اونلاين',
+        'onsite' => 'في الموقع',
     ]
 ];

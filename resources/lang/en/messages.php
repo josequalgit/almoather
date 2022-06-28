@@ -138,7 +138,11 @@ return [
         ],
         'new_campaign_request' => 'You have a new campaign request',
         'new_campaign_request_msg' => 'You have a new campaign (:name), Please check the details and reply the request ASAP',
-        'Male' => 'Male'
+        'Male' => 'Male',
+        'service' => 'Service',
+        'product' => 'Product',
+        'online' => 'Online',
+        'onsite' => 'Onsite',
 
     ]
 ];
