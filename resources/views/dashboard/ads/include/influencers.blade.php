@@ -66,7 +66,7 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
                                         <i class="fas fa-user-times"></i>
                                     </button>
                                     @endif
-                                    @if ($data->admin_approved_influencers == 1)
+                                    @if ($data->admin_approved_influencers == 0)
                                         <button  type="button" onclick="seeContract(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm"><i class="fas fa-file-signature"></i></button>
                                     @endif
                                 
