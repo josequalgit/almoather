@@ -461,7 +461,7 @@ class AdController extends Controller
             ],config('global.NOT_FOUND_STATUS'));
         }
 
-        if($data->status !== 'choosing_influencer'){
+        if($ad->status !== 'choosing_influencer'){
             return response()->json([
                 'err'       => trans($this->trans_dir.'ad_dont_have_right_status'),
                 'status'    => config('global.WRONG_VALIDATION_STATUS')
