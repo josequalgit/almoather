@@ -53,9 +53,8 @@ class AuthController extends Controller
                 config('global.UNAUTHORIZED_VALIDATION_STATUS'));
         }
 
-        $user = User::find(8);
-    Auth::login($user);
-        //$user = Auth::guard('api')->user();
+       
+        $user = Auth::guard('api')->user();
         //dd($user->email);
         if($user->customers)
         {
