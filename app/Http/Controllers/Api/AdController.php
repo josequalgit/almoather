@@ -461,12 +461,12 @@ class AdController extends Controller
             ],config('global.NOT_FOUND_STATUS'));
         }
 
-        // if($ad->status !== 'prepay' && $ad->status != 'choosing_influencer'){
-        //     return response()->json([
-        //         'err'       => trans($this->trans_dir.'ad_dont_have_right_status'),
-        //         'status'    => config('global.WRONG_VALIDATION_STATUS')
-        //     ],config('global.WRONG_VALIDATION_STATUS'));
-        // }
+        if($ad->status !== 'prepay' && $ad->status != 'choosing_influencer'){
+            return response()->json([
+                'err'       => trans($this->trans_dir.'ad_dont_have_right_status'),
+                'status'    => config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
+        }
 
         if($removed_inf_id == -1){
             $infData = $ad->matches()->where([['chosen',0],['status','!=','deleted']])->get()->map(function($item) use($ad){
@@ -555,8 +555,46 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    public function replace_matched_influencer($id , $removed_influencer , $chosen_influencer)
+    public function replace_matched_influencer($ad_id , $removed_inf_id , $chosen_inf_id)
     {
+        $ad = Ad::find($ad_id);
+
+        $chosen_inf = Influncer::find($chosen_inf_id);
+        $chosenInfPrice = $ad->onSite ? $chosen_inf->ad_onsite_price_with_vat : $chosen_inf->ad_with_vat;
+
+        $removed_inf = Influncer::find($removed_inf_id);
+        $oldInfPrice = $ad->onSite ? $removed_inf->ad_onsite_price_with_vat : $removed_inf->ad_with_vat;
+
+        $remainingBudget = $ad->budget - $ad->price_to_pay;
+        $chosenInfPrice -= $remainingBudget;
+
+        if ($chosenInfPrice > $oldInfPrice) {
+            return response()->json([
+                'msg' => 'please increase your budget',
+                'status' => 401,
+            ], 401);
+        }
+
+        $changeOld = AdsInfluencerMatch::where([['ad_id', $ad->id], ['influencer_id', $removed_inf_id]])->first();
+        $changeOld->chosen = 0;
+        $changeOld->save();
+
+        $changeNew = AdsInfluencerMatch::where([['ad_id', $ad->id], ['influencer_id', $chosen_inf_id]])->first();
+        $changeNew->chosen = 1;
+        $changeNew->save();
+
+        $this->calculateCampaignPrice($ad);
+
+        $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
+        $noInfluencerReasons = [];
+
+        $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons'))->render();
+        return response()->json([
+            'msg' => 'data was updated',
+            'data' => $influencersTable,
+            'status' => true,
+        ], 200);
+
         $removeFromChosen = AdsInfluencerMatch::where([['ad_id',$id],['influencer_id',$removed_influencer]])->first();
 
         if(!$removeFromChosen) return response()->json([
