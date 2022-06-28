@@ -43,6 +43,7 @@ class AdController extends Controller
 
     private $trans_dir = 'messages.api.';
 
+    //Return the list of ads based on Type (Customer / Influencer)
     public function index($status)
     {
         $user_id = Auth::guard('api')->user()->influncers ? Auth::guard('api')->user()->influncers->id :Auth::guard('api')->user()->customers->id;
@@ -126,6 +127,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
+    //Create Campaign
     public function store(AdRequest $request)
     {
         #CHECK REQUEST 
@@ -218,6 +220,7 @@ class AdController extends Controller
         ],config('global.CREATED_STATUS'));
     }
 
+    //Create campaign validation
     private function checkIfDataAvailable($request)
     {
         if($request->country_id||$request->nationality_id)
@@ -247,6 +250,7 @@ class AdController extends Controller
         return null;
     }
 
+    //Add Details 
     public function details($id)
     {
         $data = Ad::find($id);
@@ -263,6 +267,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
+    // Return Add contract
     public function get_ad_contract($ad_id)
     {
         $ad = Ad::find($ad_id);
@@ -287,6 +292,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
+    // Accept the contract For Influencer
     public function accept_ad_contract(AcceptAdContractRequest $request,$contract_id)
     {
         $data = InfluencerContract::find($contract_id);
@@ -322,12 +328,15 @@ class AdController extends Controller
 
         }
 
+        //ToDo Send notification for admin and customer campaign order
+
         return response()->json([
             'msg'=>trans($this->trans_dir.'data_was_updated'),
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
 
+    // SEarch on Campaigns
     public function search($query)
     {
         $user_id = Auth::guard('api')->user()->influncers ? Auth::guard('api')->user()->influncers->id :Auth::guard('api')->user()->customers->id;
@@ -351,6 +360,7 @@ class AdController extends Controller
         ]);
     }
 
+    //Todo Remove
     public function get_influencer_ads($influencer_id,$status = null)
     {
         $data = Influncer::find($influencer_id);
@@ -384,6 +394,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
+    //Todo remove
     public function get_customers_ads($customer_id , $status = null)
     {
         $data = Customer::find($customer_id);
@@ -414,6 +425,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
+    // Get matched influencers
     public function getMatchedInfluencers($id)
     {
         $data = Ad::findOrFail($id);
@@ -423,8 +435,9 @@ class AdController extends Controller
         ],config('global.WRONG_VALIDATION_STATUS'));
         $infData = $data->matches()->where('chosen',1)->get()->map(function($item){
             $inf = $item->influencers;
+            //Todo add AOAF OR ROAS
             return [
-                'name'  => $inf->full_name,
+                'name'  => $inf->nick_name,
                 'match' => $item->match
             ];
         });
@@ -436,84 +449,94 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    public function getMatchedInfluencersNotChosen($id,$removed_inf_id,$replace_permission = null)
+    // Get unmatched influencers
+    public function getMatchedInfluencersNotChosen($id,$removed_inf_id)
     {
-        $data = Ad::find($id);
-        $info = Influncer::find($removed_inf_id);
 
-        if(!$data) return response()->json([
-            'err'=>trans($this->trans_dir.'ad_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
+        $ad = Ad::find($campaign_id);
+        if (!$ad) {
+            return response()->json([
+                'err'=>trans($this->trans_dir.'ad_not_found'),
+                'status'=>config('global.NOT_FOUND_STATUS')
+            ],config('global.NOT_FOUND_STATUS'));
+        }
 
-        if($removed_inf_id == -1)
-        {
+        if($removed_inf_id == -1){
+            $infData = $ad->matches()->where([['chosen',0],['status','!=','deleted']])->get()->map(function($item) use($ad){
+                $influencerPrice = $ad->onSite ? $item->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
+                $isProfitable = $ad->campaignGoals->profitable;
 
-            $infData = $data->matches()->where([['chosen',0],['status','!=','deleted']])->get()->map(function($item) use($data , $info){
+                $remainingBudget = $ad->budget - $ad->price_to_pay;
 
-                $currentInf = Influncer::find($item->influencer_id);
-                $eligible = 0;
-                $currentBudget = 0;
-                $counter = 0;
-                $test = [];
+                $response =  [
+                    'id'        => $item->id,
+                    'name'      => $item->nick_name,
+                    'image'     => $item->users->InfulncerImage ? $item->users->InfulncerImage : null,
+                    'match'     => $item->match,
+                    'gender'    => $item->influencers->gender,
+                    'budget'    => number_format($influencerPrice),
+                    'status'    => $item->status,
+                    'eligible'  => $remainingBudget >= $influencerPrice
+                    
+                ];
+               
+                $response['ROAS'] = null;
+                $response['engagement_rate'] = null;
+                $response['AOAF'] = null;
 
-                if($data->onSite)
-                {
-                    $currentBudget = ($currentInf->ad_onsite_price >= $item->influencers->ad_onsite_price)?1:0;
+                if($isProfitable){
+                    $response['ROAS'] = $item->match . '%';
+                }else{
+                    $response['engagement_rate'] = $item->match . '%';
+                    $response['AOAF'] = $item->AOAF;
                 }
-                else
-                {
-                    $currentBudget = ($currentInf->ad_price >= $item->influencers->ad_price)?1:0;
-                }
-                $counter = $counter + 1;
 
-                return $this->match_influencer_with_eligible_status($item->influencers,$item,$counter == 2?:$currentBudget,$item->status);
+                return $response;
             });
 
             return response()->json([
-                'msg'=>trans($this->trans_dir.'all_matched_under_budget'),
-                'data'=>$infData,
-                'status'=>config('global.OK_STATUS')
+                'msg'       => trans($this->trans_dir.'all_matched_under_budget'),
+                'data'      => $infData,
+                'status'    => config('global.OK_STATUS')
             ],config('global.OK_STATUS'));
         }
 
-        if(!$info) return response()->json([
-            'err'=>trans($this->trans_dir.'inf_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
-      
-        if(!$replace_permission&&$data->status !== 'prepay'&&$data->status !== 'choosing_influencer') return response()->json([
-            'err'=>trans($this->trans_dir.'ad_dont_have_right_status'),
-            'status'=>config('global.WRONG_VALIDATION_STATUS')
-        ],config('global.WRONG_VALIDATION_STATUS'));
+        $ReplacedInfluencer = Influncer::find($removed_inf_id);
+        if (!$influencer) {
+            return response()->json([
+                'msg' => 'Influencer not found',
+                'status' => false,
+            ], config('global.NOT_FOUND_STATUS'));
+        }
 
+        $infData = $ad->matches()->where('chosen',0)->get()->map(function($item) use($ad , $ReplacedInfluencer){
+			$remainingBudget = $ad->budget - $ad->price_to_pay;
+            $influencerPrice = $ad->ad_type == 'online' ? $ReplacedInfluencer->ad_with_vat : $ReplacedInfluencer->ad_onsite_price_with_vat;
+            $influencerPrice += $remainingBudget;
 
-		
-        $infData = $data->matches()->where('chosen',0)->get()->map(function($item) use($data , $info){
-			
-            $currentInf = $info;
-            $eligible = 0;
-            $currentBudget = 0;
-			$counter = 0;
-			$test = [];
+            $response =  [
+                'id'        => $item->id,
+                'name'      => $item->nick_name,
+                'image'     => $item->users->InfulncerImage ? $item->users->InfulncerImage : null,
+                'match'     => $item->match,
+                'gender'    => $item->influencers->gender,
+                'budget'    => number_format($influencerPrice),
+                'status'    => $item->status,
+                'eligible'  => $remainingBudget >= $influencerPrice
+            ];
+           
+            $response['ROAS'] = null;
+            $response['engagement_rate'] = null;
+            $response['AOAF'] = null;
 
-			
-
-            if($data->onSite)
-            {
-                $currentBudget = ($currentInf->ad_onsite_price >= $item->influencers->ad_onsite_price)?1:0;
-				
+            if($isProfitable){
+                $response['ROAS'] = $item->match . '%';
+            }else{
+                $response['engagement_rate'] = $item->match . '%';
+                $response['AOAF'] = $item->AOAF;
             }
-            else
-            {
 
-                $currentBudget = ($currentInf->ad_price >= $item->influencers->ad_price)?1:0;
-            }
-			$counter = $counter +1;
-			
-
-            return $this->match_influencer_with_eligible_status($item->influencers,$item,$counter == 2?:$currentBudget,$item->status);
-            
+            return $response;
         });
 
         return response()->json([

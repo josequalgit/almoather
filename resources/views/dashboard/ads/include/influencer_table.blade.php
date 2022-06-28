@@ -67,7 +67,7 @@
     </div>
     <div class="col-lg-6 col-md-12 p-2">
         <div class="count-box list">
-            <span> <i class="bx bx-money"></i>Toal Price with tax:</span><span class="numbers"><b>{{ number_format($ad->price_to_pay) }}</b></span>
+            <span> <i class="bx bx-money"></i>Toal Price:</span><span class="numbers"><b>{{ number_format($ad->price_to_pay) }}</b></span>
         </div>
     </div>
 

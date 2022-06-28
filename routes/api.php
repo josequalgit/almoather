@@ -149,7 +149,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
             Route::get('influencers/{influncer_id}/{status?}','get_influencer_ads');
             Route::get('customers/{customer_id}/{status?}','get_customers_ads');
             Route::get('matched/Influencer/{id}','getMatchedInfluencers');
-            Route::get('matched/not_chosen_inf/{id}/{removed_inf_id}/{replace_permission?}','getMatchedInfluencersNotChosen');
+            Route::get('matched/not_chosen_inf/{id}/{removed_inf_id}','getMatchedInfluencersNotChosen');
             Route::get('matched/replace_influencer/{id}/{removed_influencer}/{chosen_influencer}','replace_matched_influencer');
             Route::get('preview_ad_matches/{id}','before_payment');
             Route::post('confirm_matches/{id}','confirm_matches');

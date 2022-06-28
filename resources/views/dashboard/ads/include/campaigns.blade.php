@@ -73,7 +73,28 @@
                                         class="me-2">{{ $data->campaignGoals?$data->campaignGoals->title:null }}</span>
                                 </div>
 
-                                <h6>Location</h6>
+                                <div class="border-top pt-1 pb-1">
+                                    <b class="me-2">Type:</b> <span
+                                        class="me-2">{{ ucfirst($data->ad_type) }}</span>
+                                </div>
+
+                                <div class="border-top pt-1 pb-1">
+                                    <b class="me-2">On: </b> <span class="me-2">
+                                        @foreach ($data->socialMedias as $item)
+                                            <img src="{{ $item->image }}" class="rounded-circle social-media-icon" />
+                                        @endforeach
+                                    </span>
+                                </div>
+                                <div class="border-top pt-1 pb-1">
+                                    <b class="me-2">Link: <a target="_blank"
+                                            href="{{ $data->store_link }}">{{ $data->store_link }}</a> </b>
+                                </div>
+                                <div class="border-top pt-1 pb-1 mb-3">
+                                    <b class="me-2">Status: {{ $data->status }} </b><span
+                                        class="me-2"></span>
+                                </div>
+
+                                <h4>Location</h4>
                                 <div class="border-top pt-1 pb-1">
                                     <b class="me-2">Country:</b> <span
                                         class="me-2">{{ $data->countries?$data->countries->name:null }}</span>
@@ -86,21 +107,7 @@
                                     <b class="me-2">Area:</b> <span
                                         class="me-2">{{ $data->areas?$data->areas->name:null }}</span>
                                 </div>
-                                <div class="border-top pt-1 pb-1">
-                                    <b class="me-2">On: </b> <span class="me-2">
-                                        @foreach ($data->socialMedias as $item)
-                                            <img src="{{ $item->image }}" class="rounded-circle social-media-icon" />
-                                        @endforeach
-                                    </span>
-                                </div>
-                                <div class="border-top pt-1 pb-1">
-                                    <b class="me-2">Link: <a target="_blank"
-                                            href="{{ $data->store_link }}">{{ $data->store_link }}</a> </b>
-                                </div>
-                                <div class="border-top pt-1 pb-1">
-                                    <b class="me-2">Status: {{ $data->status }} </b><span
-                                        class="me-2"></span>
-                                </div>
+                                
                             </div>
                         </div>
                         <div class="">

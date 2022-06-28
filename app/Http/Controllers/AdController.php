@@ -401,13 +401,7 @@ class AdController extends Controller
         $removed_inf = Influncer::find($removed_inf_id);
         $oldInfPrice = $ad->onSite ? $removed_inf->ad_onsite_price_with_vat : $removed_inf->ad_with_vat;
 
-        $matchedPriceTotal = 0;
-        $sumColumn = $ad->ad_type ? 'ad_with_vat' : 'ad_onsite_price_with_vat';
-        $ad->matches()->where('chosen', 1)->get()->map(function($item) use(&$matchedPriceTotal,$sumColumn){
-            $matchedPriceTotal += $item->influencers->{$sumColumn};
-        });
-
-        $remainingBudget = $budget - $matchedPriceTotal;
+        $remainingBudget = $ad->budget - $ad->price_to_pay;
         $chosenInfPrice -= $remainingBudget;
 
         if ($chosenInfPrice > $oldInfPrice) {
@@ -425,10 +419,10 @@ class AdController extends Controller
         $changeNew->chosen = 1;
         $changeNew->save();
 
+        $this->calculateCampaignPrice($ad);
+
         $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
         $noInfluencerReasons = [];
-
-        $this->calculateCampaignPrice($ad);
 
         $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons'))->render();
         return response()->json([
@@ -550,19 +544,13 @@ class AdController extends Controller
         $sumColumn = $ad->ad_type ? 'ad_with_vat' : 'ad_onsite_price_with_vat';
 
         $unMatched = $ad->matches()->where('chosen', 0)->where('status','!=','deleted')->get();
-        $matchedPriceTotal = 0;
-        $ad->matches()->where('chosen', 1)->get()->map(function($item) use(&$matchedPriceTotal,$sumColumn){
-            $matchedPriceTotal += $item->influencers->{$sumColumn};
-        });
-
-        $appPercentage = 0.15 * $ad->budget;
-        $budget = $ad->budget - $appPercentage;
-        $remainingBudget = $budget - $matchedPriceTotal;
+        
+        $remainingBudget = $ad->budget - $ad->price_to_pay;
 
         $influencerPrice = $ad->ad_type == 'online' ? $influencer->ad_with_vat : $influencer->ad_onsite_price_with_vat;
         $influencerPrice += $remainingBudget;
 
-        $unmatchedInfluencersTable = view('dashboard.ads.include.unmatched_influencer', compact('unMatched','ad','influencer','influencerPrice','budget'))->render();
+        $unmatchedInfluencersTable = view('dashboard.ads.include.unmatched_influencer', compact('unMatched','ad','influencer','influencerPrice'))->render();
 
         return response()->json([
             'msg' => '',
