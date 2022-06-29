@@ -84,6 +84,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
     #GET PRIVACY
     Route::controller(PrivacyController::class)->prefix('privacy')->group(function(){
         Route::get('/','index');
+        Route::get('return-policy','indexPolicy');
     });
 
 

@@ -279,7 +279,7 @@
                 {{ ($name == 'dashboard.terms.indexPolicy'|| $name == 'dashboard.terms.updatePolicy'|| $name == 'dashboard.indexPolicy.updatePolicy') ? 'active':''  }}
                 ">
                   <a href="{{ route('dashboard.terms.indexPolicy') }}" class="menu-link">
-                    <div data-i18n="List">Policy</div>
+                    <div data-i18n="List">Return Policy</div>
                   </a>
                 </li>
                 <li class="menu-item

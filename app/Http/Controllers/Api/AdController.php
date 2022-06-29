@@ -476,7 +476,7 @@ class AdController extends Controller
                 $remainingBudget = $ad->budget - $ad->price_to_pay;
 
                 $response =  [
-                    'id'        => $item->id,
+                    'id'        => $item->influencers->id,
                     'name'      => $item->influencers->nick_name,
                     'image'     => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
                     'match'     => $item->match,
