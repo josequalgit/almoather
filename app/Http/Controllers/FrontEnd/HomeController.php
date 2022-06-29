@@ -43,5 +43,12 @@ class HomeController extends Controller
         ));
     }
 
+    public function about_us()
+    {
+        $data = Page::where('slug','about_us')->first();
+        
+        return view('frontEnd.aboutus.index',compact('data'));
+    }
+
 
 }

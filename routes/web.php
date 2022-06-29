@@ -26,6 +26,7 @@ use App\Http\Controllers\ReasonsController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\TeamController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\AdRelationsController;
 use App\Http\Controllers\GeneralController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\FrontEndSettingController;
 use App\Http\Controllers\FrontEnd\HomeController as FrontEndHomeController;
 use App\Http\Controllers\FrontEnd\AuthController as FrontEndAuthController;
 use App\Http\Controllers\FrontEnd\ContactController as FrontContactController;
+use App\Http\Controllers\FrontEnd\InfluencerController as FrontInfluencerController;
 
 Route::group(['middleware' => 'language'],function(){
     // Route::redirect('/','/dashboard/admins')->name('home');
@@ -47,12 +49,20 @@ Route::group(['middleware' => 'language'],function(){
             Route::post('/login_submit','login_submit')->name('login_submit');
             Route::get('/register_type','register_type')->name('register_type');
             Route::get('/customer/register','customer_register')->name('customer_register');
+            Route::get('/influencer/register','influencer_register')->name('influencer_register');
+            Route::get('/active/code','active_code')->name('active_code');
         });
 
         Route::name('contact.')->prefix('contact')->controller(FrontContactController::class)->group(function(){
             Route::get('/','index')->name('index');
             Route::post('/','store_contact_messages')->name('store_contact_messages');
         });
+
+        Route::name('influencers.')->prefix('influencers')->controller(FrontInfluencerController::class)->group(function(){
+            Route::get('/','index')->name('index');
+        });
+
+        Route::get('/about-us',[FrontEndHomeController::class,'about_us'])->name('frontEnd.about');
 
 
         Route::get('/',[FrontEndHomeController::class,'index'])->name('frontEnd.index');
@@ -441,6 +451,20 @@ Route::group(['middleware' => 'language'],function(){
                 Route::post('/update/{id}','update')->name('update');
                 Route::post('/delete/{id}','delete')->name('delete');
             });
+
+
+            Route::controller(TeamController::class)
+            ->prefix('teams')
+            ->name('teams.')
+            ->group(function(){
+                Route::get('/','index')->name('index');
+                Route::get('/create','create')->name('create');
+                Route::post('/store','store')->name('store');
+                Route::get('/edit/{id}','edit')->name('edit');
+                Route::post('/update/{id}','update')->name('update');
+                Route::post('/delete/{id}','delete')->name('delete');
+            });
+            
 
          
 

@@ -402,6 +402,13 @@
 
             </li>
             {{-- @endcan --}}
+            {{-- @canany(['Edit Ads',]) --}}
+            <li class="menue-item {{ ($name == 'dashboard.teams.index'|| $name == 'dashboard.teams.create'|| $name == 'dashboard.teams.edit') ? 'open active':''  }}">
+             
+              <a href="{{ route('dashboard.teams.index') }}"><i class="bx bx-group"></i><span class="menu-title text-truncate" data-i18n="notifications">Team</span></a>
+
+            </li>
+            {{-- @endcan --}}
 
 
         

@@ -135,6 +135,20 @@ class FrontEndSettingController extends Controller
                     'ar'=>$request->description_ar,
                     'en'=>$request->description_en,
                 ],
+                'content'=>json_encode([
+                    'section_one'=>[
+                        'title_ar'=>$request->title_ar_section_one,
+                        'title_en'=>$request->title_en_section_one,
+                        'description_ar'=>$request->description_ar_section_one,
+                        'description_en'=>$request->description_en_section_one,
+                    ],
+                    'section_two'=>[
+                        'title_ar'=>$request->title_ar_section_two,
+                        'title_en'=>$request->title_en_section_two,
+                        'description_ar'=>$request->description_ar_section_two,
+                        'description_en'=>$request->description_en_section_two,
+                    ],
+                    ]),
                 'slug'=>'about_us'
             ]);
         }
@@ -149,6 +163,20 @@ class FrontEndSettingController extends Controller
                     'ar'=>$request->description_ar,
                     'en'=>$request->description_en,
                 ],
+                'content'=>json_encode([
+                    'section_one'=>[
+                        'title_ar'=>$request->title_ar_section_one,
+                        'title_en'=>$request->title_en_section_one,
+                        'description_ar'=>$request->description_ar_section_one,
+                        'description_en'=>$request->description_en_section_one,
+                    ],
+                    'section_two'=>[
+                        'title_ar'=>$request->title_ar_section_two,
+                        'title_en'=>$request->title_en_section_two,
+                        'description_ar'=>$request->description_ar_section_two,
+                        'description_en'=>$request->description_en_section_two,
+                    ],
+                    ]),
             ]);
         }
         if($request->hasFile('image'))
@@ -156,6 +184,24 @@ class FrontEndSettingController extends Controller
             $data->clearMediaCollection('image');
             $data->addMedia($request->file('image'))
             ->toMediaCollection('image');
+        }
+        if($request->hasFile('header_image'))
+        {
+            $data->clearMediaCollection('aboutUsHeader');
+            $data->addMedia($request->file('header_image'))
+            ->toMediaCollection('aboutUsHeader');
+        }
+        if($request->hasFile('section_one_image'))
+        {
+            $data->clearMediaCollection('aboutUsSectionOneImage');
+            $data->addMedia($request->file('section_one_image'))
+            ->toMediaCollection('aboutUsSectionOneImage');
+        }
+        if($request->hasFile('section_two_image'))
+        {
+            $data->clearMediaCollection('aboutUsSectionOneImage');
+            $data->addMedia($request->file('section_two_image'))
+            ->toMediaCollection('aboutUsSectionTwoImage');
         }
         return back();
         
