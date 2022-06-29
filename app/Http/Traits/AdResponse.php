@@ -125,32 +125,27 @@ trait AdResponse
 
         //Return Matches if the status is Full payment / Choosing influencer / Progress
         if (Auth::guard('api')->user()->customers && $ad->status !== 'pending' && $ad->status !== 'approve' && $ad->status !== 'prepay' && $ad->status !== 'rejected') {
-            $basicResponse['matches'] = $ad->matches()->where('status', '!=', 'deleted')->where('chosen', 1)->get()->map(function ($item) {
+            $basicResponse['matches'] = $ad->matches()->where('status', '!=', 'deleted')->where('chosen', 1)->get()->map(function ($item) use($ad) {
                 $contract = InfluencerContract::where('influencer_id', $item->influencer_id)->first();
+
+                $influencerPrice = $ad->onSite ? $item->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
 
                 $status = null;
 
-                if ($contract && $contract->is_accepted == 2) {
-                    $status = 'rejected';
-                } else if ($contract && $contract->is_accepted == 1) {
-                    if ($contract->status == 1 && $contract->admin_status == 1) {
-                        $status = 'completed';
-                    } else {
-                        $status = 'progress';
-                    }
-                } else {
-                    if ($contract && $contract->date) {
-                        $status = 'was sent';
-                    } else {
-                        $status = 'not sent';
-                    }
-                }
+                $status = trans($this->trans_dir . 'Not Join Yet');
+                if ($contract && $contract->is_accepted == 1) {
+                    $status = trans($this->trans_dir . 'Joined');
+                } 
+
+
                 return [
                     'id' => $item->influencers->id,
                     'image' => $item->influencers->users->infulncerImage,
                     'name' => $item->influencers->nick_name,
                     'match' => $item->match,
                     'status' => $status,
+                    'gender'    => trans($this->trans_dir.$item->influencers->gender),
+                    'budget'    => number_format($influencerPrice),
                 ];
             });
         }

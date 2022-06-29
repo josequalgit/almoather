@@ -470,7 +470,7 @@ class AdController extends Controller
 
         if($removed_inf_id == -1){
             $infData = $ad->matches()->where([['chosen',0],['status','!=','deleted']])->get()->map(function($item) use($ad){
-                $influencerPrice = $ad->onSite ? $item->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
+                $influencerPrice = $ad->onSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
                 $isProfitable = $ad->campaignGoals->profitable;
 
                 $remainingBudget = $ad->budget - $ad->price_to_pay;
@@ -518,8 +518,7 @@ class AdController extends Controller
 
         $infData = $ad->matches()->where('chosen',0)->get()->map(function($item) use($ad , $ReplacedInfluencer){
 			$remainingBudget = $ad->budget - $ad->price_to_pay;
-            $influencerPrice = $ad->ad_type == 'online' ? $ReplacedInfluencer->ad_with_vat : $ReplacedInfluencer->ad_onsite_price_with_vat;
-            $influencerPrice += $remainingBudget;
+            $influencerPrice = $ad->onSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
 
             $isProfitable = $ad->campaignGoals->profitable;
 
@@ -681,10 +680,10 @@ class AdController extends Controller
                     $response['AOAF'] = null;
                     
                     if($isProfitable){
-                        $response['ROAS'] = $item->match;
+                        $response['ROAS'] = $item->match . '%';
                     }
                     else{
-                        $response['engagement_rate'] = $item->match;
+                        $response['engagement_rate'] = $item->match  . '%';
                         $response['AOAF'] = $item->AOAF;
                     }
 
@@ -737,9 +736,9 @@ class AdController extends Controller
                     $response['AOAF'] = null;
                     
                     if($isProfitable){
-                        $response['ROAS'] = $item->match;
+                        $response['ROAS'] = $item->match  . '%';
                     }else{
-                        $response['engagement_rate'] = $item->match;
+                        $response['engagement_rate'] = $item->match  . '%';
                         $response['AOAF'] = $item->AOAF;
                     }
 
@@ -1360,11 +1359,11 @@ class AdController extends Controller
 
             if($isProfitable)
             {
-                $response['ROAS'] = $item->match;
+                $response['ROAS'] = $item->match . '%';
             }
             else
             {
-                $response['engagement_rate'] = $item->match;
+                $response['engagement_rate'] = $item->match . '%';
                 $response['AOAF'] = $item->AOAF;
             }
 
@@ -1392,11 +1391,11 @@ class AdController extends Controller
             $response['AOAF']               = null;
             if($isProfitable)
             {
-                $response['ROAS'] = $item->match;
+                $response['ROAS'] = $item->match . '%';
             }
             else
             {
-                $response['engagement_rate']    = $item->match;
+                $response['engagement_rate']    = $item->match . '%';
                 $response['AOAF'] = $item->AOAF;
             }
 
