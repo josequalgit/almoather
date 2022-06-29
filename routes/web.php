@@ -169,6 +169,7 @@ Route::group(['middleware' => 'language'],function(){
                 Route::get('/update_info/{id}','update_info_view')->name('update_info_view');
                 Route::get('/view-contract/{id}','show_contract')->name('show_contract');
                 Route::post('/update_info_submit/{id}','update_info_submit')->name('update_info_submit');
+                Route::get('campaign/pdf','generateContractPdf')->name('contract-pdf');
             });
 
             Route::middleware('role_or_permission:superAdmin|Edit Slide|See Slide|Create Slide|Delete Slide')->name('slides.')->controller(SlideController::class)->group(function(){

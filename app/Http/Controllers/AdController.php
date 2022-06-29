@@ -29,6 +29,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Mpdf\Mpdf;
 
 class AdController extends Controller
 {
@@ -957,6 +958,21 @@ class AdController extends Controller
             return false;
         }
 
+    }
+
+    function generateContractPdf(){
+
+        $contract = CampaignContract::where('ad_id',28)->first()->content;
+        $contract = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $contract);
+
+        $mpdf = new Mpdf();
+        $html = view('dashboard.contract.pdf',compact('contract'))->render();
+        $mpdf->CSSselectMedia='mpdf';
+        $mpdf->autoScriptToLang = true;
+        $mpdf->WriteHTML($html);
+
+        $mpdf->Output();
+        //return view('dashboard.contract.pdf',compact('contract'));
     }
 
 }
