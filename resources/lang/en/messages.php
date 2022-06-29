@@ -143,6 +143,7 @@ return [
         'product' => 'Product',
         'online' => 'Online',
         'onsite' => 'Onsite',
-        'Not Join Yet'              => 'Not Join Yet'
+        'Not Join Yet'              => 'Not Join Yet',
+        'Joined' => 'Joined'
     ]
 ];
