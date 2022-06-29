@@ -38,6 +38,7 @@ trait UserResponse {
              'city_id'=>$info->city_id,
              'city'=>$info->citys?$info->citys->name:null,
              'influencer_category'=>$info->InfluncerCategories->pluck('id')->toArray(),
+             'influencer_category_names'=>$info->InfluncerCategories->get(),
              'bio'=>$info->bio,
              'milestone'=>$info->milestone,
              'neighborhood'=>$info->neighborhood,
