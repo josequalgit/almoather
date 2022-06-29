@@ -46,7 +46,7 @@
                                    <div class="d-flex justify-content-sm-between justify-content-center flex-wrap mt-5">
                                        <div class="pb-3">
                                            <label class="Advertiser" for="user_type">
-                                               <input type="radio" name="user_type" class="d-none" value="www.google.com">
+                                               <input type="radio" name="user_type" class="d-none" value="{{ route('auth.influencer_register') }}">
                                                <div class="px-3 py-4">
                                                    <img src="{{ asset('frontEnd/img/omnichannel.png') }}" alt=""height="50px">
                                                </div>
@@ -64,7 +64,7 @@
                                        </div>
                                    </div>
                                    <div class="mt-5">
-                                       <a href="#" type="button" class="btn btn-none login-button p-0" id="register">Register</a>
+                                       <a href="" type="button" class="btn btn-none login-button p-0" id="register">Register</a>
                                    </div>
                                </form>
                            </div>

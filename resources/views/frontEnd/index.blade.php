@@ -36,7 +36,7 @@
             <div class="col-lg-6 col-md-12 col-sm-12 text-section2">
                 <h1>{{ $about_us->title }} </h1>
                 <p>{{ $about_us->description }}</p>
-                <a href="#" class="button-more-about btn btn-none " type="submit">More About Us</a>
+                <a href="{{ route('frontEnd.about') }}" class="button-more-about btn btn-none " type="submit">More About Us</a>
             </div>
         </div>
     </div>

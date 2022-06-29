@@ -16,12 +16,17 @@ class Page extends Model implements HasMedia
         'title',
         'description',
         'slug',
+        'content',
     ];
 
     public $translatable = ['title','description'];
 
     protected $append = [
-        'image'
+        'image',
+        'aboutUsHeader',
+        'aboutUsSectionOneImage',
+        'aboutUsSectionTwoImage',
+        'contentData'
     ];
 
     public function getImageAttribute()
@@ -37,6 +42,50 @@ class Page extends Model implements HasMedia
             $publicFullUrl = $mediaItems->getFullUrl();
         }
         return $publicFullUrl;
+    }
+
+    public function getAboutUsHeaderAttribute()
+    {
+        $mediaItems = $this->getMedia('aboutUsHeader')->first();
+        
+
+        $publicFullUrl = 'https://cdn5.vectorstock.com/i/1000x1000/51/99/icon-of-user-avatar-for-web-site-or-mobile-app-vector-3125199.jpg';
+           
+        if($mediaItems)
+        {
+            $publicFullUrl = $mediaItems->getFullUrl();
+        }
+        return $publicFullUrl;
+    }
+
+    public function getAboutUsSectionOneImageAttribute()
+    {
+        $mediaItems = $this->getMedia('aboutUsSectionOneImage')->first();
+        $publicFullUrl = 'https://cdn5.vectorstock.com/i/1000x1000/51/99/icon-of-user-avatar-for-web-site-or-mobile-app-vector-3125199.jpg';
+           
+        if($mediaItems)
+        {
+            $publicFullUrl = $mediaItems->getFullUrl();
+        }
+        return $publicFullUrl;
+    }
+
+    public function getAboutUsSectionTwoImageAttribute()
+    {
+        $mediaItems = $this->getMedia('aboutUsSectionTwoImage')->first();
+        $publicFullUrl = 'https://cdn5.vectorstock.com/i/1000x1000/51/99/icon-of-user-avatar-for-web-site-or-mobile-app-vector-3125199.jpg';
+           
+        if($mediaItems)
+        {
+            $publicFullUrl = $mediaItems->getFullUrl();
+        }
+        return $publicFullUrl;
+    }
+
+    public function getContentDataAttribute()
+    {
+        $data = json_decode($this->content);
+        return $data;
     }
 
 

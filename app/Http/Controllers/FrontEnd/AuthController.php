@@ -9,6 +9,9 @@ use App\Http\Request\LoginRequest;
 use Alert;
 use Auth;
 use App\Models\Country;
+use App\Models\Category;
+use App\Models\SocialMedia;
+use App\Models\Bank;
 
 class AuthController extends Controller
 {
@@ -24,6 +27,12 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
+            if(count(Auth::user()->roles) > 0)
+            {
+                Auth::logout();
+                Alert::toast("Invalid email or password", 'error');
+                return back();
+            }
             return 'here';
         }
         else
@@ -47,5 +56,25 @@ class AuthController extends Controller
         $nationality = Country::get();
         $countries = Country::where('is_location',1)->get();
         return view('frontEnd.auth.register_customer',compact('nationality','countries'));
+    }
+    public function influencer_register()
+    {
+        $nationality = Country::get();
+        $countries = Country::where('is_location',1)->get();
+        $categories = Category::get();
+        $socialMedia = SocialMedia::get();
+        $tax = AppSetting::where('key', 'tax')->first();
+        $tax_num = $tax ? $tax->value : config('global.TAX');
+        $banks= Bank::get();
+
+        return view('frontEnd.auth.influencer_register',compact('nationality','countries','categories','socialMedia','tax_num','banks'));
+    }
+
+    public function active_code()
+    {
+        $setting = AppSetting::where('key','login_text')->first();
+        $data = json_decode($setting->value);
+
+        return view('frontEnd.auth.active_code',compact('data'));
     }
 }
