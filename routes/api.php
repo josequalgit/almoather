@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\CampaignGoalController;
 use App\Http\Controllers\Api\MailController;
 use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Api\ContactUsController;
+use App\Http\Controllers\FrontEnd\ContactController;
 use App\Http\Middleware\LanguageMiddleware;
 
 Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
@@ -32,6 +33,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
 
 
     Route::get('contact-information',[ContactUsController::class,'contactInformation']);
+    Route::post('contact',[ContactController::class,'store_contact_messages']);
 
     #SEND EMAIL ROUTE
     Route::controller(MailController::class)->prefix('mail')->group(function(){
