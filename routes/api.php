@@ -23,11 +23,15 @@ use App\Http\Controllers\Api\SlideController;
 use App\Http\Controllers\Api\CampaignGoalController;
 use App\Http\Controllers\Api\MailController;
 use App\Http\Controllers\Api\ChatController;
+use App\Http\Controllers\Api\ContactUsController;
 use App\Http\Middleware\LanguageMiddleware;
 
 Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
     Route::post('login',[AuthController::class,'login']);
     Route::get('changeLanguage/{lang}',[AuthController::class,'changeLang']);
+
+
+    Route::get('contact-information',[ContactUsController::class,'contactInformation']);
 
     #SEND EMAIL ROUTE
     Route::controller(MailController::class)->prefix('mail')->group(function(){
