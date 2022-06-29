@@ -120,6 +120,10 @@
             background-position: center center;
             background-size: 100%;
         }
+        @page {
+            header: page-header; 
+            footer: page-footer;
+        }
     </style>
 </head>
 
