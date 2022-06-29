@@ -24,21 +24,34 @@ class ContactUsController extends Controller
         $data = Terms::find(1);
         return view('dashboard.terms.index',compact('data'));
     }
-
+    public function indexPolicy()
+    {
+        $data = Privacy::find(2);
+        return view('dashboard.privacy.return-policy',compact('data'));
+    }
     public function updatePrivacy(Request $request)
     {
-        $data = Privacy::find(1);
-        if(!$data) return response()->json([
-            'msg'=>'data not found',
-            'status'=>config('global.OK_STATUS'),
-        ],config('global.OK_STATUS'));
-        $updateRequest = array_merge($request->all(),[
+        $data = Privacy::updateOrCreate(['id' => 2],[
             'text'=>[
                 'ar'=>$request->text_ar,
                 'en'=>$request->text_en,
             ]
-            ]);
-        $data->update($updateRequest);
+        ]);
+        Alert::toast('Page was updated', 'success');
+
+       return back();
+    }
+    public function updatePolicy(Request $request)
+    {
+        $data = Privacy::updateOrCreate(['id' => 2],[
+            'text'=>[
+                'ar'=>$request->text_ar,
+                'en'=>$request->text_en,
+            ]
+        ]);
+       
+        Alert::toast('Page was updated', 'success');
+        
        return back();
     }
 

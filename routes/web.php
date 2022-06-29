@@ -185,6 +185,10 @@ Route::group(['middleware' => 'language'],function(){
             Route::middleware('role_or_permission:superAdmin|Edit Terms|Show Terms')->name('terms.')->controller(ContactUsController::class)->group(function(){
                 Route::get('/privacy','index')->name('index')->middleware('role_or_permission:superAdmin|Show Privacy');
                 Route::post('/privacy/update','updatePrivacy')->name('update')->middleware('role_or_permission:superAdmin|Edit Privacy');
+
+                Route::get('/policy','indexPolicy')->name('indexPolicy')->middleware('role_or_permission:superAdmin|Show Policy');
+                Route::post('/policy/update','updatePolicy')->name('updatePolicy')->middleware('role_or_permission:superAdmin|Edit Policy');
+                
                 Route::get('/terms','indexTerms')->name('indexTerms')->middleware('role_or_permission:superAdmin|Show Terms');
                 Route::post('/terms/updateTerms','updateTerms')->name('updateTerms')->middleware('role_or_permission:superAdmin|Edit Terms');
                 // Route::post('/terms/update','updateTerms')->name('update')->middleware('role_or_permission:superAdmin|Edit Terms');
