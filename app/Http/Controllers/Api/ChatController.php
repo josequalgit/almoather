@@ -40,6 +40,7 @@ class ChatController extends Controller
                     'message'=>$item->text,
                     'sender_id'=>$item->sender_id,
                     'receiver_id'=>$item->receiver_id,
+                    'contentType' => $item->contentType,
                     'date'=>$item->created_at->format('Y-m-d')
                 ];
             });
@@ -57,6 +58,7 @@ class ChatController extends Controller
                     'message'=>$item->text,
                     'sender_id'=>$item->sender_id,
                     'receiver_id'=>$item->receiver_id,
+                    'contentType' => $item->contentType,
                     'date'=>$item->created_at->format('Y-m-d')
                 ];
             });
