@@ -20,23 +20,23 @@ class ContactUsController extends Controller
             'socialMedia' => [
                 [
                     'link' => 'https://snapchat.com/',
-                    'type' => 'snapchat'
+                    'type' => 4
                 ],
                 [
                     'link' => 'https://facebook.com/',
-                    'type' => 'facebook'
+                    'type' => 1
                 ],
                 [
                     'link' => 'https://twitter.com/',
-                    'type' => 'twitter'
+                    'type' => 2
                 ],
                 [
                     'link' => 'https://youtube.com/',
-                    'type' => 'youtube'
+                    'type' => 5
                 ],
                 [
                     'link' => 'https://instagram.com/',
-                    'type' => 'instagram'
+                    'type' => 3
                 ]
             ],
         ];
@@ -45,5 +45,9 @@ class ContactUsController extends Controller
             'status' => config('global.OK_STATUS'),
             'data'=> $data,
         ],config('global.OK_STATUS'));
+    }
+
+    function store(){
+
     }
 }
