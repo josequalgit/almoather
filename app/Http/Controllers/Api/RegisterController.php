@@ -122,12 +122,11 @@ class RegisterController extends Controller
        foreach ($request->social_media as $item) {
             $obj = $item;
             if(!is_object($item)) $obj = (object)$item;
-
             if($obj->type == 4){
-                $influencer->update(['subscribers' => $obj->subscribers]);
+                $newInfluncer->update(['subscribers' => $obj->subscribers]);
             }
             SocialMediaProfile::create([
-                'link'              => $obj->link,
+                'link'              => $obj->type == 4?$obj->link:'',
                 'views'              => $obj->views ?? 0,
                 'social_media_id'   => $obj->type,
                 'Influncer_id'      => $newInfluncer->id
@@ -155,6 +154,7 @@ class RegisterController extends Controller
 
     public function registerCustomer(CustomerRequest $request)
     {
+
         $available = $this->checkIfDataAvailable($request);
         if($available)
         {

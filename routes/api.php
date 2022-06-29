@@ -38,17 +38,18 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
     #SEND EMAIL ROUTE
     Route::controller(MailController::class)->prefix('mail')->group(function(){
         Route::post('send','basic_email');
-        Route::post('checkCode','checkCode');
+        Route::post('checkCode','checkCode')->name('activateCode');
+        Route::post('checkCodeWeb','checkCodeWeb')->name('activateCodeWeb');
         Route::post('forgetPassword','forgetPassword');
     });
 
     #REGISTER ROUTES
     Route::controller(RegisterController::class)->prefix('register')->group(function(){
-        Route::post('/influncer','registerInfluncer');
+        Route::post('/influncer','registerInfluncer')->name('register_influencer');
         Route::post('/customer','registerCustomer')->name('register_customer');
         Route::get('/verify','verify');
         Route::post('/customer/update/{id}',[RegisterController::class,'updateCustomer']);
-        Route::post('/checkUnique','checkUniqueData');
+        Route::post('/checkUnique','checkUniqueData')->name('checkUniqueData');
     });
 
     #UPDATE ROUTES

@@ -32,6 +32,14 @@ class CheckCodeRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'code.required' => 'Please add the active code',
+            'email.required' => 'Please add the email',
+        ];
+    }
+
 
     protected function failedValidation(Validator $validator)
     {

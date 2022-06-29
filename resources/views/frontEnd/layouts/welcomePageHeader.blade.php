@@ -14,7 +14,7 @@
             <div class="collapse navbar-collapse mx-auto w-auto " style="justify-content:space-evenly ;" id="navbarSupportedContent">
                 <ul class="navbar-nav nav-bar-menu">
                     <li> <a id="home" class="nav-item nav-link {{ $name == 'frontEnd.index'?'active':'' }}" href="{{ route('frontEnd.index') }}">Home </a></li>
-                    <li> <a class="nav-item nav-link" href="about.html">About</a></li>
+                    <li> <a class="nav-item nav-link {{ $name == 'frontEnd.about'?'active':'' }}" href="{{ route('frontEnd.about') }}">About</a></li>
                     <li> <a class="nav-item nav-link" href="our-services.html">Our Service</a></li>
                     <li> <a class="nav-item nav-link {{ $name == 'contact.index'?'active':'' }}" href="{{ route('contact.index') }}">Contact Us</a></li>
 

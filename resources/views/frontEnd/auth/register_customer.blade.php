@@ -23,7 +23,7 @@
       <section class="background-page7 position-relative d-flex align-items-center py-5">
         <div class="container">
            <div class="row">
-               <form class="login-adv p-md-5">
+               <form method="post" id="add_form" enctype="multipart/form-data" class="login-adv p-md-5">
                    <div class="left-path text-center">
                        <img src="{{ asset('frontEnd/img/Path 143035.png') }}" alt="" height="100px" width="250px">
                    </div>
@@ -31,28 +31,30 @@
                     <img src="{{ asset('frontEnd/img/Icon awesome-snapchat.png') }}" alt="" height="150px" width="150px">
                 </div>
                     <div class="container">
+
                         <div class="text-center">
-                            <img class="back-ground-advertiser" src="{{ asset('frontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt="">
+                            <img id="user-image" height="160px" width="155px" class="back-ground-advertiser rounded-circle" src="{{ asset('frontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt="">
+                            <input name="image" onchange="loadFile(event)" class="file-input" style="display: none;" id="fileinput" type="file" />
                         </div>
                         <h3 class="mt-3 text-center ">Advertiser information</h3>
                         <div class="row input-adv mt-5">
                             <div class="col-md-6 col-12 mt-3">
                                 <label for="first_name" class="mb-1 float-left label-advertiser">First name</label>
-                                <input id="first_name" type="text" class="form-control" placeholder="please add first name">
+                                <input name="first_name" id="first_name" type="text" class="form-control" placeholder="please add first name">
                             </div>
                             <div class="col-md-6 col-12 mt-3">
                                 <label for="miggle_name" class="mb-1 float-left label-advertiser">Middle name</label>
-                                <input id="middle_name" type="text" class="form-control" placeholder="please add middle name">
+                                <input name="middle_name" id="middle_name" type="text" class="form-control" placeholder="please add middle name">
                             </div>
                         </div>
                         <div class="row input-adv">
                             <div class="col-md-6 col-12 mt-3">
                                 <label for="last_name" class="mb-1 float-left label-advertiser">Last name</label>
-                                <input id="last_name" type="text" class="form-control" placeholder="please add last name">
+                                <input name="last_name" id="last_name" type="text" class="form-control" placeholder="please add last name">
                             </div>
                             <div class="col-md-6 col-12 mt-3">
                                 <label for="gender" class="mb-1 float-left label-advertiser">Gender</label>
-                                <select class="form-control" id="gender" >
+                                <select name="gender" class="form-control" id="gender" >
                                     <option value="Male" >Male</option>
                                     <option value="Female">Female</option>
                                 </select>
@@ -61,7 +63,7 @@
                         <div class="row input-adv">
                             <div class="col-md-6 col-12  mt-3">
                                 <label for="nationality" class="mb-1 float-left label-advertiser">Nationality</label>
-                                <select class="form-control" id="nationality_id" >
+                                <select name="nationality_id" class="form-control" id="nationality_id" >
                                     @foreach ($nationality as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
@@ -69,50 +71,67 @@
                             </div>
                             <div class="col-md-6 col-12  mt-3">
                                 <label for="countries" class="mb-1 float-left label-advertiser">Countries</label>
-                                <select onchange='getRegionAccordingToCountry()' class="form-control" id="country_id" >
+                                <select name="country_id" onchange='getRegionAccordingToCountry()' class="form-control" id="country_id" >
                                     @foreach ($countries as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="col-md-6 col-12">
+                                <div class="mt-3">
+                                    <label for="country_code" class="mb-1 float-left label-advertiser">Country code</label>
+                                    <input name="country_code" id="country_code" type="number" class="form-control" placeholder="please add last name">
+                                </div>
+    
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="mt-3">
+                                    <label for="dial_code" class="mb-1 float-left label-advertiser">Dial code</label>
+                                    <input name="dial_code" id="dial_code" type="text" class="form-control" placeholder="please add dial code">
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6 col-12 mt3">
-                            <label for="country_code" class="mb-1 float-left label-advertiser">Country code</label>
-                            <input id="country_code" type="text" class="form-control" placeholder="please add country code">
-                        </div>
+                        
                         <div class="right-facebook">
                             <img src="{{ asset('frontEnd/img/Group 55637.png') }}" alt="" width="200px" height="200px">
                         </div>
                         <div class="row input-adv">
                             <div class="col-md-6 col-12  mt-3">
                                 <label for="countries" class="mb-1 float-left label-advertiser">Region</label>
-                                <select  onchange='getCityAccordingToRegion()' id="region_id" class="form-control">
+                                <select  name="region_id" onchange='getCityAccordingToRegion()' id="region_id" class="form-control">
                                 </select>
                             </div>
                             <div class="col-md-6 col-12  mt-3">
                                 <label for="city" class="mb-1 float-left label-advertiser">City</label>
-                                <select id="city_id" class="form-control"  name="" id="" >
+                                <select id="city_id" class="form-control"  name="city_id" id="" >
                                 </select>
                             </div>
                         </div>
                         <div class="row input-adv">
                             <div class="col-md-6 col-12  mt-3">
                                 <label for="email" class="mb-1 float-left label-advertiser">Email</label>
-                                <input id="email" type="email" class="form-control"  placeholder="Email">
+                                <input name="email" id="email" type="email" class="form-control"  placeholder="Email">
                             </div>
                             <div class="col-md-6 col-12  mt-3">
                                 <label for="phone" class="mb-1 float-left label-advertiser">Phone</label>
-                                <input id="phone" type="number" class="form-control"  placeholder="Phone Number">
+                                <input name="phone" id="phone" type="number" class="form-control"  placeholder="Phone Number">
                             </div>
+                        
                         </div>
                         <div class="row input-adv">
                             <div class="col-md-6 col-12 mt-3">
                                 <label for="password" class="mb-1 float-left label-advertiser">Password</label>
-                                <input id="password" type="password" class="form-control"  placeholder="Password">
+                                <input name="password" id="password" type="password" class="form-control"  placeholder="Password">
                             </div>
                             <div class="col-md-6 col-12 mt-3">
                                 <label for="password_conformation" class="mb-1 float-left label-advertiser">Password Conformation</label>
-                                <input id="password_conformation" type="password" class="form-control"  placeholder="Re-Password">
+                                <input name="password_confirmation" id="password_conformation" type="password" class="form-control"  placeholder="Re-Password">
+                            </div>
+                        </div>
+                        <div class="row input-adv">
+                            <div class="col mt-3">
+                                <label for="id_number" class="mb-1 float-left label-advertiser">ID Number</label>
+                                <input name="id_number" id="id_number" type="number" class="form-control"  placeholder="id number">
                             </div>
                         </div>
                         <div class="row">
@@ -129,17 +148,18 @@
                         <div class="row justify-content-center">
                             <div class="col-md-6 col-12 mt-3">
                                 <div class="form-check input-adv p-0">
-                                   <button type="button" onclick="sendCreateRequest()" class="btn btn-none form-control"> Sing Up</button>
+                                   <button type="submit"  class="btn btn-none form-control"> Sing Up</button>
                                 </div>
                             </div>
                            
                         </div>
                         <div class="row mt-2 justify-content-center">
                             <div class="col-md-6 col-12 input-adv mt-3">
-                                <p class="text-center">Do you have an account?  <a href="">Log in</a> </p>
+                                <p class="text-center">Do you have an account?  <a href="{{ route('auth.login') }}">Log in</a> </p>
                             </div>
                            
                         </div>
+
                         <div class="left-instagram">
                             <img src="{{ asset('frontEnd/img/Icon awesome-instagram.png') }}" alt="" width="150px" height="150px">
                         </div>
@@ -167,12 +187,93 @@
 
 
 <script>
-    let count_count = '{{ count($countries) }}';
-    if(count_count > 0)
+    document.getElementById('city_id').value = '';
+
+            $( "#user-image" ).click(function() {
+                $('#fileinput').trigger('click'); 
+            });
+        var loadFile = function(event) {
+            var image = document.getElementById('user-image');
+            let supported_file_types = ['jpeg','png','jpg','png'];
+            let current_file_type = event.target.files[0].type.split("/");
+            if(!supported_file_types.includes(current_file_type[1]))
+            {
+                Swal.fire({
+                        title: 'Valdation Error!',
+                        text:'file is not supported, supported file types('+ supported_file_types.toString() +')',
+                        icon: 'error',
+                        toast:true,
+                        position:'top-right',
+                        showConfirmButton:false
+
+                    })
+                    document.getElementById('fileinput').value = '';
+                return;
+            }
+            image.src = URL.createObjectURL(event.target.files[0]);
+        };
+
+
+    let count_countries = '{{ count($countries) }}';
+    if(count_countries > 0)
     {
         getRegionAccordingToCountry('{{ $countries[0]->id }}')
     }
     $('#region_id').attr("disabled", 'disabled');
+
+    $('#add_form').submit(function(e) {
+
+       e.preventDefault();
+       console.log(this)
+       let formData = new FormData(document.getElementById('add_form'));
+
+       let url = '{{ route("register_customer") }}';
+
+       $.ajax({
+            url:url,
+            type:'POST',
+            data:formData,
+            enctype: 'multipart/form-data',
+            cache:false,
+                contentType: false,
+                processData: false,
+            success:(res)=>{
+                if(res.status == 201)
+                {
+                   window.location.replace("{{ route('auth.active_code') }}");
+                }
+            },
+            error:(err)=>{
+                if(err.responseJSON.status == 401)
+                {
+                    Swal.fire({
+                        title: 'Valdation Error!',
+                        text:err.responseJSON.err,
+                        icon: 'error',
+                        toast:true,
+                        position:'top-right',
+                        showConfirmButton:false
+
+                    })
+
+                }
+                else
+                {
+                    Swal.fire({
+                            title: 'Server Error!',
+                            icon: 'error',
+                            toast:true,
+                            position:'top-right',
+                            showConfirmButton:false
+                        })
+
+                }
+
+
+            }
+        });
+  });
+
     function sendCreateRequest()
     {
         const form = {
@@ -180,14 +281,16 @@
             middle_name:document.getElementById('middle_name').value,
             phone:document.getElementById('phone').value,
             last_name:document.getElementById('last_name').value,
+            id_number:document.getElementById('id_number').value,
             gender:document.getElementById('gender').value,
-            nationality:document.getElementById('nationality_id').value,
+            nationality_id:document.getElementById('nationality_id').value,
             country_id:document.getElementById('country_id').value,
             region_id:document.getElementById('region_id').value,
             country_code:document.getElementById('country_code').value,
             city_id:document.getElementById('city_id').value,
             email:document.getElementById('email').value,
             password:document.getElementById('password').value,
+            dial_code:document.getElementById('dial_code').value,
             password_confirmation:document.getElementById('password_conformation').value,
         }
         let url = '{{ route("register_customer") }}';
@@ -195,7 +298,12 @@
             url:url,
             type:'POST',
             data:form,
-            success:(res)=>{},
+            success:(res)=>{
+                if(res.status == 201)
+                {
+                  //  window.location.replace('')
+                }
+            },
             error:(err)=>{
                 if(err.status == 422)
                 {

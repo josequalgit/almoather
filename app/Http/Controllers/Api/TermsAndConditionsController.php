@@ -17,6 +17,7 @@ class TermsAndConditionsController extends Controller
             'err'=>trans($this->trans_dir.'terms_and_conditions_data_was_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
+        
         return response()->json([
             'msg'=>trans($this->trans_dir.'terms_and_conditions_data_was_found'),
             'data'=>$data->getTranslation('text',app()->getLocale()),
