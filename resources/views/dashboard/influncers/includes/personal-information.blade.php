@@ -22,7 +22,7 @@
                 <fieldset class="form-group col-md-6">
                                         
                     <div class="imgUp">
-                        <img class="image-preview"  src="{{ $data->users->infulncerImage['url']}}" />
+                        <img class="image-preview"  src="{{ $data->users->infulncerImage['url'] }}" />
                         <label class="btn btn-primary">
                             Upload<input name="image" type="file" class="uploadFile img" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;">
                         </label>
@@ -94,12 +94,6 @@
                 <label for="phone">Phone</label>
                 <input value="{{ $data->users->dial_code . $data->users->phone }}" disabled type="text"
                     class="form-control required" id="phone" placeholder="Phone">
-            </div>
-
-            <div class="form-group col-md-6">
-                <label for="ratting">Ratting</label>
-                <input value="{{ old('ratting') ? old('ratting') : $data->ratting }}" name="ratting" type="text"
-                    class="form-control required" id="ratting" placeholder="ratting" min="0" max="5">
             </div>
             
 

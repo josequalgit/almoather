@@ -1,0 +1,43 @@
+body{
+    background-color: #fff;
+    font-family: 'Rubik','Tajawal';
+    background-repeat: no-repeat;
+    background-position: top right;
+}
+
+.direction-rtl{
+    direction: rtl;
+}
+
+.logo{
+    width: 250px;
+}
+
+.devider{
+    border-top: 3px solid #8486AB;
+}
+
+a.website-link{
+    font-size: 20px;
+    font-weight: bold;
+    color: #8486AB;  
+    text-decoration: underline;
+}
+
+.contract-content{
+    position: relative;
+}
+.contract-content:after {
+    content: "";
+    background-image: url(../img/avatars/logo-almuaather.png);
+    opacity: 0.15;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100%;
+}

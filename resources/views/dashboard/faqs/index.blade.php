@@ -44,8 +44,8 @@
                                                 @foreach ($data as $item)
                                                         <tr>
                                                          
-                                                            <td>{{ $item->question }}</td>
-                                                            <td>{{ $item->answer }}</td>
+                                                            <td>{{ $item->getTranslation('question','ar') }}</td>
+                                                            <td>{{ $item->getTranslation('answer','ar') }}</td>
                                                             
                                                             <td>
                                                                 @can('Edit Faq')

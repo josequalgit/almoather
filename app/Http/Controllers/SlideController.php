@@ -68,8 +68,8 @@ class SlideController extends Controller
 
         if($request->hasFile('image'))
         {
+            $data->clearMediaCollection('slideImages');
             $data->addMedia($request->file('image'))
-            ->clearMediaCollection('slideImages')
             ->toMediaCollection('slideImages');
         }
 

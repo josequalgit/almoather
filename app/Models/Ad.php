@@ -54,7 +54,7 @@ class Ad extends Model implements HasMedia
         'document',
         'crImage',
         'logo',
-        'adBudgetWithVat'
+        'adBudgetWithVat','location'
     ];
 
     public function socialMedias()
@@ -80,7 +80,7 @@ class Ad extends Model implements HasMedia
 
     public function areas()
     {
-        return $this->belongsTo(Area::class,'area_id');
+        return $this->belongsTo(Region::class,'area_id');
     }
 
     public function customers()
@@ -370,6 +370,21 @@ class Ad extends Model implements HasMedia
             $budget = $this->budget + ($this->budget * ($tax / 100));
         }
         return $budget;
+    }
+
+    function getLocationAttribute(){
+        $location = '';
+        if($this->countries){
+            $location .= $this->countries->name . ', ';
+        } 
+        if($this->areas){
+            $location .= $this->areas->name . ', ';
+        } 
+        if($this->cities){
+            $location .= $this->cities->name;
+        } 
+
+        return trim($location,', ');
     }
    
 

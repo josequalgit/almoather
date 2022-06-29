@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 
+use App\Models\CampaignContract;
 use App\Models\Contract;
 use App\Models\InfluencerContract;
 use Auth;
@@ -16,6 +17,15 @@ trait AdResponse
         $info = $ad->influncers ? $ad->influncers()->get()->map(function ($item) {
             return $this->userDataResponse([], null, $item->users->id);
         }) : null;
+
+        $date = $ad->created_at->format('d/m/Y');
+        // if($ad->InfluencerContract){
+        //     $date = $ad->InfluencerContract()->orderBy('date','asc')->first();
+        //     if($date && $date->date){
+        //         $date = $date->date->format('d/m/Y');
+        //     }
+            
+        // }
 
         $basicResponse = [
             'id' => $ad->id,
@@ -68,15 +78,15 @@ trait AdResponse
             }),
             'cr_num' => $ad->cr_num,
             'about' => $ad->about,
-            'relation' => $ad->relation,
+            'relation' => $ad->relations ? $ad->relations->title : '',
             'category' => $ad->categories ? $ad->categories->name : null,
             'scenario' => $ad->scenario,
             'videos' => $ad->videos,
             'influencer' => $info ? $info : null,
             'budget' => $ad->budget,
             'format_budget' => $this->formateMoneyNumber($ad->budget),
-            'date' => $ad->date,
-            'type' => $ad->ad_type,
+            'date' => $date,
+            'type' => trans($this->trans_dir . $ad->ad_type),
             'price' => $ad->price,
             'website_link' => $ad->website_link,
             'about_product' => $ad->about_product,
@@ -92,18 +102,20 @@ trait AdResponse
                 'id' => $ad->areas->id,
                 'name' => $ad->areas->name,
             ] : null,
+            'location' => $ad->location,
             'customer_id' => $ad->customers->id,
             'isVat' => $ad->is_vat,
             'discount_code' => $ad->discount_code,
             'hasStore' => $ad->has_hasStore ? true : false,
-            'is_onSite' => $ad->onSite ? 'Online' : 'Site',
+            'is_onSite' => trans($this->trans_dir . $ad->ad_type),
             'tax_value' => $ad->tax_value,
             'reject_note' => $ad->reject_note,
-
+            'admin_approved_influencers' => $ad->admin_approved_influencers ? true : false
         ];
 
         if ($ad->status == 'fullpayment' && Auth::guard('api')->user()->customers) {
-            $basicResponse['contract'] = $this->create_customer_contract($ad->id);
+            $contract = CampaignContract::where('ad_id',$ad->id)->first();
+            $basicResponse['contract'] = $contract ? $contract->content : null;
         }
         if (Auth::guard('api')->user()->influncers) {
             $basicResponse['contract'] = InfluencerContract::select('id', 'content', 'date')->where(['influencer_id' => Auth::guard('api')->user()->influncers->id])
@@ -111,33 +123,29 @@ trait AdResponse
                 ->first();
         }
 
+        //Return Matches if the status is Full payment / Choosing influencer / Progress
         if (Auth::guard('api')->user()->customers && $ad->status !== 'pending' && $ad->status !== 'approve' && $ad->status !== 'prepay' && $ad->status !== 'rejected') {
-            $basicResponse['matches'] = $ad->matches()->where('status', '!=', 'deleted')->where('chosen', 1)->get()->map(function ($item) {
+            $basicResponse['matches'] = $ad->matches()->where('status', '!=', 'deleted')->where('chosen', 1)->get()->map(function ($item) use($ad) {
                 $contract = InfluencerContract::where('influencer_id', $item->influencer_id)->first();
+
+                $influencerPrice = $ad->onSite ? $item->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
 
                 $status = null;
 
-                if (isset($contract) && $contract->is_accepted == 2) {
-                    $status = 'rejected';
-                } else if (isset($contract) && $contract->is_accepted == 1) {
-                    if ($contract->status == 1 && $contract->admin_status == 1) {
-                        $status = 'completed';
-                    } else {
-                        $status = 'progress';
-                    }
-                } else {
-                    if (isset($contract) && $contract->date) {
-                        $status = 'was sent';
-                    } else {
-                        $status = 'not sent';
-                    }
-                }
+                $status = trans($this->trans_dir . 'Not Join Yet');
+                if ($contract && $contract->is_accepted == 1) {
+                    $status = trans($this->trans_dir . 'Joined');
+                } 
+
+
                 return [
                     'id' => $item->influencers->id,
                     'image' => $item->influencers->users->infulncerImage,
-                    'name' => $item->influencers->first_name . ' ' . $item->influencers->middle_name . ' ' . $item->influencers->last_name,
+                    'name' => $item->influencers->nick_name,
                     'match' => $item->match,
                     'status' => $status,
+                    'gender'    => trans($this->trans_dir.$item->influencers->gender),
+                    'budget'    => number_format($influencerPrice),
                 ];
             });
         }
@@ -218,29 +226,4 @@ trait AdResponse
     {
         return number_format($number, 0, '.', ',');
     }
-
-    private function create_contract($ad_id = null, $customer)
-    {
-        $contractData = Contract::find(1);
-
-        if (!$contractData) {
-            return false;
-        }
-
-        $replace = str_replace("[[Name]]", $customer->first_name . ' ' . $customer->last_name, $contractData->content);
-
-        if ($contractData) {
-            return Contract::create([
-                'title' => $contractData->title,
-                'content' => $replace,
-                'ad_id' => $ad_id,
-            ]);
-        } else {
-            return false;
-        }
-
-    }
-
-    
-
 }

@@ -25,6 +25,8 @@ class Influencer extends Voluum{
             $influencer->update([
                 'voluum_id' => $row['trafficSourceId']
             ]);
+
+            $this->updateInfluencer($row['trafficSourceId'],$influencer_id);
             return response()->json([
                 'status' => true,
                 'data' => [
@@ -33,24 +35,8 @@ class Influencer extends Voluum{
                 ]
             ], 200);
         }
-        $data = [
-            'name' => $influencer->full_name,
-            'impressionSpecific' => false,
-            'externalIds' => [],
-            'currencyCode' => 'USD',
-            'customVariables' => [
-                [
-                    'index' => 1,
-                    "name" => "Almuaathir ID",
-                    "parameter" => "almuaathir_id_{$influencer->id}",
-                    "placeholder" => $influencer->id,
-                    "trackedInReports" => false
-                ]
-            ],
-            'workspace' => null,
-            'directTracking' => false,
-            'skipSendingPostback' => true,
-        ];
+        
+        $data = $this->getInfluencerParameters($influencer);
 
         $response = $this->post(Endpoints::addInfluencerEndpoint(),$data);
         if($response && isset($response['rows']) && !empty($response['rows'])){
@@ -72,7 +58,7 @@ class Influencer extends Voluum{
             'data' => $response
         ];
         $this->log($error);
-        return response()->json($error, 404);
+        return response()->json($error, 401);
     }
 
     function checkInfluencerExists($influencer){
@@ -92,5 +78,70 @@ class Influencer extends Voluum{
         }
 
         return false;
+    }
+
+    private function getInfluencerParameters($influencer,$voluum_id = false){
+        $data = [
+            'name' => $influencer->nick_name,
+            'impressionSpecific' => false,
+            'externalIds' => [],
+            'currencyCode' => 'SAR',
+            'customVariables' => [
+                [
+                    'index' => 1,
+                    "name" => "Almuaathir ID",
+                    "parameter" => "almuaathir_id_{$influencer->id}",
+                    "placeholder" => $influencer->id,
+                    "trackedInReports" => true
+                ]
+            ],
+            'workspace' => null,
+            'directTracking' => false,
+            'skipSendingPostback' => true,
+        ];
+
+        if($voluum_id){
+            $data['id'] = $voluum_id;
+        }
+
+        return $data;
+    }
+
+    public function updateInfluencer($influencer_id){
+
+        $influencer = Influncer::find($influencer_id);
+        if(!$influencer){
+            $error = [
+                'error' => "$influencer_id Not found",
+                'status' => false
+            ];
+            $this->log($error);
+            return response()->json($error, 404);
+        }
+
+        $data = $this->getInfluencerParameters($influencer,$influencer->voluum_id);
+// echo Endpoints::updateInfluencerEndpoint($influencer->voluum_id);die;
+        $response = $this->put(Endpoints::updateInfluencerEndpoint($influencer->voluum_id),$data);
+        dd($response);
+        if($response && isset($response['rows']) && !empty($response['rows'])){
+            $row = $response['rows'][0];
+            $influencer->update([
+                'voluum_id' => $row['trafficSourceId']
+            ]);
+            return response()->json([
+                'status' => true,
+                'data' => [
+                    'influencer' => $influencer->nick_name,
+                    'vluum_id' => $row['trafficSourceId'],
+                ]
+            ], 200);
+        }
+        $error = [
+            'error' => "$influencer_id Not set",
+            'status' => false,
+            'data' => $response
+        ];
+        $this->log($error);
+        return response()->json($error, 404);
     }
 }

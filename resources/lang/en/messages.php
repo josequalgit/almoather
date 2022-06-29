@@ -66,8 +66,8 @@ return [
         'city_not_found'=>'city not found',
         'areas_for'=>'areas for',
         'country_small'=>'country',
-        'wrong_email_password'=>'wrong email/password',
-        'user_data'=>'user data',
+        'wrong_email_password'=>'Incorrect email or password',
+        'user_data'=>'ًLogged In successfully. Welcome Back',
         'user_dont_have_right_role'=>"user dose't have the right role to make this action",
         'successfully_logged_out'=>'Successfully logged out',
         'login_successfully'=>'login successfully',
@@ -137,7 +137,13 @@ return [
             "choosing_influencer"=>"Pay The Full Payment",
         ],
         'new_campaign_request' => 'You have a new campaign request',
-        'new_campaign_request_msg' => 'You have a new campaign (:name), Please check the details and reply the request ASAP'
-
+        'new_campaign_request_msg' => 'You have a new campaign (:name), Please check the details and reply the request ASAP',
+        'Male' => 'Male',
+        'service' => 'Service',
+        'product' => 'Product',
+        'online' => 'Online',
+        'onsite' => 'Onsite',
+        'Not Join Yet'              => 'Not Join Yet',
+        'Joined' => 'Joined'
     ]
 ];

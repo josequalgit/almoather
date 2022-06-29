@@ -31,14 +31,15 @@ class FaqController extends Controller
     public function store(FaqRequest $request)
     {
         $allFelids = $request->all();
+        
         $addTranslate = [
             'question'=>[
-                'ar'=>$request->answer_ar,
-                'en'=>$request->answer_en,
-            ],
-            'answer'=>[
                 'ar'=>$request->question_ar,
                 'en'=>$request->question_en,
+            ],
+            'answer'=>[
+                'ar'=>$request->answer_ar,
+                'en'=>$request->answer_en,
             ]
         ];
         $data = FAQ::create($addTranslate);
@@ -50,6 +51,7 @@ class FaqController extends Controller
     {
         $data = FAQ::find($id);
         $allFelids = $request->all();
+
         $addTranslate = [
             'question'=>[
                 'ar'=>$request->question_ar,

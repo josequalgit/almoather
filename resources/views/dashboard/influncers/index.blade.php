@@ -31,10 +31,10 @@
                                     <div class="block-top">
                                         <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->code) }}.png" alt="{{$item->countries->name}}"></div>
                                         <div class="back-grey"></div>
-                                        <div class="block-image"><img src="{{ $item->users->image['url'] }}" alt="{{ $item->full_name }}"></div>
+                                        <div class="block-image"><img src="{{ $item->users->infulncerImage['url'] }}" alt="{{ $item->nick_name }}"></div>
                                     </div>
                                     <div class="block-info mw-100">
-                                        <span class="name">{{ $item->full_name }}</span>
+                                        <span class="name">{{ $item->nick_name }}</span>
                                         <div class="categories mw-100 text-center">
                                             @foreach($item->InfluncerCategories()->pluck('name')->toArray() as $cat)
                                             <span class="desc badge mw-100 bg-info mt-1">{{$cat}}</span>
@@ -57,7 +57,7 @@
                                         </div>
                                         <div class="engagement text-center col-6 mb-1">
                                             <div class="count-box">
-                                                <span class="numbers">{{ number_format($item->ROAS) }}</span>
+                                                <span class="numbers">{{ number_format($item->ROAS) }}%</span>
                                                 <span>ROAS</span>
                                             </div>
                                         </div>
@@ -94,13 +94,13 @@
                             <tbody>
                                 @foreach ($data as $item)
                                         <tr>
-                                            <td><img src="{{ $item->users->image['url'] }}" alt="{{ $item->full_name }}"></td>
-                                            <td>{{ $item->full_name  }}</td>
+                                            <td><img src="{{ $item->users->infulncerImage['url'] }}" alt="{{ $item->nick_name }}"></td>
+                                            <td>{{ $item->nick_name  }}</td>
                                             <td><div class="d-flex justify-content-center align-items-center"><div class="contry-name">{{$item->countries->name}}</div> <div class="flag"><img src="https://ipdata.co/flags/{{ strtolower($item->countries->code) }}.png" alt="{{$item->countries->name}}"></div></div></td>
                                             <td>{{ $item->subscribers }}</td>
                                             <td>{{ $item->engRate }}%</td>
                                             <td>{{ number_format($item->AOAF) }}</td>
-                                            <td>{{ number_format($item->ROAS) }}</td>
+                                            <td>{{ number_format($item->ROAS) }}%</td>
                                             <td>
                                                 <a class="btn btn-secondary" href="{{ route('dashboard.influncers.edit',$item->id) }}">
                                                     <i class="bx bx-show"></i>

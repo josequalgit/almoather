@@ -53,6 +53,7 @@ class AuthController extends Controller
                 config('global.UNAUTHORIZED_VALIDATION_STATUS'));
         }
 
+       
         $user = Auth::guard('api')->user();
         //dd($user->email);
         if($user->customers)

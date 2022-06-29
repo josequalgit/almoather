@@ -74,8 +74,8 @@ class InfluncerController extends Controller
         $data = $request->except('image', '_token','categories');
         $influencer->update($data);
         if($request->hasFile('image')){
-            $influencer->clearMediaCollection('influncers');
-            $influencer->addMedia($request->file('image'))->toMediaCollection('influncers');
+            $influencer->users->clearMediaCollection('influncers');
+            $influencer->users->addMedia($request->file('image'))->toMediaCollection('influncers');
         }
 
         $influencer->InfluncerCategories()->sync($request->categories);

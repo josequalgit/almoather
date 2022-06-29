@@ -247,7 +247,7 @@
 
           if ($body.hasClass("vertical-overlay-menu")) {
             $(".sidenav-overlay").removeClass("d-none").addClass("d-block");
-            $("body").css("overflow", "hidden");
+           // $("body").css("overflow", "hidden");
           }
         },
         function () {
@@ -267,7 +267,7 @@
 
           if (!$body.hasClass("vertical-overlay-menu")) {
             $(".sidenav-overlay").removeClass("d-block d-none");
-            $("body").css("overflow", "auto");
+            //$("body").css("overflow", "auto");
           }
         }
       );
@@ -282,7 +282,7 @@
 
           if ($body.hasClass("vertical-overlay-menu")) {
             $(".sidenav-overlay").removeClass("d-block").addClass("d-none");
-            $("body").css("overflow", "auto");
+           // $("body").css("overflow", "auto");
           }
         },
         function () {
@@ -290,7 +290,7 @@
 
           if (!$body.hasClass("vertical-overlay-menu")) {
             $(".sidenav-overlay").removeClass("d-block d-none");
-            $("body").css("overflow", "auto");
+            //$("body").css("overflow", "auto");
           }
         }
       );

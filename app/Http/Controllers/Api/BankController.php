@@ -12,7 +12,12 @@ class BankController extends Controller
 
     public function index()
     {
-        $data = Bank::select(['id','name'])->get();
+        $data = Bank::get()->map(function($item){
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+            ];
+        });
         return response()->json([
             'msg'=>trans($this->trans_dir.'all_banks_available'),
             'data'=>$data,

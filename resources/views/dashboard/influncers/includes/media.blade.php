@@ -80,7 +80,7 @@
                         <input type="text" id="Username{{$item->id}}" name="social_media[{{$item->id}}][link]" class="{{$item->id == 4 ? 'required' : ''}} form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" value="{{ $influencerSocial ? $influencerSocial->link : ''}}">
                     </div>
                     <div class="col-4 mb-1 form-group">
-                        <label for="subscribers{{$item->id}}">Username</label>
+                        <label for="subscribers{{$item->id}}">Subscribers</label>
                         <input type="number" min="0" name="social_media[{{$item->id}}][subscribers]"  id="subscribers{{$item->id}}" class="form-control {{$item->id == 4 ? 'required' : ''}}" placeholder="Subscribers" aria-label="Subscribers" aria-describedby="basic-addon1" value="{{ $influencerSocial ? $influencerSocial->views : 0}}">
                         <input type="hidden" name="social_media[{{$item->id}}][type]" value="{{$item->id}}">
                     </div>

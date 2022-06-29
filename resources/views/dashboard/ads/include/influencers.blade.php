@@ -46,7 +46,7 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
                                 <td>{{ $item->influencers->nick_name }}</td>
                                 <td>{{ $price }}</td>
                                 @if($data->campaignGoals->profitable)
-                                    <td>{{ $item->match ?? 0 }}</td>
+                                    <td>{{ $item->match ?? 0 }}%</td>
                                 @else
                                     <td>{{ $item->match ?? 0 }}%</td>
                                     <td>{{ $item->AOAF ?? 0 }}</td>
@@ -66,7 +66,7 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
                                         <i class="fas fa-user-times"></i>
                                     </button>
                                     @endif
-                                    @if ($data->admin_approved_influencers == 1)
+                                    @if ($data->admin_approved_influencers == 0)
                                         <button  type="button" onclick="seeContract(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm"><i class="fas fa-file-signature"></i></button>
                                     @endif
                                 

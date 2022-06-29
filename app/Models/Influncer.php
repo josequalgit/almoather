@@ -246,7 +246,7 @@ class Influncer extends Model implements HasMedia
     function getTypeInfluencerSubscriberAttribute(){
         if($this->subscribers < 10000){
             return 'Micro';
-        }else if($this->subscribers > 10001 && $this->subscribers < 100000){
+        }else if($this->subscribers > 10001 && $this->subscribers < 1000000){
             return 'Mid';
         }else{
             return 'Macro';
