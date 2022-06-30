@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Page;
 use App\Models\ContactMessages;
 use App\Models\AppSetting;
+use App\Http\Requests\ContactRequest;
 use App;
 class ContactController extends Controller
 {
@@ -22,7 +23,7 @@ class ContactController extends Controller
         return view('frontEnd.contactUs.index',compact('contact_us','get_in_touch','location'));
     }
 
-    public function store_contact_messages(Request $request)
+    public function store_contact_messages(ContactRequest $request)
     {
         $data = ContactMessages::create($request->all());
         return response()->json([

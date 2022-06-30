@@ -523,7 +523,7 @@ class AdController extends Controller
             $isProfitable = $ad->campaignGoals->profitable;
 
             $response =  [
-                'id'        => $item->id,
+                'id'        => $item->influencers->id,
                 'name'      => $item->influencers->nick_name,
                 'image'     => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
                 'match'     => $item->match,
