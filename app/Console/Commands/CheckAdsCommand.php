@@ -21,6 +21,8 @@ class CheckAdsCommand extends Command
      * @var string
      */
     protected $signature = 'ads:check';
+    public $notification_trans_dir = 'notifications.';
+
 
     /**
      * The console command description.
@@ -159,12 +161,29 @@ class CheckAdsCommand extends Command
             $influencers = Influncer::get();
             $checkSubscription =[
                 'en'=>[
-                    'msg'=>'Please Update You Subscription Number'
+                    'msg'=>'Please Update Your Subscription Number'
                 ],
                 'ar'=>[
                     'msg'=>'الرجاء تحديث عدد متابعينك'
                 ]
                 ];
+            $checkSubscriptionTitle =[
+                'en'=>[
+                    'msg'=>'Update Subscribers!'
+                ],
+                'ar'=>[
+                    'msg'=>'تحديث المشتركين'
+                ]
+                ];
+
+                $message_body = [
+                    "title" => $checkSubscriptionTitle[$lang??'en'],
+                    "body" => $checkSubscription[$lang??'en'],
+                    "type" => 'influencers',
+                    'target_id' =>$ad->id
+                ];
+                $tokens = [];
+        
             foreach ($influencers as $value) 
             {
                 $countDiffDays = Carbon::parse($value->subscribers_update)->diffInDays($cDate);
@@ -172,9 +191,25 @@ class CheckAdsCommand extends Command
                 {
                     $sendTo = User::find($value->users->id);
                     $lang = $item->customers->users->lang;
+                    array_push($tokens,$sendTo->users->fcm_token);
                     Notification::send($sendTo, new AddInfluencer($checkSubscription[$lang??'en']));    
                 }
+
+                foreach ($value->contracts as $key => $value) {
+
+                    $message_body = [
+                        "title" => trans($this->notification_trans_dir,'influencers_ad_reminder_msg',['ad_name'=>$value->ads->store]),
+                        "body" => $checkSubscription[$lang??'en'],
+                        "type" => 'influencers',
+                        'target_id' =>$ad->id
+                    ];
+                }
             }
+
+        $this->sendNotifications($tokens,$message_body);
+
+
+
 
 
     }

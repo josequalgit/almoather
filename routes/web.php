@@ -63,6 +63,7 @@ Route::group(['middleware' => 'language'],function(){
         });
 
         Route::get('/about-us',[FrontEndHomeController::class,'about_us'])->name('frontEnd.about');
+        Route::get('/our-services',[FrontEndHomeController::class,'ourServices'])->name('frontEnd.ourservice');
 
 
         Route::get('/',[FrontEndHomeController::class,'index'])->name('frontEnd.index');
@@ -436,7 +437,7 @@ Route::group(['middleware' => 'language'],function(){
             ->name('frontEndSettings.')
             ->group(function(){
                 Route::get('/{type?}','index')->name('index')
-                ->where(['type'=>'welcome_page|about_us|faq|contact_info|website_description|login_text|register_type|get_touch|location']);
+                ->where(['type'=>'welcome_page|about_us|faq|contact_info|website_description|login_text|register_type|get_touch|location|our-services']);
                 Route::post('/update','updateWelcomePage')->name('update');
                 Route::post('/update/updateBriefAboutUs','updateBriefAboutUs')->name('updateBriefAboutUs');
                 Route::post('/update/faq','updateFaq')->name('updateFaq');
@@ -445,6 +446,7 @@ Route::group(['middleware' => 'language'],function(){
                 Route::post('/update/updateLoginText','updateLoginText')->name('updateLoginText');
                 Route::post('/update/registerType','registerType')->name('registerType');
                 Route::post('/update/updateMapLink','updateMapLink')->name('updateMapLink');
+                Route::post('/update/update_services','update_services')->name('updateServices');
             });
 
             Route::controller(BankController::class)

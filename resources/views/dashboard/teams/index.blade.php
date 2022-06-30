@@ -12,7 +12,7 @@
                         <div class="card">
                             <div class="card-header pb-0">
                                 <div class="card-title">
-                                    <p class="mb-0">Teams</p>
+                                    <p class="mb-0">Team</p>
                                   
                                 </div>
                                 <div class="section-right">
@@ -32,6 +32,7 @@
                                                 <th><span class="align-middle">Name</span></th>
                                                 <th>Description</th>
                                                 <th>Social Media</th>
+                                                <th>Show</th>
                                                 <th>Status</th>
                                             </tr>
                                         </thead>
@@ -39,7 +40,7 @@
                                             @foreach ($data as $item)
                                             <tr>
                                                 <td>
-                                                  <img height="50px" class="rounded-circle" src=" {{ $item->image['url'] }}" alt="">
+                                                  <img width="70px" class="rounded-circle" src=" {{ $item->image['url'] }}" alt="">
                                                 </td>
                                                 <td>
                                                    {{ $item->name }}
@@ -49,6 +50,7 @@
                                                     Twitter: {{$item->accounts->twitter}}<br/>
                                                     FaceBook: {{$item->accounts->facebook}}
                                                 </td>
+                                                <td>{{ $item->show?'Yes':'No' }}</td>
                                                 <td>
                                                     {{-- @can('Edit City') --}}
                                                     <a  href="{{ route('dashboard.teams.edit',$item->id) }}" class="btn btn-secondary">

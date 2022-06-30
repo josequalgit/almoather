@@ -16,6 +16,9 @@ use Carbon\Carbon;
 
 class InfluncerController extends Controller
 {
+
+    public $notification_trans_dir = 'notifications.';
+
     public function index($status = 'accepted')
     {
         $allStatus = ['pending','accepted','rejected','band'];
@@ -70,6 +73,30 @@ class InfluncerController extends Controller
 
         $oldStatus = $influencer->status;
         $request->rejected_note = $request->status == 'rejected' ? $request->rejected_note : '';
+
+        $message_body = [];
+
+        if($request->status == 'rejected')
+        {
+            $message_body = [
+                "title" => trans('reject_influencers_title'),
+                "body" => trans('reject_influencers_msg',['reject_influencers_msg'=>$request->rejected_note]),
+                "type" => 'influencers',
+                'target_id' =>$ad->id
+            ];
+        }
+        else
+        {
+            $message_body = [
+                "title" => trans('accept_influencers_title'),
+                "body" => trans('accept_influencers_msg'),
+                "type" => 'influencers',
+                'target_id' =>$ad->id
+            ];
+        }
+        $tokens = [$influencer->users->fcm_token];
+        $this->sendNotifications($tokens,$message_body);
+
 
         $data = $request->except('image', '_token','categories');
         $influencer->update($data);

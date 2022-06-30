@@ -49,6 +49,14 @@
                                     <textarea name="description_ar" placeholder="Enter Description in ar" class="form-control">{{ old('description_ar')?old('description_ar'):$data->getTranslation('description','ar') }}</textarea>
                                 </fieldset>
 
+                                <fieldset class="form-group">
+                                    <label for="basicInput">Show</label>
+                                    <select name="show" class="form-control">
+                                        <option  {{ $data->show == '1'?'selected':'' }} value="1">Yes</option>
+                                        <option {{ $data->show == '0' ?'selected':'' }} value="0">No</option>
+                                    </select>
+                                </fieldset>
+
                                 <div class="form-group mt-2">
                                     <h5>
                                         Social Media

@@ -34,6 +34,8 @@ use Mpdf\Mpdf;
 class AdController extends Controller
 {
     use SendNotification;
+    public $notification_trans_dir = 'notifications.';
+
     public function index($status = null)
     {
         if ($status == 'All') {
@@ -73,7 +75,6 @@ class AdController extends Controller
 
     public function update(Request $request, $id , $confirm = null)
     {
-
         /** VALIDATIONS */
         $ad = Ad::find($id);
 
@@ -109,13 +110,14 @@ class AdController extends Controller
 
             $tokens = [$ad->customers->users->fcm_token];
             if($request->note){
-                $title = "Your campaign {$ad->store} has been rejected";
-                $msg = "Your campaign {$ad->store} rejected because ({$request->note})";
+                $title = trans($this->notification_trans_dir.'rejected_campaign_title',['ad_name'=>$ad->store]);
+                $msg = trans($this->notification_trans_dir.'rejected_campaign_msg',['ad_name'=>$ad->store,'reject_reason'=>$request->note]);
             }else{
-                $title = "Your campaign {$ad->store} has been accepted";
-                $msg = "Congratulation! Your campaign {$ad->store} accepted Please go to campaign and complete the steps";
+                $title = trans($this->notification_trans_dir.'accepted_campaign_title',['ad_name'=>$ad->store]);
+                $msg = trans($this->notification_trans_dir.'accepted_campaign_msg',['ad_name'=>$ad->store]);
             }
-           
+            $this->sendNotifications($tokens,$data);
+
             $data = [
                 "title" => $title,
                 "body" => $msg,
@@ -123,19 +125,37 @@ class AdController extends Controller
                 'target_id' =>$ad->id
             ];
 
+            if($ad->status == 'approve')
+            {
+                $users = [$ad->customers->users];
+                $info =[
+                    'msg' => $msg,
+                    'id' => $ad->id ,
+                    'type' => 'Ad'
+                ];
+    
+    
+                /** SEND NOTIFICATION TO INFLUENCER */
+                $tokens = [];
+                $InfMessage =[
+                    'msg' => trans($this->notification_trans_dir.'accept_ad_to_influencer'),
+                    'id' => $ad->id ,
+                    'type' => 'Ad'
+                ];
+                foreach ($ad->matches as $key => $value) {
+                   array_push($tokens,$value->influencers->users->fcm_token);
+                }
+                $this->sendNotifications($tokens,$InfMessage);
 
-            activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
-            $this->sendNotifications($tokens,$data);
+            }
+            else
+            {
 
-            $users = [$ad->customers->users];
-            $info =[
-                'msg' => $msg,
-                'id' => $ad->id ,
-                'type' => 'Ad'
-            ];
+            }
 
             Notification::send($users, new AddInfluencer($info));
             Alert::toast('Ad was updated', 'success');
+            activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
 
             return response()->json([
                 'msg' => 'status was changed',
