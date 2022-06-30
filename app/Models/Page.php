@@ -26,7 +26,8 @@ class Page extends Model implements HasMedia
         'aboutUsHeader',
         'aboutUsSectionOneImage',
         'aboutUsSectionTwoImage',
-        'contentData'
+        'contentData',
+        'servicePageFiles'
     ];
 
     public function getImageAttribute()
@@ -86,6 +87,22 @@ class Page extends Model implements HasMedia
     {
         $data = json_decode($this->content);
         return $data;
+    }
+
+    public function getServicePageFilesAttribute()
+    {
+        $service_header_image = $this->getMedia('service_header_image')->first();
+        $service_second_section_image_one = $this->getMedia('service_second_section_image_one')->first();
+        $second_section_image_two = $this->getMedia('second_section_image_two')->first();
+        $main_video_video_section = $this->getMedia('main_video_video_section')->first();
+        $background_video_image = $this->getMedia('back_ground_video_image')->first();
+        return (object)[
+            'header'=>$service_header_image?$service_header_image->getFullUrl():null,
+            'second_image_one'=>$service_second_section_image_one?$service_second_section_image_one->getFullUrl():null,
+            'second_image_two'=>$second_section_image_two?$second_section_image_two->getFullUrl():null,
+            'video'=>$main_video_video_section?$main_video_video_section->getFullUrl():null,
+            'video_backgroundImage'=>$background_video_image?$background_video_image->getFullUrl():null,
+        ];
     }
 
 

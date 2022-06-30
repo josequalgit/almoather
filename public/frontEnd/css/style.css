@@ -2056,11 +2056,18 @@ header {
 
 .card-slider-att img {
     width: 150px;
-    position: absolute;
-    top: -64px;
-    left: -50%;
     margin: auto;
-    right: -50%;
+    border-radius: 50%;
+}
+
+.slick-next:before {
+    content: '→';
+    color: black;
+}
+
+.slick-prev:before {
+    content: '←';
+    color: black;
 }
 
 .social-image {

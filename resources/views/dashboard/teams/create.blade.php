@@ -40,6 +40,7 @@
                                     <label for="basicInput">Name AR</label>
                                     <input id="name" value="{{ old('name_ar') }}" type="text" class="form-control"  name="name_ar" placeholder="Enter name in english" />
                                 </fieldset>
+                              
                                 <fieldset class="form-group">
                                     <label for="basicInput">Description En</label>
                                     <textarea name="description_en" placeholder="Enter Description in en" class="form-control">{{ old('description_en') }}</textarea>
@@ -47,6 +48,14 @@
                                 <fieldset class="form-group">
                                     <label for="basicInput">Description Ar</label>
                                     <textarea name="description_ar" placeholder="Enter Description in ar" class="form-control">{{ old('description_ar') }}</textarea>
+                                </fieldset>
+
+                                <fieldset class="form-group">
+                                    <label for="basicInput">Show</label>
+                                    <select name="show" class="form-control">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
                                 </fieldset>
 
                                 <div class="form-group mt-2">

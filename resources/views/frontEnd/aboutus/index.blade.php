@@ -58,51 +58,31 @@
           </div>
         </div>
         <div class="row  d-flex mt-5 position-relative text-center">
-            <div class="col-lg-4 col-md-12 col-sm-12 mt-5 px-4" >
-                <div class="card card-slider-att p-5 mt-5">
-                    <div class="img-center text-center ">
-                        <img  src="{{ asset('frontEnd/img/cheerful-caucasian-logo.png') }}" alt="">
-                    </div>
-                    <div class="card-body text-center mt-5">
-                      <h5 class="card-title mt-4">Card title</h5>
-                      <p class="card-text mt-4">Data Analysis Vivamus sagittis lacus vel augue laoreet.</p>
-                      <div class="social d-flex justify-content-center">
-                        <a href="#" class="me-2"><i class="fa-brands fa-facebook-f color"></i></a>
-                        <a href="#" class="me-2"><i class="fa-brands fa-twitter color"></i></a>
-                      </div>
+          <div class="test row-eq-height" data-slick='{"slidesToShow": 4, "slidesToScroll": 4}'>
+          
+           @foreach ($team as $item)
+           <div>
+            <div class="col p-2" >
+              <div class="card card-slider-att p-3">
+                  <div class="img-center text-center mt-2">
+                      <img  src="{{ $item->image['url'] }}" alt="">
+                  </div>
+                  <div class="card-body text-center">
+                    <h5 class="card-title mt-4">{{ $item->name }}</h5>
+                    <p class="card-text mt-4">{{ $item->description }}</p>
+                    <div class="social d-flex justify-content-center">
+                      <a href="asdasd" class="me-2"><i class="fa-brands fa-facebook-f color"></i></a>
+                      <a href="asdasd" class="me-2"><i class="fa-brands fa-twitter color"></i></a>
                     </div>
                   </div>
+                </div>
             </div>
-            <div class="col-lg-4 col-md-12 col-sm-12 mt-5 px-4">
-                <div class="card card-slider-att p-5 mt-5">
-                    <div class="img-center text-center ">
-                        <img src="{{ asset('frontEnd/img/cheerful-caucasian-logo.png') }}" alt="">
-                    </div>
-                    <div class="card-body text-center mt-5">
-                      <h5 class="card-title mt-4">Card title</h5>
-                      <p class="card-text mt-4">Data Analysis Vivamus sagittis lacus vel augue laoreet.</p>
-                      <div class="social d-flex justify-content-center">
-                        <a href="#" class="me-2"><i class="fa-brands fa-facebook-f color"></i></a>
-                        <a href="#" class="me-2"><i class="fa-brands fa-twitter color"></i></a>
-                      </div>
-                    </div>
-                  </div>
-            </div>
-            <div class="col-lg-4 col-md-12 col-sm-12 mt-5 px-4">
-                <div class="card card-slider-att p-5 mt-5">
-                    <div class="img-center text-center ">
-                        <img  src="{{ asset('frontEnd/img/cheerful-caucasian-logo.png') }}" alt="">
-                    </div>
-                    <div class="card-body text-center mt-5">
-                      <h5 class="card-title mt-4">Card title</h5>
-                      <p class="card-text mt-4">Data Analysis Vivamus sagittis lacus vel augue laoreet.</p>
-                      <div class="social d-flex justify-content-center">
-                        <a href="#" class="me-2"><i class="fa-brands fa-facebook-f color"></i></a>
-                        <a href="#" class="me-2"><i class="fa-brands fa-twitter color"></i></a>
-                      </div>
-                    </div>
-                  </div>
-            </div>
+         </div>
+           @endforeach
+          </div>
+          
+          
+          
         </div>
     </div>
   </section>
@@ -146,4 +126,15 @@
     </div>
   </section>
   
+@endsection
+
+@section('scripts')
+<script>
+  $('.test').slick({
+  infinite: true,
+  slidesToShow: 3,
+  slidesToScroll: 3
+});
+
+</script>
 @endsection

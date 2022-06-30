@@ -95,6 +95,8 @@
                   @include('dashboard.frontEndSetting.include.get_touch')
                   @elseif($type == 'location')
                   @include('dashboard.frontEndSetting.include.location')
+                  @elseif($type == 'our-services')
+                  @include('dashboard.frontEndSetting.include.ourservice')
                   @endif
                 </div>
             </div>

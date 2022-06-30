@@ -65,8 +65,8 @@
                                   <input id="code_2" type="tel" max="1" pattern="[0-9]" class="form-control2">
                                   <input id="code_3" type="tel" max="1" pattern="[0-9]" class="form-control2">
                                   <input id="code_4" type="tel" max="1" pattern="[0-9]" class="form-control2">
-                                  <input id="code_3" type="tel" max="1" pattern="[0-9]" class="form-control2">
-                                  <input id="code_4" type="tel" max="1" pattern="[0-9]" class="form-control2">
+                                  <input id="code_5" type="tel" max="1" pattern="[0-9]" class="form-control2">
+                                  <input id="code_6" type="tel" max="1" pattern="[0-9]" class="form-control2">
                                 </div>
                                 <button onclick="activeCode()" type="button" class="btn btn-none login-button p-0" id="register">Activate</button>
                               </form>
@@ -142,7 +142,7 @@ function handleArrowRight(e) {
 
 function activeCode()
 {
-    let code = document.getElementById('code_1').value+document.getElementById('code_2').value+document.getElementById('code_3').value+document.getElementById('code_4').value;
+    let code = document.getElementById('code_1').value+document.getElementById('code_2').value+document.getElementById('code_3').value+document.getElementById('code_4').value+document.getElementById('code_5').value+document.getElementById('code_6').value;
     let url = '{{ route("activateCodeWeb") }}';
     $.ajax({
         url:url,
