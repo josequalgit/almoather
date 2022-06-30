@@ -40,7 +40,7 @@
                                             @foreach ($data as $item)
                                             <tr>
                                                 <td>
-                                                  <img height="50px" class="rounded-circle" src=" {{ $item->image['url'] }}" alt="">
+                                                  <img width="70px" class="rounded-circle" src=" {{ $item->image['url'] }}" alt="">
                                                 </td>
                                                 <td>
                                                    {{ $item->name }}

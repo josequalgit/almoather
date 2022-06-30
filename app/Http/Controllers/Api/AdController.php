@@ -42,6 +42,7 @@ class AdController extends Controller
     use ApiPaginator , UserResponse , AdResponse , SendNotification;
 
     private $trans_dir = 'messages.api.';
+    private $trans_dir_notification = 'notifications.api.';
 
     //Return the list of ads based on Type (Customer / Influencer)
     public function index($status)
@@ -319,7 +320,7 @@ class AdController extends Controller
             ];
 
             $this->sendAdminNotification('contract_manager_notification',$info);
-
+            $this->sendNotifications($data->ads->customers->users->fcm_token,$info);
             $getContactManagers = User::whereHas('roles',function($q){
                 $q->where('name','Contracts Manager')
                 ->orWhere('name','superAdmin');
@@ -327,6 +328,16 @@ class AdController extends Controller
 
             Notification::send($getContactManagers, new AddInfluencer($info));
 
+        }
+
+        if($request->status == 1)
+        {
+            $info =[
+                'msg'=>trans($this->trans_dir.'influencer').'"'.$name.'"'. trans($this->trans_dir.'accept_contract'),
+                'id'=>$influencer->users->id,
+                'type'=>'Influencer'
+            ];
+            $this->sendNotifications($data->ads->customers->users->fcm_token,$info);
         }
 
         //ToDo Send notification for admin and customer campaign order
@@ -450,7 +461,7 @@ class AdController extends Controller
     }
 
     // Get unmatched influencers
-    public function getMatchedInfluencersNotChosen($campaign_id,$removed_inf_id)
+    public function getMatchedInfluencersNotChosen($campaign_id,$removed_inf_id,Request $request)
     {
 
         $ad = Ad::find($campaign_id);
@@ -469,7 +480,14 @@ class AdController extends Controller
         }
 
         if($removed_inf_id == -1){
-            $infData = $ad->matches()->where([['chosen',0],['status','!=','deleted']])->get()->map(function($item) use($ad){
+            $infData =$ad->matches();
+            if($request->search)
+            {
+               $infData = $infData->whereHas('influncers',function($q) use($request){
+                    $q->where('nick_name','%'.$request->search.'%');
+                });
+            }
+            $infData = $infData->where([['chosen',0],['status','!=','deleted']])->get()->map(function($item) use($ad){
                 $influencerPrice = $ad->onSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
                 $isProfitable = $ad->campaignGoals->profitable;
 
@@ -516,7 +534,14 @@ class AdController extends Controller
             ], config('global.NOT_FOUND_STATUS'));
         }
 
-        $infData = $ad->matches()->where('chosen',0)->get()->map(function($item) use($ad , $ReplacedInfluencer){
+        $infData =$ad->matches();
+            if($request->search)
+            {
+               $infData = $infData->whereHas('influncers',function($q) use($request){
+                    $q->where('nick_name','%'.$request->search.'%');
+                });
+            }
+            $infData = $infData->where('chosen',0)->get()->map(function($item) use($ad , $ReplacedInfluencer){
 			$remainingBudget = $ad->budget - $ad->price_to_pay;
             $influencerPrice = $ad->onSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
 
@@ -1080,6 +1105,7 @@ class AdController extends Controller
              * 
              * */
 
+
             Payment::create([
                 'ad_id' => $ad_id,
                 'trans_id' => $request->TranId,
@@ -1088,7 +1114,19 @@ class AdController extends Controller
                 'status_code' => $request->ResponseCode,
                 'type' => $request->type,
             ]);
-			
+
+            /**
+             * Send notification to customer when the payment failed
+             */
+            $tokens = [ $data->customers->users->fcm_token ];
+
+            $data = [
+                "title" =>trans($this->trans_dir_notification.'reject_payment_ad_title'),
+                "body" => trans($this->trans_dir_notification.'reject_payment_ad',['ad_name'=>$data->store]),
+                "type" => 'Ad',
+                'target_id' =>$ad->id
+            ];
+			$this->sendNotifications($tokens,$data);
              return response()->json([
                 'err' => trans($this->trans_dir.'payment_failed'),
                 'status' => config('global.WRONG_VALIDATION_STATUS')
@@ -1153,7 +1191,7 @@ class AdController extends Controller
 
                 $tokens = [];
                 foreach($data->matches as $match){
-                    $tokens[] = $match->influencers->token;
+                    $tokens[] = $match->influencers->users->fcm_token;
                 }
 
                 if(!empty($tokens)){

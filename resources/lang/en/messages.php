@@ -19,6 +19,7 @@ return [
         'ad_contract'=>'ad contract',
         'influencer'=>'Influencer',
         'reject_contract'=>'rejected the contract because of',
+        'accept_contract'=>'accept the contract',
         'ad_small'=>'ad',
         'data_was_updated'=>'data was updated',
         'search_result'=>'the search result',
