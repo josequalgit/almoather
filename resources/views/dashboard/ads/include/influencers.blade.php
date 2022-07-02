@@ -57,8 +57,8 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
                                     <td>{{ $item->AOAF ?? 0 }}</td>
                                 @endif
                                 @if(!in_array($data->status,$notShowSinarioStatuses))
-                                    <td class="date {{ $contract ? 'has-content' : ''}}" data-date="{{ $contract ? $contract->date->format('Y-m-d') : '' }}">{{ $contract ? $contract->date->format('d/m/Y') : 'Not set' }}</td>
-                                    <td class="sinario {{ $contract ? 'has-content' : ''}}">{{ $contract ? $contract->scenario : 'Not set' }}</td>
+                                    <td class="date {{ $contract && $contract->date ? 'has-content' : ''}}" data-date="{{ $contract && $contract->date ? $contract->date->format('Y-m-d') : '' }}">{{ $contract ? $contract->date->format('d/m/Y') : 'Not set' }}</td>
+                                    <td class="sinario {{ $contract && $contract->scenario ? 'has-content' : ''}}">{{ $contract && $contract->scenario? $contract->scenario : 'Not set' }}</td>
                                 @endif
                                 <td>{{ $item->influencers->TypeInfluencerSubscriber }}</td>
                                 <td>{{ ucwords(str_replace('_',' ',$item->status)) }}</td>
