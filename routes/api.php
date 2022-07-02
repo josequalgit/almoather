@@ -171,7 +171,6 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
             Route::post('changeMatchedStatus','changeMatchStatus');
             Route::post('check_payment/{ad_id}','check_payment');
             Route::get('get_ad_influencers_match/{ad_id}','get_ad_influencers_match');
-            Route::get('wait_for_influencer_response/{ad_id}','wait_for_influencer_response');
             Route::post('update/{ad_id}','update');
             Route::get('ad_details_update/{ad_id}','ad_details_update');
             Route::post('/upload_media/{file_id}/{type}','uploadMedia')->where('type','remove|add|replace');

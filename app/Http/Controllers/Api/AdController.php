@@ -789,49 +789,6 @@ class AdController extends Controller
 
     }
 
-    /** NOT IN USE */
-    //Todo Remove
-    public function full_payment($ad_id)
-    {
-        $ad = Ad::find($ad_id);
-        if(!$ad) return response()->json([
-            'err'=>trans($this->trans_dir.'ad_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
-        
-        if($ad->status !== 'prepay') return response()->json([
-            'err'=>trans($this->trans_dir.'ad_dont_have_right_status'),
-            'status'=>config('global.WRONG_VALIDATION_STATUS')
-        ],config('global.WRONG_VALIDATION_STATUS'));
-
-        $ad->status = 'fullpayment';
-        $ad->save();
-
-        $name = Auth::guard('api')->user()->customers->full_name;
-        $info =[
-            'msg'=>trans($this->trans.'customer').' "'.$name.'"'.' '.trans($this->trans.'payed_full_payment').'('.$ad->budget.') for "'.$ad->store.'" ',
-            'id'=>$ad->id,
-            'type'=>'Ad'
-        ];
-
-        $this->sendAdminNotification('contract_manager_notification',$info);
-
-        $getContactManagers = User::whereHas('roles',function($q){
-            $q->where('name','Contracts Manager')
-            ->orWhere('name','superAdmin');
-        })->get();
-
-        Notification::send($getContactManagers, new AddInfluencer($info));
-        
-
-        return response()->json([
-            'msg'=>trans($this->trans_dir.'ad_status_was_changed').$ad->status.'',
-            'status'=>config('global.OK_STATUS')
-        ],config('global.OK_STATUS'));
-
-    }
-
-
     /** When the influencer response to the ad */
     //Todo check notification
     public function completeAd($contract_id)
@@ -982,65 +939,6 @@ class AdController extends Controller
         return $this->match_response($ad);
     }
 
-    //Return influencers when waiting customer to pay full payment
-    public function wait_for_influencer_response($ad_id)
-    {
-        $data = Ad::find($ad_id);
-        if(!$data) return response()->json([
-            'err'=>trans($this->trans_dir.'ad_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
-        $cal = $data->budget * 5.5/100;
-
-        return response()->json([
-            'msg'=>trans($this->trans_dir.'all_matched'),
-            'data'=>[
-                'id'=>$data->id,
-                'type'=> trans($this->trans_dir.$data->type),
-                'category'=>$data->categories?$data->categories->name:null,
-                'format_price'=>$this->formateMoneyNumber($data->budget - $cal),
-                'format_budget'=>$this->formateMoneyNumber($data->budget),
-                'price'=>$data->budget - $cal,
-                'budget'=>$data->budget,
-                'match'=> $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($data){
-                    $contract = InfluencerContract::where('influencer_id',$item->influencer_id)->where('ad_id',$data->id)->first();
-
-                    $response = [
-                        'id' => $item->influencers->id,
-                        'image' => $item->influencers->users->infulncerImage,
-                        'name' => $item->influencers->nick_name,
-                        'match' => $item->match,
-                        'status' => null,
-                        'gender'    => trans($this->trans_dir.$item->influencers->gender),
-                        'budget'    => number_format($influencerPrice),
-                    ];
-
-                    $isProfitable = $data->campaignGoals->profitable;
-
-                    $response['ROAS'] = null;
-                    $response['engagement_rate'] = null;
-                    $response['AOAF'] = null;
-
-                    if($isProfitable){
-                        $response['ROAS'] = $item->match . '%';
-                    }else{
-                        $response['engagement_rate'] = $item->match . '%';
-                        $response['AOAF'] = $item->AOAF;
-                    }
-
-                    $response['start_date'] = null;
-                    if($contract && $contract->date){
-                        $response['start_date'] = $contract->date->format('d/m/Y');
-                    }
-                   
-                        
-                })
-            ],
-            'status'=>config('global.OK_STATUS')
-        ],config('global.OK_STATUS'));
-
-    }
-
     //Todo Explain this
     public function get_ad_influencers_match($ad_id)
     {
@@ -1064,7 +962,7 @@ class AdController extends Controller
                 'budget'            => $data->budget,
                 'format_price'      => $this->formateMoneyNumber($data->budget - $cal),
                 'format_budget'     => $this->formateMoneyNumber($data->budget),
-                'match'             => $data->status == 'prepay' ? $this->get_ad_influencers_matchs($data) : $this->get_ad_influncers_with_status($data)
+                'match'             => $this->get_ad_influencers_matchs($data)
             ],
             'status' => config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
@@ -1329,85 +1227,19 @@ class AdController extends Controller
         );
     }
 
-    private function get_ad_influncers_with_status($ad)
-    {
-        return $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($ad){
-            $contract = InfluencerContract::where('influencer_id',$item->influencer_id)->where('ad_id',$ad->id)->first();
-
-            $status = null;
-        
-            if(isset($contract)&&$contract->is_accepted == 2)
-            {
-                $status = 'rejected';
-            }else if(isset($contract)&&$contract->is_accepted == 1){
-
-                if($contract->status == 1&&$contract->admin_status == 1)
-                {
-                    $status = 'completed';
-                }
-                elseif($contract->status == 1&&$contract->status == 0)
-                {
-                    $status = 'waiting admin approve';
-                }
-                elseif($contract->is_accepted == 1)
-                {
-                    $status = 'Progress';
-                }
-                elseif($contract->is_accepted == 0)
-                {
-                    $status = 'pending';
-                }
-                else
-                {
-                    $status = 'progress';
-                }
-            }
-            else
-            {
-                $status = 'pending';
-            }
-
-            $inf = $item->influencers;
-            $isProfitable =  $ad->campaignGoals->profitable;
-            $isOnSite = $ad->ad_type == 'onsite';
-        
-            $price = $isOnSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
-
-            $response =  [
-                'id'        => $inf->id,
-                'name'      => $inf->nick_name,
-                'image'     => $inf->users->InfulncerImage ? $inf->users->InfulncerImage : null,
-                'match'     => $item->match,
-                'gender'    => trans($this->trans_dir.$item->influencers->gender),
-                'budget'    => number_format($price),
-                'status'    => $status
-                
-            ];
-    
-            $response['ROAS'] = null;
-            $response['engagement_rate'] = null;
-            $response['AOAF'] = null;
-
-            if($isProfitable)
-            {
-                $response['ROAS'] = $item->match . '%';
-            }
-            else
-            {
-                $response['engagement_rate'] = $item->match . '%';
-                $response['AOAF'] = $item->AOAF;
-            }
-
-            return $response;
-        });
-    }
-
     private function get_ad_influencers_matchs($ad)
     {
        $isProfitable =  $ad->campaignGoals->profitable;
        $isOnSite = $ad->ad_type == 'onsite';
         return $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($isProfitable,$isOnSite){
             $price = $isOnSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
+
+            $contract = InfluencerContract::where('influencer_id', $item->influencer_id)->where('ad_id',$ad->id)->first();
+
+            $influencerPrice = $ad->onSite ? $item->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
+
+            $status = null;
+
             $response = [
                 'id'            => $item->influencers->id,
                 'name'          => $item->influencers->nick_name,
@@ -1415,6 +1247,7 @@ class AdController extends Controller
                 'gender'        => trans($this->trans_dir.$item->influencers->gender),
                 'is_primary'    => $item->status == 'basic' ? true : false,
                 'budget'        => number_format($price),
+                'status'        => null
             ];
 
             $response['ROAS']               = null;
@@ -1428,6 +1261,11 @@ class AdController extends Controller
             {
                 $response['engagement_rate']    = $item->match . '%';
                 $response['AOAF'] = $item->AOAF;
+            }
+
+            $response['start_date'] = null;
+            if($contract && $contract->date){
+                $response['start_date'] = $contract->date->format('d/m/Y');
             }
 
             return $response;
