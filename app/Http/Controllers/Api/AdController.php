@@ -378,9 +378,9 @@ class AdController extends Controller
         $data->is_accepted = $request->status == 0 ? 2 : $request->status;
         $data->rejectNote = $request->reject_note;
         $data->save();
+        $influencer = Influncer::find($data->influencer_id);
 
         if($request->status == 0 && $request->rejectNote){
-            $influencer = Influncer::find($data->influencer_id);
             $name = $influencer->nick_name;
             
             $info =[
