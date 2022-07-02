@@ -14,6 +14,8 @@ return [
     'CAMPAIGN_FULL_PAYMENT_REMINDER' => 3,
     'CAMPAIGN_FULL_PAYMENT_PERIOD' => 10,
     'WARNING_DAYS_PERIOD'=>26,
+    'CANCELED_DAYS_PERIOD'=>28,
+    'RESET_DAYS_PERIOD'=>30,
     'LANGS'=>['en','ar'],
     'CUSTOMER_ADS_STATUS'=>['Active','WaitingPayment','Pending','Finished','Rejected'],
     'INFLUENCER_ADS_STATUS'=>['Pending','Active','Completed','Rejected'],

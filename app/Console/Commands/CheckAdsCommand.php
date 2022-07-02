@@ -54,11 +54,12 @@ class CheckAdsCommand extends Command
             $setting = AppSetting::where('key','expired_info')->first();
             $warningDaysPeriod = config('global.WARNING_DAYS_PERIOD');
             $canceledDaysPeriod = config('global.CANCELED_DAYS_PERIOD');
+            $resetDaysPeriod = config('global.CANCELED_DAYS_PERIOD');
             if($setting)
             {
                 $ser = json_decode($setting->value);
-                $warningDaysPeriod = $data['warning_days_period'];
-                $canceledDaysPeriod = $data['canceled_days_period'];
+                // $warningDaysPeriod = $ser['warning_days_period'];
+                // $canceledDaysPeriod = $ser['canceled_days_period'];
             }
             $ads = Ad::get();
             $canceledDaysPeriod = $warningDaysPeriod;
@@ -141,18 +142,42 @@ class CheckAdsCommand extends Command
 
                 }
 
-                    
-    
-                #SEND NOTIFICATION TO CUSTOMER ABOUT THE AD
+                
+                #SEND NOTIFICATION TO INFLUENCER ABOUT THE AD
+                $remind_about_ad_date = [];
                 if($item->influencers)
                 {
                     $before2DaysDate = date("Y-m-d", strtotime("-2 day"));
+                    $before1DaysDate = date("Y-m-d", strtotime("-1 day"));
+                    $beforeTodayDate = date("Y-m-d");
                     $date = $item->date;
                     if($before2DaysDate == $date)
                     {
                         $sendTo = User::find($item->influencers->users->id);
                         $lang = $item->influencers->users->lang;
                         Notification::send($sendTo, new AddInfluencer($adminMessage[$lang??'en']));
+                    }
+                    if($before1DaysDate == $date)
+                    {
+                        $message_body = [
+                            "title" => trans($this->notification_trans_dir.'ad_reminder_before_one_day_title'),
+                            "body" => trans($this->notification_trans_dir.'ad_reminder_before_one_day',['ad_name'=>$item->ads->store]),
+                            "type" => 'influencers',
+                            'target_id' =>$item->ads->id
+                        ];
+                        $this->sendNotifications([$item->influencers->users->fcm_token],$message_body);
+
+                    }
+                    if($beforeTodayDate == $date)
+                    {
+                        $message_body = [
+                            "title" => trans($this->notification_trans_dir.'ad_reminder_before_one_day_title'),
+                            "body" => trans($this->notification_trans_dir.'ad_reminder_for_today',['ad_name'=>$item->ads->store]),
+                            "type" => 'influencers',
+                            'target_id' =>$item->ads->id
+                        ];
+                        $this->sendNotifications([$item->influencers->users->fcm_token],$message_body);
+
                     }
                 }
             }
@@ -176,37 +201,65 @@ class CheckAdsCommand extends Command
                 ]
                 ];
 
-                $message_body = [
-                    "title" => $checkSubscriptionTitle[$lang??'en'],
-                    "body" => $checkSubscription[$lang??'en'],
-                    "type" => 'influencers',
-                    'target_id' =>$ad->id
-                ];
+              
                 $tokens = [];
-        
+                $tokens_for_reminder = [];
             foreach ($influencers as $value) 
             {
                 $countDiffDays = Carbon::parse($value->subscribers_update)->diffInDays($cDate);
-                if($countDiffDays == $canceledDaysPeriod || $countDiffDays > $canceledDaysPeriod)
+
+                if($countDiffDays >= $canceledDaysPeriod)
                 {
+                    if($countDiffDays >= $resetDaysPeriod)
+                    {
+                        $influencers->update([
+                            'subscribers'=>50000,
+                            'subscribers_update'=>Carbon::parse()->now()
+                        ]);
+                        $message_body_for_resting_subscribers = [
+                            "title" => trans($this->notification_trans_dir,'ad_influencer_before_one_day_title'),
+                            "body" => trans($this->notification_trans_dir,'influencer_reset_message'),
+                            "type" => 'influencers',
+                            'target_id' =>$value->users->id
+                        ];
+                        $this->sendNotifications([$value->users->fcm_token],$message_body_for_resting_subscribers);
+
+                    }
+                    $message_body = [
+                        "title" => $checkSubscriptionTitle[$lang??'en'],
+                        "body" => $checkSubscription[$lang??'en'],
+                        "type" => 'influencers',
+                        'target_id' =>$value->users->id
+                    ];
                     $sendTo = User::find($value->users->id);
                     $lang = $item->customers->users->lang;
-                    array_push($tokens,$sendTo->users->fcm_token);
+                   // array_push($tokens,$sendTo->users->fcm_token);
+                    $this->sendNotifications([$sendTo->users->fcm_token],$message_body);
                     Notification::send($sendTo, new AddInfluencer($checkSubscription[$lang??'en']));    
                 }
 
+                #INFLUENCERS REMINDER FOR THE AD DATE 
                 foreach ($value->contracts as $key => $value) {
 
-                    $message_body = [
-                        "title" => trans($this->notification_trans_dir,'influencers_ad_reminder_msg',['ad_name'=>$value->ads->store]),
+                    $message_body_for_reminder = [
+                        "title" => trans($this->notification_trans_dir.'influencers_ad_reminder_msg',['ad_name'=>$value->ads->store]),
                         "body" => $checkSubscription[$lang??'en'],
                         "type" => 'influencers',
-                        'target_id' =>$ad->id
+                        'target_id' =>$value->influencers->users->id
                     ];
+
+                    array_push($tokens_for_reminder,$value->influencers->users->fcm_token);
+                    $this->sendNotifications([$value->influencers->users->fcm_token],$message_body_for_reminder);
                 }
+
+
+                /** UPDATE SUBSCRIPTION REMINDER */
+               
+
             }
 
-        $this->sendNotifications($tokens,$message_body);
+
+
 
 
 
