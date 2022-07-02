@@ -86,10 +86,10 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
     #GET PRIVACY
     Route::controller(PrivacyController::class)->prefix('privacy')->group(function(){
         Route::get('/','index');
-        Route::get('return-policy','indexPolicy');
+        
     });
 
-
+    Route::get('return-policy',[PrivacyController::class,'indexPolicy']);
     #GET TERMS AND CONDITIONS
     Route::controller(TermsAndConditionsController::class)->prefix('terms')->group(function(){
         Route::get('/','index');
