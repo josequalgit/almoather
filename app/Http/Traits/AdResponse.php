@@ -134,8 +134,7 @@ trait AdResponse
         ];
 
         if (Auth::guard('api')->user()->customers) {
-            $contract = route('contractApi',$ad->id);
-            $basicResponse['contract'] = $contract ? $contract->content : null;
+            $basicResponse['contract'] = route('contractApi',$ad->id);
         }
         if (Auth::guard('api')->user()->influncers) {
             $basicResponse['contract'] = InfluencerContract::select('id', 'content', 'date')->where(['influencer_id' => Auth::guard('api')->user()->influncers->id])
