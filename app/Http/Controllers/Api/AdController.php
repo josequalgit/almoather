@@ -338,7 +338,8 @@ class AdController extends Controller
     }
 
     //Get campaign Contract
-    public function getInfluencerContractApi($ad,$inf_id){
+    public function getInfluencerContractApi($campaign_id,$inf_id){
+        $ad = Ad::find($campaign_id);
         $contract = $ad->InfluencerContract()->where('influencer_id',$inf_id)->first();
 
         $content = $contract->content;
