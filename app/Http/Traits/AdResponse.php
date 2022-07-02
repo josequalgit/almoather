@@ -145,7 +145,7 @@ trait AdResponse
         //Return Matches if the status is Full payment / Choosing influencer / Progress
         if (Auth::guard('api')->user()->customers && $ad->status !== 'pending' && $ad->status !== 'approve' && $ad->status !== 'prepay' && $ad->status !== 'rejected') {
             $basicResponse['matches'] = $ad->matches()->where('status', '!=', 'deleted')->where('chosen', 1)->get()->map(function ($item) use($ad) {
-                $contract = InfluencerContract::where('influencer_id', $item->influencer_id)->first();
+                $contract = InfluencerContract::where('influencer_id', $item->influencer_id)->where('ad_id',$ad->id)->first();
 
                 $influencerPrice = $ad->onSite ? $item->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
 
@@ -156,8 +156,7 @@ trait AdResponse
                     $status = trans($this->trans_dir . 'Joined');
                 } 
 
-
-                return [
+                $response = [
                     'id' => $item->influencers->id,
                     'image' => $item->influencers->users->infulncerImage,
                     'name' => $item->influencers->nick_name,
@@ -166,6 +165,24 @@ trait AdResponse
                     'gender'    => trans($this->trans_dir.$item->influencers->gender),
                     'budget'    => number_format($influencerPrice),
                 ];
+
+                $response['ROAS'] = null;
+                $response['engagement_rate'] = null;
+                $response['AOAF'] = null;
+
+                if($isProfitable){
+                    $response['ROAS'] = $item->match . '%';
+                }else{
+                    $response['engagement_rate'] = $item->match . '%';
+                    $response['AOAF'] = $item->AOAF;
+                }
+
+                $response['start_date'] = null;
+                if($contract && $contract->date){
+                    $response['start_date'] = $contract->date->format('d/m/Y');
+                }
+
+                return $response;
             });
         }
 
