@@ -165,6 +165,7 @@ Route::group(['middleware' => 'language'],function(){
                 Route::post('/ads/DeleteFile/{file_id}','deleteFile')->name('deleteFile');
                 Route::post('/ads/updateBasic/{ad_id}','update_basic')->name('updateBasic');
                 Route::post('/ads/update/{id}/{confirm?}','update')->name('update')->middleware('permission:Edit Ads');
+                Route::get('/ads/add-influencer/{ad_id}/{chosen_inf}','addInfluencerMatch')->name('addInfluencerMatch');
                 Route::get('/ads/changeMatch/{ad_id}/{removed_inf}/{chosen_inf}','changeMatch')->name('changeMatch')->middleware('permission:Edit Ads');
                 Route::get('/ads/seeMatched/{ad_id}','seeMatched')->name('seeMatched');
                 Route::get('/ads/contract/edit/{ad_id}','editContract')->name('editContract');
@@ -180,7 +181,8 @@ Route::group(['middleware' => 'language'],function(){
                 Route::get('/update_info/{id}','update_info_view')->name('update_info_view');
                 Route::get('/view-contract/{id}','show_contract')->name('show_contract');
                 Route::post('/update_info_submit/{id}','update_info_submit')->name('update_info_submit');
-                Route::get('campaign/pdf','generateContractPdf')->name('contract-pdf');
+                Route::get('campaign/pdf/{id}','getCampaignContract')->name('contract-pdf');
+                Route::get('campaign/pdf/print/{id}','printContract')->name('printContract');
             });
 
             Route::middleware('role_or_permission:superAdmin|Edit Slide|See Slide|Create Slide|Delete Slide')->name('slides.')->controller(SlideController::class)->group(function(){
@@ -196,6 +198,10 @@ Route::group(['middleware' => 'language'],function(){
             Route::middleware('role_or_permission:superAdmin|Edit Terms|Show Terms')->name('terms.')->controller(ContactUsController::class)->group(function(){
                 Route::get('/privacy','index')->name('index')->middleware('role_or_permission:superAdmin|Show Privacy');
                 Route::post('/privacy/update','updatePrivacy')->name('update')->middleware('role_or_permission:superAdmin|Edit Privacy');
+
+                Route::get('/policy','indexPolicy')->name('indexPolicy')->middleware('role_or_permission:superAdmin|Show Policy');
+                Route::post('/policy/update','updatePolicy')->name('updatePolicy')->middleware('role_or_permission:superAdmin|Edit Policy');
+                
                 Route::get('/terms','indexTerms')->name('indexTerms')->middleware('role_or_permission:superAdmin|Show Terms');
                 Route::post('/terms/updateTerms','updateTerms')->name('updateTerms')->middleware('role_or_permission:superAdmin|Edit Terms');
                 // Route::post('/terms/update','updateTerms')->name('update')->middleware('role_or_permission:superAdmin|Edit Terms');

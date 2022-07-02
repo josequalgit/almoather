@@ -7,6 +7,11 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
 <section>
     <div class="add-section">
         <div class="blocks-table d-block">
+            @if(!in_array($data->status,$notShowfluencersActions))
+            <div class="text-right">
+                <button class="btn-primary btn" onclick="getUnchosenInfulncers(this,'0')">Add Influencer</button>
+            </div>
+            @endif
             <div class="table-responsive mb-2">
                 <table class="table zero-configuration table-influencers col-12">
                     <thead>
@@ -52,8 +57,8 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
                                     <td>{{ $item->AOAF ?? 0 }}</td>
                                 @endif
                                 @if(!in_array($data->status,$notShowSinarioStatuses))
-                                    <td class="date {{ $contract ? 'has-content' : ''}}">{{ $contract ? $contract->date : 'Not set' }}</td>
-                                    <td class="sinario {{ $contract ? 'has-content' : ''}}">{{ $contract ? $contract->scenario : 'Not set' }}</td>
+                                    <td class="date {{ $contract && $contract->date ? 'has-content' : ''}}" data-date="{{ $contract && $contract->date ? $contract->date->format('Y-m-d') : '' }}">{{ $contract && $contract->date ? $contract->date->format('d/m/Y') : 'Not set' }}</td>
+                                    <td class="sinario {{ $contract && $contract->scenario ? 'has-content' : ''}}">{{ $contract && $contract->scenario? $contract->scenario : 'Not set' }}</td>
                                 @endif
                                 <td>{{ $item->influencers->TypeInfluencerSubscriber }}</td>
                                 <td>{{ ucwords(str_replace('_',' ',$item->status)) }}</td>
@@ -66,8 +71,8 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
                                         <i class="fas fa-user-times"></i>
                                     </button>
                                     @endif
-                                    @if ($data->admin_approved_influencers == 0)
-                                        <button  type="button" onclick="seeContract(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm"><i class="fas fa-file-signature"></i></button>
+                                    @if (!in_array($data->status,$notShowSinarioStatuses))
+                                        <button  type="button" onclick="openInfluencerDataModal(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm"><i class="fas fa-file-signature"></i></button>
                                     @endif
                                 
                                 </td>
@@ -84,7 +89,8 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
             @endif
             @if ($data->admin_approved_influencers == 1)
                 <div class="d-flex justify-content-center">
-                    <button  type="button" onclick="viewContract(this)" class="btn btn-secondary">View Contract</button>
+                    <button class="btn btn-secondary mr-1" onclick="printContract(this)" >Print Contract</button>
+                    <button  type="button" onclick="viewContract(this)" class="btn btn-danger">Update Contract</button>
                 </div> 
             @endif
             <div class="row mt-2">

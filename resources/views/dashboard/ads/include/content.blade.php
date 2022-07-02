@@ -15,8 +15,8 @@
                                     <div class="col">
                                         <label for="">Type</label>
                                         <select class="form-control" id="ad-type">
-                                            <option {{ $data->type == 'product' ? 'selected' : '' }} value="product" data-items="{{json_encode($productCategories)}}" >Product</option>
-                                            <option {{ $data->type == 'service' ? 'selected' : '' }} value="service" data-items="{{json_encode($serviceCategories)}}">Service</option>
+                                            <option {{ $data->type == 'product' ? 'selected' : '' }} value="product" data-items="{{json_encode($productCategories)}}" >منتج</option>
+                                            <option {{ $data->type == 'service' ? 'selected' : '' }} value="service" data-items="{{json_encode($serviceCategories)}}">خدمة</option>
                                         </select>
                                     </div>
                                     <div class="col">
@@ -50,7 +50,7 @@
                                             </a>
                                             <div class="ml-2">
                                                 <h6 class="mb-0">Video #{{ $key + 1 }}</h6>
-                                                <div class="about"><button onclick="deleteFileModal( {{ $item->id }})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
+                                                <div class="about"><button onclick="deleteFileModal({{ $item->id }})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
                                             </div>
                                         </div>
                                     </div>
@@ -72,7 +72,7 @@
                                             </a>
                                             <div class="ml-2">
                                                 <h6 class="mb-0">Image #{{ $key + 1 }}</h6>
-                                                <div class="about"><button onclick="deleteFileModal( {{ $item->id }})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
+                                                <div class="about"><button onclick="deleteFileModal({{ $item->id }})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
                                             </div>
                                         </div>
                                     </div>

@@ -277,22 +277,64 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        if($ad->status == 'pending' || $ad->status == 'rejected') return response()->json([
-            'err'=>trans($this->trans_dir,'no_contract_for_ad').' '.$ad->status,
-            'status'=>config('global.WRONG_VALIDATION_STATUS')
-        ],config('global.WRONG_VALIDATION_STATUS'));
-
-        $data = CampaignContract::select(['content'])->find($ad->contacts->id);
-        if(!$data) return response()->json([
+        if(!$ad->contacts) return response()->json([
             'err'       => trans($this->trans_dir.'contract_not_found'),
             'status'    => config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
+        $matches = $ad->matches()->where('chosen', 1)->where('status','!=','deleted')->get();
+        $hasInfluencerError = false;
+        foreach($matches as $match){
+            if(!$match->contract || !$match->contract->date || !$match->contract->scenario){
+                $hasInfluencerError = true;
+                break;
+            }
+        }
+
+        if($hasInfluencerError){
+            return response()->json([
+                'message'=> 'Please Wait until we approve influencers list',
+                'status'=> false
+            ],config('global.OK_STATUS'));
+        }
+
         return response()->json([
             'msg'   => trans($this->trans_dir.'ad_contract'),
-            'data'  => $data->content,
+            'data'  => route('contractApi',$ad->id),
             'status'=> config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
+    }
+
+    //Get campaign Contract
+    public function getCampaignContract($campaign_id){
+        $ad = Ad::find($campaign_id);
+        $contract = CampaignContract::where('ad_id',$campaign_id)->first();
+
+        $content = $contract->content;
+
+        $startDate = $ad->InfluencerContract()->orderBy('date','asc')->first();
+        $endDate = $ad->InfluencerContract()->orderBy('date','desc')->first();
+
+        $content = str_replace("[[_CONTRACT_NUM_]]", $ad->id, $content);
+        $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
+        $content = str_replace("[[_CUSTOMER_NAME_]]", $ad->customers->full_name, $content);
+        $content = str_replace("[[_STORE_NAME_]]", $ad->store, $content);
+        $content = str_replace("[[_CUSTOMER_NATIONALITY_]]", $ad->customers->nationalities->getTranslation('name','ar'), $content);
+        $content = str_replace("[[_CR_NUM_]]", $ad->cr_num, $content);
+        $content = str_replace("[[_NATIONAL_NUM_]]", $ad->customers->id_number, $content);
+        $content = str_replace("[[_PHONE_]]", $ad->customers->users->phone, $content);
+        $content = str_replace("[[_EMAIL_]]", $ad->customers->users->email, $content);
+        $content = str_replace("[[_PRICE_WITH_TAX_]]", number_format($ad->adBudgetWithVat), $content);
+        $content = str_replace("[[_PRICE_]]", number_format($ad->budget), $content);
+        $content = str_replace("[[_START_DATE_]]", $startDate->date->format('d/m/Y'), $content);
+        $content = str_replace("[[_END_DATE_]]", $endDate->date->format('d/m/Y'), $content);
+        $content = str_replace("[[_CAMPAIGN_GOAL_]]", $ad->campaignGoals->getTranslation('title','ar'), $content);
+        
+
+        $title = $contract->ads->store;
+
+        return $this->generateContractPdf($content,$title);
+
     }
 
     // Accept the contract For Influencer
@@ -348,7 +390,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    // SEarch on Campaigns
+    // Search on Campaigns
     public function search($query)
     {
         $user = Auth::guard('api')->user();
@@ -494,7 +536,7 @@ class AdController extends Controller
                 $remainingBudget = $ad->budget - $ad->price_to_pay;
 
                 $response =  [
-                    'id'        => $item->id,
+                    'id'        => $item->influencers->id,
                     'name'      => $item->influencers->nick_name,
                     'image'     => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
                     'match'     => $item->match,
@@ -548,7 +590,7 @@ class AdController extends Controller
             $isProfitable = $ad->campaignGoals->profitable;
 
             $response =  [
-                'id'        => $item->id,
+                'id'        => $item->influencers->id,
                 'name'      => $item->influencers->nick_name,
                 'image'     => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
                 'match'     => $item->match,
@@ -630,6 +672,7 @@ class AdController extends Controller
         return $this->match_response($data);
     }
 
+    //Calculate Campaign price
     private function calculateCampaignPrice($ad){
         $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
         $budgetSum = 0;
@@ -910,7 +953,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    //Todo Explain this
+    //Customer Approve/Reject contract
     public function accept_customer_ad_contract(Request $request , $contract_id)
     {
         $data = CampaignContract::find($contract_id);
@@ -918,17 +961,25 @@ class AdController extends Controller
             'err'=>trans($this->trans_dir.'contract_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
+
         if($request->status == 0&&!$request->rejectNote) return response()->json([
             'err'=>trans($this->trans_dir.'please_add_reject_note'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
         $data->is_accepted = $request->status;
-        $data->rejectNote = $request->status == 0?$request->rejectNote:null;
+        $data->rejectNote = $request->status == 0 ? $request->rejectNote : null;
         $data->save();
+
+        $adData = [
+            'budget' => number_format($data->ads->budget),
+            'price_to_pay' => number_format($data->ads->price_to_pay),
+            'price' => $data->ads->price_to_pay,
+        ];
     
         return response()->json([
             'msg'=>trans($this->trans_dir.'data_was_updated'),
+            'data' => $adData,
             'status'=>config('global.OK_STATUS'),
         ],config('global.OK_STATUS'));
     }
@@ -1103,9 +1154,7 @@ class AdController extends Controller
             * 
              * Save in the database
              * 
-             * */
-
-
+             */
             Payment::create([
                 'ad_id' => $ad_id,
                 'trans_id' => $request->TranId,
@@ -1317,8 +1366,19 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
+    //Match influencers list
     private function match_response($ad)
     {
+        $matches = $ad->matches()->where('chosen', 1)->where('status','!=','deleted')->get();
+        $hasInfluencerError = false;
+        foreach($matches as $match){
+            if(!$match->contract || !$match->contract->date || !$match->contract->scenario){
+                $hasInfluencerError = true;
+                break;
+            }
+        }
+        $admin_approved_influencers = $ad->admin_approved_influencers == 1 && !$hasInfluencerError;
+
         return response()->json([
             'msg'       => trans($this->trans_dir.'data_was_updated'),
             'status'    => config('global.OK_STATUS'),
@@ -1326,7 +1386,7 @@ class AdController extends Controller
 				'id'                => $ad->id,
 				'type'              => $ad->type,
 				'status'            => $ad->status,
-                'influncers_status' => $ad->admin_approved_influencers ? true : false,
+                'influncers_status' => $admin_approved_influencers ? true : false,
 				'category'          => $ad->categories->name,
 				'format_budget'     => $this->formateMoneyNumber($ad->budget),
 				'budget'            => $ad->budget,

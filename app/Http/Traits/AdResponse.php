@@ -6,6 +6,7 @@ use App\Models\CampaignContract;
 use App\Models\Contract;
 use App\Models\InfluencerContract;
 use Auth;
+use Mpdf\Mpdf;
 
 trait AdResponse
 {
@@ -18,14 +19,31 @@ trait AdResponse
             return $this->userDataResponse([], null, $item->users->id);
         }) : null;
 
+        $matches = $ad->matches()->where('chosen', 1)->where('status','!=','deleted')->get();
+        $hasInfluencerError = false;
+        foreach($matches as $match){
+            if(!$match->contract || !$match->contract->date || !$match->contract->scenario){
+                $hasInfluencerError = true;
+                break;
+            }
+        }
+        $admin_approved_influencers = $ad->admin_approved_influencers == 1 && !$hasInfluencerError;
+
         $date = $ad->created_at->format('d/m/Y');
-        // if($ad->InfluencerContract){
-        //     $date = $ad->InfluencerContract()->orderBy('date','asc')->first();
-        //     if($date && $date->date){
-        //         $date = $date->date->format('d/m/Y');
-        //     }
+        $start_date = null;
+        $end_date = null;
+        if($ad->InfluencerContract){
+            $contractData = $ad->InfluencerContract()->orderBy('date','asc')->first();
+            if($contractData && $contractData->date){
+                $start_date = $contractData->date->format('d/m/Y');
+            }
+
+            $contractData = $ad->InfluencerContract()->orderBy('date','desc')->first();
+            if($contractData && $contractData->date){
+                $end_date = $contractData->date->format('d/m/Y');
+            }
             
-        // }
+        }
 
         $basicResponse = [
             'id' => $ad->id,
@@ -85,7 +103,9 @@ trait AdResponse
             'influencer' => $info ? $info : null,
             'budget' => $ad->budget,
             'format_budget' => $this->formateMoneyNumber($ad->budget),
-            'date' => $date,
+            'date' => !$start_date || !$end_date ?  $date : null,
+            'start_date' => $start_date && $end_date ?  $start_date : null,
+            'end_date' => $start_date && $end_date ?  $end_date : null,
             'type' => trans($this->trans_dir . $ad->ad_type),
             'price' => $ad->price,
             'website_link' => $ad->website_link,
@@ -110,7 +130,7 @@ trait AdResponse
             'is_onSite' => trans($this->trans_dir . $ad->ad_type),
             'tax_value' => $ad->tax_value,
             'reject_note' => $ad->reject_note,
-            'admin_approved_influencers' => $ad->admin_approved_influencers ? true : false
+            'admin_approved_influencers' => $admin_approved_influencers ? true : false
         ];
 
         if ($ad->status == 'fullpayment' && Auth::guard('api')->user()->customers) {
@@ -225,5 +245,49 @@ trait AdResponse
     private function formateMoneyNumber($number)
     {
         return number_format($number, 0, '.', ',');
+    }
+
+    public function generateContractPdf($contract,$title = ''){
+        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
+
+        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata'];
+        $pdf = new mpdf([
+            'margin_left' => 10,
+            'margin_right' => 10,
+            'margin_top' => 35,
+            'margin_bottom' => 65,
+            'fontDir' => array_merge($fontDirs, [
+                public_path('Amiri'),
+            ]),
+            'fontdata' => $fontData + [
+                'Amiri' => [
+                    'R' => 'Amiri-Regular.ttf',
+                    'I' => 'Amiri-Bold.ttf',
+                    'useOTL' => 0xFF,
+                    'useKashida' => 75
+                ]
+            ],
+            'default_font' => 'Amiri'
+        ]);
+        $pdf->SetTitle($title);
+        $pdf->setAutoTopMargin = 'stretch';
+        $pdf->SetDisplayMode('fullpage');
+        $html = view('dashboard.contract.pdf',compact('contract','title'))->render();
+        $pdf->autoScriptToLang = true;
+        $pdf->autoLangToFont = true;
+        $pdf->SetWatermarkImage(public_path('img/avatars/logo-almuaather-full.jpg'),0.2,array(130,130));
+        $pdf->showWatermarkImage = true;
+        $pdf->SetDefaultBodyCSS('background', "url('".asset('img/avatars/pdf-bg.jpg')."')");
+        $pdf->SetDefaultBodyCSS('background-image-resize', 6);
+        $pdf->SetDefaultBodyCSS('background-position', 'top right');
+        $pdf->SetDefaultBodyCSS('background-repeat', 'no-repeat');
+       
+
+        $pdf->WriteHTML($html);
+
+        $pdf->Output();
+        
     }
 }

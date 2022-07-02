@@ -276,6 +276,13 @@
                   </a>
                 </li>
                 <li class="menu-item
+                {{ ($name == 'dashboard.terms.indexPolicy'|| $name == 'dashboard.terms.updatePolicy'|| $name == 'dashboard.indexPolicy.updatePolicy') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.terms.indexPolicy') }}" class="menu-link">
+                    <div data-i18n="List">Return Policy</div>
+                  </a>
+                </li>
+                <li class="menu-item
                 {{ ($name == 'dashboard.terms.indexTerms'|| $name == 'dashboard.indexTerms.updateTerms'|| $name == 'dashboard.indexTerms.updateTerms') ? 'active':''  }}
                 ">
                   <a href="{{ route('dashboard.terms.indexTerms') }}" class="menu-link">
