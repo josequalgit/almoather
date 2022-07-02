@@ -604,7 +604,7 @@ class AdController extends Controller
 
         $this->calculateCampaignPrice($ad);
 
-        return $this->match_response($data);
+        return $this->match_response($ad);
     }
 
     //Calculate Campaign price
