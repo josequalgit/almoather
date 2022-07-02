@@ -594,7 +594,7 @@ class AdController extends Controller
 
         $changeOld = AdsInfluencerMatch::where([['ad_id', $ad->id], ['influencer_id', $removed_inf_id]])->first();
         $changeOld->chosen = 0;
-        $changeNew->status = 'not_basic';
+        $changeOld->status = 'not_basic';
         $changeOld->save();
 
         $changeNew = AdsInfluencerMatch::where([['ad_id', $ad->id], ['influencer_id', $chosen_inf_id]])->first();
@@ -939,7 +939,7 @@ class AdController extends Controller
         return $this->match_response($ad);
     }
 
-    //Todo Explain this
+    //Return Influencers mathces before customer pay full payment
     public function get_ad_influencers_match($ad_id)
     {
         $data = Ad::find($ad_id);
@@ -1197,7 +1197,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    //Match influencers list
+    //Match influencers list 
     private function match_response($ad)
     {
         $matches = $ad->matches()->where('chosen', 1)->where('status','!=','deleted')->get();
@@ -1227,6 +1227,7 @@ class AdController extends Controller
         );
     }
 
+    //Get Influencers Matches data
     private function get_ad_influencers_matchs($ad)
     {
        $isProfitable =  $ad->campaignGoals->profitable;
