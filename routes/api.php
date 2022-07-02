@@ -29,7 +29,7 @@ use App\Http\Middleware\LanguageMiddleware;
 
 Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
     Route::post('login',[AuthController::class,'login']);
-    Route::get('campaign/pdf/{id}',[AuthController::class,'getCampaignContract'])->name('contractApi');
+    Route::get('campaign/pdf/{id}',[AdController::class,'getCampaignContract'])->name('contractApi');
     Route::get('changeLanguage/{lang}',[AuthController::class,'changeLang']);
 
 

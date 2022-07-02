@@ -307,6 +307,7 @@ class AdController extends Controller
 
     //Get campaign Contract
     public function getCampaignContract($campaign_id){
+        $ad = Ad::find($campaign_id);
         $contract = CampaignContract::where('ad_id',$campaign_id)->first();
 
         $content = $contract->content;
