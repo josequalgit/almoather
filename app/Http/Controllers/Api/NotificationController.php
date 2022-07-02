@@ -48,8 +48,7 @@ class NotificationController extends Controller
     {
   
         $data = DB::table('notifications')->where('id',$id)->first();
-        $data->read_at = Carbon::now();
-        $data->save();
+     
         
         if(!$data)  return response()->json([
              'err'=>trans($this->trans_dir.'wrong_notification_id'),
@@ -74,8 +73,7 @@ class NotificationController extends Controller
             }
             else
             {
-                $data->read_at = Carbon::now();
-                $data->save();
+               
                 return response()->json([
                     'msg'=>trans($this->trans_dir.'data_not_found'),
                     'type'=>'Ad',
