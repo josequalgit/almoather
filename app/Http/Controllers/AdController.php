@@ -283,6 +283,14 @@ class AdController extends Controller
             $data->status = 0;
             $data->link = null;
             $data->rejectNote = $request->rejectNote;
+            $tokens = $data->influencers->users->fcm_token;
+            $data = [
+                "title" => trans($this->notification_trans_dir.'rejected_ad_inf',['ad_name'=>$data->ads->store]),
+                "body" => $request->rejectNote,
+                "type" => 'Ad',
+                'target_id' =>$data->ads->id            
+            ];
+            $this->sendNotifications($tokens,$data);
         }
         else
         {
