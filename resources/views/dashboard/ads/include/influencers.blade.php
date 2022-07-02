@@ -7,7 +7,7 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
 <section>
     <div class="add-section">
         <div class="blocks-table d-block">
-            @if(!in_array($data->status,$notShowSinarioStatuses))
+            @if(!in_array($data->status,$notShowfluencersActions))
             <div class="text-right">
                 <button class="btn-primary btn" onclick="getUnchosenInfulncers(this,'0')">Add Influencer</button>
             </div>

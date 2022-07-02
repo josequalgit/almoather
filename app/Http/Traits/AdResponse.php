@@ -29,15 +29,20 @@ trait AdResponse
         $admin_approved_influencers = $ad->admin_approved_influencers == 1 && !$hasInfluencerError;
 
         $date = $ad->created_at->format('d/m/Y');
-        // if($ad->InfluencerContract){
-        //     $date = $ad->InfluencerContract()->orderBy('date','asc')->first();
-        //     if($date && $date->date){
-        //         $date = $date->date->format('d/m/Y');
-        //     }
-            
-        // }
+        $start_date = null;
+        $end_date = null;
+        if($ad->InfluencerContract){
+            $contractData = $ad->InfluencerContract()->orderBy('date','asc')->first();
+            if($contractData && $contractData->date){
+                $start_date = $contractData->date->format('d/m/Y');
+            }
 
-        
+            $contractData = $ad->InfluencerContract()->orderBy('date','desc')->first();
+            if($contractData && $contractData->date){
+                $end_date = $contractData->date->format('d/m/Y');
+            }
+            
+        }
 
         $basicResponse = [
             'id' => $ad->id,
@@ -97,7 +102,9 @@ trait AdResponse
             'influencer' => $info ? $info : null,
             'budget' => $ad->budget,
             'format_budget' => $this->formateMoneyNumber($ad->budget),
-            'date' => $date,
+            'date' => !$start_date || !$end_date ?  $date : null,
+            'start_date' => $start_date && $end_date ?  $start_date : null,
+            'end_date' => $start_date && $end_date ?  $end_date : null,
             'type' => trans($this->trans_dir . $ad->ad_type),
             'price' => $ad->price,
             'website_link' => $ad->website_link,

@@ -99,6 +99,7 @@ class AdController extends Controller
             ], config('global.UNAUTHORIZED_VALIDATION_STATUS'));
         }
 
+        
         if($confirm||$request->note)
         {
             $ad->status = $request->status;
@@ -116,14 +117,14 @@ class AdController extends Controller
                 $title = trans($this->notification_trans_dir.'accepted_campaign_title',['ad_name'=>$ad->store]);
                 $msg = trans($this->notification_trans_dir.'accepted_campaign_msg',['ad_name'=>$ad->store]);
             }
-            $this->sendNotifications($tokens,$data);
-
             $data = [
                 "title" => $title,
                 "body" => $msg,
                 "type" => 'Ad',
                 'target_id' =>$ad->id
             ];
+
+            $this->sendNotifications($tokens,$data);
 
             if($ad->status == 'approve')
             {
@@ -146,10 +147,6 @@ class AdController extends Controller
                    array_push($tokens,$value->influencers->users->fcm_token);
                 }
                 $this->sendNotifications($tokens,$InfMessage);
-
-            }
-            else
-            {
 
             }
 
@@ -198,8 +195,8 @@ class AdController extends Controller
         $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
 
         $this->calculateCampaignPrice($ad);
-
-        $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons'))->render();
+        $data = $ad;
+        $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','data','noInfluencerReasons'))->render();
         return response()->json([
             'msg' => 'status was changed',
             'data' => $influencersTable,
@@ -445,7 +442,9 @@ class AdController extends Controller
         $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
         $noInfluencerReasons = [];
 
-        $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons'))->render();
+        $data = $ad;
+
+        $influencersTable = view('dashboard.ads.include.influencers', compact('matchedInfluencers','data','noInfluencerReasons'))->render();
         return response()->json([
             'msg' => 'data was updated',
             'data' => $influencersTable,
@@ -479,7 +478,8 @@ class AdController extends Controller
         $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
         $noInfluencerReasons = [];
 
-        $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons'))->render();
+        $data = $ad;
+        $influencersTable = view('dashboard.ads.include.influencers', compact('matchedInfluencers','data','noInfluencerReasons'))->render();
         return response()->json([
             'msg' => 'data was updated',
             'data' => $influencersTable,
@@ -506,13 +506,15 @@ class AdController extends Controller
         }
 
         $ad->matches()->where('influencer_id', $influencer_id)->update(['status' =>'deleted']);
+        $ad->InfluencerContract()->where('influencer_id', $influencer_id)->delete();
         
         $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
         $noInfluencerReasons = [];
 
         $this->calculateCampaignPrice($ad);
         
-        $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons'))->render();
+        $data = $ad;
+        $influencersTable = view('dashboard.ads.include.influencers', compact('matchedInfluencers','data','noInfluencerReasons'))->render();
         return response()->json([
             'msg' => 'data was updated',
             'data' => $influencersTable,
@@ -947,42 +949,6 @@ class AdController extends Controller
         ], 200);
     }
 
-    function addCampaignInfluencer($ad_id,$inf_id){
-        $ad = Ad::find($ad_id);
-
-        $matchedPriceTotal = 0;
-        $sumColumn = $ad->ad_type ? 'ad_with_vat' : 'ad_onsite_price_with_vat';
-        $ad->matches()->where('chosen', 1)->get()->map(function($item) use(&$matchedPriceTotal,$sumColumn){
-            $matchedPriceTotal += $item->influencers->{$sumColumn};
-        });
-
-        $remainingBudget = $budget - $matchedPriceTotal;
-        $chosenInfPrice -= $remainingBudget;
-
-        if ($chosenInfPrice > $oldInfPrice) {
-            return response()->json([
-                'msg' => 'please increase your budget',
-                'status' => 401,
-            ], 401);
-        }
-
-        $changeNew = AdsInfluencerMatch::where([['ad_id', $ad->id], ['influencer_id', $chosen_inf_id]])->first();
-        $changeNew->chosen = 1;
-        $changeNew->save();
-
-        $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
-        $noInfluencerReasons = [];
-
-        $this->calculateCampaignPrice($ad);
-
-        $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','ad','noInfluencerReasons'))->render();
-        return response()->json([
-            'msg' => 'data was updated',
-            'data' => $influencersTable,
-            'status' => true,
-        ], 200);
-    }
-
     private function create_influencer_contract($ad_id = null, $customer)
     {
         $contractData = AppSetting::where('key', 'Influencer Contract')->first();
@@ -1019,6 +985,7 @@ class AdController extends Controller
 
     }
 
+    //Get campaign Contract In json format
     public function printContract($campaign_id){
         $ad = Ad::find($campaign_id);
         if (!$ad) {
@@ -1053,6 +1020,7 @@ class AdController extends Controller
 
     }
 
+    //Get campaign Contract
     public function getCampaignContract($campaign_id){
         $contract = CampaignContract::where('ad_id',$campaign_id)->first();
         $ad = Ad::find($campaign_id);

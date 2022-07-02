@@ -50,7 +50,7 @@
                                             </a>
                                             <div class="ml-2">
                                                 <h6 class="mb-0">Video #{{ $key + 1 }}</h6>
-                                                <div class="about"><button onclick="deleteFileModal( {{ $item->id }})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
+                                                <div class="about"><button onclick="deleteFileModal({{ $item->id }})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
                                             </div>
                                         </div>
                                     </div>
@@ -72,7 +72,7 @@
                                             </a>
                                             <div class="ml-2">
                                                 <h6 class="mb-0">Image #{{ $key + 1 }}</h6>
-                                                <div class="about"><button onclick="deleteFileModal( {{ $item->id }})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
+                                                <div class="about"><button onclick="deleteFileModal({{ $item->id }})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
                                             </div>
                                         </div>
                                     </div>
