@@ -12,7 +12,6 @@
             <th>AOAF</th>
             @endif
             <th>Influencer Type</th>
-            <th>Choose Type</th>
             <th>Over Budget</th>
             <th>Action</th>
         </tr>
@@ -37,11 +36,14 @@
                     <td>{{ $item->AOAF ?? 0 }}</td>
                 @endif
                 <td>{{ $item->influencers->TypeInfluencerSubscriber }}</td>
-                <td>{{ ucwords(str_replace('_',' ',$item->status)) }}</td>
                 <td>{{ $price <= $influencerPrice ? 'No' : 'Yes'  }}</td>
                 <td>
                     @if ($price <= $influencerPrice)
-                    <button class="btn btn-secondary" onclick="replaceInfluncer(this,'{{ $item->influencers->id }}')"> <i class="bx bx-check"></i></button>
+                        @if($type == 'replace')
+                            <button class="btn btn-secondary" onclick="replaceInfluncer(this,'{{ $item->influencers->id }}')"> <i class="bx bx-check"></i></button>
+                        @else
+                            <button class="btn btn-secondary" onclick="addInfluncer(this,'{{ $item->influencers->id }}')"> <i class="bx bx-check"></i></button>
+                        @endif
                     @else
                     <button class="btn btn-secondary" disabled><i class="bx bx-check"></i></button>
                     @endif

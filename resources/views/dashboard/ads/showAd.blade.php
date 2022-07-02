@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <div id="seeContract" class="modal" tabindex="-1" role="dialog">
+            <div id="influencer-data" class="modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -66,7 +66,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-secondary text-center align-middle" onclick="sendContract(this)">Save</button>
+                            <button class="btn btn-secondary text-center align-middle" onclick="saveInfluencerData(this)">Save</button>
                             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -132,7 +132,7 @@
                             </form>
                         </div>
                         <div class="modal-footer border-0 py-1 justify-content-center">
-                            <button type="button" class="btn btn-secondary" onclick="printContract(this)">Print</button>
+                            <button type="button" class="btn btn-secondary" onclick="updateContract(this)">Update</button>
                             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -147,60 +147,6 @@
 
 @section('scripts')
     <script>
-
-        function printContract($this){
-            var divContents = CKEDITOR.instances['contract-text'].getData();
-            var a = window.open('', '', 'height=500, width=500');
-            a.document.write('<html>');
-            a.document.write(`<body>
-                <style>
-                @media print {
-                    * {
-                        box-sizing: border-box;
-                    }
-                    @page {
-                        margin-top: 25px;
-                        margin-bottom: 25px;
-                        page-break-after: always;
-                        display: inline-block;
-                        white-space: nowrap;
-                    }
-                    body  {
-                        padding: 5px 15px;
-                        direction: rtl;
-                        text-align: right;
-                        border: 15px solid #8e8ab0;
-                        page-break-after: always;
-                        display: inline-block;
-                        white-space: nowrap;
-                        margin-top: 25px;
-                        margin-bottom: 25px;
-                    }
-
-                    .container{
-                        white-space: normal;
-                    }
-                }
-                * {
-                    box-sizing: border-box;
-                }
-                body  {
-                    padding: 5px 15px;
-                    direction: rtl;
-                    text-align: right;
-                    border: 15px solid #8e8ab0;
-                    page-break-after: always;
-                }
-                .container{
-                    white-space: normal;
-                }
-                </style>
-                `);
-            a.document.write(`<div class="container">${divContents}</div>`);
-            a.document.write('</body></html>');
-            a.document.close();
-            a.print();
-        }
 
         $(function(){
 
@@ -334,28 +280,39 @@
         let fileType = null;
         let deletetedFileId = null;
 
+        //Open non choosen influencers
         function getUnchosenInfulncers($this,inf_id) {
             removed_inf = inf_id;
             let url = '{{ route("dashboard.ads.getUnmatchedInfluencers",["ad_id" => $data->id,"influencer_id" => ":inf_id"]) }}';
             url = url.replace(':inf_id',inf_id);
-            $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i>`);
+            if(inf_id > 0){
+                $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i>`);
+            }else{
+                $($this).attr('disabled',true).html($($this).text() + ` <i class="fa fa-spinner fa-spin"></i>`);
+            }
+            
             $.ajax({
                 type: 'GET',
                 url: url,
                 dataType: 'json',
                 success: (res) => {
-                if(res.count){
-                    $('#unchosen_inf .modal-body').html(res.influencers);
-                    $('#unchosen_inf').modal('show');
-                }else{
-                    Swal.fire(
-                        '',
-                        'No influencers found in unmatched list',
-                        'error'
-                    )
-                }
-                $($this).attr('disabled',false).html(`<i class="bx bx-transfer"></i>`);
-                console.log(res);
+                    if(res.count){
+                        $('#unchosen_inf .modal-body').html(res.influencers);
+                        $('#unchosen_inf').modal('show');
+                    }else{
+                        Swal.fire(
+                            '',
+                            'No influencers found in unmatched list',
+                            'error'
+                        )
+                    }
+
+                    if(inf_id > 0){
+                        $($this).attr('disabled',false).html(`<i class="bx bx-transfer"></i>`);
+                    }else{
+                        $($this).attr('disabled',false).html($($this).text());
+                    }
+                    
                 },
                 error: (err) => {
                     console.log(err);
@@ -365,11 +322,12 @@
             
         }
 
+        //Change influencer from choosen
         function replaceInfluncer($this,inf_id) {
             let url = "{{ route('dashboard.ads.changeMatch', [$data->id, ':removed_inf', ':chosen_inf']) }}";
             url = url.replace(':removed_inf', removed_inf);
             url = url.replace(':chosen_inf', inf_id)
-
+            
             $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i>`);
             $.ajax({
                 type: 'GET',
@@ -395,6 +353,37 @@
 
         }
 
+        //Add influencer from choosen
+        function addInfluncer($this,inf_id) {
+            let url = "{{ route('dashboard.ads.addInfluencerMatch', [$data->id, ':chosen_inf']) }}";
+            url = url.replace(':chosen_inf', inf_id)
+            
+            $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i>`);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: (res) => {
+                    if(res.status){
+                        $('.influencer-data').html(res.data);
+                    }else{
+                        Swal.fire(
+                            '',
+                            res.error,
+                            'error'
+                        )
+                    }
+                    $('#unchosen_inf').modal('hide');
+                    $($this).attr('disabled',false).html(`<i class="bx bx-check"></i>`);
+                },
+                error: (err) => {
+                    console.log(err);
+                    $($this).attr('disabled',false).html(`<i class="bx bx-check"></i>`);
+                }
+            });
+
+        }
+
+        //Admin approve influencers list
         function approveInfluencersList($this) { 
             Swal.fire({
                 title: 'Are you sure?',
@@ -420,6 +409,7 @@
                                     'success'
                                 );
                                 $($this).parent().after(`<div class="d-flex justify-content-center">
+                                                    <a class="btn btn-secondary mr-1" href="{{ route('dashboard.ads.contract-pdf',$data->id) }}" target="_blank" >Print</a>
                                                     <button  type="button" onclick="viewContract(this)" class="btn btn-secondary">View Contract</button>
                                                 </div> `);
                                 $($this).parent().remove();
@@ -443,7 +433,7 @@
             });
         }
 
-
+        //Open contract modal
         function viewContract($this){
             let url = '{{ route("dashboard.ads.show_contract",["id" => $data->id]) }}';
             $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i> ` + $($this).text());
@@ -471,6 +461,39 @@
             });
         }
 
+        //Update Contract for campaign
+        function updateContract($this){
+            let url = '{{ route("dashboard.ads.updateContract",["ad_id" => $data->id]) }}';
+            $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i> ` + $($this).text());
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {'content': CKEDITOR.instances['contract-text'].getData()},
+                dataType: 'json',
+                success: (res) => {
+                    if(res.status){
+                        Swal.fire(
+                            'Success!',
+                            res.message,
+                            'success'
+                        );
+                    }else{
+                        Swal.fire(
+                            'Error!',
+                            res.message,
+                            'error'
+                        );
+                    }
+                    $($this).attr('disabled',false).html($($this).text());
+                },
+                error: (err) => {
+                    console.log(err);
+                    $($this).attr('disabled',false).html($($this).text());
+                }
+            });
+        }
+
+        //Remove influencer from choosen list
         function removeInfluencer($this,inf_id) { 
             Swal.fire({
                 title: 'Are you sure?',
@@ -509,20 +532,21 @@
             });
         }
 
-
-        function seeContract($this,inf_id) {
+        //Open Modal for influencer date and scenario
+        function openInfluencerDataModal($this,inf_id) {
             choosen_inf_id = inf_id;
             $('#scenario,#contractDate').val('');
             if($('tr[data-id="'+choosen_inf_id+'"] .sinario').hasClass('has-content')){
                 $('#scenario').val($('tr[data-id="'+choosen_inf_id+'"] .sinario').text());
             }
             if($('tr[data-id="'+choosen_inf_id+'"] .date').hasClass('has-content')){
-                $('#contractDate').val($('tr[data-id="'+choosen_inf_id+'"] .date').text());
+                $('#contractDate').val($('tr[data-id="'+choosen_inf_id+'"] .date').attr('data-date'));
             }
-            $('#seeContract').modal('toggle');
+            $('#influencer-data').modal('toggle');
         }
 
-        function sendContract($this) {
+        //Save influencer Date and scenario
+        function saveInfluencerData($this) {
             let url = '{{ route('dashboard.ads.sendContractToInfluncer', ':id') }}';
             let addId = url.replace(':id', '{{ $data->id }}');
 
@@ -551,8 +575,14 @@
                             'Influencer data was saved successfully',
                             'success'
                         );
+                        let dateArray = document.getElementById('contractDate').value.split('-');
+                        let year = dateArray[0] || '';
+                        let month = dateArray[1] || '';
+                        let day = dateArray[2] || '';
+                        let date = `${day}/${month}/${year}`;
+
                         $('tr[data-id="'+choosen_inf_id+'"] .sinario').text(document.getElementById('scenario').value).addClass('has-content');
-                        $('tr[data-id="'+choosen_inf_id+'"] .date').text(document.getElementById('contractDate').value).addClass('has-content');
+                        $('tr[data-id="'+choosen_inf_id+'"] .date').text(date).addClass('has-content').attr('data-date',document.getElementById('contractDate').value);
                     }else{
                         Swal.fire(
                             'Error!',
@@ -561,7 +591,7 @@
                         );
                     }
                     
-                    $('#seeContract').modal('hide');
+                    $('#influencer-data').modal('hide');
                     $($this).attr('disabled',false).html($($this).text());
                 },
                 error: (err) => {
@@ -577,16 +607,18 @@
 
         }
 
+        //Open Delete File Modal
         function deleteFileModal(id) {
             deletetedFileId = id;
             $('#deleteFile').modal('toggle');
         }
 
+        //Delete Campaign File
         function deleteFile() {
             let url = '{{ route('dashboard.ads.deleteFile', ':id') }}';
             let updateUrl = url.replace(':id', deletetedFileId);
             $.ajax({
-                url: updateUrl,
+                url: url,
                 type: 'POST',
                 data: {},
                 success: (res) => {
@@ -595,6 +627,35 @@
                 },
                 error: (err) => {
                     console.log('err: ', err);
+                }
+            });
+        }
+
+        function printContract($this){
+            let url = "{{ route('dashboard.ads.printContract',$data->id) }}";
+            $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i> ` + $($this).text());
+            $.ajax({
+                url: url,
+                type: 'get',
+                success: (res) => {
+                    if(res.status){
+                        window.open(res.url, "_blank");
+                    }else{
+                        Swal.fire(
+                            'Error!',
+                            res.message,
+                            'error'
+                        );
+                    }
+                },
+                error: (err) => {
+                    Swal.fire(
+                        'Error!',
+                        err.responseJSON.message,
+                        'error'
+                    );
+                    console.log('error: ', err);
+                    $($this).attr('disabled',false).html($($this).text());
                 }
             });
         }

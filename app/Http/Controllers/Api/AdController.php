@@ -337,7 +337,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    // SEarch on Campaigns
+    // Search on Campaigns
     public function search($query)
     {
         $user = Auth::guard('api')->user();
@@ -605,6 +605,7 @@ class AdController extends Controller
         return $this->match_response($data);
     }
 
+    //Calculate Campaign price
     private function calculateCampaignPrice($ad){
         $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
         $budgetSum = 0;
@@ -1279,8 +1280,19 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
+    //Match influencers list
     private function match_response($ad)
     {
+        $matches = $ad->matches()->where('chosen', 1)->where('status','!=','deleted')->get();
+        $hasInfluencerError = false;
+        foreach($matches as $match){
+            if(!$match->contract || !$match->contract->date || !$match->contract->scenario){
+                $hasInfluencerError = true;
+                break;
+            }
+        }
+        $admin_approved_influencers = $ad->admin_approved_influencers == 1 && !$hasInfluencerError;
+
         return response()->json([
             'msg'       => trans($this->trans_dir.'data_was_updated'),
             'status'    => config('global.OK_STATUS'),
@@ -1288,7 +1300,7 @@ class AdController extends Controller
 				'id'                => $ad->id,
 				'type'              => $ad->type,
 				'status'            => $ad->status,
-                'influncers_status' => $ad->admin_approved_influencers ? true : false,
+                'influncers_status' => $admin_approved_influencers ? true : false,
 				'category'          => $ad->categories->name,
 				'format_budget'     => $this->formateMoneyNumber($ad->budget),
 				'budget'            => $ad->budget,

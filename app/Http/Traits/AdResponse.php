@@ -18,6 +18,16 @@ trait AdResponse
             return $this->userDataResponse([], null, $item->users->id);
         }) : null;
 
+        $matches = $ad->matches()->where('chosen', 1)->where('status','!=','deleted')->get();
+        $hasInfluencerError = false;
+        foreach($matches as $match){
+            if(!$match->contract || !$match->contract->date || !$match->contract->scenario){
+                $hasInfluencerError = true;
+                break;
+            }
+        }
+        $admin_approved_influencers = $ad->admin_approved_influencers == 1 && !$hasInfluencerError;
+
         $date = $ad->created_at->format('d/m/Y');
         // if($ad->InfluencerContract){
         //     $date = $ad->InfluencerContract()->orderBy('date','asc')->first();
@@ -26,6 +36,8 @@ trait AdResponse
         //     }
             
         // }
+
+        
 
         $basicResponse = [
             'id' => $ad->id,
@@ -110,7 +122,7 @@ trait AdResponse
             'is_onSite' => trans($this->trans_dir . $ad->ad_type),
             'tax_value' => $ad->tax_value,
             'reject_note' => $ad->reject_note,
-            'admin_approved_influencers' => $ad->admin_approved_influencers ? true : false
+            'admin_approved_influencers' => $admin_approved_influencers ? true : false
         ];
 
         if ($ad->status == 'fullpayment' && Auth::guard('api')->user()->customers) {
