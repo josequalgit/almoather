@@ -953,7 +953,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    //Todo Explain this
+    //Customer Approve/Reject contract
     public function accept_customer_ad_contract(Request $request , $contract_id)
     {
         $data = CampaignContract::find($contract_id);
@@ -961,17 +961,25 @@ class AdController extends Controller
             'err'=>trans($this->trans_dir.'contract_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
+
         if($request->status == 0&&!$request->rejectNote) return response()->json([
             'err'=>trans($this->trans_dir.'please_add_reject_note'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
 
         $data->is_accepted = $request->status;
-        $data->rejectNote = $request->status == 0?$request->rejectNote:null;
+        $data->rejectNote = $request->status == 0 ? $request->rejectNote : null;
         $data->save();
+
+        $adData = [
+            'budget' => number_format($data->ads->budget),
+            'price_to_pay' => number_format($data->ads->price_to_pay),
+            'price' => $data->ads->price_to_pay,
+        ];
     
         return response()->json([
             'msg'=>trans($this->trans_dir.'data_was_updated'),
+            'data' => $adData,
             'status'=>config('global.OK_STATUS'),
         ],config('global.OK_STATUS'));
     }
@@ -1146,9 +1154,7 @@ class AdController extends Controller
             * 
              * Save in the database
              * 
-             * */
-
-
+             */
             Payment::create([
                 'ad_id' => $ad_id,
                 'trans_id' => $request->TranId,
