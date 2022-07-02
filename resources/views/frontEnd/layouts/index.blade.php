@@ -7,6 +7,9 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="{{ asset('frontEnd/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontEnd/css/all.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontEnd/slick/slick.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('frontEnd/slick/slick-theme.css') }}"/>
+
     @php
           $route = Route::current();
         $name = $route->getName();
@@ -36,6 +39,8 @@
 
     <script type='text/javascript' src='{{ asset('frontEnd/js/jquery-3.6.0.min.js') }}'></script>
     <script type='text/javascript' src='{{ asset('frontEnd/js/bootstrap.min.js') }}'></script>
+    <script type="text/javascript" src="{{ asset('frontEnd/slick/slick.min.js') }}"></script>
+
     @yield('scripts')
 
 </body>

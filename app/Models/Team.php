@@ -15,7 +15,8 @@ class Team extends Model implements HasMedia
     protected $fillable = [
         'name',
         'description',
-        'social_media'
+        'social_media',
+        'show'
     ];
 
     protected $append = [

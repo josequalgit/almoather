@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\AppSetting;
 use App\Models\Page;
 use App\Models\FAQ;
+use App\Models\Team;
 use App;
 class HomeController extends Controller
 {
@@ -45,9 +46,17 @@ class HomeController extends Controller
 
     public function about_us()
     {
-        $data = Page::where('slug','about_us')->first();
+        $data = Page::where('slug','about_us')->firstOrFail();
+        $team = Team::where('show',1)->get();
         
-        return view('frontEnd.aboutus.index',compact('data'));
+        return view('frontEnd.aboutus.index',compact('data','team'));
+    }
+
+    public function ourServices()
+    {
+        $data = Page::where('slug','our-services')->firstOrFail();
+
+        return view('frontEnd.services.index',compact('data'));
     }
 
 

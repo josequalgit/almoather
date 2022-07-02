@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\AppSetting;
 use App\Models\Page;
-
+use Alert;
 class FrontEndSettingController extends Controller
 {
    
@@ -46,6 +46,10 @@ class FrontEndSettingController extends Controller
         'location'=>[
             'title'=>'Location',
             'type'=>'location',
+        ],
+        'our-services'=>[
+            'title'=>'Our Services',
+            'type'=>'our-services',
         ],
 
     ];
@@ -445,6 +449,87 @@ class FrontEndSettingController extends Controller
         ]);
 
         return $data;
+    }
+
+    public function update_services(Request $request)
+    {
+        $page = Page::where('slug','our-services')->first();
+
+        if($request->hasFile('header_image'))
+        {
+            $page->clearMediaCollection('service_header_image');
+            $page->addMedia($request->file('header_image'))
+            ->toMediaCollection('service_header_image');
+        }
+        if($request->hasFile('second_section_image_one'))
+        {
+            $page->clearMediaCollection('service_second_section_image_one');
+            $page->addMedia($request->file('second_section_image_one'))
+            ->toMediaCollection('service_second_section_image_one');
+        }
+        if($request->hasFile('second_section_image_two'))
+        {
+            $page->clearMediaCollection('service_second_section_image_two');
+            $page->addMedia($request->file('second_section_image_two'))
+            ->toMediaCollection('service_second_section_image_two');
+        }
+        if($request->hasFile('main_video_video_section'))
+        {
+            $page->clearMediaCollection('main_video_video_section');
+            $page->addMedia($request->file('main_video_video_section'))
+            ->toMediaCollection('main_video_video_section');
+        }
+        if($request->hasFile('back_ground_video_image'))
+        {
+            $page->clearMediaCollection('back_ground_video_image');
+            $page->addMedia($request->file('back_ground_video_image'))
+            ->toMediaCollection('back_ground_video_image');
+        }
+
+        $data = [
+            'name'=>[
+                'ar'=>$request->title_ar,
+                'en'=>$request->title_en,
+            ],
+            'description'=>[
+                'ar'=>$request->description_ar,
+                'en'=>$request->description_en,
+            ],
+            'content'=>json_encode([
+                'title_ar_section_one'=>$request->title_ar_section_one,
+                'title_en_section_one'=>$request->title_en_section_one,
+                'description_ar_section_one'=>$request->description_ar_section_one,
+                'description_en_section_one'=>$request->description_en_section_one,
+                'title_ar_section_two'=>$request->title_ar_section_two,
+                'title_en_section_two'=>$request->title_en_section_two,
+                'description_ar_section_two'=>$request->description_ar_section_two,
+                'description_en_section_two'=>$request->description_en_section_two,
+                'card_one_title_en'=>$request->card_one_title_en,
+                'card_one_title_ar'=>$request->card_one_title_ar,
+                'card_one_description_ar'=>$request->card_one_description_ar,
+                'card_one_description_en'=>$request->card_one_description_en,
+                'card_two_title_en'=>$request->card_two_title_en,
+                'card_two_title_ar'=>$request->card_two_title_ar,
+                'card_two_description_ar'=>$request->card_two_description_ar,
+                'card_two_description_en'=>$request->card_two_description_en,
+                'card_three_title_en'=>$request->card_three_title_en,
+                'card_three_title_ar'=>$request->card_three_title_ar,
+                'card_three_description_ar'=>$request->card_three_description_ar,
+                'card_three_description_en'=>$request->card_three_description_en,
+                'card_four_title_en'=>$request->card_four_title_en,
+                'card_four_title_ar'=>$request->card_four_title_ar,
+                'card_four_description_ar'=>$request->card_four_description_ar,
+                'card_four_description_en'=>$request->card_four_description_en,
+                'video_section_title_en'=>$request->video_section_title_en,
+                'video_section_title_ar'=>$request->video_section_title_ar,
+                'video_section_description_en'=>$request->video_section_description_en,
+                'video_section_description_ar'=>$request->video_section_description_ar,
+            ])
+        ];
+
+        $page->update($data);
+        Alert::toast('Service page was update', 'success');
+        return back();
     }
 
     

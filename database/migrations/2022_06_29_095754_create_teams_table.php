@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
+            $table->boolean('show')->default(1);
             $table->json('social_media');
             $table->timestamps();
         });
