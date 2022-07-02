@@ -29,11 +29,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
-use Mpdf\Mpdf;
+use App\Http\Traits\AdResponse;
 
 class AdController extends Controller
 {
-    use SendNotification;
+    use SendNotification , AdResponse;
     public $notification_trans_dir = 'notifications.';
 
     public function index($status = null)
@@ -1082,53 +1082,6 @@ class AdController extends Controller
         return $this->generateContractPdf($content,$title);
 
 
-    }
-
-    private function generateContractPdf($contract,$title = ''){
-        
-        //return view('dashboard.contract.pdf',compact('contract'));
-        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
-        $fontDirs = $defaultConfig['fontDir'];
-
-        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
-        $fontData = $defaultFontConfig['fontdata'];
-        $pdf = new mpdf([
-            'margin_left' => 10,
-            'margin_right' => 10,
-            'margin_top' => 35,
-            'margin_bottom' => 65,
-            'fontDir' => array_merge($fontDirs, [
-                public_path('Amiri'),
-            ]),
-            'fontdata' => $fontData + [
-                'Amiri' => [
-                    'R' => 'Amiri-Regular.ttf',
-                    'I' => 'Amiri-Bold.ttf',
-                    'useOTL' => 0xFF,
-                    'useKashida' => 75
-                ]
-            ],
-            'default_font' => 'Amiri'
-        ]);
-        $pdf->SetTitle($title);
-        $pdf->setAutoTopMargin = 'stretch';
-        $pdf->SetDisplayMode('fullpage');
-        $html = view('dashboard.contract.pdf',compact('contract','title'))->render();
-        $pdf->autoScriptToLang = true;
-        $pdf->autoLangToFont = true;
-        $pdf->SetWatermarkImage(public_path('img/avatars/logo-almuaather-full.jpg'),0.2,array(130,130));
-        $pdf->showWatermarkImage = true;
-        //$pdf->SetWatermarkImage(public_path('img/avatars/pdf-bg.jpg'),1,array(0,10));
-        $pdf->SetDefaultBodyCSS('background', "url('".asset('img/avatars/pdf-bg.jpg')."')");
-        $pdf->SetDefaultBodyCSS('background-image-resize', 6);
-        $pdf->SetDefaultBodyCSS('background-position', 'top right');
-        $pdf->SetDefaultBodyCSS('background-repeat', 'no-repeat');
-       
-
-        $pdf->WriteHTML($html);
-
-        $pdf->Output();
-        
     }
 
 }
