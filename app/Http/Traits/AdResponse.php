@@ -166,6 +166,8 @@ trait AdResponse
                     'budget'    => number_format($influencerPrice),
                 ];
 
+                $isProfitable = $ad->campaignGoals->profitable;
+
                 $response['ROAS'] = null;
                 $response['engagement_rate'] = null;
                 $response['AOAF'] = null;
