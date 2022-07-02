@@ -28,14 +28,14 @@
                                 <div class="form-group col">
                                   <label for="inputEmail4">Text Ar</label>
                                   <textarea name="text_ar" class="form-control" id="text_ar" rows="3">
-                                      {{ $data->getTranslation('text','ar') }}
+                                      {{ $data ? $data->getTranslation('text','ar') : '' }}
                                   </textarea>
                                   {{-- <input value="{{ old('name')?old('name'):$data->name }}" name="name" type="text" class="form-control" id="inputEmail4" placeholder="Enter Name"> --}}
                                 </div>
                                 <div class="form-group col">
                                   <label for="inputPassword4">Text EN</label>
                                   <textarea name="text_en" class="form-control" id="text_en" rows="3">
-                                    {{ $data->getTranslation('text','en') }}
+                                    {{ $data ? $data->getTranslation('text','en') : '' }}
                                   </textarea>
                                   {{-- <input value="{{ old('title')?old('title'):$data->title }}" name="title" type="text" class="form-control" id="inputPassword4" placeholder="Enter Title"> --}}
                                 </div>
