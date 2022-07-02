@@ -29,6 +29,7 @@ use App\Http\Middleware\LanguageMiddleware;
 
 Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
     Route::post('login',[AuthController::class,'login']);
+    Route::get('campaign/pdf/{id}',[AuthController::class,'getCampaignContract'])->name('contractApi');
     Route::get('changeLanguage/{lang}',[AuthController::class,'changeLang']);
 
 
@@ -175,7 +176,6 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
             Route::get('ad_details_update/{ad_id}','ad_details_update');
             Route::post('/upload_media/{file_id}/{type}','uploadMedia')->where('type','remove|add|replace');
             Route::get('get_ad_relation','get_ads_relation');
-            Route::get('campaign/pdf/{id}','getCampaignContract')->name('contractApi');
         });
 
         #CATEGORIES ROUTES
