@@ -355,8 +355,7 @@ class AdController extends Controller
         $content = str_replace("[[_EMAIL_]]", $ad->customers->users->email, $content);
         $content = str_replace("[[_PRICE_WITH_TAX_]]", number_format($ad->adBudgetWithVat), $content);
         $content = str_replace("[[_PRICE_]]", number_format($ad->budget), $content);
-        $content = str_replace("[[_START_DATE_]]", $startDate->date->format('d/m/Y'), $content);
-        $content = str_replace("[[_END_DATE_]]", $endDate->date->format('d/m/Y'), $content);
+        $content = str_replace("[[_START_DATE_]]", $contract->date->format('d/m/Y'), $content);
         $content = str_replace("[[_CAMPAIGN_GOAL_]]", $ad->campaignGoals->getTranslation('title','ar'), $content);
         
 
