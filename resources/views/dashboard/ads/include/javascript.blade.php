@@ -40,7 +40,7 @@
             items = JSON.parse(items) || [];
             items.forEach(element => {
                 let selected = $('#ad-category').attr('data-item') == element.id ? 'selected' : '';
-                $('#ad-category').append(`<option value="${element.id}" ${selected}>${element.name.en}</option>`) 
+                $('#ad-category').append(`<option value="${element.id}" ${selected}>${element.name.ar}</option>`) 
             });
         }).change();
 

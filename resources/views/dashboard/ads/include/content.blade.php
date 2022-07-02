@@ -15,8 +15,8 @@
                                     <div class="col">
                                         <label for="">Type</label>
                                         <select class="form-control" id="ad-type">
-                                            <option {{ $data->type == 'product' ? 'selected' : '' }} value="product" data-items="{{json_encode($productCategories)}}" >Product</option>
-                                            <option {{ $data->type == 'service' ? 'selected' : '' }} value="service" data-items="{{json_encode($serviceCategories)}}">Service</option>
+                                            <option {{ $data->type == 'product' ? 'selected' : '' }} value="product" data-items="{{json_encode($productCategories)}}" >منتج</option>
+                                            <option {{ $data->type == 'service' ? 'selected' : '' }} value="service" data-items="{{json_encode($serviceCategories)}}">خدمة</option>
                                         </select>
                                     </div>
                                     <div class="col">

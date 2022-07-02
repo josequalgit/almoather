@@ -17,13 +17,13 @@ class LanguageMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $lang = $request->header('lang') ? $request->header('lang') : 'en';
+        $lang = $request->header('lang') ? $request->header('lang') : 'ar';
  
         $availLocale=['en','ar'];
         if(in_array($lang,$availLocale)){
             App::setLocale($lang);
         }else{
-            App::setLocale('en');
+            App::setLocale('ar');
         }
         return $next($request);
     }

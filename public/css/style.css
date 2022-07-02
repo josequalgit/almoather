@@ -1136,3 +1136,40 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     margin-left: 5px;
     line-height: 25px;
 }
+
+.frontend-settings .tab a {
+    display: block;
+    background-color: inherit;
+    color: black;
+    padding: 10px 10px;
+    width: 100%;
+    border: none;
+    outline: none;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 17px;
+  }
+  
+/* Change background color of buttons on hover */
+.frontend-settings .tab a:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current "tab button" class */
+.frontend-settings .tab a.active {
+    background-color: #8e8ab0;
+    color: #fff;
+}
+.frontend-settings .tab a {
+    background-color:#8e8ab04a;
+    color: #000;
+    font-size: 15px;
+}
+
+.frontend-settings .tabcontent {
+    border-width: 1px;
+}
+.frontend-settings .tablinks{
+    border-radius: 5px;
+}
