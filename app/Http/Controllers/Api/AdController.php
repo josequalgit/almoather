@@ -948,7 +948,7 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
         
-        $cal = $data->budget * 5.5/100;
+        $cal = $data->budget * 5.5 / 100;
 
         return response()->json([
             'msg'=>trans($this->trans_dir.'all_matched'),
@@ -1231,7 +1231,7 @@ class AdController extends Controller
     {
        $isProfitable =  $ad->campaignGoals->profitable;
        $isOnSite = $ad->ad_type == 'onsite';
-        return $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($isProfitable,$isOnSite){
+        return $ad->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($isProfitable,$isOnSite,$ad){
             $price = $isOnSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
 
             $contract = InfluencerContract::where('influencer_id', $item->influencer_id)->where('ad_id',$ad->id)->first();
