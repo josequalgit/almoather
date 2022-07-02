@@ -17,6 +17,16 @@
                 </div>
 
                 <div class="card-body">
+                    @if($data->status == 'rejected')
+                    <div class="form-group">
+                        <label for="reject-note">Reject Note</label>
+                        <textarea name="reject-note-update" id="reject-note" class="form-control" rows="5">{{$data->reject_note}}</textarea>
+                        <div class="text-right mt-1">
+                            <button class="btn btn-danger btn-sm" id="update-reject-note" onClick="updateRejectNote(this)">Update Reject Note</button>
+                        </div>
+                        
+                    </div>
+                    @endif
                     <form id="ad_details_from" action="/" class="campaign-form">
                         <div class="row">
                             <div class="col" id="wizard-basic">
@@ -64,6 +74,14 @@
                 enablePagination: true,
                 enableAllSteps: false,
                 startIndex: 0,
+                labels: {
+                    current: "current step:",
+                    pagination: "Pagination",
+                    finish: "Approve",
+                    next: "Next",
+                    previous: "Previous",
+                    loading: "Loading ..."
+                },
                 onInit: function() {
                     $('.actions ul').prepend(`<li class='list-dicration' aria-disabled="false"><button type='button' onclick='sendStatusRequest("rejected")' class='btn btn-danger' role="menuitem">Reject</button></li>`)
                     $('.actions ul li:nth-child(2)').hide();
@@ -174,6 +192,61 @@
                     $('[href="#next"]').attr('disabled',false).html('Next');
                 }
             })
+        }
+
+        function updateRejectNote($this){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                denyButtonText: `Yes & Send Notifiication`,
+            }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    sendUpdateNoteRequest($this,0);
+                } else if (result.isDenied) {
+                    sendUpdateNoteRequest($this,1);
+                }
+            });
+           
+        }
+
+        function sendUpdateNoteRequest($this,sendNotification){
+            let url = '{{ route("dashboard.ads.updateRejectNote") }}';
+            $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i> ` + $($this).text());
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {'ad_id': '{{$data->id}}','send_notification': sendNotification,'reject_note': $('#reject-note').val()},
+                dataType: 'json',
+                success: (res) => {
+                    if(res.status){
+                        Swal.fire(
+                            'Success!',
+                            res.message,
+                            'success'
+                        );
+                    }else{
+                        Swal.fire(
+                            'Error!',
+                            res.message,
+                            'error'
+                        );
+                    }
+                    $($this).attr('disabled',false).html($($this).text());
+                },
+                error: (err) => {
+                    Swal.fire(
+                        'Error!',
+                        err.responseJSON.message,
+                        'error'
+                    );
+                    $($this).attr('disabled',false).html($($this).text());
+                }
+            });
         }
 
 

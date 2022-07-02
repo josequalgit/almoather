@@ -162,7 +162,7 @@ class AdController extends Controller
         else
         {
             $ad->category_id = $request->category_id;
-            $ad->reject_note = $request->note ?? null;
+            
             $ad->eng_number = $request->engagement_rate;
             $ad->save();
         }
@@ -1015,7 +1015,7 @@ class AdController extends Controller
         return response()->json([
             'message'=>'',
             'url' => route('dashboard.ads.contract-pdf',$ad->id),
-            'status'=> false
+            'status'=> true
         ],config('global.OK_STATUS'));
 
     }
@@ -1082,6 +1082,34 @@ class AdController extends Controller
         return $this->generateContractPdf($content,$title);
 
 
+    }
+
+    function updateRejectNote(Request $request){
+        $data = $request->validate([
+            "reject_note"    => "required"
+        ]);
+
+        $ad = Ad::find($request->ad_id);
+
+        $ad->update(['reject_note' => $data['reject_note']]);
+        if($request->send_notification && $ad->customers->users->fcm_token){
+            $tokens = [$ad->customers->users->fcm_token];
+            $title = trans($this->notification_trans_dir.'rejected_campaign_title',['ad_name'=>$ad->store]);
+            $msg = trans($this->notification_trans_dir.'rejected_campaign_msg',['ad_name'=>$ad->store,'reject_reason'=>$request->note]);
+
+            $data = [
+                "title" => $title,
+                "body" => $msg,
+                "type" => 'Ad',
+                'target_id' =>$ad->id
+            ];
+
+            $this->sendNotifications($tokens,$data);
+        }
+        return response()->json([
+            'message'=>'Note updated successfully',
+            'status'=> true
+        ],config('global.OK_STATUS'));
     }
 
 }

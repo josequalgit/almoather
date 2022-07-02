@@ -133,8 +133,8 @@ trait AdResponse
             'admin_approved_influencers' => $admin_approved_influencers ? true : false
         ];
 
-        if ($ad->status == 'fullpayment' && Auth::guard('api')->user()->customers) {
-            $contract = CampaignContract::where('ad_id',$ad->id)->first();
+        if (Auth::guard('api')->user()->customers) {
+            $contract = route('contractApi',$ad->id);
             $basicResponse['contract'] = $contract ? $contract->content : null;
         }
         if (Auth::guard('api')->user()->influncers) {

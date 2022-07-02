@@ -65,14 +65,14 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
                                 <td>
                                     @if(!in_array($data->status,$notShowfluencersActions))
                                     <button type="button" onclick="getUnchosenInfulncers(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm mb-1">
-                                        <i class="bx bx-transfer"></i>
+                                        <i class="fas fa-exchange-alt"></i>
                                     </button>
                                     <button type="button" onclick="removeInfluencer(this,'{{ $item->influencers->id }}')" class="btn btn-danger btn-sm mb-1">
                                         <i class="fas fa-user-times"></i>
                                     </button>
                                     @endif
                                     @if (!in_array($data->status,$notShowSinarioStatuses))
-                                        <button  type="button" onclick="openInfluencerDataModal(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm"><i class="fas fa-file-signature"></i></button>
+                                        <button  type="button" onclick="openInfluencerDataModal(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm mb-1"><i class="fas fa-file-signature"></i></button>
                                     @endif
                                 
                                 </td>
