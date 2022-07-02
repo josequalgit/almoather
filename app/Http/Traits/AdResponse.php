@@ -134,7 +134,7 @@ trait AdResponse
         ];
 
         $contractStatuses = ['fullpayment','progress','complete'];
-        if (in_array($ad->status,$contractData) && Auth::guard('api')->user()->customers) {
+        if (in_array($ad->status,$contractStatuses) && Auth::guard('api')->user()->customers) {
             $basicResponse['contract'] = route('contractApi',$ad->id);
         }
         if (Auth::guard('api')->user()->influncers) {
