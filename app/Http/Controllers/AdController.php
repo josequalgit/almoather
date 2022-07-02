@@ -965,10 +965,8 @@ class AdController extends Controller
         $startDate = $ad->InfluencerContract()->orderBy('date','asc')->first();
         $endDate = $ad->InfluencerContract()->orderBy('date','desc')->first();
 
-        $content = str_replace("[[_LOGO_]]", '<img src="'.asset('img/avatars/logo-almuaather.png').'" height="100" >', $content);
-        
         $content = str_replace("[[_CONTRACT_NUM_]]", $ad->id, $content);
-       // $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
+        $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
         $content = str_replace("[[_CUSTOMER_NAME_]]", $ad->customers->full_name, $content);
         $content = str_replace("[[_STORE_NAME_]]", $ad->store, $content);
         $content = str_replace("[[_CUSTOMER_NATIONALITY_]]", $ad->customers->nationalities->getTranslation('name','ar'), $content);

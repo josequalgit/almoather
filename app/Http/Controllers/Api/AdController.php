@@ -337,6 +337,34 @@ class AdController extends Controller
 
     }
 
+    //Get campaign Contract
+    public function getInfluencerContractApi($ad,$inf_id){
+        $contract = $ad->InfluencerContract()->where('influencer_id',$inf_id)->first();
+
+        $content = $contract->content;
+
+        $content = str_replace("[[_CONTRACT_NUM_]]", $ad->id, $content);
+        $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
+        $content = str_replace("[[_CUSTOMER_NAME_]]", $ad->customers->full_name, $content);
+        $content = str_replace("[[_STORE_NAME_]]", $ad->store, $content);
+        $content = str_replace("[[_CUSTOMER_NATIONALITY_]]", $ad->customers->nationalities->getTranslation('name','ar'), $content);
+        $content = str_replace("[[_CR_NUM_]]", $ad->cr_num, $content);
+        $content = str_replace("[[_NATIONAL_NUM_]]", $ad->customers->id_number, $content);
+        $content = str_replace("[[_PHONE_]]", $ad->customers->users->phone, $content);
+        $content = str_replace("[[_EMAIL_]]", $ad->customers->users->email, $content);
+        $content = str_replace("[[_PRICE_WITH_TAX_]]", number_format($ad->adBudgetWithVat), $content);
+        $content = str_replace("[[_PRICE_]]", number_format($ad->budget), $content);
+        $content = str_replace("[[_START_DATE_]]", $startDate->date->format('d/m/Y'), $content);
+        $content = str_replace("[[_END_DATE_]]", $endDate->date->format('d/m/Y'), $content);
+        $content = str_replace("[[_CAMPAIGN_GOAL_]]", $ad->campaignGoals->getTranslation('title','ar'), $content);
+        
+
+        $title = $ad->store;
+
+        return $this->generateContractPdf($content,$title);
+
+    }
+
     // Accept the contract For Influencer
     public function accept_ad_contract(AcceptAdContractRequest $request,$contract_id)
     {

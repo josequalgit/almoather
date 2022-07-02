@@ -14,6 +14,7 @@ return [
         'user_data'                 => 'تم تسجيل الدخول بنجاح. مرحبًا بعودتك',
         'successfully_logged_out'   =>'تم تسجيل الخروج بنجاح',
         'Not Join Yet'              => 'لم يتم',
-        'Joined'                    => 'تم'
+        'Joined'                    => 'تم',
+        'date_not_set'              => 'لم يتم تحديد التاريخ'
     ]
 ];

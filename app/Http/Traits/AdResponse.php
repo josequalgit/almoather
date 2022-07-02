@@ -134,13 +134,16 @@ trait AdResponse
         ];
 
         $contractStatuses = ['fullpayment','progress','complete'];
+        $basicResponse['executionDate'] = null;
         if (in_array($ad->status,$contractStatuses) && Auth::guard('api')->user()->customers) {
             $basicResponse['contract'] = route('contractApi',$ad->id);
         }
+
         if (Auth::guard('api')->user()->influncers) {
-            $basicResponse['contract'] = InfluencerContract::select('id', 'content', 'date')->where(['influencer_id' => Auth::guard('api')->user()->influncers->id])
-                ->where(['ad_id' => $ad->id])
-                ->first();
+            $contractData = $ad->InfluencerContract()->where('influencer_id',Auth::guard('api')->user()->influncers->id)->first();
+            $basicResponse['contract'] = route('InfluencerContractApi',[$ad,Auth::guard('api')->user()->influncers->id]);
+            
+            $basicResponse['executionDate'] = $contractData && $contractData->date? $contractData->date->format('d/m/Y') : trans($this->trans_dir . 'date_not_set');
         }
 
         //Return Matches if the status is Full payment / Choosing influencer / Progress
