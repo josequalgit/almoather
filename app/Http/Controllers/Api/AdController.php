@@ -402,6 +402,7 @@ class AdController extends Controller
 
         if($request->status == 1)
         {
+            $name = $influencer->nick_name;
             $info =[
                 'msg'=>trans($this->trans_dir.'influencer').'"'.$name.'"'. trans($this->trans_dir.'accept_contract'),
                 'id'=>$influencer->users->id,
