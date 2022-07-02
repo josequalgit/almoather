@@ -412,71 +412,6 @@ class AdController extends Controller
         ]);
     }
 
-    //Todo Remove
-    public function get_influencer_ads($influencer_id,$status = null)
-    {
-        $data = Influncer::find($influencer_id);
-        $itemsPaginated  = [];
-        if(!$data) return response()->json([
-            'err'=>trans($this->trans_dir.'inf_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
-
-        if($status)
-        {
-          $itemsPaginated  =  $data->ads()->where('status',$status)->paginate(config('global.PAGINATION_NUMBER'));
-
-        }
-        else
-        {
-            $itemsPaginated  = $data->ads()->paginate(config('global.PAGINATION_NUMBER'));
-        }
-
-
-        $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item){
-            return $this->adResponse($item);
-
-        })->toArray();
-
-
-        return response()->json([
-            'msg'=>trans($this->trans_dir.'all_inf_ads'),
-            'data'=>$this->formate($itemsTransformed , $itemsPaginated),
-            'status'=>config('global.OK_STATUS')
-        ],config('global.OK_STATUS'));
-    }
-
-    //Todo remove
-    public function get_customers_ads($customer_id , $status = null)
-    {
-        $data = Customer::find($customer_id);
-        $itemsPaginated  = [];
-        if(!$data) return response()->json([
-            'err'=>trans($this->trans_dir.'customer_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
-
-        if($status)
-        {
-          $itemsPaginated  =  $data->ads()->where('status',$status)->paginate(config('global.PAGINATION_NUMBER'));
-
-        }
-        else
-        {
-            $itemsPaginated  = $data->ads()->paginate(config('global.PAGINATION_NUMBER'));
-        }
-
-        $itemsTransformed = $itemsPaginated->getCollection()->transform(function($item){
-            return $this->adResponse($item);
-        })->toArray();
-
-        return response()->json([
-            'msg'=>trans($this->trans_dir.'all_customer_ads'),
-            'data'=>$this->formate($itemsTransformed , $itemsPaginated),
-            'status'=>config('global.OK_STATUS')
-        ],config('global.OK_STATUS'));
-    }
-
     // Get matched influencers
     //Todo Explain this
     public function getMatchedInfluencers($id)
@@ -1047,7 +982,7 @@ class AdController extends Controller
         return $this->match_response($ad);
     }
 
-    //Todo Explain this
+    //Return influencers when waiting customer to pay full payment
     public function wait_for_influencer_response($ad_id)
     {
         $data = Ad::find($ad_id);
@@ -1067,41 +1002,39 @@ class AdController extends Controller
                 'format_budget'=>$this->formateMoneyNumber($data->budget),
                 'price'=>$data->budget - $cal,
                 'budget'=>$data->budget,
-                'match'=> $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item){
-                    $contract = InfluencerContract::where('influencer_id',$item->influencer_id)->first();
+                'match'=> $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($data){
+                    $contract = InfluencerContract::where('influencer_id',$item->influencer_id)->where('ad_id',$data->id)->first();
 
-                    $status = null;
-                   
-                    if(isset($contract)&&$contract->is_accepted == 2)
-                    {
-                      $status = 'rejected';
-                    }
-                    else if(isset($contract)&&$contract->is_accepted == 1)
-                    {
-                      if($contract->status == 1&&$contract->admin_status == 1)
-                      {
-                        $status = 'completed';
-                      }
-                      else
-                      {
-                        $status = 'progress';
-                      }
-                    }
-                    else
-                    {
-                      $status = 'pending';
-                    }
-
-                    
-
-                    return [
-                      'id'      => $item->influencers->id,
-                      'image'   => $item->influencers->users->infulncerImage,
-                      'name'    => $item->influencers->nick_name,
-                      'match'   => $item->match,
-                      'status'  => $status
+                    $response = [
+                        'id' => $item->influencers->id,
+                        'image' => $item->influencers->users->infulncerImage,
+                        'name' => $item->influencers->nick_name,
+                        'match' => $item->match,
+                        'status' => null,
+                        'gender'    => trans($this->trans_dir.$item->influencers->gender),
+                        'budget'    => number_format($influencerPrice),
                     ];
-                    })
+
+                    $isProfitable = $data->campaignGoals->profitable;
+
+                    $response['ROAS'] = null;
+                    $response['engagement_rate'] = null;
+                    $response['AOAF'] = null;
+
+                    if($isProfitable){
+                        $response['ROAS'] = $item->match . '%';
+                    }else{
+                        $response['engagement_rate'] = $item->match . '%';
+                        $response['AOAF'] = $item->AOAF;
+                    }
+
+                    $response['start_date'] = null;
+                    if($contract && $contract->date){
+                        $response['start_date'] = $contract->date->format('d/m/Y');
+                    }
+                   
+                        
+                })
             ],
             'status'=>config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
