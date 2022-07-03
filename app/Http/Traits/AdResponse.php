@@ -32,7 +32,7 @@ trait AdResponse
         $date = $ad->created_at->format('d/m/Y');
         $start_date = null;
         $end_date = null;
-        $camp_link = null;
+        
         if($ad->InfluencerContract){
             $contractData = $ad->InfluencerContract()->orderBy('date','asc')->first();
             if($contractData && $contractData->date){
@@ -136,6 +136,7 @@ trait AdResponse
 
         $contractStatuses = ['fullpayment','progress','complete'];
         $basicResponse['executionDate'] = null;
+        $basicResponse['camp_link'] = null;
         if (in_array($ad->status,$contractStatuses) && Auth::guard('api')->user()->customers) {
             $basicResponse['contract'] = route('contractApi',$ad->id);
         }
@@ -199,7 +200,10 @@ trait AdResponse
             
         } else {
             $basicResponse['status'] = $this->getStatusForInf($ad);
-            $basicResponse['camp_link'] = 'https://josequal.com';
+            if($basicResponse['status'] == 'Active'){
+                $basicResponse['camp_link'] = 'https://josequal.com';
+            }
+            
         }
         $basicResponse['messages'] = [
             'label_text' => $this->getLabelTextResponse($ad->status),
