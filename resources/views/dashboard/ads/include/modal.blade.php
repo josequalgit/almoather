@@ -32,7 +32,7 @@
     </div>
 </div>
 
-<div id="accept_ad_contract" class="modal accept_adcontract_modal" tabindex="-1" role="dialog">
+<div id="accept_ad_contract" class="modal accept_adcontract_modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body accept_ad_contract_body">
@@ -47,7 +47,7 @@
     </div>
 </div>
 
-<div id="influencer-data" class="modal" tabindex="-1" role="dialog">
+<div id="influencer-data" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -75,7 +75,7 @@
     </div>
 </div>
 
-<div id="reject_ad_contract" class="modal" tabindex="-1" role="dialog">
+<div id="reject_ad_contract" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
@@ -92,7 +92,7 @@
 </div>
 
 
-<div id="rejectedReson" class="modal" tabindex="-1" role="dialog">
+<div id="rejectedReson" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -105,7 +105,7 @@
                 <textarea class="form-control" id="rejectedNote" rows="12"></textarea>
             </div>
             <div class="modal-footer">
-                <button onclick="sendStatusRequest('reject')" type="button" class="btn btn-primary">Send</button>
+                <button onclick="sendUpdateNoteRequest(this,true,'rejectedNote')" type="button" class="btn btn-primary">Send</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>

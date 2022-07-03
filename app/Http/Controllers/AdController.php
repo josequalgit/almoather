@@ -85,13 +85,6 @@ class AdController extends Controller
             ], config('global.NOT_FOUND_STATUS'));
         }
 
-        if (!$request->status) {
-            return response()->json([
-                'msg' => 'please add a status',
-                'status' => config('global.UNAUTHORIZED_VALIDATION_STATUS'),
-            ], config('global.UNAUTHORIZED_VALIDATION_STATUS'));
-        }
-
         if (!$request->category_id) {
             return response()->json([
                 'msg' => 'please choose a category',
@@ -100,62 +93,30 @@ class AdController extends Controller
         }
 
         
-        if($confirm||$request->note)
+        if($confirm)
         {
-            $ad->status = $request->status;
+            $ad->status = 'approve';
             $ad->category_id = $request->category_id;
+            $ad->type = $request->type;
             $ad->eng_number = $request->engagement_rate;
-            $ad->reject_note = $request->note ?? null;
+            $ad->reject_note = null;
             $ad->save();
 
 
             $tokens = [$ad->customers->users->fcm_token];
-            if($request->note){
-                $title = trans($this->notification_trans_dir.'rejected_campaign_title',['ad_name'=>$ad->store]);
-                $msg = trans($this->notification_trans_dir.'rejected_campaign_msg',['ad_name'=>$ad->store,'reject_reason'=>$request->note]);
-            }else{
-                $title = trans($this->notification_trans_dir.'accepted_campaign_title',['ad_name'=>$ad->store]);
-                $msg = trans($this->notification_trans_dir.'accepted_campaign_msg',['ad_name'=>$ad->store]);
-            }
+            $title = trans($this->notification_trans_dir.'accepted_campaign_title',['ad_name'=>$ad->store]);
+            $msg = trans($this->notification_trans_dir.'accepted_campaign_msg',['ad_name'=>$ad->store]);
+
             $data = [
                 "title" => $title,
                 "body" => $msg,
                 "type" => 'Ad',
-                'target_id' =>$ad->id
+                'target_id' => $ad->id
             ];
 
             $this->sendNotifications($tokens,$data);
 
-            if($ad->status == 'approve')
-            {
-                $users = [$ad->customers->users];
-                $info =[
-                    'msg' => $msg,
-                    'id' => $ad->id ,
-                    'type' => 'Ad'
-                ];
-    
-    
-                //Todo move to approve influencers list
-                // /** SEND NOTIFICATION TO INFLUENCER */
-                // $tokens = [];
-                // $InfMessage =[
-                //     'msg' => trans($this->notification_trans_dir.'accept_ad_to_influencer'),
-                //     'id' => $ad->id ,
-                //     'type' => 'Ad'
-                // ];
-                // foreach ($ad->matches as $key => $value) {
-                //    array_push($tokens,$value->influencers->users->fcm_token);
-                // }
-                // $this->sendNotifications($tokens,$InfMessage);
-
-            }
-
-            //Todo remove this
-            // $users = [User::find(1), User::find($ad->customers->users->id)];
-            // Notification::send($users, new AddInfluencer($info));
-            // Alert::toast('Ad was updated', 'success');
-            // activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
+            activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
 
             return response()->json([
                 'msg' => 'status was changed',
@@ -165,19 +126,11 @@ class AdController extends Controller
         else
         {
             $ad->category_id = $request->category_id;
-            
             $ad->eng_number = $request->engagement_rate;
+            $ad->type = $request->type;
             $ad->save();
-        }
-
-        if(!$confirm)
-        {
-
             $ad->matches()->delete();
         }
-
-
-        /** SAVE THE DATA */
 
 
         // STEP 1 - GET THE PROPERTY CATEGORIES
@@ -200,6 +153,7 @@ class AdController extends Controller
         $this->calculateCampaignPrice($ad);
         $data = $ad;
         $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','data','noInfluencerReasons'))->render();
+        
         return response()->json([
             'msg' => 'status was changed',
             'data' => $influencersTable,
@@ -1100,7 +1054,7 @@ class AdController extends Controller
 
         $ad = Ad::find($request->ad_id);
 
-        $ad->update(['reject_note' => $data['reject_note']]);
+        $ad->update(['reject_note' => $data['reject_note'],'status' => 'rejected']);
         if($request->send_notification && $ad->customers->users->fcm_token){
             $tokens = [$ad->customers->users->fcm_token];
             $title = trans($this->notification_trans_dir.'rejected_campaign_title',['ad_name'=>$ad->store]);

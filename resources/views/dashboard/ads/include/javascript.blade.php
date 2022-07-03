@@ -574,4 +574,9 @@
         })
     }
 
+    function openModal($this,modalId){
+        $('#' + modalId).modal('show');
+        return false;
+    }
+
 </script>
