@@ -345,7 +345,7 @@ class Ad extends Model implements HasMedia
 
     public function getStoreLinkAttribute()
     {
-        return strpos($this->attributes['store_link'], "http") ? $this->attributes['store_link'] : 'https://' . $this->attributes['store_link'];
+        return strpos($this->attributes['store_link'], "http") !== false ? $this->attributes['store_link'] : 'https://' . $this->attributes['store_link'];
     }
 
     public function checkIfNumberExist()

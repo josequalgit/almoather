@@ -120,9 +120,7 @@ class Influencer extends Voluum{
         }
 
         $data = $this->getInfluencerParameters($influencer,$influencer->voluum_id);
-// echo Endpoints::updateInfluencerEndpoint($influencer->voluum_id);die;
         $response = $this->put(Endpoints::updateInfluencerEndpoint($influencer->voluum_id),$data);
-        dd($response);
         if($response && isset($response['rows']) && !empty($response['rows'])){
             $row = $response['rows'][0];
             $influencer->update([
