@@ -120,7 +120,7 @@ class Voluum{
         return $response->json();
     }
 
-    private function log($error){
+    protected function log($error){
         Log::build([
             'driver' => 'single',
             'path' => storage_path().'/logs/vlouum.log',

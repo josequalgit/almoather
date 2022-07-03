@@ -58,7 +58,7 @@ class Influencer extends Voluum{
             'data' => $response
         ];
         $this->log($error);
-        return response()->json($error, 401);
+        return response()->json($error, 400);
     }
 
     function checkInfluencerExists($influencer){
