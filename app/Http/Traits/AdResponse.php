@@ -6,6 +6,7 @@ use App\Models\CampaignContract;
 use App\Models\Contract;
 use App\Models\InfluencerContract;
 use Auth;
+use Carbon\Carbon;
 use Mpdf\Mpdf;
 
 trait AdResponse
@@ -146,7 +147,16 @@ trait AdResponse
             $basicResponse['contract'] = route('InfluencerContractApi',[$ad,Auth::guard('api')->user()->influncers->id]);
             $basicResponse['contractId'] = $contractData->id;
             
-            $basicResponse['executionDate'] = $contractData && $contractData->date? $contractData->date->format('d/m/Y') : trans($this->trans_dir . 'date_not_set');
+            $basicResponse['executionDate'] = $contractData && $contractData->date ? $contractData->date->format('d/m/Y') : trans($this->trans_dir . 'date_not_set');
+            
+            $basicResponse['status'] = $this->getStatusForInf($ad);
+            if($basicResponse['status'] == 'Progress'){
+                $basicResponse['camp_link'] = 'https://josequal.com';
+            }
+
+            $basicResponse['date'] = $contractData && $contractData->created_at ?  $contractData->created_at->diffForHumans() : '';
+
+            $basicResponse['showExecution'] = $contractData && $contractData->date && Carbon::parse($contractData->date)->gt(Carbon::now()) ? true : false;
         }
 
         //Return Matches if the status is Full payment / Choosing influencer / Progress
@@ -197,14 +207,8 @@ trait AdResponse
 
         if (Auth::guard('api')->user()->customers) {
             $basicResponse['status'] = $ad->status;
-            
-        } else {
-            $basicResponse['status'] = $this->getStatusForInf($ad);
-            if($basicResponse['status'] == 'Progress'){
-                $basicResponse['camp_link'] = 'https://josequal.com';
-            }
-            
         }
+
         $basicResponse['messages'] = [
             'label_text' => $this->getLabelTextResponse($ad->status),
             'button_text' => $this->getButtonTextResponse($ad->is_all_accepted() ? 'inf_list' : $ad->status),
