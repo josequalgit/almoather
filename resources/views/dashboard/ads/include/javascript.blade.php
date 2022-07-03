@@ -34,7 +34,7 @@
             allowedContent: true
         });
 
-        $('#ad-type').on('change',function(){
+        $(document).on('change','#ad-type',function(){
             $('#ad-category').html('');
             let items = $('#ad-type option[value="'+$(this).val()+'"]').attr('data-items');
             items = JSON.parse(items) || [];
@@ -42,7 +42,8 @@
                 let selected = $('#ad-category').attr('data-item') == element.id ? 'selected' : '';
                 $('#ad-category').append(`<option value="${element.id}" ${selected}>${element.name.ar}</option>`) 
             });
-        }).change();
+        });
+        $('#ad-type').change();
 
         $(document).on('click','.open-choose-video',function(){
             $('#adVideo').trigger('click');
@@ -53,7 +54,7 @@
             fileType = 'image';
         });
 
-        $('#adVideo,#addImage').on('change',function(){
+        $(document).on('input','#adVideo,#addImage',function(){
             var itemId = $(this).attr('id');
             let video = document.getElementById(itemId).files[0];
             let formData = new FormData();
