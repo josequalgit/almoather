@@ -151,6 +151,7 @@
             }else{
                 fullUrl = '{{ route('dashboard.ads.update', ':id') }}';
                 fullUrl = fullUrl.replace(':id', '{{ $data->id }}');
+                status = document.getElementById('rejectedNote').value ? 'rejected' : '';
             }
         
             $.ajax({
@@ -185,6 +186,7 @@
                     totalInfluencers = res.totalInfluencers;
                     $('.influencer-data').html(res.data);
                     $('[href="#next"]').attr('disabled',false).html('Next');
+                    $('#rejectedReson').modal('hide');
                 },
                 error: (err) => {
                     console.log("updateding error: ", err);

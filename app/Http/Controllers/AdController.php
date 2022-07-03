@@ -136,23 +136,26 @@ class AdController extends Controller
                 ];
     
     
-                /** SEND NOTIFICATION TO INFLUENCER */
-                $tokens = [];
-                $InfMessage =[
-                    'msg' => trans($this->notification_trans_dir.'accept_ad_to_influencer'),
-                    'id' => $ad->id ,
-                    'type' => 'Ad'
-                ];
-                foreach ($ad->matches as $key => $value) {
-                   array_push($tokens,$value->influencers->users->fcm_token);
-                }
-                $this->sendNotifications($tokens,$InfMessage);
+                //Todo move to approve influencers list
+                // /** SEND NOTIFICATION TO INFLUENCER */
+                // $tokens = [];
+                // $InfMessage =[
+                //     'msg' => trans($this->notification_trans_dir.'accept_ad_to_influencer'),
+                //     'id' => $ad->id ,
+                //     'type' => 'Ad'
+                // ];
+                // foreach ($ad->matches as $key => $value) {
+                //    array_push($tokens,$value->influencers->users->fcm_token);
+                // }
+                // $this->sendNotifications($tokens,$InfMessage);
 
             }
 
-            Notification::send($users, new AddInfluencer($info));
-            Alert::toast('Ad was updated', 'success');
-            activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
+            //Todo remove this
+            // $users = [User::find(1), User::find($ad->customers->users->id)];
+            // Notification::send($users, new AddInfluencer($info));
+            // Alert::toast('Ad was updated', 'success');
+            // activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
 
             return response()->json([
                 'msg' => 'status was changed',
