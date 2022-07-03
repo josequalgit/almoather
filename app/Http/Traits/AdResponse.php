@@ -32,6 +32,7 @@ trait AdResponse
         $date = $ad->created_at->format('d/m/Y');
         $start_date = null;
         $end_date = null;
+        $camp_link = null;
         if($ad->InfluencerContract){
             $contractData = $ad->InfluencerContract()->orderBy('date','asc')->first();
             if($contractData && $contractData->date){
@@ -194,10 +195,11 @@ trait AdResponse
         }
 
         if (Auth::guard('api')->user()->customers) {
-
             $basicResponse['status'] = $ad->status;
+            
         } else {
             $basicResponse['status'] = $this->getStatusForInf($ad);
+            $basicResponse['camp_link'] = 'https://josequal.com';
         }
         $basicResponse['messages'] = [
             'label_text' => $this->getLabelTextResponse($ad->status),
@@ -253,11 +255,11 @@ trait AdResponse
             return 'Pending';
         }
 
-        if ($contract->status == 1 && $contract->status == 0) {
+        if ($contract->status == 1 && $contract->admin_status == 0) {
             return 'waiting admin approve';
         }
 
-        if ($contract->is_accepted == 2 && $contract->admin_status == 1) {
+        if ($contract->status == 2 && $contract->admin_status == 1) {
             return 'Completed';
         }
 
