@@ -105,7 +105,7 @@
                 <textarea class="form-control" id="rejectedNote" rows="12"></textarea>
             </div>
             <div class="modal-footer">
-                <button onclick="sendStatusRequest()" type="button" class="btn btn-primary">Send</button>
+                <button onclick="sendStatusRequest('reject')" type="button" class="btn btn-primary">Send</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
