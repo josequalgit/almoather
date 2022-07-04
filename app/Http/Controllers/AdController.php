@@ -105,6 +105,7 @@ class AdController extends Controller
 
 
             $tokens = [$ad->customers->users->fcm_token];
+            $title = '';
             if($request->note){
                 $title = 'rejected_campaign_title';
                 $msg = 'rejected_campaign_msg';
