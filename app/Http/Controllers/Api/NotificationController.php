@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\User;
 use App\Models\Ad;
 use Carbon\Carbon;
-use Auth , DB;
+use Auth , DB , App;
 
 class NotificationController extends Controller
 {
