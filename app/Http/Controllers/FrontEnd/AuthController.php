@@ -33,7 +33,8 @@ class AuthController extends Controller
                 Alert::toast("Invalid email or password", 'error');
                 return back();
             }
-            return 'here';
+
+            return redirect()->route('customers.index');
         }
         else
         {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html dir="{{ app()->getLocale() == 'ar'?'rtl':'ltr' }}" lang="{{ app()->getLocale() }}">
   <head>
     <title>Al-Muaathir</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,7 +33,7 @@
                                         <div class="circle-img"><img src="{{ asset('frontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt=""></div>
                                         <div class="circle-img"><img src="{{ asset('frontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt=""></div>
                                     </div>
-                                    <p class="ps-4 m-0">Join 60.000 + users</p>
+                                    <p class="ps-4 m-0">{{ trans('messages.frontEnd.join_users',['number'=>'60,000']) }}</p>
                                 </div>
                             </div>
                             <img class="arrow-img" src="{{ asset('frontEnd/img/Group 50667.png') }}" alt="">
@@ -43,8 +43,8 @@
                                         <div class="icon">
                                            <img src="{{ asset('frontEnd/img/logo.png') }}" width="150px" height="150px" alt="">
                                         </div>
-                                        <h3>Welcome Back</h3>
-                                        <span>Enter the required data</span>
+                                        <h3>{{ trans('messages.frontEnd.welcome_back') }}</h3>
+                                        <span>{{ trans('messages.frontEnd.enter_the_required_data') }}</span>
                                     </div>
                                     <form method="POST" action="{{ route('auth.login_submit') }}" class="form mt-2"> 
                                         @csrf
@@ -58,11 +58,11 @@
                                           </div>
                                         <div class="extra mt-3">
                                             <div class="forget">
-                                                <a href="#">Forgot Password ?</a>
+                                                <a href="#">{{ trans('messages.frontEnd.forgot_password') }}</a>
                                             </div>
                                         </div>
                                         <div class="mt-3">
-                                            <button type="submit" class="btn btn-none login-button">Log In</button>
+                                            <button type="submit" class="btn btn-none login-button">{{ trans('messages.frontEnd.login') }}</button>
                                         </div>
                                     </form>
                                 </div>

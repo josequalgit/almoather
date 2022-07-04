@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
 use Auth;
+use Illuminate\Support\Facades\Notification;
 
 trait SendNotification {
     function sendNotifications($tokens,$data,$topic = false){
@@ -54,11 +55,18 @@ trait SendNotification {
     function sendAdminNotification($channel,$data)
     {
         $data = (object) $data;
+        $ad = null;
         if($data->id == null || $data->msg == null) throw new \Exception('Error Adding Data To Admin Notification function. Please Check The Data object');
+        if($data->type == 'ad')
+        {
+            $ad = Ad::find($data->id);
+            Notification::send([$ad->customers->users], new AddInfluencer($info));
+        }
+
 
         Redis::publish($channel, json_encode([
             'id'=> $data->id,
-            "message" => $data->msg,
+            "message" => trans($data->msg,['ad_name'=>$ad?$ad->name:'']),
             "date" => Carbon::now()->diffForHumans(),
         ]));
     }

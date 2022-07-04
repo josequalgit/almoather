@@ -22,14 +22,21 @@ class NotificationController extends Controller
             'msg'=>trans($this->trans_dir.'user_was_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
-
+    
         $data = $user->notifications()->select(['data','id'])->paginate(config('global.PAGINATION_NUMBER'));
            $data->getCollection()->transform(function($item){
             if(array_key_exists('msg', $item->data))
             {
+                $name = 'not found';
+                $data = Ad::find($item->data['id']);
+                $msg = $item->data['msg'];
+                if($data) $name = $data->store;
+                if($item->data['type'] == 'Ad') $msg = trans($item->data['msg'],['ad_name'=>$name]);
+
                 return [
                     'id'=>$item->id,
-                    'msg'=>$item->data['msg'],
+                    'msg'=>$msg,
+                    'text'=>trans($item->data['msg'],['ad_name'=>$name]),
                     'data_id'=>$item->data['id']?$item->data['id']:null,
                     'type'=>$item->data['type'],
                     'read'=>$item->read_at?true:false

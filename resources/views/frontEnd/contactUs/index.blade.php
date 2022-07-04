@@ -20,19 +20,19 @@
             <div>
               <div class="contact-form-wrapper d-flex justify-content-start">
                 <form action="#" class="contact-form">
-                  <h5 class="title">Send us a message </h5>
+                  <h5 class="title">{{ trans('messages.frontEnd.send_us_a_message') }} </h5>
                   </p>
                   <div>
-                    <input type="text" class="form-control rounded border-white mb-3 form-input" id="name" placeholder="Name">
+                    <input type="text" class="form-control rounded border-white mb-3 form-input" id="name" placeholder="{{ trans('messages.frontEnd.name') }}">
                   </div>
                   <div>
-                    <input id="email" type="email" class="form-control rounded border-white mb-3 form-input" placeholder="Email">
+                    <input id="email" type="email" class="form-control rounded border-white mb-3 form-input" placeholder="{{ trans('messages.frontEnd.email') }}">
                   </div>
                   <div>
-                    <textarea id="message" class="form-control rounded border-white mb-3 form-text-area" rows="5" cols="30" placeholder="Message"></textarea>
+                    <textarea id="message" class="form-control rounded border-white mb-3 form-text-area" rows="5" cols="30" placeholder="{{ trans('messages.frontEnd.message') }}"></textarea>
                   </div>
                   <div class="submit-button-wrapper">
-                    <button onclick="addContactMessage()" class="btn btn-none" type="button"><i class="fa-solid fa-paper-plane"></i> Send</button>
+                    <button onclick="addContactMessage()" class="btn btn-none" type="button"><i class="fa-solid fa-paper-plane"></i> {{ trans('messages.frontEnd.send') }}</button>
                   </div>
                 </form>
               </div>
@@ -75,7 +75,7 @@
               <div class="col-lg-4 col-md-12 col-sm-12 mt-md-5" >
                 <div class="contact-form-wrapper p-2 ">
                   <div  class="contact-form1 text-left">
-                    <h5 class="title" id="title-button">Phone </h5>
+                    <h5 class="title" id="title-button">{{ trans('messages.frontEnd.phone') }}</h5>
                     </p>
                     <div>
                       <button  class="left-form form-control btn btn-none rounded border-white mb-3 " ><i class="fa-solid fa-phone fa-lg px-3" style="color:#CA9B3D ;"></i>{{ $contact_info->phone }}</button>
@@ -88,7 +88,7 @@
               <div class="col-lg-4 col-md-12 col-sm-12">
                 <div  class="contact-form-wrapper center-top-div p-2">
                   <div   id="contact-form1-center" class="contact-form1 text-left">
-                    <h5 class="title" id="title-button2">Email</h5>
+                    <h5 class="title" id="title-button2">{{ trans('messages.frontEnd.email') }}</h5>
                     </p>
                     <div>
                       <button  class="center-form form-control btn btn-none rounded border-white mb-3 " ><i class="fa-solid fa-envelope fa-lg px-3" style="color:#CA9B3D ;"></i>{{ $contact_info->email }}</button>
@@ -109,16 +109,16 @@
                 </div>
                 <div  class="contact-form-wrapper p-2 position-relative">
                   <div  class="contact-form1 text-left">
-                    <h5 class="title" id="title-button">Social Media</h5>
+                    <h5 class="title" id="title-button">{{ trans('messages.frontEnd.social_media') }}</h5>
                     </p>
                     <div>
-                      <button  class="left-form form-control btn btn-none rounded border-white mb-3 " ><i class="fa-brands fa-facebook fa-lg px-3" style="color:#CA9B3D ;"></i>Like our facebook page</button>
+                      <button  class="left-form form-control btn btn-none rounded border-white mb-3 " ><i class="fa-brands fa-facebook fa-lg px-3" style="color:#CA9B3D ;"></i>{{ trans('messages.frontEnd.social_media',['name'=>'فيسبوك']) }}</button>
                     </div >
                     <div>
-                      <button  class="left-form form-control btn btn-none rounded border-white mb-3 " ><i class="fa-brands fa-youtube fa-lg px-3" style="color:#CA9B3D ;"></i>Like our instagram page</button>
+                      <button  class="left-form form-control btn btn-none rounded border-white mb-3 " ><i class="fa-brands fa-youtube fa-lg px-3" style="color:#CA9B3D ;"></i>{{ trans('messages.frontEnd.social_media',['name'=>'انستغرام']) }}</button>
                     </div>
                     <div>
-                      <button  class="left-form form-control btn btn-none rounded border-white mb-3 " ><i class="fa-brands fa-twitter fa-lg px-3" style="color:#CA9B3D ;"></i>Get our twitter updates</button>
+                      <button  class="left-form form-control btn btn-none rounded border-white mb-3 " ><i class="fa-brands fa-twitter fa-lg px-3" style="color:#CA9B3D ;"></i>{{ trans('messages.frontEnd.social_media',['name'=>'تويتر']) }}</button>
                     </div>
                    
                   </div>

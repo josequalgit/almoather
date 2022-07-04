@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html dir="{{ app()->getLocale() == 'ar'?'rtl':'ltr' }}" lang="{{ app()->getLocale() }}" >
   <head>
     <title>Al-Muaathir</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,7 +51,7 @@
                             <img id="user-image" height="160px" width="155px" class="back-ground-advertiser rounded-circle" src="{{ asset('frontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt="">
                             <input name="image" onchange="loadFile(event)" class="file-input required1" style="display: none;" id="fileinput" type="file" />
                         </div>
-                        <h3 class="mt-3 text-center" id="section_title">Influencer information</h3>
+                        <h3 class="mt-3 text-center" id="section_title">{{ trans('messages.frontEnd.influencer_information') }}</h3>
                         
 
                         {{-- Influencer information --}}
@@ -59,21 +59,21 @@
                         <section id="page_number_1">
                             <div class="row input-adv mt-5">
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="first_name" class="mb-1 float-left label-advertiser ">First name</label>
-                                    <input name="first_name" id="first_name" type="text" class="form-control required1" placeholder="please add first name">
+                                    <label for="first_name" class="mb-1 float-left label-advertiser ">{{ trans('messages.frontEnd.first_name') }}</label>
+                                    <input name="first_name" id="first_name" type="text" class="form-control required1" placeholder="{{ trans('messages.frontEnd.first_name') }}">
                                 </div>
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="miggle_name" class="mb-1 float-left label-advertiser">Middle name</label>
-                                    <input name="middle_name" id="middle_name" type="text" class="form-control required1" placeholder="please add middle name">
+                                    <label for="miggle_name" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.middle_name') }}</label>
+                                    <input name="middle_name" id="middle_name" type="text" class="form-control required1" placeholder="{{ trans('messages.frontEnd.middle_name') }}">
                                 </div>
                             </div>
                             <div class="row input-adv">
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="last_name" class="mb-1 float-left label-advertiser">Last name</label>
-                                    <input name="last_name" id="last_name" type="text" class="form-control required1" placeholder="please add last name">
+                                    <label for="last_name" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.last_name') }}</label>
+                                    <input name="last_name" id="last_name" type="text" class="form-control required1" placeholder="{{ trans('messages.frontEnd.last_name') }}">
                                 </div>
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="gender" class="mb-1 float-left label-advertiser">Gender</label>
+                                    <label for="gender" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.gender') }}</label>
                                     <select name="gender" class="form-control required1" id="gender" >
                                         <option value="Male" >Male</option>
                                         <option value="Female">Female</option>
@@ -82,7 +82,7 @@
                             </div>
                             <div class="row input-adv">
                                 <div class="col-md-6 col-12  mt-3">
-                                    <label for="nationality" class="mb-1 float-left label-advertiser">Nationality</label>
+                                    <label for="nationality" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.nationality') }}</label>
                                     <select name="nationality_id" class="form-control required1" id="nationality_id" >
                                         @foreach ($nationality as $item)
                                             <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -90,7 +90,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6 col-12  mt-3">
-                                    <label for="countries" class="mb-1 float-left label-advertiser">Country</label>
+                                    <label for="countries" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.countries') }}</label>
                                     <select name="country_id" onchange='getRegionAccordingToCountry()' class="form-control required1" id="country_id" >
                                         @foreach ($countries as $item)
                                             <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -99,27 +99,27 @@
                                 </div>
                                 <div class="col-md-6 col-12">
                                     <div class="mt-3">
-                                        <label for="country_code" class="mb-1 float-left label-advertiser">Country code</label>
-                                        <input name="country_code" id="country_code" type="number" class="form-control required1" placeholder="please add last name">
+                                        <label for="country_code" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.country_code') }}</label>
+                                        <input name="country_code" id="country_code" type="number" class="form-control required1" placeholder="{{ trans('messages.frontEnd.country_code') }}">
                                     </div>
         
                                 </div>
                                 <div class="col-md-6 col-12">
                                     <div class="mt-3">
-                                        <label for="dial_code" class="mb-1 float-left label-advertiser">National id number / iqama</label>
-                                        <input name="id_number" id="id_number" type="number" class="form-control required1"  placeholder="id number">
+                                        <label for="dial_code" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.id_number') }}</label>
+                                        <input name="id_number" id="id_number" type="number" class="form-control required1"  placeholder="{{ trans('messages.frontEnd.id_number') }}">
     
                                     </div>
                                 </div>
                             </div>
                             <div class="row input-adv">
                                 <div class="col-md-6 col-12  mt-3">
-                                    <label for="region_id" class="mb-1 float-left label-advertiser">Region</label>
+                                    <label for="region_id" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.region') }}</label>
                                     <select  name="region_id" onchange='getCityAccordingToRegion()' id="region_id" class="form-control required1">
                                     </select>
                                 </div>
                                 <div class="col-md-6 col-12  mt-3">
-                                    <label for="city" class="mb-1 float-left label-advertiser">City</label>
+                                    <label for="city" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.city') }}</label>
                                      <select id="city_id" class="form-control required1"  name="city_id" id="" >
                                     </select>
                                 </div>
@@ -127,27 +127,27 @@
                             <div class="row input-adv">
                                 
                                 <div class="col-md-6 col-12  mt-3">
-                                    <label for="phone" class="mb-1 float-left label-advertiser">Mobile Number</label>
-                                    <input name="phone" id="phone" type="number" class="form-control required1"  placeholder="Phone Number">
+                                    <label for="phone" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.phone') }}</label>
+                                    <input name="phone" id="phone" type="number" class="form-control required1"  placeholder="{{ trans('messages.frontEnd.phone') }}">
                                 </div>
                                 <div class="col-md-6 col-12  mt-3">
-                                    <label for="dial_code" class="mb-1 float-left label-advertiser">Dial code</label>
-                                    <input name="dial_code" id="dial_code" type="number" class="form-control required1"  placeholder="Dial code Number">
+                                    <label for="dial_code" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.dial_code') }}</label>
+                                    <input name="dial_code" id="dial_code" type="number" class="form-control required1"  placeholder="{{ trans('messages.frontEnd.dial_code') }}">
                                 </div>
                                 <div class="col  mt-3">
-                                    <label for="email" class="mb-1 float-left label-advertiser">E-mail Address</label>
-                                    <input name="email" id="email" type="email" class="form-control required1"  placeholder="Email">
+                                    <label for="email" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.mail') }}</label>
+                                    <input name="email" id="email" type="email" class="form-control required1"  placeholder="{{ trans('messages.frontEnd.mail') }}">
                                 </div>
                             
                             </div>
                             <div class="row input-adv">
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="password" class="mb-1 float-left label-advertiser">Password</label>
-                                    <input name="password" id="password" type="password" class="form-control required1"  placeholder="Password">
+                                    <label for="password" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.password') }}</label>
+                                    <input name="password" id="password" type="password" class="form-control required1"  placeholder="{{ trans('messages.frontEnd.password') }}">
                                 </div>
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="password_conformation" class="mb-1 float-left label-advertiser">Re-Password</label>
-                                    <input name="password_confirmation" id="password_conformation" type="password" class="form-control required1"  placeholder="Re-Password">
+                                    <label for="password_conformation" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.password_confirm') }}</label>
+                                    <input name="password_confirmation" id="password_conformation" type="password" class="form-control required1"  placeholder="{{ trans('messages.frontEnd.password_confirm') }}">
                                 </div>
                             </div>
                            
@@ -156,21 +156,21 @@
                         <section id="page_number_2">
                             <div class="row input-adv mt-5">
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="nick_name" class="mb-1 float-left label-advertiser">Nick Name</label>
-                                    <input name="nick_name" id="nick_name" type="text" class="form-control required2" placeholder="please add nick">
+                                    <label for="nick_name" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.nick_name') }}</label>
+                                    <input name="nick_name" id="nick_name" type="text" class="form-control required2" placeholder="{{ trans('messages.frontEnd.nick_name') }}">
                                 </div>
                                 <div class="col-md-6 col-12  mt-3">
-                                    <label for="countries" class="mb-1 float-left label-advertiser">Do you do ads outside ?</label>
+                                    <label for="countries" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.ads_outside') }}</label>
                                     <select name="ads_out_country" class="form-control required2" id="ads_out_country" >
-                                        <option value="1">Yes</option>
-                                        <option value="0">No</option>
+                                        <option value="1">{{ trans('messages.frontEnd.yes') }}</option>
+                                        <option value="0">{{ trans('messages.frontEnd.no') }}</option>
                                     </select>
                                 </div>
                                
                             </div>
                             <div class="row input-adv">
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="category" class="mb-1 float-left label-advertiser">Category</label>
+                                    <label for="category" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.category_type') }}</label>
                                     <select multiple name="categories[]" class="form-control required2" id="categories" style="height: 150px;" >
                                         @foreach ($categories as $item)
                                             <option value="{{ $item->id }}" >{{ $item->name }}</option>
@@ -178,7 +178,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="miggle_name" class="mb-1 float-left label-advertiser">About Me</label>
+                                    <label for="miggle_name" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.about_me') }}</label>
                                     <textarea name="bio" class="form-control required2" id="bio" name="bio" id="" cols="30" rows="5">
                                     </textarea>
                                 </div>
@@ -187,28 +187,28 @@
                             <div class="row input-adv">
                                 <div class="col-md-6 col-12">
                                     <div class="mt-3">
-                                        <label for="online_ad_price" class="mb-1 float-left label-advertiser">Online ad price</label>
-                                        <input oninput="adPriceWithTax('ad_with_vat',event.target.value)" name="ad_price" id="ad_price" type="number" class="form-control required2" placeholder="please add last name">
+                                        <label for="online_ad_price" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.ad_online_price') }}</label>
+                                        <input oninput="adPriceWithTax('ad_with_vat',event.target.value)" name="ad_price" id="ad_price" type="number" class="form-control required2" placeholder="{{ trans('messages.frontEnd.ad_online_price') }}">
                                     </div>
                                 </div>
                                
                                 <div class="col-md-6 col-12">
                                     <div class="mt-3">
-                                        <label for="online_ad_price_with_tax" class="mb-1 float-left label-advertiser">Online ad price(with tax)</label>
-                                        <input  readonly="readonly" name="ad_with_vat" id="ad_with_vat" type="number" class="form-control required2" placeholder="please add ad with vat">
+                                        <label for="online_ad_price_with_tax" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.ad_with_vat') }}</label>
+                                        <input  readonly="readonly" name="ad_with_vat" id="ad_with_vat" type="number" class="form-control required2" placeholder="{{ trans('messages.frontEnd.ad_with_vat') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">
                                     <div class="mt-3">
-                                        <label for="dial_code" class="mb-1 float-left label-advertiser">Onsite ad price</label>
-                                        <input oninput="adPriceWithTax('ad_onsite_price_with_vat',event.target.value)" name="ad_onsite_price" id="ad_onsite_price" type="number" class="form-control required2"  placeholder="on site ad price with vat">
+                                        <label for="dial_code" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.ad_price') }}</label>
+                                        <input oninput="adPriceWithTax('ad_onsite_price_with_vat',event.target.value)" name="ad_onsite_price" id="ad_onsite_price" type="number" class="form-control required2"  placeholder="{{ trans('messages.frontEnd.ad_price') }}">
                                     </div>
                                 </div>
 
                                     <div class="col-md-6 col-12">
                                         <div class="mt-3">
-                                            <label for="dial_code" class="mb-1 float-left label-advertiser">Onsite ad price(with tax)</label>
-                                            <input  readonly="readonly" name="ad_onsite_price_with_vat" id="ad_onsite_price_with_vat" type="number" class="form-control required2"  placeholder="id number">
+                                            <label for="dial_code" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.ad_onsite_price_with_vat') }}</label>
+                                            <input  readonly="readonly" name="ad_onsite_price_with_vat" id="ad_onsite_price_with_vat" type="number" class="form-control required2"  placeholder="{{ trans('messages.frontEnd.ad_onsite_price_with_vat') }}">
                                         </div>
                                     </div>
                               
@@ -216,7 +216,7 @@
                           
                             
                                 <div class="form-group mt-4">
-                                    <label class="mb-2" for="inputAddress2">Social Media</label>
+                                    <label class="mb-2" for="inputAddress2">{{ trans('messages.frontEnd.your_account_media') }}</label>
                                     <div class="row">
                                         @foreach ($socialMedia as $item)
                                             <div class="col-6">
@@ -246,11 +246,11 @@
                                                         @endswitch
                                                 </div>
                                                 <div class="mb-2">
-                                                    <input name="social_media[{{$item->name}}][link]" type="text" class="form-control {{ $item->id == 4?'required2':'' }}" placeholder="Username" aria-label="Username" aria-describedby="basic-addon">
+                                                    <input name="social_media[{{$item->name}}][link]" type="text" class="form-control {{ $item->id == 4?'required2':'' }}" placeholder="{{ trans('messages.frontEnd.username') }}" aria-label="Username" aria-describedby="basic-addon">
                                                     <input name="social_media[{{$item->name}}][type]" type="hidden" class="form-control {{ $item->id == 4?'required2':'' }}" value="{{ $item->id }}" >
                                                 </div>
                                                 <div>
-                                                    <input name="social_media[{{ $item->name }}][subscribers]" type="number" class="ml-2 form-control {{ $item->id == 4?'required2':'' }}" placeholder="subscirbers" aria-label="subscirbers" aria-describedby="basic-addon">
+                                                    <input name="social_media[{{ $item->name }}][subscribers]" type="number" class="ml-2 form-control {{ $item->id == 4?'required2':'' }}" placeholder="{{ trans('messages.frontEnd.subscibers') }}" aria-label="subscirbers" aria-describedby="basic-addon">
                                                 </div>
                                                 <div>
                                                     <input hidden name="social_media[{{ $item->name }}][type]" value="{{ $item->id }}" type="text" class="ml-2 form-control {{ $item->id == 4?'required2':'' }}" placeholder="subscirbers" aria-label="subscirbers" aria-describedby="basic-addon1">
@@ -260,51 +260,42 @@
                                         @endforeach
                                     </div>
                                 </div>
-                                <div class="col">
-                                        {{-- <div class="mt-3">
-                                            <label for="dial_code" class="mb-1 float-left label-advertiser">Snap Link</label>
-                                            <input   name="social_media[Snapchat][link]"  type="text" class="form-control"  placeholder="id number">
-                                        </div> --}}
-                                        {{-- <div class="mt-3">
-                                            <label for="dial_code" class="mb-1 float-left label-advertiser">Subscribers</label>
-                                            <input   name="social_media[Snapchat][subscribers]"  type="number" class="form-control"  placeholder="id number">
-                                        </div> --}}
-                                    </div>
+                               
                         </section>
                         <section id="page_number_3">
                             <div class="row input-adv mt-5">
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="rep_full_name" class="mb-1 float-left label-advertiser">Representer full name</label>
-                                    <input name="rep_full_name" id="full_name_for" type="text" class="form-control required3" placeholder="please add Representer full name">
+                                    <label for="rep_full_name" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.representer_full_name') }}</label>
+                                    <input name="rep_full_name" id="full_name_for" type="text" class="form-control required3" placeholder="{{ trans('messages.frontEnd.representer_full_name') }}">
                                 </div>
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="miggle_name" class="mb-1 float-left label-advertiser">Representer Phone</label>
-                                    <input name="rep_phone_number" id="rep_phone_number" type="text" class="form-control required3" placeholder="please add middle name">
+                                    <label for="miggle_name" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.rep_phone_number') }}</label>
+                                    <input name="rep_phone_number" id="rep_phone_number" type="text" class="form-control required3" placeholder="{{ trans('messages.frontEnd.rep_phone_number') }}">
                                 </div>
                             </div>
                             <div class="row input-adv">
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="rep_city" class="mb-1 float-left label-advertiser">Representer City</label>
-                                    <input name="rep_city" id="rep_city" type="text" class="form-control required3" placeholder="please add representer city">
+                                    <label for="rep_city" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.city') }}</label>
+                                    <input name="rep_city" id="rep_city" type="text" class="form-control required3" placeholder="{{ trans('messages.frontEnd.city') }}">
                                 </div>
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="street" class="mb-1 float-left label-advertiser">Representer Street</label>
-                                    <input name="street" id="street" type="text" class="form-control required3" placeholder="please add representer street">
+                                    <label for="street" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.street') }}</label>
+                                    <input name="street" id="street" type="text" class="form-control required3" placeholder="{{ trans('messages.frontEnd.street') }}">
                                 </div>
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="rep_area" class="mb-1 float-left label-advertiser">Representer Region</label>
-                                    <input name="rep_area" id="rep_area" type="text" class="form-control required3" placeholder="please add representer region">
+                                    <label for="rep_area" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.region') }}</label>
+                                    <input name="rep_area" id="rep_area" type="text" class="form-control required3" placeholder="{{ trans('messages.frontEnd.region') }}">
                                 </div>
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="milestone" class="mb-1 float-left label-advertiser">Milestone</label>
-                                    <input name="milestone" id="milestone" type="text" class="form-control required3" placeholder="please add representer milestone">
+                                    <label for="milestone" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.milestone') }}</label>
+                                    <input name="milestone" id="milestone" type="text" class="form-control required3" placeholder="{{ trans('messages.frontEnd.milestone') }}">
                                 </div>
                             </div>
                             <div class="row input-adv">
                                 <div class="col">
                                     <div class="mt-3">
-                                        <label for="dial_code" class="mb-1 float-left label-advertiser">Neighborhood</label>
-                                        <input name="neighborhood" id="neighborhood" type="text" class="form-control required3"  placeholder="please add the neighborhood">
+                                        <label for="dial_code" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.neighborhood') }}</label>
+                                        <input name="neighborhood" id="neighborhood" type="text" class="form-control required3"  placeholder="{{ trans('messages.frontEnd.neighborhood') }}">
     
                                     </div>
                                 </div>
@@ -313,11 +304,11 @@
                         <section id="page_number_4">
                             <div class="row input-adv mt-5">
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="bank_account_name" class="mb-1 float-left label-advertiser">Cridet Card Name</label>
-                                    <input name="bank_account_name" id="bank_account_name" type="text" class="form-control required4" placeholder="please add cridet card name">
+                                    <label for="bank_account_name" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.bank_account_name') }}</label>
+                                    <input name="bank_account_name" id="bank_account_name" type="text" class="form-control required4" placeholder="{{ trans('messages.frontEnd.bank_account_name') }}">
                                 </div>
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="miggle_name" class="mb-1 float-left label-advertiser">Bank</label>
+                                    <label for="miggle_name" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.bank') }}</label>
                                     <select name="bank_id" class="form-control required4" id="bank_id" >
                                         @foreach ($banks as $item)
                                         <option value="{{$item->id }}">{{ $item->name }}</option>
@@ -327,27 +318,27 @@
                             </div>
                             <div class="row input-adv">
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="bank_account_number" class="mb-1 float-left label-advertiser">IBan Number</label>
-                                    <input name="bank_account_number" id="bank_account_number" type="text" class="form-control required4" placeholder="please add Iban Number">
+                                    <label for="bank_account_number" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.iban_number') }}</label>
+                                    <input name="bank_account_number" id="bank_account_number" type="text" class="form-control required4" placeholder="{{ trans('messages.frontEnd.iban_number') }}">
                                 </div>
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="bank_account_number_confirm" class="mb-1 float-left label-advertiser">Confirm IBan Number</label>
-                                    <input name="bank_account_number_confirm" id="bank_account_number_confirm" type="text" class="form-control required4" placeholder="please add Iban Number">
+                                    <label for="bank_account_number_confirm" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.iban_number_con') }}</label>
+                                    <input name="bank_account_number_confirm" id="bank_account_number_confirm" type="text" class="form-control required4" placeholder="{{ trans('messages.frontEnd.iban_number_con') }}">
                                 </div>
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="commercial_registration_no" class="mb-1 float-left label-advertiser">Cr Number</label>
-                                    <input name="commercial_registration_no" id="commercial_registration_no" type="text" class="form-control required4" placeholder="please add cr number">
+                                    <label for="commercial_registration_no" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.cr_number') }}</label>
+                                    <input name="commercial_registration_no" id="commercial_registration_no" type="text" class="form-control required4" placeholder="{{ trans('messages.frontEnd.cr_number') }}">
                                 </div>
                                 <div class="col-md-6 col-12 mt-3">
-                                    <label for="milestone" class="mb-1 float-left label-advertiser">Are you subjected to added-value vat?</label>
+                                    <label for="milestone" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.are_you_subjected_to_added_value_vat') }}</label>
                                     <select name="is_vat" class="form-control required4" id="is_vat" >
-                                        <option value="1">Yes</option>
-                                        <option value="0">No</option>
+                                        <option value="1">{{ trans('messages.frontEnd.yes') }}</option>
+                                        <option value="0">{{ trans('messages.frontEnd.no') }}</option>
                                     </select>
                                 </div>
                                 <div class="col mt-3">
-                                    <label for="milestone" class="mb-1 float-left label-advertiser">Upload Your Cr Document</label>
-                                    <input name="cr_file" id="cr_file" type="file" class="form-control required4" placeholder="please add Iban Number">
+                                    <label for="milestone" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.upload_your_cr_document') }}</label>
+                                    <input name="cr_file" id="cr_file" type="file" class="form-control required4" placeholder="{{ trans('messages.frontEnd.upload_your_cr_document') }}">
                                 </div>
                             </div>
                          
@@ -365,16 +356,16 @@
                         <div class="row justify-content-center">
                             <div class="col-md-6 col-12 mt-3">
                                 <div class="form-check input-adv p-0">
-                                   <button id="nextButton" onclick="changePage()" type="button"  class="btn btn-none form-control">Next</button>
-                                   <button id="submitButton"  type="submit"  class="btn btn-none form-control">Finish</button>
-                                   <button id="backButtonButton" onclick="goBackOnePage()" type="button"  class="btn btn-none form-control mt-2">Back</button>
+                                   <button id="nextButton" onclick="changePage()" type="button"  class="btn btn-none form-control">{{ trans('messages.frontEnd.next') }}</button>
+                                   <button id="submitButton"  type="submit"  class="btn btn-none form-control">{{ trans('messages.frontEnd.finish') }}</button>
+                                   <button id="backButtonButton" onclick="goBackOnePage()" type="button"  class="btn btn-none form-control mt-2">{{ trans('messages.frontEnd.back') }}</button>
                                 </div>
                             </div>
                            
                         </div>
                         <div class="row mt-2 justify-content-center">
                             <div class="col-md-6 col-12 input-adv mt-3">
-                                <p class="text-center">Do you have an account?  <a href="{{ route('auth.login') }}">Log in</a> </p>
+                                <p class="text-center">{{ trans('messages.frontEnd.do_you_have_an_account') }} ?  <a href="{{ route('auth.login') }}">{{ trans('messages.frontEnd.login') }}</a> </p>
                             </div>
                            
                         </div>
@@ -412,10 +403,10 @@
         $('#submitButton').hide();
 
         let object_titles = {
-            'page_number_1':'Influencer information',
-            'page_number_2':'Media information',
-            'page_number_3':'Delivery Address information',
-            'page_number_4':'Bank and Commercial information',
+            'page_number_1':'{{ trans("messages.frontEnd.influencer_information") }}',
+            'page_number_2':'{{ trans("messages.frontEnd.media_information") }}',
+            'page_number_3':'{{ trans("messages.frontEnd.delivery_address_information") }}',
+            'page_number_4':'{{ trans("messages.frontEnd.bank_and_commercial_information") }}',
         };
         let last_page_number =  4;
     document.getElementById('city_id').value = '';
@@ -540,7 +531,7 @@
                 if(res.data.length == 0)
                 {
                     Swal.fire({
-                        title: 'Erro!',
+                        title: 'ُError!',
                         text:'No data to country',
                         icon: 'error',
                         position:'top-right',
