@@ -31,7 +31,7 @@ class NotificationController extends Controller
                 $data = Ad::find($item->data['id']);
                 $msg = $item->data['msg'];
                 if($data) $name = $data->store;
-                if($type == 'ad') $msg = trans($item->data['msg'],['ad_name'=>$name]);
+                if($item->data['type'] == 'ad') $msg = trans($item->data['msg'],['ad_name'=>$name]);
 
                 return [
                     'id'=>$item->id,
