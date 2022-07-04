@@ -18,13 +18,18 @@ class NotificationController extends Controller
     {
         $user = Auth::guard('api')->user();
         $data = [];
+
         if(!$user) return response()->json([
             'msg'=>trans($this->trans_dir.'user_was_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
     
+
+
         $data = $user->notifications()->select(['data','id'])->paginate(config('global.PAGINATION_NUMBER'));
+
            $data->getCollection()->transform(function($item){
+               
             if(array_key_exists('msg', $item->data))
             {
                 $name = 'not found';
