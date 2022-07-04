@@ -1057,8 +1057,8 @@ class AdController extends Controller
         $ad->update(['reject_note' => $data['reject_note'],'status' => 'rejected']);
         if($request->send_notification && $ad->customers->users->fcm_token){
             $tokens = [$ad->customers->users->fcm_token];
-            $title = trans($this->notification_trans_dir.'rejected_campaign_title',['ad_name'=>$ad->store]);
-            $msg = trans($this->notification_trans_dir.'rejected_campaign_msg',['ad_name'=>$ad->store,'reject_reason'=>$request->note]);
+            $title = trans($this->notification_trans_dir.'rejected_campaign_title',['ad_name' => $ad->store]);
+            $msg = trans($this->notification_trans_dir.'rejected_campaign_msg',['ad_name' => $ad->store,'reject_reason' => $request->reject_note]);
 
             $data = [
                 "title" => $title,
