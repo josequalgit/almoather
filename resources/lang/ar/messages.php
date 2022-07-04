@@ -14,11 +14,12 @@ return [
         'user_data'                 => 'تم تسجيل الدخول بنجاح. مرحبًا بعودتك',
         'successfully_logged_out'   =>'تم تسجيل الخروج بنجاح',
         'Not Join Yet'              => 'لم يتم الإنضمام',
-        'Joined' => 'تم الإنضمام'
+        'Joined' => 'تم الإنضمام',
+        'rejected_campaign_title'=>'تم رفض اعلان ":ad_name"',
+
     ],
     'frontEnd'=>[
         'home'=>'الرئيسيه',
-        'rejected_campaign_title'=>'تم رفض اعلان ":ad_name"',
         'about'=>'من نحن',
         'our-service'=>'خدماتنا',
         'contact'=>'تواصل',
