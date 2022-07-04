@@ -120,7 +120,7 @@ class AdController extends Controller
                 'target_id' => $ad->id
             ];
 
-            $users = [User::find(1), User::find($data->customers->users->id)];
+            $users = [User::find(1), User::find($ad->customers->users->id)];
             $info = [
                 'msg'=>'accepted_campaign_title',
                 'type' => 'Ad',
