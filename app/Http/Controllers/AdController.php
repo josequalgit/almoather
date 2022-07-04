@@ -120,7 +120,7 @@ class AdController extends Controller
                 'target_id' => $ad->id
             ];
 
-            Notification::send([$ad->customers->users], new AddInfluencer($data));
+           // Notification::send([$ad->customers->users], new AddInfluencer($data));
 
 
             $this->sendNotifications($tokens,$data);
