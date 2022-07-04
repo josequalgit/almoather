@@ -11,23 +11,41 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+    @php
+       $prefix = Request::route()->getPrefix();
+       $name = Request::route()->getName();
+      
+    @endphp
             <div class="collapse navbar-collapse mx-auto w-auto " style="justify-content:space-evenly ;" id="navbarSupportedContent">
+                @if($prefix == 'customers')
                 <ul class="navbar-nav nav-bar-menu">
-                    <li> <a id="home" class="nav-item nav-link {{ $name == 'frontEnd.index'?'active':'' }}" href="{{ route('frontEnd.index') }}">Home </a></li>
-                    <li> <a class="nav-item nav-link {{ $name == 'frontEnd.about'?'active':'' }}" href="{{ route('frontEnd.about') }}">About</a></li>
-                    <li> <a class="nav-item nav-link {{ $name == 'frontEnd.ourservice'?'active':'' }}" href="{{ route('frontEnd.ourservice') }}">Our Service</a></li>
-                    <li> <a class="nav-item nav-link {{ $name == 'contact.index'?'active':'' }}" href="{{ route('contact.index') }}">Contact Us</a></li>
-
+                    <li> <a  id="home" class="nav-item nav-link {{ $name == 'customers.index'?'active':'' }}" href="{{ route('customers.index') }}">{{ trans('messages.frontEnd.profile') }}</a></li> 
+                    <li> <a class="nav-item nav-link" href="#">{{ trans('messages.frontEnd.my_ads') }}</a></li> 
+                    <li> <a class="nav-item nav-link" href="#">{{ trans('messages.frontEnd.create') }}</a></li> 
                 </ul>
+                @else
+                <ul class="navbar-nav nav-bar-menu">
+                    <li> <a id="home" class="nav-item nav-link {{ $name == 'frontEnd.index'?'active':'' }}" href="{{ route('frontEnd.index') }}">{{ trans('messages.frontEnd.home') }}</a></li>
+                    <li> <a class="nav-item nav-link {{ $name == 'frontEnd.about'?'active':'' }}" href="{{ route('frontEnd.about') }}">{{ trans('messages.frontEnd.about') }}</a></li>
+                    <li> <a class="nav-item nav-link {{ $name == 'frontEnd.ourservice'?'active':'' }}" href="{{ route('frontEnd.ourservice') }}">{{ trans('messages.frontEnd.our-service') }}</a></li>
+                    <li> <a class="nav-item nav-link {{ $name == 'contact.index'?'active':'' }}" href="{{ route('contact.index') }}">{{ trans('messages.frontEnd.contact') }}</a></li>
+                </ul>
+                @endif
+              
+              
                 <div class="social d-flex">
-                    <a class="button-a btn btn-none me-2" href="{{ route('auth.login') }}">Login</a>
-                    <a class="button-a btn btn-none me-2" href="{{ route('auth.register_type') }}" id="signup">Sign Up</a>
+                    @if(Auth::check())
                     <a href="#" class="me-2">
                         <div class="icon-box d-flex justify-content-center align-items-center"><img src="{{ asset('frontEnd/img/Search.svg') }}" alt=""></div>
                     </a>
-                    <a href="#" class="me-2">
+                    <a href="{{ route('customers.index') }}" class="me-2">
                         <div class="icon-box d-flex justify-content-center align-items-center"><img src="{{ asset('frontEnd/img/user.svg') }}" alt=""></div>
                     </a>
+                    @else
+                    <a class="button-a btn btn-none me-2" href="{{ route('auth.login') }}">{{ trans('messages.frontEnd.login') }}</a>
+                    <a class="button-a btn btn-none me-2" href="{{ route('auth.register_type') }}" id="signup">{{ trans('messages.frontEnd.register') }}</a>
+
+                    @endif
                 </div>
 
             </div>

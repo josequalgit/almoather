@@ -33,6 +33,7 @@ use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\ContactMessagesController;
 use App\Http\Controllers\FrontEndSettingController;
 use App\Http\Controllers\FrontEnd\HomeController as FrontEndHomeController;
+use App\Http\Controllers\FrontEnd\CustomerController as FrontEndCustomerController;
 use App\Http\Controllers\FrontEnd\AuthController as FrontEndAuthController;
 use App\Http\Controllers\FrontEnd\ContactController as FrontContactController;
 use App\Http\Controllers\FrontEnd\InfluencerController as FrontInfluencerController;
@@ -59,6 +60,10 @@ Route::group(['middleware' => 'language'],function(){
         });
 
         Route::name('influencers.')->prefix('influencers')->controller(FrontInfluencerController::class)->group(function(){
+            Route::get('/','index')->name('index');
+        });
+        
+        Route::middleware(['customer_middleware'=>'customer_middleware'])->name('customers.')->prefix('customers')->controller(FrontEndCustomerController::class)->group(function(){
             Route::get('/','index')->name('index');
         });
 

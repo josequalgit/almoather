@@ -36,7 +36,7 @@
             <div class="col-lg-6 col-md-12 col-sm-12 text-section2">
                 <h1>{{ $about_us->title }} </h1>
                 <p>{{ $about_us->description }}</p>
-                <a href="{{ route('frontEnd.about') }}" class="button-more-about btn btn-none " type="submit">More About Us</a>
+                <a href="{{ route('frontEnd.about') }}" class="button-more-about btn btn-none ">{{ trans('messages.frontEnd.more_about_us') }}</a>
             </div>
         </div>
     </div>
@@ -52,7 +52,7 @@
     <div class="container">
         <div class="row ">
             <div class="col-12 text-center our-working-Process">
-                <h1> Our Working Process</h1>
+                <h1>{{ trans('messages.frontEnd.our_working_process') }}</h1>
                 <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua </p>
             </div>
 
@@ -63,9 +63,9 @@
                     <div class="col-6 p-1 position-relative">
                         <div id="image1" class="h-100 w-100" alt="">
                             <div class="our-service-image-1">
-                                <h4>OUR SERVICE</h4>
+                                <h4>{{ trans('messages.frontEnd.our-service') }}</h4>
                                 <p> consectetur adipiscing elit, sed do eiusmod tempor</p>
-                                <a href="#" class="read-more-text">READ MORE <i class="fa-solid fa-arrow-right"></i></a>
+                                <a href="#" class="read-more-text">{{ trans('messages.frontEnd.read_more') }}<i class="fa-solid fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
                     <div class="our-service-text">
                         <h4>Our service</h4>
                         <p> consectetur adipiscing elit, sed do eiusmod tempor</p>
-                        <a href="#" class="read-more-text">READ MORE <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="#" class="read-more-text">{{ trans('messages.frontEnd.read_more') }}<i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -140,7 +140,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    Accordion Item #{{ $key+1 }}
+                                    {{ trans('messages.frontEnd.accordion_item') }} #{{ $key+1 }}
                                 </button>
                             </h2>
                             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
@@ -152,7 +152,7 @@
                         </div>
                         @endforeach
                     
-                        <a href="#" class="read-more mt-3">READ MORE <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="#" class="read-more mt-3">{{ trans('messages.frontEnd.read_more') }} <i class="fa-solid fa-arrow-right"></i></a>
 
                     </div>
 
@@ -184,7 +184,7 @@
                     <div>
                         
                         <p>{{ $contact_info?->location }} </p>
-                        <span>Location</span>
+                        <span>{{ trans('messages.frontEnd.location') }}</span>
                     </div>
 
                 </div>
@@ -192,7 +192,7 @@
                     <i class="fa-solid fa-phone fa-3x px-4" style="color:#9686AA ;"></i>
                     <div>
                         <p>{{ $contact_info?->phone }} </p>
-                        <span>Phone</span>
+                        <span>{{ trans('messages.frontEnd.phone') }}</span>
                     </div>
 
                 </div>
@@ -200,7 +200,7 @@
                     <i class="fa-solid fa-envelope fa-3x px-4" style="color:#9686AA;"></i>
                     <div class="webmail">
                         <a href="{{ $contact_info?->email }}">{{ $contact_info?->email }}</a><br>
-                        <span>Mail</span>
+                        <span>{{ trans('messages.frontEnd.mail') }}</span>
                     </div>
 
                 </div>
@@ -209,7 +209,7 @@
                 <img id="phone" src="{{ asset('frontEnd/img/phone.png') }}" alt="">
             </div>
         </div>
-        <div class="col-lg-12 col-md-12 col-sm-12 text-center read-more-contact"><a href="#">READ MORE <i
+        <div class="col-lg-12 col-md-12 col-sm-12 text-center read-more-contact"><a href="#">{{ trans('messages.frontEnd.read_more') }} <i
         class="fa-solid fa-arrow-right"></i></a></div>
     </div>
     <div class="right-face">

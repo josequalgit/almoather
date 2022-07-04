@@ -54,7 +54,7 @@
     <div class="container">
         <div class="row">
           <div class="col-lg-12 col-md-12 col-sm-12 save-your-time text-center">
-            <h1> Save your time and money by choosing our professional team.</h1>
+            <h1>{{ trans('messages.frontEnd.save_your_time_and_money_by_choosing_our_professional_team') }}</h1>
           </div>
         </div>
         <div class="row  d-flex mt-5 position-relative text-center">
@@ -127,13 +127,14 @@
   </section>
   
 @endsection
-
 @section('scripts')
 <script>
+  let lang = document.getElementsByTagName('html')[0].getAttribute('lang');
   $('.test').slick({
   infinite: true,
   slidesToShow: 3,
-  slidesToScroll: 3
+  slidesToScroll: 3,
+  rtl: lang == 'ar' ? true : false
 });
 
 </script>
