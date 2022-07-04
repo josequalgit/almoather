@@ -122,9 +122,9 @@ class AdController extends Controller
 
             $users = [User::find(1), User::find($data->customers->users->id)];
             $info = [
-                'msg' => 'accepted_campaign_title',
+                'msg'=>'accepted_campaign_title',
                 'type' => 'Ad',
-                'id' => $ad->id,
+                'id'=>$ad->id,
             ];
             Notification::send($users, new AddInfluencer($info));
 
