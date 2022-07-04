@@ -36,7 +36,7 @@ class NotificationController extends Controller
                 return [
                     'id'=>$item->id,
                     'msg'=>$msg,
-                    'text'=>trans($item->data['msg'],['ad_name'=>$name]),
+                    'text'=>trans($this->$trans_dir.$item->data['msg'],['ad_name'=>$name]),
                     'data_id'=>$item->data['id']?$item->data['id']:null,
                     'type'=>$item->data['type'],
                     'read'=>$item->read_at?true:false
