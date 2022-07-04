@@ -6,54 +6,75 @@ use App\Models\Ad;
 
 class Offer extends Voluum{
 
-    public function createOffer($campaign_id){
-        $campaign = Ad::find($campaign_id);
+    public function createOffer($offer_id){
+        $offer = Ad::find($offer_id);
 
-        if(!$campaign){
+        if(!$offer){
             $error = [
-                'error' => "$campaign_id Not found",
+                'error' => "$offer_id Not found",
                 'status' => false
             ];
             $this->log($error);
             return response()->json($error, 404);
         }
 
-        $campaignGoalProfitable = $campaign->campaignGoals->profitable;
-        $checkCampaign = $this->checkOfferExists($campaign);
-        if($checkCampaign){
-            $row = $response['rows'][0];
-            $this->updateOffer($campaign,$row['offerId']);
+        $checkOffer = $this->checkOfferExists($offer);
+        if($checkOffer){
+            $voluumOffer = $this->updateOffer($offer,$checkOffer['rows'][0]['offerId']);
         }else{
-            $this->insertOffer($campaign,$campaignGoalProfitable);
+            $voluumOffer = $this->insertOffer($offer);
+        }
+
+        if($voluumOffer['status']){
+            $data = [
+                'message' => "$offer_id Offer added Successfully",
+                'status' => true,
+                'data' => $voluumOffer
+            ];
+            $this->log($data);
+            return response()->json($data, 200);
         }
 
         $error = [
-            'error' => "$influencer_id Not set",
+            'error' => "$offer_id Not set",
             'status' => false,
-            'data' => $response
+            'data' => $voluumOffer
         ];
         $this->log($error);
         return response()->json($error, 400);
 
     }
 
-    private function updateOffer($campaign,$offerId,$profitable){
-        $data = $this->getOfferParams($campaign,$offerId);
-    
-        $response = $this->put(Endpoints::offerEndpoint(),$data);
-        if($response && isset($response['rows']) && !empty($response['rows'])){
-            $row = $response['rows'][0];
-            $campaign->update([
-                'voluum_id' => $campaign
+    private function updateOffer($offer,$offerId){
+        
+        $data = $this->getOfferParams($offer,$offerId);
+        $response = $this->put(Endpoints::updateOfferEndpoint($offerId),$data);
+        if($response && isset($response['id'])){
+            $offer->update([
+                'voluum_id' => $response['id']
             ]);
-            return isset($campaign) ? $response : false;
+            return ['status' => true,'data' => $response];
         }
 
-        return false;
+        return ['status' => false,'data' => $response];
     }
 
-    private function getOfferParams($campaign,$offerId = false){
-        $link = explode('?',trim($campaign->store_link,'/'));
+    private function insertOffer($offer){
+        $data = $this->getOfferParams($offer);
+    
+        $response = $this->post(Endpoints::offerEndpoint(),$data);
+        if($response && isset($response['id'])){
+            $offer->update([
+                'voluum_id' => $response['id']
+            ]);
+            return ['status' => true,'data' => $response];
+        }
+        return ['status' => false,'data' => $response];
+    }
+
+    private function getOfferParams($offer,$offerId = false){
+        
+        $link = explode('?',trim($offer->store_link,'/'));
 
         $params = [];
         if(isset($link[1])){
@@ -68,13 +89,13 @@ class Offer extends Voluum{
         ));
 
         $data = [
-            "namePostfix"   => $campaign->store . "-offer-" . $campaign->id,
+            "namePostfix"   => $offer->store . "-offer-" . $offer->id,
             "url"           => $url,
             "payout"        => [
                 "type" => "AUTO"
             ],
             "currencyCode"  => "USD",
-            "tags"          => [str_replace(' ','_',$campaign->categories->getTranslation('name','en'))],
+            "tags"          => [str_replace(' ','_',$offer->categories->getTranslation('name','en'))],
             "workspace"     => null,
             "conversionTrackingMethod"  => "S2S_POSTBACK_URL",
             "preferredTrackingDomain"   => "courcusesinding.com"
@@ -87,19 +108,10 @@ class Offer extends Voluum{
         return $data;
     }
 
-    private function insertOffer($campaign,$profitable){
-        $data = $this->getOfferParams($campaign);
-    
-        $response = $this->post(Endpoints::offerEndpoint(),$data);
-        dd($response);
-
-
-    }
-
-    private function checkOfferExists($campaign){
+    private function checkOfferExists($offer){
         $data = [
             'from'      => '2022-06-02T00:00:00Z',
-            'filter'    => 'offer-'.$campaign->id,
+            'filter'    => 'offer-'.$offer->id,
             'groupBy'   => 'offer',
             'offset'    => 0,
             'limit'     => 1,

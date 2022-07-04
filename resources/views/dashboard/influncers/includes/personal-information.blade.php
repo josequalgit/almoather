@@ -12,7 +12,7 @@
         
         <div class="row">
             
-            @if ($data->rejected_note)
+            @if ($data->status == 'rejected')
                 <div class="form-group col-12">
                     <label for="inputAddress2">Rejected Note</label>
                     <textarea class="form-control" rows="12" disabled>{{ old('rejected_note') ? old('rejected_note') : $data->rejected_note }}</textarea>

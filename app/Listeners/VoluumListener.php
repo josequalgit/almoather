@@ -8,10 +8,36 @@ use Illuminate\Queue\InteractsWithQueue;
 use App\Voluum\Influencer;
 use App\Voluum\Offer;
 use Illuminate\Support\Facades\Log;
+use App\Jobs\VoluumJob;
+
 
 class VoluumListener implements ShouldQueue
 {
     use InteractsWithQueue;
+
+     /**
+     * The name of the connection the job should be sent to.
+     *
+     * @var string|null
+     */
+    public $connection = 'database';
+ 
+    /**
+     * The name of the queue the job should be sent to.
+     *
+     * @var string|null
+     */
+    public $queue = 'listeners';
+ 
+    /**
+     * The time (seconds) before the job should be processed.
+     *
+     * @var int
+     */
+    public $delay = 60;
+
+
+    public $afterCommit = true;
     /**
      * Create the event listener.
      *

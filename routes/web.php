@@ -487,7 +487,7 @@ Route::group(['middleware' => 'language'],function(){
 
 
     Route::get('voluum',function(){
-        $voluum = new App\Voluum\Offers;
-        $voluum->createOffer(28);
+        $voluum = new App\Voluum\Offer;
+        $voluum->createOffer(1);
     });
 });

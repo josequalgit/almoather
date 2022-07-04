@@ -15,6 +15,7 @@ class Ad extends Model implements HasMedia
     use HasFactory , InteractsWithMedia,SoftDeletes;
 
     protected $fillable = [
+        'voluum_id',
         'type',
         'store',
         'ad_type',
