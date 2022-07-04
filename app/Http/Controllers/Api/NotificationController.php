@@ -22,7 +22,7 @@ class NotificationController extends Controller
             'msg'=>trans($this->trans_dir.'user_was_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
-
+    
         $data = $user->notifications()->select(['data','id'])->paginate(config('global.PAGINATION_NUMBER'));
            $data->getCollection()->transform(function($item){
             if(array_key_exists('msg', $item->data))
@@ -36,6 +36,7 @@ class NotificationController extends Controller
                 return [
                     'id'=>$item->id,
                     'msg'=>$msg,
+                    'text'=>$item->data['msg'],
                     'data_id'=>$item->data['id']?$item->data['id']:null,
                     'type'=>$item->data['type'],
                     'read'=>$item->read_at?true:false
