@@ -3,6 +3,7 @@
 return [
     'api'=>[
         'not_found'=>'Not Found',
+        'rejected_campaign_title'=>'Ad ":ad_name" was rejected',
         'inf_wrong_status'=>'influencer is not authorized to get ads with this status',
         'get_all_ads'=>'get all ads with the status',
         'customer_wrong_status'=>'customer is not authorized to get ads with this status',
@@ -20,6 +21,7 @@ return [
         'influencer'=>'Influencer',
         'reject_contract'=>'rejected the contract because of',
         'accept_contract'=>'accept the contract',
+        'accepted_campaign'=>'Your',
         'ad_small'=>'ad',
         'data_was_updated'=>'data was updated',
         'search_result'=>'the search result',
