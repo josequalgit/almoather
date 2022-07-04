@@ -361,7 +361,7 @@ class UpdateDataController extends Controller
             SocialMediaProfile::create([
                 'link'=>$obj->link,
                 'social_media_id'=>$obj->type,
-                'views'=> $obj->views,
+                'subscribers'=> $obj->subscribers,
                 'Influncer_id'=>$inf->id
             ]);
         }
