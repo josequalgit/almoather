@@ -489,7 +489,7 @@ class AdController extends Controller
             $infData =$ad->matches();
             if($request->search)
             {
-               $infData = $infData->whereHas('influncers',function($q) use($request){
+               $infData = $infData->whereHas('influencers',function($q) use($request){
                     $q->where('nick_name','%'.$request->search.'%');
                 });
             }
