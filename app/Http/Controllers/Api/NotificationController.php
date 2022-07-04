@@ -37,7 +37,7 @@ class NotificationController extends Controller
                 $msg = $item->data['msg'];
                 if($data) $name = $data->store;
                 if($item->data['type'] == 'Ad') $msg = trans($this->trans_dir.$item->data['msg'],['ad_name'=>$name]);
-
+                dd($item->data['msg']);
                 return [
                     'id'=>$item->id,
                     'msg'=>$msg,
