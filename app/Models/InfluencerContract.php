@@ -10,6 +10,8 @@ class InfluencerContract extends Model
     use HasFactory;
 
     protected $fillable = [
+        'campaign_url',
+        'voluum_id',
         'content',
         'is_accepted',
         'influencer_id',

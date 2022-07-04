@@ -67,6 +67,9 @@ class VoluumListener implements ShouldQueue
         }else if($event->type == 'offer'){
             $voluum = new Offer;
             $voluum->createOffer($event->modelId);
+        }else if($event->type == 'campaign'){
+            $voluum = new Campaign;
+            $voluum->createCampaign($event->modelId);
         }
     }
 

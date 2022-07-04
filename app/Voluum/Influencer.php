@@ -19,7 +19,6 @@ class Influencer extends Voluum{
         }
 
         $checkInfluencer = $this->checkInfluencerExists($influencer);
-
         if($checkInfluencer){
             $voluumInfluencer = $this->updateInfluencer($influencer,$checkInfluencer['rows'][0]['trafficSourceId']);
         }else{
