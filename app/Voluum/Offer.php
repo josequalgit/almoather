@@ -98,7 +98,7 @@ class Offer extends Voluum{
             "tags"          => [str_replace(' ','_',$offer->categories->getTranslation('name','en'))],
             "workspace"     => null,
             "conversionTrackingMethod"  => "S2S_POSTBACK_URL",
-            "preferredTrackingDomain"   => "courcusesinding.com"
+            "preferredTrackingDomain"   => "track.almuaathir.com"
         ];
 
         if($offerId){

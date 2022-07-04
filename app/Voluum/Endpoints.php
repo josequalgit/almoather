@@ -11,6 +11,8 @@ class Endpoints{
     const UPDATE_INFLUENCER = 'traffic-source/{uuid}';
     const OFFER = 'offer';
     const UPDATE_OFFER = 'offer/{uuid}';
+    const CAMPAIGN = 'campaign';
+    const UPDATE_CAMPAIGN = 'campaign/{uuid}';
 
     public static function authEndpoint(){
         return self::getMainUrl() . static::AUTH;
@@ -42,6 +44,14 @@ class Endpoints{
 
     public static function updateOfferEndpoint($uuid){
         return self::getMainUrl() . str_replace('{uuid}',$uuid,static::UPDATE_OFFER);
+    }
+
+    public static function campaignEndpoint(){
+        return self::getMainUrl() . static::CAMPAIGN;
+    }
+
+    public static function updateCampaignEndpoint($uuid){
+        return self::getMainUrl() . str_replace('{uuid}',$uuid,static::UPDATE_CAMPAIGN);
     }
 
 }

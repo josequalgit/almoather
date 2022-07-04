@@ -2,12 +2,14 @@
 namespace App\Voluum;
 use App\Voluum\Voluum;
 use App\Voluum\Endpoints;
-use App\Models\ad;
+use App\Voluum\Influencer;
+use App\Voluum\Offer;
+use App\Models\InfluencerContract;
 
 class Campaign extends Voluum{
 
     public function createCampaign($campaign_id){
-        $campaign = Ad::find($campaign_id);
+        $campaign = InfluencerContract::whereHas('ads')->whereHas('influencers')->find($campaign_id);
 
         if(!$campaign){
             $error = [
@@ -18,11 +20,21 @@ class Campaign extends Voluum{
             return response()->json($error, 404);
         }
 
+        if($campaign->influencers->voluum_id == null){
+            $influencer = new Influencer;
+            $influencer->addInfluencer($campaign->influencers->id);
+        }
+
+        if($campaign->ads->voluum_id == null){
+            $offer = new Offer;
+            $offer->createOffer($campaign->ads->id);
+        }   
+
         $checkCampaign = $this->checkCampaignExists($campaign);
         if($checkCampaign){
-            $voluumCampaign = $this->updateOffer($campaign,$checkCampaign['rows'][0]['campaignId']);
+            $voluumCampaign = $this->updateCampaign($campaign,$checkCampaign['rows'][0]['campaignId']);
         }else{
-            $voluumCampaign = $this->insertOffer($campaign);
+            $voluumCampaign = $this->insertCampaign($campaign);
         }
 
         if($voluumCampaign['status']){
@@ -63,6 +75,7 @@ class Campaign extends Voluum{
         $data = $this->getCampaignParams($campaign);
     
         $response = $this->post(Endpoints::campaignEndpoint(),$data);
+        
         if($response && isset($response['id'])){
             $campaign->update([
                 'voluum_id' => $response['id']
@@ -89,72 +102,97 @@ class Campaign extends Voluum{
         ));
 
         $data = [
-            "namePostfix"   => "campaing-" . $campaign->ad_id . "-" . $campaign->influencer_id,
-            "url"           => "",
-            "impressionUrl"  => "",
-            "basic"  => true,
-            "costModel"        => [
-                "type" => "NOT_TRACKED",
-                "trafficLossEnabled" => false,
-                "trafficLossRatio" => null,
+            "namePostfix"       => "campaign-" . $campaign->ad_id . "-" . $campaign->influencer_id,
+            "url"               => "",
+            "impressionUrl"     => "",
+            "basic"             => true,
+            "costModel"         => [
+                "type"                  => "NOT_TRACKED",
+                "trafficLossEnabled"    => false,
+                "trafficLossRatio"      => null,
             ],
             "trafficSource"        => [
-                "id" => $campaign->influencers->voluum_id,
-                "name" => $campaign->influencers->nick_name,
-                "impressionSpecific" => false,
-                "externalIds" => [],
-                "currencyCode" => "USD",
-                "customVariables" =>  [
-                    "index" => 1,
-                    "name" => "Almuaathir ID",
-                    "parameter" => "almuaathir_id_" . $campaign->influencers->id,
-                    "placeholder" => $campaign->influencers->id,
-                    "trackedInReports" => true
+                "id"                    => $campaign->influencers->voluum_id,
+                "name"                  => $campaign->influencers->nick_name,
+                "impressionSpecific"    => false,
+                "externalIds"           => [],
+                "currencyCode"          => "USD",
+                "customVariables"       =>  [
+                    [
+                        "index"             => 1,
+                        "name"              => "Almuaathir ID",
+                        "parameter"         => "almuaathir_id_" . $campaign->influencers->id,
+                        "placeholder"       => $campaign->influencers->id,
+                        "trackedInReports"  => true
+                    ]
                 ],
-                "workspace"  => null,
-                "directTracking"  => false,
-                "skipSendingPostback"  => true,
+                "workspace"             => null,
+                "directTracking"        => false,
+                "skipSendingPostback"   => true,
             ],
-            "redirectTarget" => [
-                "inlineFlow" => [
+            "redirectTarget"        => [
+                "inlineFlow"    => [
                     "id" => "9e895b51-fc45-4620-0aed-d5308ca843ec",
                     "name" => "Global - inline path",
                     "defaultPaths" => [
-                        "id" => "f643156b-1b4b-49ce-89c9-3280d6eff000",
-                        "name" => "New path",
-                        "active" => true,
-                        "weight" => 100,
-                        "destination" => "DIRECT_LINKING",
-                        "autoOptimized" => false,
-                        "offers" => [
-                            "offer" => [
-                                "id" => $campaign->ads->voluum_id,
-                                "namePostfix" => $campaign->ads->store . "-offer-" . $campaign->ads->id,
-                                "url" => $url,
-                                "affiliateNetwork" => [
-                                    "id" => "00000000-0000-0000-0000-000000000000",
-                                    "name" => "None",
-                                    "appendClickIdToOfferUrl" => false,
-                                    "duplicatedPostbackIsUpsell" => false,
-                                    "whitelistConfiguration" => [
-                                        "onlyWhitelistedPostbackIps" => false
+                        [
+                            "id"            => "f643156b-1b4b-49ce-89c9-3280d6eff000",
+                            "name"          => "New path",
+                            "active"        => true,
+                            "weight"        => 100,
+                            "destination"   => "DIRECT_LINKING",
+                            "autoOptimized" => false,
+                            "offers"    => [
+                                [
+                                    "offer" => [
+                                        "id"            => $campaign->ads->voluum_id,
+                                        "namePostfix"   => $campaign->ads->store . "-offer-" . $campaign->ads->id,
+                                        "url"           => $url,
+                                        "affiliateNetwork" => [
+                                            "id"                                => "00000000-0000-0000-0000-000000000000",
+                                            "name"                              => "None",
+                                            "appendClickIdToOfferUrl"           => false,
+                                            "duplicatedPostbackIsUpsell"        => false,
+                                            "whitelistConfiguration"            => [
+                                                "onlyWhitelistedPostbackIps"    => false
+                                            ],
+                                            "workspace"                         => null,
+                                            "currencyCode"                      => "USD",
+                                            "conversionTrackingMethod"          => "S2S_POSTBACK_URL"
+                                        ],
+                                        "country" => [
+                                            "code"  => "global",
+                                            "name"  => "Global",
+                                        ],
+                                        "tags"      => [str_replace(' ','_',$campaign->ads->categories->getTranslation('name','en'))],
+                                        "conversionTrackingMethod" => "S2S_POSTBACK_URL",
                                     ],
-                                    "workspace" => null,
-                                    "currencyCode" => "USD",
-                                    "conversionTrackingMethod" => "S2S_POSTBACK_URL"
-                                ],
-                                "country" => [
-                                    "code" => "global",
-                                    "name" => "global",
-                                ],
-                                "tags" => ""
-                            ]
+                                    "weight" => 100
+                                ]
+                                
+                            ],
+                            "offerRedirectMode"         => "REGULAR",
+                            "realtimeRoutingApiState"   => "DISABLED",
+                            "offersDisplaySortOrder"    => null,
+                            "landersDisplaySortOrder"   => null,
+                            "listicle"                  => false
                         ]
-                    ]
+                    ],
+                    "conditionalPathsGroups"        => [],
+                    "defaultOfferRedirectMode"      => "REGULAR",
+                    "realtimeRoutingApi"            => "DISABLED",
+                    "workspace"     => [
+                        "id"    => "5270d276-5604-43ae-a7a7-a417e03d6251"
+                    ],
+                    "defaultPathsSmartRotation"     => false
                 ]
-            ]
+            ],
+            "tags"      => [],
+            "workspace" => [
+                "id" => "5270d276-5604-43ae-a7a7-a417e03d6251"
+            ],
+            "directTracking" => false
         ];
-      //  "redirectTarget":{"inlineFlow":{"defaultPaths":[{"offers":[{"offer":"tags":["healthy_food"],"conversionTrackingMethod":"S2S_POSTBACK_URL"},"weight":100}],"offerRedirectMode":"REGULAR","realtimeRoutingApiState":"DISABLED","offersDisplaySortOrder":null,"landersDisplaySortOrder":null,"listicle":false}],"conditionalPathsGroups":[],"defaultOfferRedirectMode":"REGULAR","realtimeRoutingApi":"DISABLED","workspace":{"id":"5270d276-5604-43ae-a7a7-a417e03d6251"},"defaultPathsSmartRotation":false}},"tags":[],"workspace":{"id":"5270d276-5604-43ae-a7a7-a417e03d6251"},"directTracking":false}
 
         if($campaignId){
             $data['id'] = $campaignId;
@@ -166,7 +204,7 @@ class Campaign extends Voluum{
     private function checkCampaignExists($campaign){
         $data = [
             'from'      => '2022-06-02T00:00:00Z',
-            'filter'    => 'campaign-'.$campaign->ad_id.'-'.$campaign->influencer_i,
+            'filter'    => 'campaign-'.$campaign->ad_id.'-'.$campaign->influencer_id,
             'groupBy'   => 'campaign',
             'offset'    => 0,
             'limit'     => 1,
@@ -174,6 +212,7 @@ class Campaign extends Voluum{
         ];
 
         $response = $this->get(Endpoints::reportEndpoint(),$data);
+        
         if($response && isset($response['rows']) && !empty($response['rows'])){
             $row = $response['rows'][0];
             return isset($row['campaignId']) ? $response : false;

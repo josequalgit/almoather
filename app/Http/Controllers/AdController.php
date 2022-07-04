@@ -29,6 +29,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use App\Events\VoluumEvent;
 use App\Http\Traits\AdResponse;
 
 class AdController extends Controller
@@ -115,6 +116,8 @@ class AdController extends Controller
             ];
 
             $this->sendNotifications($tokens,$data);
+
+            event(new VoluumEvent($ad->id,'offer'));
 
             activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
 
@@ -507,6 +510,7 @@ class AdController extends Controller
                 $hasInfluencerError = true;
                 $message .= '<li>' . $match->influencers->full_name . '</li>';
             }
+            
         }
         $message .= '</ol>';
 
@@ -515,6 +519,10 @@ class AdController extends Controller
                 'msg'=>$message,
                 'status'=> false
             ],config('global.OK_STATUS'));
+        }
+
+        foreach($matches as $match){
+            event(new VoluumEvent($match->contract->id,'campaign'));
         }
 
         $this->calculateCampaignPrice($ad);
