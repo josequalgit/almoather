@@ -146,6 +146,8 @@ trait AdResponse
             $contractData = $ad->InfluencerContract()->where('influencer_id',Auth::guard('api')->user()->influncers->id)->first();
             $basicResponse['contract'] = route('InfluencerContractApi',[$ad,Auth::guard('api')->user()->influncers->id]);
             $basicResponse['contractId'] = $contractData->id;
+            if($contractData->rejectNote) $basicResponse['rejectNote'] = $contractData->rejectNote;
+            $basicResponse['contractId'] = $contractData->id;
             
             $basicResponse['executionDate'] = $contractData && $contractData->date ? $contractData->date->format('d/m/Y') : trans($this->trans_dir . 'date_not_set');
             
