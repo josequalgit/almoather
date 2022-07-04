@@ -29,7 +29,7 @@ class NotificationController extends Controller
         $data = $user->notifications()->select(['data','id'])->paginate(config('global.PAGINATION_NUMBER'));
 
            $data->getCollection()->transform(function($item){
-               
+               App::setlocale('ar');
             if(array_key_exists('msg', $item->data))
             {
                 $name = 'not found';
