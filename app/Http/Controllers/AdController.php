@@ -105,29 +105,10 @@ class AdController extends Controller
 
 
             $tokens = [$ad->customers->users->fcm_token];
-            $title = '';
-            if($request->note){
-                $title = 'rejected_campaign_title';
-                $msg = 'rejected_campaign_msg';
-            }else{
+          
                 $title = 'accepted_campaign_title';
                 $msg = 'accepted_campaign_msg';
-            }
-            $data = [
-                "title" => $title,
-                "body" => $msg,
-                "msg" => $msg,
-                "type" => 'Ad',
-                'target_id' => $ad->id
-            ];
-
-            $users = [User::find(1), User::find($ad->customers->users->id)];
-            $info = [
-                'msg'=>'accepted_campaign_title',
-                'type' => 'Ad',
-                'id'=>$ad->id,
-            ];
-            Notification::send($users, new AddInfluencer($info));
+           
 
             $this->sendNotifications($tokens,$data);
 
@@ -1076,6 +1057,7 @@ class AdController extends Controller
 
         $ad = Ad::find($request->ad_id);
 
+
         $ad->update(['reject_note' => $data['reject_note'],'status' => 'rejected']);
         if($request->send_notification && $ad->customers->users->fcm_token){
             $tokens = [$ad->customers->users->fcm_token];
@@ -1090,6 +1072,24 @@ class AdController extends Controller
             ];
 
             $this->sendNotifications($tokens,$data);
+            
+            $data = [
+                "title" => $title,
+                "body" => $msg,
+                "msg" => $msg,
+                "type" => 'Ad',
+                'target_id' => $ad->id
+            ];
+            $title = 'rejected_campaign_title';
+            $msg = 'rejected_campaign_msg';
+
+            $users = [User::find(1), User::find($ad->customers->users->id)];
+            $info = [
+                'msg'=>'accepted_campaign_title',
+                'type' => 'Ad',
+                'id'=>$ad->id,
+            ];
+            Notification::send($users, new AddInfluencer($info));
         }
         return response()->json([
             'message'=>'Note updated successfully',
