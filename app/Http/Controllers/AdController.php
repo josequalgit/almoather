@@ -1072,7 +1072,7 @@ class AdController extends Controller
             ];
 
             $this->sendNotifications($tokens,$data);
-            
+
             $data = [
                 "title" => $title,
                 "body" => $msg,
@@ -1085,7 +1085,7 @@ class AdController extends Controller
 
             $users = [User::find(1), User::find($ad->customers->users->id)];
             $info = [
-                'msg'=>'accepted_campaign_title',
+                'msg'=>'rejected_campaign_title',
                 'type' => 'Ad',
                 'id'=>$ad->id,
             ];
