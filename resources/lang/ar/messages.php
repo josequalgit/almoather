@@ -18,6 +18,7 @@ return [
     ],
     'frontEnd'=>[
         'home'=>'الرئيسيه',
+        'rejected_campaign_title'=>'تم رفض اعلان ":ad_name"',
         'about'=>'من نحن',
         'our-service'=>'خدماتنا',
         'contact'=>'تواصل',
