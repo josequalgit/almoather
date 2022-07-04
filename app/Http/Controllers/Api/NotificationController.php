@@ -27,9 +27,15 @@ class NotificationController extends Controller
            $data->getCollection()->transform(function($item){
             if(array_key_exists('msg', $item->data))
             {
+                $name = 'not found';
+                $data = Ad::find();
+                $msg = $item->data['msg'];
+                if($data) $name = $data->store;
+                if($type == 'ad') $msg = trans($item->data['msg'],['ad_name'=>$name]);
+
                 return [
                     'id'=>$item->id,
-                    'msg'=>$item->data['msg'],
+                    'msg'=>$msg,
                     'data_id'=>$item->data['id']?$item->data['id']:null,
                     'type'=>$item->data['type'],
                     'read'=>$item->read_at?true:false
@@ -48,8 +54,7 @@ class NotificationController extends Controller
     {
   
         $data = DB::table('notifications')->where('id',$id)->first();
-        $data->read_at = Carbon::now();
-        $data->save();
+     
         
         if(!$data)  return response()->json([
              'err'=>trans($this->trans_dir.'wrong_notification_id'),
@@ -74,8 +79,7 @@ class NotificationController extends Controller
             }
             else
             {
-                $data->read_at = Carbon::now();
-                $data->save();
+               
                 return response()->json([
                     'msg'=>trans($this->trans_dir.'data_not_found'),
                     'type'=>'Ad',

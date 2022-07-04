@@ -30,6 +30,7 @@ use App\Http\Middleware\LanguageMiddleware;
 Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
     Route::post('login',[AuthController::class,'login']);
     Route::get('campaign/pdf/{id}',[AdController::class,'getCampaignContract'])->name('contractApi');
+    Route::get('campaign/pdf/{id}/{inf_id}',[AdController::class,'getInfluencerContractApi'])->name('InfluencerContractApi');
     Route::get('changeLanguage/{lang}',[AuthController::class,'changeLang']);
 
 
@@ -85,10 +86,10 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
     #GET PRIVACY
     Route::controller(PrivacyController::class)->prefix('privacy')->group(function(){
         Route::get('/','index');
-        Route::get('return-policy','indexPolicy');
+        
     });
 
-
+    Route::get('return-policy',[PrivacyController::class,'indexPolicy']);
     #GET TERMS AND CONDITIONS
     Route::controller(TermsAndConditionsController::class)->prefix('terms')->group(function(){
         Route::get('/','index');
@@ -171,7 +172,6 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
             Route::post('changeMatchedStatus','changeMatchStatus');
             Route::post('check_payment/{ad_id}','check_payment');
             Route::get('get_ad_influencers_match/{ad_id}','get_ad_influencers_match');
-            Route::get('wait_for_influencer_response/{ad_id}','wait_for_influencer_response');
             Route::post('update/{ad_id}','update');
             Route::get('ad_details_update/{ad_id}','ad_details_update');
             Route::post('/upload_media/{file_id}/{type}','uploadMedia')->where('type','remove|add|replace');

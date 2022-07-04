@@ -9,6 +9,8 @@ class Endpoints{
     const ADD_INFLUENCER = 'traffic-source';
     const CHECK_AUTH = 'auth/session/';
     const UPDATE_INFLUENCER = 'traffic-source/{uuid}';
+    const OFFER = 'offer';
+    const UPDATE_OFFER = 'offer/{uuid}';
 
     public static function authEndpoint(){
         return self::getMainUrl() . static::AUTH;
@@ -32,6 +34,14 @@ class Endpoints{
 
     public static function updateInfluencerEndpoint($uuid){
         return self::getMainUrl() . str_replace('{uuid}',$uuid,static::UPDATE_INFLUENCER);
+    }
+
+    public static function offerEndpoint(){
+        return self::getMainUrl() . static::OFFER;
+    }
+
+    public static function updateOfferEndpoint($uuid){
+        return self::getMainUrl() . str_replace('{uuid}',$uuid,static::UPDATE_OFFER);
     }
 
 }

@@ -53,31 +53,29 @@ class AuthController extends Controller
                 config('global.UNAUTHORIZED_VALIDATION_STATUS'));
         }
 
-       
         $user = Auth::guard('api')->user();
-        //dd($user->email);
+        if($request->fcm_token){
+            $user->update(['fcm_token' => $request->fcm_token]);
+        }
+
         if($user->customers)
         {
-            if($request->fcm_token){
-                $user->update(['fcm_token' => $request->fcm_token]);
-            }
+            
 			 return response()->json([
                 'msg'=>trans($this->trans_dir.'user_data'),
 				 'data'=>$this->userDataResponse($user,$token , $user->id),
 				 'type'=>'customer',
                 'status'=>config('global.OK_STATUS') 
             ],config('global.OK_STATUS'));
-        }
-        if($user->influncers)
+        }else if($user->influncers)
         {
-            $user->update(['fcm_token' => $request->fcm_token]);
 			 return response()->json([
                 'msg' =>trans($this->trans_dir.'user_data'),
 				 'data' => $this->userDataResponse($user,$token, $user->id),
 				 'type' => 'influencer',
                 'status'=>config('global.OK_STATUS')
             ],config('global.OK_STATUS'));
-         //   return ;
+
         }
         else
         {

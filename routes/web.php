@@ -188,6 +188,7 @@ Route::group(['middleware' => 'language'],function(){
                 Route::post('/update_info_submit/{id}','update_info_submit')->name('update_info_submit');
                 Route::get('campaign/pdf/{id}','getCampaignContract')->name('contract-pdf');
                 Route::get('campaign/pdf/print/{id}','printContract')->name('printContract');
+                Route::post('campaign/update-reject-note','updateRejectNote')->name('updateRejectNote');
             });
 
             Route::middleware('role_or_permission:superAdmin|Edit Slide|See Slide|Create Slide|Delete Slide')->name('slides.')->controller(SlideController::class)->group(function(){
@@ -491,7 +492,7 @@ Route::group(['middleware' => 'language'],function(){
 
 
     Route::get('voluum',function(){
-        $voluum = new App\Voluum\Influencer;
-        $voluum->updateInfluencer(1);
+        $voluum = new App\Voluum\Offer;
+        $voluum->createOffer(1);
     });
 });

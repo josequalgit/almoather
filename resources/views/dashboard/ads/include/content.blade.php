@@ -14,7 +14,7 @@
                                 <div class="row p-4 add_space">
                                     <div class="col">
                                         <label for="">Type</label>
-                                        <select class="form-control" id="ad-type">
+                                        <select class="form-control" id="ad-type" name="ad_type" >
                                             <option {{ $data->type == 'product' ? 'selected' : '' }} value="product" data-items="{{json_encode($productCategories)}}" >منتج</option>
                                             <option {{ $data->type == 'service' ? 'selected' : '' }} value="service" data-items="{{json_encode($serviceCategories)}}">خدمة</option>
                                         </select>

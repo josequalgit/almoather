@@ -13,9 +13,13 @@ use App\Models\InfluncerCategory;
 use Alert,Auth;
 use App\Http\Requests\UpdateInfluencerRequest;
 use Carbon\Carbon;
+use App\Events\VoluumEvent;
+use App\Http\Traits\SendNotification;
 
 class InfluncerController extends Controller
 {
+
+    use SendNotification;
 
     public $notification_trans_dir = 'notifications.';
 
@@ -76,13 +80,15 @@ class InfluncerController extends Controller
 
         $message_body = [];
 
+
+        event(new VoluumEvent($id,'influencer'));
         if($request->status == 'rejected')
         {
             $message_body = [
                 "title" => trans('reject_influencers_title'),
                 "body" => trans('reject_influencers_msg',['reject_influencers_msg'=>$request->rejected_note]),
                 "type" => 'influencers',
-                'target_id' =>$ad->id
+                'target_id' => $id
             ];
         }
         else
@@ -91,7 +97,7 @@ class InfluncerController extends Controller
                 "title" => trans('accept_influencers_title'),
                 "body" => trans('accept_influencers_msg'),
                 "type" => 'influencers',
-                'target_id' =>$ad->id
+                'target_id' => $id
             ];
         }
         $tokens = [$influencer->users->fcm_token];

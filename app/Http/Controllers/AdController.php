@@ -85,13 +85,6 @@ class AdController extends Controller
             ], config('global.NOT_FOUND_STATUS'));
         }
 
-        if (!$request->status) {
-            return response()->json([
-                'msg' => 'please add a status',
-                'status' => config('global.UNAUTHORIZED_VALIDATION_STATUS'),
-            ], config('global.UNAUTHORIZED_VALIDATION_STATUS'));
-        }
-
         if (!$request->category_id) {
             return response()->json([
                 'msg' => 'please choose a category',
@@ -100,12 +93,13 @@ class AdController extends Controller
         }
 
         
-        if($confirm||$request->note)
+        if($confirm)
         {
-            $ad->status = $request->status;
+            $ad->status = 'approve';
             $ad->category_id = $request->category_id;
+            $ad->type = $request->type;
             $ad->eng_number = $request->engagement_rate;
-            $ad->reject_note = $request->note ?? null;
+            $ad->reject_note = null;
             $ad->save();
 
 
@@ -121,37 +115,11 @@ class AdController extends Controller
                 "title" => $title,
                 "body" => $msg,
                 "type" => 'Ad',
-                'target_id' =>$ad->id
+                'target_id' => $ad->id
             ];
 
             $this->sendNotifications($tokens,$data);
 
-            if($ad->status == 'approve')
-            {
-                $users = [$ad->customers->users];
-                $info =[
-                    'msg' => $msg,
-                    'id' => $ad->id ,
-                    'type' => 'Ad'
-                ];
-    
-    
-                /** SEND NOTIFICATION TO INFLUENCER */
-                $tokens = [];
-                $InfMessage =[
-                    'msg' => trans($this->notification_trans_dir.'accept_ad_to_influencer'),
-                    'id' => $ad->id ,
-                    'type' => 'Ad'
-                ];
-                foreach ($ad->matches as $key => $value) {
-                   array_push($tokens,$value->influencers->users->fcm_token);
-                }
-                $this->sendNotifications($tokens,$InfMessage);
-
-            }
-
-            Notification::send($users, new AddInfluencer($info));
-            Alert::toast('Ad was updated', 'success');
             activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
 
             return response()->json([
@@ -162,19 +130,11 @@ class AdController extends Controller
         else
         {
             $ad->category_id = $request->category_id;
-            $ad->reject_note = $request->note ?? null;
             $ad->eng_number = $request->engagement_rate;
+            $ad->type = $request->type;
             $ad->save();
-        }
-
-        if(!$confirm)
-        {
-
             $ad->matches()->delete();
         }
-
-
-        /** SAVE THE DATA */
 
 
         // STEP 1 - GET THE PROPERTY CATEGORIES
@@ -197,6 +157,7 @@ class AdController extends Controller
         $this->calculateCampaignPrice($ad);
         $data = $ad;
         $influencersTable = view('dashboard.ads.include.influencer_table', compact('matchedInfluencers','data','noInfluencerReasons'))->render();
+        
         return response()->json([
             'msg' => 'status was changed',
             'data' => $influencersTable,
@@ -965,10 +926,8 @@ class AdController extends Controller
         $startDate = $ad->InfluencerContract()->orderBy('date','asc')->first();
         $endDate = $ad->InfluencerContract()->orderBy('date','desc')->first();
 
-        $content = str_replace("[[_LOGO_]]", '<img src="'.asset('img/avatars/logo-almuaather.png').'" height="100" >', $content);
-        
         $content = str_replace("[[_CONTRACT_NUM_]]", $ad->id, $content);
-       // $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
+        $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
         $content = str_replace("[[_CUSTOMER_NAME_]]", $ad->customers->full_name, $content);
         $content = str_replace("[[_STORE_NAME_]]", $ad->store, $content);
         $content = str_replace("[[_CUSTOMER_NATIONALITY_]]", $ad->customers->nationalities->getTranslation('name','ar'), $content);
@@ -1023,7 +982,7 @@ class AdController extends Controller
         return response()->json([
             'message'=>'',
             'url' => route('dashboard.ads.contract-pdf',$ad->id),
-            'status'=> false
+            'status'=> true
         ],config('global.OK_STATUS'));
 
     }
@@ -1090,6 +1049,34 @@ class AdController extends Controller
         return $this->generateContractPdf($content,$title);
 
 
+    }
+
+    function updateRejectNote(Request $request){
+        $data = $request->validate([
+            "reject_note"    => "required"
+        ]);
+
+        $ad = Ad::find($request->ad_id);
+
+        $ad->update(['reject_note' => $data['reject_note'],'status' => 'rejected']);
+        if($request->send_notification && $ad->customers->users->fcm_token){
+            $tokens = [$ad->customers->users->fcm_token];
+            $title = trans($this->notification_trans_dir.'rejected_campaign_title',['ad_name' => $ad->store]);
+            $msg = trans($this->notification_trans_dir.'rejected_campaign_msg',['ad_name' => $ad->store,'reject_reason' => $request->reject_note]);
+
+            $data = [
+                "title" => $title,
+                "body" => $msg,
+                "type" => 'Ad',
+                'target_id' =>$ad->id
+            ];
+
+            $this->sendNotifications($tokens,$data);
+        }
+        return response()->json([
+            'message'=>'Note updated successfully',
+            'status'=> true
+        ],config('global.OK_STATUS'));
     }
 
 }

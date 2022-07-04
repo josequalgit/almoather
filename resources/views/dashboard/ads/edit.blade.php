@@ -17,6 +17,16 @@
                 </div>
 
                 <div class="card-body">
+                    @if($data->status == 'rejected')
+                    <div class="form-group">
+                        <label for="reject-note">Reject Note</label>
+                        <textarea name="reject-note-update" id="reject-note" class="form-control" rows="5">{{$data->reject_note}}</textarea>
+                        <div class="text-right mt-1">
+                            <button class="btn btn-danger btn-sm" id="update-reject-note" onClick="updateRejectNote(this)">Update Reject Note</button>
+                        </div>
+                        
+                    </div>
+                    @endif
                     <form id="ad_details_from" action="/" class="campaign-form">
                         <div class="row">
                             <div class="col" id="wizard-basic">
@@ -64,8 +74,16 @@
                 enablePagination: true,
                 enableAllSteps: false,
                 startIndex: 0,
+                labels: {
+                    current: "current step:",
+                    pagination: "Pagination",
+                    finish: "Approve",
+                    next: "Next",
+                    previous: "Previous",
+                    loading: "Loading ..."
+                },
                 onInit: function() {
-                    $('.actions ul').prepend(`<li class='list-dicration' aria-disabled="false"><button type='button' onclick='sendStatusRequest("rejected")' class='btn btn-danger' role="menuitem">Reject</button></li>`)
+                    $('.actions ul').prepend(`<li class='list-dicration' aria-disabled="false"><button type='button' onclick='openModal(this,"rejectedReson")' class='btn btn-danger' role="menuitem">Reject</button></li>`)
                     $('.actions ul li:nth-child(2)').hide();
                 },
                 onFinishing: function() {
@@ -111,24 +129,18 @@
        
 
         function sendStatusRequest(status = null) {
-            status = status || false;
-
-            if (status == 'rejected') {
-                $('#rejectedReson').modal('toggle');
-                return;
-            }
-
+           
             let rate = '{{ $data->campaignGoals->profitable }}';
             
             let engRate = document.getElementById('eng_number') ? document.getElementById('eng_number').value : 0;
+
             if ((rate && engRate > 100) || (rate && engRate < 0)) {
                 return alert('please add correct amout of rate')
             }
             let fullUrl = '';
             if (status == 'approve') {
-                fullUrl = '{{ route('dashboard.ads.update', [':id', ':confirm']) }}';
+                fullUrl = '{{ route('dashboard.ads.update', [':id', 1]) }}';
                 fullUrl = fullUrl.replace(':id', '{{ $data->id }}');
-                fullUrl = fullUrl.replace(':confirm', 1);
                 $('#rejectedNote').val('');
             }else{
                 fullUrl = '{{ route('dashboard.ads.update', ':id') }}';
@@ -139,14 +151,12 @@
                 url: fullUrl,
                 type: 'POST',
                 data: {
-                    status: status,
-                    note: document.getElementById('rejectedNote').value,
-                    category_id: document.getElementById('ad-category').value,
-                    engagement_rate: engRate,
-                    onSite: '{{ $data->onSite }}',
-                    adBudget: '{{ $data->budget }}',
-                    _token: '{{ csrf_token() }}',
-                    confirm:status == 'approve'?true:false
+                    category_id:        $('#ad-category').val(),
+                    type:            $('#ad-type').val(),
+                    engagement_rate:    engRate,
+                    onSite:             '{{ $data->onSite }}',
+                    adBudget:           '{{ $data->budget }}',
+                    _token:             '{{ csrf_token() }}',
                 },
                 beforeSend: () => {
                     totalInfluencers = 0;
@@ -167,13 +177,81 @@
                     totalInfluencers = res.totalInfluencers;
                     $('.influencer-data').html(res.data);
                     $('[href="#next"]').attr('disabled',false).html('Next');
+                    $('#rejectedReson').modal('hide');
                 },
                 error: (err) => {
                     console.log("updateding error: ", err);
-                    alert('something wrong with updateing the ad');
+                    Swal.fire(
+                        'Error!',
+                        err.responseJSON.msg,
+                        'error'
+                    );
                     $('[href="#next"]').attr('disabled',false).html('Next');
                 }
             })
+        }
+
+        function updateRejectNote($this){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                denyButtonText: `Yes & Send Notifiication`,
+            }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    sendUpdateNoteRequest($this,0);
+                } else if (result.isDenied) {
+                    sendUpdateNoteRequest($this,1);
+                }
+            });
+           
+        }
+
+        function sendUpdateNoteRequest($this,sendNotification,noteId = false){
+            let url = '{{ route("dashboard.ads.updateRejectNote") }}';
+            let note = noteId ? $('#'+noteId).val() : $('#reject-note').val();
+            $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i> ` + $($this).text());
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {'ad_id': '{{$data->id}}','send_notification': sendNotification,'reject_note': note},
+                dataType: 'json',
+                success: (res) => {
+                    if(res.status){
+                        Swal.fire(
+                            'Success!',
+                            res.message,
+                            'success'
+                        );
+                    }else{
+                        Swal.fire(
+                            'Error!',
+                            res.message,
+                            'error'
+                        );
+                    }
+                    $($this).attr('disabled',false).html($($this).text());
+                    $('#rejectedReson').modal('hide');
+                    if(noteId){
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 500);
+                    }
+                },
+                error: (err) => {
+                    Swal.fire(
+                        'Error!',
+                        err.responseJSON.message,
+                        'error'
+                    );
+                    $($this).attr('disabled',false).html($($this).text());
+                    $('#rejectedReson').modal('hide');
+                }
+            });
         }
 
 

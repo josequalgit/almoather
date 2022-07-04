@@ -6,6 +6,7 @@ use App\Models\CampaignContract;
 use App\Models\Contract;
 use App\Models\InfluencerContract;
 use Auth;
+use Carbon\Carbon;
 use Mpdf\Mpdf;
 
 trait AdResponse
@@ -32,6 +33,7 @@ trait AdResponse
         $date = $ad->created_at->format('d/m/Y');
         $start_date = null;
         $end_date = null;
+        
         if($ad->InfluencerContract){
             $contractData = $ad->InfluencerContract()->orderBy('date','asc')->first();
             if($contractData && $contractData->date){
@@ -133,20 +135,34 @@ trait AdResponse
             'admin_approved_influencers' => $admin_approved_influencers ? true : false
         ];
 
-        if ($ad->status == 'fullpayment' && Auth::guard('api')->user()->customers) {
-            $contract = CampaignContract::where('ad_id',$ad->id)->first();
-            $basicResponse['contract'] = $contract ? $contract->content : null;
+        $contractStatuses = ['fullpayment','progress','complete'];
+        $basicResponse['executionDate'] = null;
+        $basicResponse['camp_link'] = null;
+        if (in_array($ad->status,$contractStatuses) && Auth::guard('api')->user()->customers) {
+            $basicResponse['contract'] = route('contractApi',$ad->id);
         }
+
         if (Auth::guard('api')->user()->influncers) {
-            $basicResponse['contract'] = InfluencerContract::select('id', 'content', 'date')->where(['influencer_id' => Auth::guard('api')->user()->influncers->id])
-                ->where(['ad_id' => $ad->id])
-                ->first();
+            $contractData = $ad->InfluencerContract()->where('influencer_id',Auth::guard('api')->user()->influncers->id)->first();
+            $basicResponse['contract'] = route('InfluencerContractApi',[$ad,Auth::guard('api')->user()->influncers->id]);
+            $basicResponse['contractId'] = $contractData->id;
+            
+            $basicResponse['executionDate'] = $contractData && $contractData->date ? $contractData->date->format('d/m/Y') : trans($this->trans_dir . 'date_not_set');
+            
+            $basicResponse['status'] = $this->getStatusForInf($ad);
+            if($basicResponse['status'] == 'Progress'){
+                $basicResponse['camp_link'] = 'https://josequal.com';
+            }
+
+            $basicResponse['date'] = $contractData && $contractData->created_at ?  $contractData->created_at->diffForHumans() : '';
+
+            $basicResponse['showExecution'] = $contractData && $contractData->date && Carbon::parse($contractData->date)->gt(Carbon::now()) ? true : false;
         }
 
         //Return Matches if the status is Full payment / Choosing influencer / Progress
         if (Auth::guard('api')->user()->customers && $ad->status !== 'pending' && $ad->status !== 'approve' && $ad->status !== 'prepay' && $ad->status !== 'rejected') {
             $basicResponse['matches'] = $ad->matches()->where('status', '!=', 'deleted')->where('chosen', 1)->get()->map(function ($item) use($ad) {
-                $contract = InfluencerContract::where('influencer_id', $item->influencer_id)->first();
+                $contract = InfluencerContract::where('influencer_id', $item->influencer_id)->where('ad_id',$ad->id)->first();
 
                 $influencerPrice = $ad->onSite ? $item->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
 
@@ -157,8 +173,7 @@ trait AdResponse
                     $status = trans($this->trans_dir . 'Joined');
                 } 
 
-
-                return [
+                $response = [
                     'id' => $item->influencers->id,
                     'image' => $item->influencers->users->infulncerImage,
                     'name' => $item->influencers->nick_name,
@@ -167,15 +182,33 @@ trait AdResponse
                     'gender'    => trans($this->trans_dir.$item->influencers->gender),
                     'budget'    => number_format($influencerPrice),
                 ];
+
+                $isProfitable = $ad->campaignGoals->profitable;
+
+                $response['ROAS'] = null;
+                $response['engagement_rate'] = null;
+                $response['AOAF'] = null;
+
+                if($isProfitable){
+                    $response['ROAS'] = $item->match . '%';
+                }else{
+                    $response['engagement_rate'] = $item->match . '%';
+                    $response['AOAF'] = $item->AOAF;
+                }
+
+                $response['start_date'] = null;
+                if($contract && $contract->date){
+                    $response['start_date'] = $contract->date->format('d/m/Y');
+                }
+
+                return $response;
             });
         }
 
         if (Auth::guard('api')->user()->customers) {
-
             $basicResponse['status'] = $ad->status;
-        } else {
-            $basicResponse['status'] = $this->getStatusForInf($ad);
         }
+
         $basicResponse['messages'] = [
             'label_text' => $this->getLabelTextResponse($ad->status),
             'button_text' => $this->getButtonTextResponse($ad->is_all_accepted() ? 'inf_list' : $ad->status),
@@ -230,11 +263,11 @@ trait AdResponse
             return 'Pending';
         }
 
-        if ($contract->status == 1 && $contract->status == 0) {
+        if ($contract->status == 1 && $contract->admin_status == 0) {
             return 'waiting admin approve';
         }
 
-        if ($contract->is_accepted == 2 && $contract->admin_status == 1) {
+        if ($contract->status == 2 && $contract->admin_status == 1) {
             return 'Completed';
         }
 
