@@ -21,7 +21,7 @@
                                 <p>{{ $website_des->{app()->getLocale()} }}</p>
                         </div>
                         <div class="Social Media">
-                            <h4>Social Media</h6>
+                            <h4>{{ trans('messages.frontEnd.social_media') }}</h6>
                                 <div class="social d-flex">
                                     <a href="#" class="me-2">
                                         <div class="icon-box d-flex justify-content-center align-items-center"><i class="fa-brands fa-facebook-f"></i></div>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="col-12 col-md-4 col-lg-4 mt-5">
                         <div class="footer_links">
-                            <h4>Quick Links</h4>
+                            <h4>{{ trans('messages.frontEnd.quick_links') }}</h4>
                             <ul class="quick_links">
                                 <li><a href="about.html">About</a></li>
                                 <li><a href="our-services.html">Services</a></li>
@@ -48,7 +48,7 @@
                     </div>
                     <div class="col-12 col-md-4 col-lg-4 mt-5">
                         <div class="footer_contact">
-                            <h4>Contact Info</h4>
+                            <h4>{{ trans('messages.frontEnd.contact_info') }}</h4>
                             <ul class="contact_links">
                                 <li><i class="fa-solid fa-location-dot fa-xl"></i><a>{{ $contact_info?->location }}</a></li>
                                 <li><i class="fa-solid fa-phone fa-xl"></i><a href="tel:{{ $contact_info?->phone }}">{{ $contact_info?->phone }}</a></li>

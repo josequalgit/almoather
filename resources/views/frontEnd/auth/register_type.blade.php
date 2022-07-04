@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html  dir="{{ app()->getLocale() == 'ar'?'rtl':'ltr' }}" lang="{{ app()->getLocale() }}">
   <head>
     <title>Al-Muaathir</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,7 +40,7 @@
                                    <div class="icon">
                                        <img src="{{ asset('frontEnd/img/logo.png') }}" width="150px" height="150px" alt="">
                                    </div>
-                                   <h3>Choose membership</h3>
+                                   <h3>{{ trans('messages.frontEnd.choose_membership') }}</h3>
                                </div>
                                <form > 
                                    <div class="d-flex justify-content-sm-between justify-content-center flex-wrap mt-5">
@@ -50,7 +50,7 @@
                                                <div class="px-3 py-4">
                                                    <img src="{{ asset('frontEnd/img/omnichannel.png') }}" alt=""height="50px">
                                                </div>
-                                               <h3>Influencer</h3>
+                                               <h3>{{ trans('messages.frontEnd.influencer') }}</h3>
                                            </label>
                                        </div>
                                        <div class="pb-3">
@@ -59,12 +59,12 @@
                                                <div class="px-3 py-4">
                                                    <img src="{{ asset('frontEnd/img/influencer.png') }}" alt="" height="50px">
                                                </div>
-                                               <h3>Advertiser</h3>
+                                               <h3>{{ trans('messages.frontEnd.advertiser') }}</h3>
                                            </label>
                                        </div>
                                    </div>
                                    <div class="mt-5">
-                                       <a href="" type="button" class="btn btn-none login-button p-0" id="register">Register</a>
+                                       <a href="" type="button" class="btn btn-none login-button p-0" id="register">{{ trans('messages.frontEnd.register') }}</a>
                                    </div>
                                </form>
                            </div>

@@ -111,11 +111,11 @@ class AdController extends Controller
 
             $tokens = [$ad->customers->users->fcm_token];
             if($request->note){
-                $title = trans($this->notification_trans_dir.'rejected_campaign_title',['ad_name'=>$ad->store]);
-                $msg = trans($this->notification_trans_dir.'rejected_campaign_msg',['ad_name'=>$ad->store,'reject_reason'=>$request->note]);
+                $title = 'rejected_campaign_title';
+                $msg = 'rejected_campaign_msg';
             }else{
-                $title = trans($this->notification_trans_dir.'accepted_campaign_title',['ad_name'=>$ad->store]);
-                $msg = trans($this->notification_trans_dir.'accepted_campaign_msg',['ad_name'=>$ad->store]);
+                $title = 'accepted_campaign_title';
+                $msg = 'accepted_campaign_msg';
             }
             $data = [
                 "title" => $title,
