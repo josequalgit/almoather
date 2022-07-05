@@ -114,7 +114,7 @@ class AdController extends Controller
                     "title" => $title,
                     "body" =>$msg ,
                     "type" => 'Ad',
-                    'target_id' =>$ad->id            
+                    'target_id' =>$ad->id             
                 ];
            
 
