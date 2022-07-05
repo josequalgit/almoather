@@ -490,7 +490,7 @@ class AdController extends Controller
             if($request->search)
             {
                $infData = $infData->whereHas('influencers',function($q) use($request){
-                    $q->where('nick_name','%'.$request->search.'%');
+                    $q->where('nick_name','LIKE','%'.urldecode($request->search).'%');
                 });
             }
             $infData = $infData->where([['chosen',0],['status','!=','deleted']])->get()->map(function($item) use($ad){
