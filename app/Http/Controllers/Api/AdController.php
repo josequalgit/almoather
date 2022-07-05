@@ -552,7 +552,7 @@ class AdController extends Controller
                 $influencerPrice = $ad->onSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
                 $replaceInfluencerPrice = $ad->onSite ? $ReplacedInfluencer->ad_onsite_price_with_vat : $ReplacedInfluencer->ad_onsite_price_with_vat;
                 
-                $remainingBudget += $influencerPrice;
+                $remainingBudget += $replaceInfluencerPrice;
                 $isProfitable = $ad->campaignGoals->profitable;
 
                 $response =  [
@@ -563,6 +563,9 @@ class AdController extends Controller
                     'gender'    => trans($this->trans_dir.$item->influencers->gender),
                     'budget'    => number_format($influencerPrice),
                     'status'    => $item->status,
+                    'adBudget' => $ad->budget,
+                    'price_to_pay' => $ad->price_to_pay,
+                    'replaceInfluencerPrice' => $replaceInfluencerPrice,
                     'remaining' => $remainingBudget,
                     'eligible'  => $remainingBudget >= $replaceInfluencerPrice
                 ];
