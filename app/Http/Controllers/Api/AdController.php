@@ -563,6 +563,7 @@ class AdController extends Controller
                     'gender'    => trans($this->trans_dir.$item->influencers->gender),
                     'budget'    => number_format($influencerPrice),
                     'status'    => $item->status,
+                    'remaining' => $remainingBudget,
                     'eligible'  => $remainingBudget >= $influencerPrice
                 ];
             
