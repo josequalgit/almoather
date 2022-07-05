@@ -552,7 +552,7 @@ class AdController extends Controller
                 $influencerPrice = $ad->onSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
                 $replaceInfluencerPrice = $ad->onSite ? $ReplacedInfluencer->ad_onsite_price_with_vat : $ReplacedInfluencer->ad_onsite_price_with_vat;
                 
-                $remainingBudget += $replaceInfluencerPrice;
+                $remainingBudget += $influencerPrice;
                 $isProfitable = $ad->campaignGoals->profitable;
 
                 $response =  [
@@ -564,7 +564,7 @@ class AdController extends Controller
                     'budget'    => number_format($influencerPrice),
                     'status'    => $item->status,
                     'remaining' => $remainingBudget,
-                    'eligible'  => $remainingBudget >= $influencerPrice
+                    'eligible'  => $remainingBudget >= $replaceInfluencerPrice
                 ];
             
                 $response['ROAS'] = null;
