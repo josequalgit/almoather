@@ -549,8 +549,8 @@ class AdController extends Controller
             }
             $infData = $infData->where('chosen',0)->get()->map(function($item) use($ad , $ReplacedInfluencer){
                 $remainingBudget = $ad->budget - $ad->price_to_pay;
-                $influencerPrice = $ad->onSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
-                $replaceInfluencerPrice = $ad->onSite ? $ReplacedInfluencer->ad_onsite_price_with_vat : $ReplacedInfluencer->ad_onsite_price_with_vat;
+                $influencerPrice = $ad->onSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
+                $replaceInfluencerPrice = $ad->onSite ? $ReplacedInfluencer->ad_onsite_price_with_vat : $ReplacedInfluencer->ad_with_vat;
                 
                 $remainingBudget += $replaceInfluencerPrice;
                 $isProfitable = $ad->campaignGoals->profitable;
@@ -563,10 +563,6 @@ class AdController extends Controller
                     'gender'    => trans($this->trans_dir.$item->influencers->gender),
                     'budget'    => number_format($influencerPrice),
                     'status'    => $item->status,
-                    'adBudget' => $ad->budget,
-                    'price_to_pay' => $ad->price_to_pay,
-                    'replaceInfluencerPrice' => $replaceInfluencerPrice,
-                    'remaining' => $remainingBudget,
                     'eligible'  => $remainingBudget >= $replaceInfluencerPrice
                 ];
             
