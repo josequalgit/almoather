@@ -148,9 +148,9 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
         });
 
         #Ad ROUTES
-        Route::prefix('ads')->controller(AdController::class)->group(function(){
-            Route::get('get/{status}','index');
-            Route::post('create','store')->middleware('check_customer');
+        Route::prefix('campaign')->controller(AdController::class)->group(function(){
+            Route::get('get/{status}','index')->name('getAdsApi');
+            Route::post('create','store')->name('storeAdApi')->middleware('check_customer');
             Route::get('details/{id}','details');
             Route::get('contract/{ad_id}','get_ad_contract');
             Route::post('contract/accept_contract/{contract_id}','accept_ad_contract');
@@ -165,7 +165,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
             Route::post('confirm_matches/{id}','confirm_matches');
             Route::get('completePay/{id}','pay_now');
             Route::get('back_up_influencers/{id}/{removed_inf}','back_up_influencers');
-            Route::get('/ads/contract/{ad_id}','get_ad_contract');
+            Route::get('/campaign/contract/{ad_id}','get_ad_contract');
             Route::post('fullPayment/{ad_id}','full_payment');
             Route::get('completeAd/{ad_id}','completeAd');
             Route::post('addMatch','addMatch');

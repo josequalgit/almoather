@@ -46,14 +46,12 @@
                                         <h3>{{ trans('messages.frontEnd.welcome_back') }}</h3>
                                         <span>{{ trans('messages.frontEnd.enter_the_required_data') }}</span>
                                     </div>
-                                    <form method="POST" action="{{ route('auth.login_submit') }}" class="form mt-2"> 
-                                        @csrf
+                                    <form class="form mt-2"> 
                                         <div class="form-group mb-50">
-                                            <input id="email" name="email" type="email" class="form-control"  autocomplete="email" autofocus placeholder="Phone Number or Email address">
-                                             
+                                            <input id="email_input" name="email" type="email" class="form-control"  autocomplete="email" autofocus placeholder="Phone Number or Email address">
                                           </div>
                                           <div class="form-group">
-                                            <input id="password" type="password" name="password" class="form-control" name="password"  autocomplete="current-password" placeholder="Password">
+                                            <input id="password_input" type="password" name="password" class="form-control" name="password"  autocomplete="current-password" placeholder="Password">
                                           
                                           </div>
                                         <div class="extra mt-3">
@@ -62,7 +60,7 @@
                                             </div>
                                         </div>
                                         <div class="mt-3">
-                                            <button type="submit" class="btn btn-none login-button">{{ trans('messages.frontEnd.login') }}</button>
+                                            <button type="button" onclick="login()" class="btn btn-none login-button">{{ trans('messages.frontEnd.login') }}</button>
                                         </div>
                                     </form>
                                 </div>
@@ -86,6 +84,41 @@
      <script type='text/javascript' src='{{ asset('frontEnd/js/bootstrap.min.js') }}'></script>
      <script type='text/javascript' src='{{ asset('frontEnd/js/all.min.js') }}'></script>
      <!--End JAVASCRIPT-->
+     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+     <script>
+        function login()
+         {
+             let url = '{{ route("auth.login_submit") }}'
+             console.log(url)
+             $.ajax({
+                 url:url,
+                 type:'POST',
+                 data:{
+                    username:document.getElementById('email_input').value,
+                     password:document.getElementById('password_input').value,
+                     _token:'{{ csrf_token() }}'
+                 },
+                 success:(res)=>{
+                     if(res.data.token)
+                     {
+                         localStorage.setItem('token',res.data.token)
+                         window.location.href = res.data.url
+                     }
+                 },
+                 error:(err)=>{
+                    Swal.fire({
+                        title: 'Something went wrong!',
+                        text: err.responseJSON.msg,
+                        position: 'top-right',
+                        icon: 'error',
+                        toast: true,
+                        showConfirmButton:false
+                    })
+                 },
+             })
+         }
+     </script>
 
  </body>
 </html>

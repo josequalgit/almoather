@@ -104,10 +104,18 @@ class AdController extends Controller
             $ad->save();
 
 
-            $tokens = [$ad->customers->users->fcm_token];
+                $tokens = [$ad->customers->users->fcm_token];
           
+                
                 $title = 'accepted_campaign_title';
                 $msg = 'accepted_campaign_msg';
+           
+                $data = [
+                    "title" => $title,
+                    "body" =>$msg ,
+                    "type" => 'Ad',
+                    'target_id' =>$ad->id             
+                ];
            
 
             $this->sendNotifications($tokens,$data);

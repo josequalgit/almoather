@@ -16,6 +16,8 @@ return [
         'Not Join Yet'              => 'لم يتم الإنضمام',
         'Joined' => 'تم الإنضمام',
         'rejected_campaign_title'=>'تم رفض اعلان ":ad_name"',
+        'accepted_campaign'=>'تم قبول اعلان ":ad_name"',
+        
 
     ],
     'frontEnd'=>[
@@ -109,5 +111,20 @@ return [
         'pending' => 'معلق',
         'rejected' => 'مرفوض',
         'finished' => 'منتهي',
+        'more' =>'المزيد',
+        'store_name'=>'اسم العلامة التجارية',
+        'ad_type'=>'نوع الحملة',
+        'my_ads'=>'علاني',
+        'please_add_the_ad_information_in_the_form_below'=>'الرجاء اضافة معلومات الاعلان',
+        'marof_number'=>'ادخل رقم التوثيق',
+        'onsite'=>'حضوري',
+        'online'=>'عن بعد',
+        'enter_budget'=>'ادخل ميزانيتك',
+        'your_scenario'=>'',
+        'influencer_social_media'=>'حساباتك في منصات التواصل الاجتماعي',
+        'logo'=>'الشعار',
+        'add_cr_file'=>'أدرج السجل التجاري',
+        'dose_your_store_on_marof'=>'هل متجرك موثوق من منصة معروف ؟'
+
     ],
 ];
