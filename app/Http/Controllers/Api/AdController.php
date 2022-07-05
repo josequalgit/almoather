@@ -548,35 +548,37 @@ class AdController extends Controller
                 });
             }
             $infData = $infData->where('chosen',0)->get()->map(function($item) use($ad , $ReplacedInfluencer){
-			$remainingBudget = $ad->budget - $ad->price_to_pay;
-            $influencerPrice = $ad->onSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
+                $remainingBudget = $ad->budget - $ad->price_to_pay;
+                $influencerPrice = $ad->onSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
+                $replaceInfluencerPrice = $ad->onSite ? $ReplacedInfluencer->ad_onsite_price_with_vat : $ReplacedInfluencer->ad_onsite_price_with_vat;
+                
+                $remainingBudget += $replaceInfluencerPrice;
+                $isProfitable = $ad->campaignGoals->profitable;
 
-            $isProfitable = $ad->campaignGoals->profitable;
+                $response =  [
+                    'id'        => $item->influencers->id,
+                    'name'      => $item->influencers->nick_name,
+                    'image'     => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
+                    'match'     => $item->match,
+                    'gender'    => trans($this->trans_dir.$item->influencers->gender),
+                    'budget'    => number_format($influencerPrice),
+                    'status'    => $item->status,
+                    'eligible'  => $remainingBudget >= $influencerPrice
+                ];
+            
+                $response['ROAS'] = null;
+                $response['engagement_rate'] = null;
+                $response['AOAF'] = null;
 
-            $response =  [
-                'id'        => $item->influencers->id,
-                'name'      => $item->influencers->nick_name,
-                'image'     => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
-                'match'     => $item->match,
-                'gender'    => trans($this->trans_dir.$item->influencers->gender),
-                'budget'    => number_format($influencerPrice),
-                'status'    => $item->status,
-                'eligible'  => $remainingBudget >= $influencerPrice
-            ];
-           
-            $response['ROAS'] = null;
-            $response['engagement_rate'] = null;
-            $response['AOAF'] = null;
+                if($isProfitable){
+                    $response['ROAS'] = $item->match . '%';
+                }else{
+                    $response['engagement_rate'] = $item->match . '%';
+                    $response['AOAF'] = $item->AOAF;
+                }
 
-            if($isProfitable){
-                $response['ROAS'] = $item->match . '%';
-            }else{
-                $response['engagement_rate'] = $item->match . '%';
-                $response['AOAF'] = $item->AOAF;
-            }
-
-            return $response;
-        });
+                return $response;
+            });
 
         return response()->json([
             'msg'=>trans($this->trans_dir.'all_matched_under_budget'),
