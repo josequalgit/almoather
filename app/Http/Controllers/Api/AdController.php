@@ -661,7 +661,7 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        $cal = $data->budget * 5.5 / 100;
+        $cal = $data->budget * 0.10;
 
         if($data->status !== 'approve') return response()->json([
             'err'=>trans($this->trans_dir.'ad_dont_have_right_status'),
@@ -742,7 +742,7 @@ class AdController extends Controller
             'status' => config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
         
-        $cal = $data->budget * 5.5 / 100;
+        $cal = $data->budget * 0.1;
 
         return response()->json([
             'msg' => trans($this->trans_dir.'all_matched'),
@@ -977,7 +977,7 @@ class AdController extends Controller
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
         
-        $cal = $data->budget * 5.5 / 100;
+        $cal = $data->budget * 0.1;
 
         return response()->json([
             'msg'=>trans($this->trans_dir.'all_matched'),
