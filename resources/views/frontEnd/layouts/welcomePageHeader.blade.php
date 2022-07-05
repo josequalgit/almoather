@@ -13,15 +13,16 @@
     </button>
     @php
        $prefix = Request::route()->getPrefix();
+
        $name = Request::route()->getName();
       
     @endphp
             <div class="collapse navbar-collapse mx-auto w-auto " style="justify-content:space-evenly ;" id="navbarSupportedContent">
-                @if($prefix == 'customers')
+                @if($prefix == '/customers')
                 <ul class="navbar-nav nav-bar-menu">
                     <li> <a  id="home" class="nav-item nav-link {{ $name == 'customers.index'?'active':'' }}" href="{{ route('customers.index') }}">{{ trans('messages.frontEnd.profile') }}</a></li> 
                     <li> <a class="nav-item nav-link" href="#">{{ trans('messages.frontEnd.my_ads') }}</a></li> 
-                    <li> <a class="nav-item nav-link" href="#">{{ trans('messages.frontEnd.create') }}</a></li> 
+                    <li> <a class="nav-item nav-link {{ $name == 'customers.ads.index'?'active':'' }}" href="{{ route('customers.ads.create') }}">{{ trans('messages.frontEnd.create') }}</a></li> 
                 </ul>
                 @else
                 <ul class="navbar-nav nav-bar-menu">

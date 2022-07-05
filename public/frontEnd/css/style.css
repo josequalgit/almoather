@@ -743,7 +743,7 @@ input[type="date"]:valid::before {
     padding: 10px;
 }
 
-.ads-text {
+.your-scenario {
     color: #000000;
 }
 
@@ -1841,13 +1841,13 @@ a {
     margin-top: -44px;
 }
 
-.ads-text h3 {
+.your-scenario h3 {
     color: #000000;
     font-size: 22px;
     font-weight: 500;
 }
 
-.ads-text input {
+.your-scenario input {
     border-radius: 10px;
     height: 50px;
     background-color: #E6E7E8;
@@ -1859,9 +1859,15 @@ a {
     font-weight: 500;
 }
 
-.your-scenario input {
+.your-scenario textarea {
     border-radius: 10px;
     height: 150px;
+    background-color: #E6E7E8;
+}
+
+.your-scenario select {
+    border-radius: 10px;
+    height: 50px;
     background-color: #E6E7E8;
 }
 
@@ -2181,4 +2187,10 @@ header {
     height: 100%;
     width: 100%;
     object-fit: cover;
+}
+
+.load-more-button {
+    background-color: #CA9B3D !important;
+    color: white !important;
+    border-color: #CA9B3D !important;
 }

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('frontEnd/css/all.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('frontEnd/slick/slick.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('frontEnd/slick/slick-theme.css') }}"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @php
           $route = Route::current();

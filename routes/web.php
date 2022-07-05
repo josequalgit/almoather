@@ -37,6 +37,7 @@ use App\Http\Controllers\FrontEnd\CustomerController as FrontEndCustomerControll
 use App\Http\Controllers\FrontEnd\AuthController as FrontEndAuthController;
 use App\Http\Controllers\FrontEnd\ContactController as FrontContactController;
 use App\Http\Controllers\FrontEnd\InfluencerController as FrontInfluencerController;
+use App\Http\Controllers\FrontEnd\AdController as FrontAdController;
 
 Route::group(['middleware' => 'language'],function(){
     // Route::redirect('/','/dashboard/admins')->name('home');
@@ -63,8 +64,12 @@ Route::group(['middleware' => 'language'],function(){
             Route::get('/','index')->name('index');
         });
         
-        Route::middleware(['customer_middleware'=>'customer_middleware'])->name('customers.')->prefix('customers')->controller(FrontEndCustomerController::class)->group(function(){
-            Route::get('/','index')->name('index');
+        Route::middleware(['customer_middleware'=>'customer_middleware'])->name('customers.')->prefix('customers')->group(function(){
+            Route::get('/',[FrontEndCustomerController::class,'index'])->name('index');
+
+            Route::name('ads.')->controller(FrontAdController::class)->group(function(){
+                Route::get('/create','create')->name('create');
+            });
         });
 
         Route::get('/about-us',[FrontEndHomeController::class,'about_us'])->name('frontEnd.about');
@@ -115,7 +120,7 @@ Route::group(['middleware' => 'language'],function(){
                 Route::post('customer/store','store')->name('store')->middleware('permission:Create Customer');
                 Route::get('customer/delete/{id}','delete')->name('delete')->middleware('permission:Delete Customer');
                 Route::post('customer/updateStatus/{id}','updateStatus')->name('updateStatus')->middleware('permission:Edit Customer');
-                Route::get('customer/show ads/{id}','show_ads')->name('showAds')->middleware('permission:See Customer Ads');
+                Route::get('customer/show/{id}','show_ads')->name('showAds')->middleware('permission:See Customer Ads');
 
             });
             
@@ -163,26 +168,26 @@ Route::group(['middleware' => 'language'],function(){
             });
 
             Route::middleware('role_or_permission:superAdmin|Edit Ads|See Ads')->name('ads.')->controller(AdController::class)->group(function(){
-                Route::get('/ads/{status?}','index')->name('index')->middleware('permission:See Ads')->where('status','Pending|Active|Finished|Rejected|All|UnderReview');
-                Route::get('/ads/edit/{id}/{editable?}','edit')->name('edit')->middleware('permission:Edit Ads');
-                Route::post('/ads/UploadVideo/{ad_id}','uploadVideo')->name('uploadVideo');
-                Route::post('/ads/UploadImage/{ad_id}','uploadImage')->name('uploadImage');
-                Route::post('/ads/DeleteFile/{file_id}','deleteFile')->name('deleteFile');
-                Route::post('/ads/updateBasic/{ad_id}','update_basic')->name('updateBasic');
-                Route::post('/ads/update/{id}/{confirm?}','update')->name('update')->middleware('permission:Edit Ads');
-                Route::get('/ads/add-influencer/{ad_id}/{chosen_inf}','addInfluencerMatch')->name('addInfluencerMatch');
-                Route::get('/ads/changeMatch/{ad_id}/{removed_inf}/{chosen_inf}','changeMatch')->name('changeMatch')->middleware('permission:Edit Ads');
-                Route::get('/ads/seeMatched/{ad_id}','seeMatched')->name('seeMatched');
-                Route::get('/ads/contract/edit/{ad_id}','editContract')->name('editContract');
-                Route::post('/ads/contract/update/{ad_id}','updateContract')->name('updateContract');
-                Route::post('/ads/contract/changeStatus/{contract_id}','changeStatus')->name('changeStatus');
-                Route::post('/ads/UpdateAddress/{id}','updateAddress')->name('updateAddress');
-                Route::post('/ads/contract/influencers/{ad_id}','sendContractToInfluencer')->name('sendContractToInfluncer');
-                Route::post('/ads/contract/customers/{contract_id}','sendContractToCustomer')->name('sendContractToCustomer');
-                Route::get('/ads/contract/customers/seeInfluncer/{contract_id}','seeContractInfluencer')->name('seeContractInfluencer');
-                Route::get('/ads/get-unmatched-influencers/{ad_id}/{influencer_id}','getUnmatchedInfluencers')->name('getUnmatchedInfluencers');
-                Route::post('/ads/approve-influencers-list/{ad_id}','approveInfluencersList')->name('approveInfluencersList');
-                Route::delete('/ads/delete-match-influencers/{ad_id}/{influencer_id}','deleteMatchInfluencers')->name('deleteMatchInfluencers');
+                Route::get('/campaign/{status?}','index')->name('index')->middleware('permission:See Ads')->where('status','Pending|Active|Finished|Rejected|All|UnderReview');
+                Route::get('/campaign/edit/{id}/{editable?}','edit')->name('edit')->middleware('permission:Edit Ads');
+                Route::post('/campaign/UploadVideo/{ad_id}','uploadVideo')->name('uploadVideo');
+                Route::post('/campaign/UploadImage/{ad_id}','uploadImage')->name('uploadImage');
+                Route::post('/campaign/DeleteFile/{file_id}','deleteFile')->name('deleteFile');
+                Route::post('/campaign/updateBasic/{ad_id}','update_basic')->name('updateBasic');
+                Route::post('/campaign/update/{id}/{confirm?}','update')->name('update')->middleware('permission:Edit Ads');
+                Route::get('/campaign/add-influencer/{ad_id}/{chosen_inf}','addInfluencerMatch')->name('addInfluencerMatch');
+                Route::get('/campaign/changeMatch/{ad_id}/{removed_inf}/{chosen_inf}','changeMatch')->name('changeMatch')->middleware('permission:Edit Ads');
+                Route::get('/campaign/seeMatched/{ad_id}','seeMatched')->name('seeMatched');
+                Route::get('/campaign/contract/edit/{ad_id}','editContract')->name('editContract');
+                Route::post('/campaign/contract/update/{ad_id}','updateContract')->name('updateContract');
+                Route::post('/campaign/contract/changeStatus/{contract_id}','changeStatus')->name('changeStatus');
+                Route::post('/campaign/UpdateAddress/{id}','updateAddress')->name('updateAddress');
+                Route::post('/campaign/contract/influencers/{ad_id}','sendContractToInfluencer')->name('sendContractToInfluncer');
+                Route::post('/campaign/contract/customers/{contract_id}','sendContractToCustomer')->name('sendContractToCustomer');
+                Route::get('/campaign/contract/customers/seeInfluncer/{contract_id}','seeContractInfluencer')->name('seeContractInfluencer');
+                Route::get('/campaign/get-unmatched-influencers/{ad_id}/{influencer_id}','getUnmatchedInfluencers')->name('getUnmatchedInfluencers');
+                Route::post('/campaign/approve-influencers-list/{ad_id}','approveInfluencersList')->name('approveInfluencersList');
+                Route::delete('/campaign/delete-match-influencers/{ad_id}/{influencer_id}','deleteMatchInfluencers')->name('deleteMatchInfluencers');
                 Route::get('/update_info/{id}','update_info_view')->name('update_info_view');
                 Route::get('/view-contract/{id}','show_contract')->name('show_contract');
                 Route::post('/update_info_submit/{id}','update_info_submit')->name('update_info_submit');

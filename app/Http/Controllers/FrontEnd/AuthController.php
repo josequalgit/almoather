@@ -26,20 +26,36 @@ class AuthController extends Controller
     public function login_submit(Request $request)
     {
         $credentials = $request->only('email', 'password');
-        if (Auth::attempt($credentials)) {
-            if(count(Auth::user()->roles) > 0)
+        $token = '';
+         if ($token = Auth::guard('api')->attempt(['email'=>$request->username,'password'=>$request->password])) {
+            
+            if(count(Auth::guard('api')->user()->roles) > 0)
             {
-                Auth::logout();
-                Alert::toast("Invalid email or password", 'error');
-                return back();
+                Auth::guard('api')->logout();
+               // Alert::toast("Invalid email or password", 'error');
+                return response()->json([
+                    'msg'=>'Invalid email or password',
+                    'status'=>config('global.WRONG_VALIDATION_STATUS')
+                ],config('global.WRONG_VALIDATION_STATUS'));
             }
-
-            return redirect()->route('customers.index');
+            $is_user_verified = Auth::guard('api')->user()->email_verified_at?true:false;
+            return response()->json([
+                'data'=>[
+                    'url'=>$is_user_verified?route('customers.index'):route('auth.active_code'),
+                    'token'=>$token,
+                    'is_user_verified'=>$is_user_verified,
+                    'status'=>config('global.OK_STATUS')
+                ],
+                'status'=>config('global.OK_STATUS')
+            ],config('global.OK_STATUS'));
         }
         else
         {
-            Alert::toast('Invalid email or password', 'error');
-            return back();
+            // Alert::toast('Invalid email or password', 'error');
+            return response()->json([
+                'msg'=>'Invalid email or password',
+                'status'=>config('global.WRONG_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
     }
