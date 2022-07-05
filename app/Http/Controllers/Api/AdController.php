@@ -691,7 +691,7 @@ class AdController extends Controller
         return response()->json([
             'msg' => trans($this->trans_dir.'all_matched_blurred'),
             'data' => [
-                'type ' => trans($this->trans_dir.$data->type),
+                'type' => trans($this->trans_dir.$data->type),
                 'category' => $data->categories ? $data->categories->name : null,
                 'format_price' => $this->formateMoneyNumber($cal),
                 'format_budget' => $this->formateMoneyNumber($data->budget),

@@ -98,7 +98,10 @@ trait AdResponse
             }),
             'cr_num' => $ad->cr_num,
             'about' => $ad->about,
-            'relation' => $ad->relations ? $ad->relations->title : '',
+            'relation' => $ad->relations ? [
+                'id' => $ad->relations->id,
+                'name' => $ad->relations->title,
+            ] : null,
             'category' => $ad->categories ? $ad->categories->name : null,
             'scenario' => $ad->scenario,
             'videos' => $ad->videos,
