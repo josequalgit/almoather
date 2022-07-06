@@ -8,9 +8,12 @@ use App\Http\Traits\UserResponse;
 use App\Models\User;
 use App\Models\Influncer;
 use App\Models\Customer;
+use App\Models\ContactMessages;
 use App;
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\ChangePasswordRequest;
+use App\Http\Requests\Api\ContactUsRequest;
+use App\Http\Requests\ContactRequest;
 
 class AuthController extends Controller
 {
@@ -224,6 +227,16 @@ class AuthController extends Controller
         }
 
     }
+
+    public function store_contact_messages(ContactRequest $request)
+    {
+        $data = ContactMessages::create($request->all());
+        return response()->json([
+            'msg'=>'data was added',
+            'status'=>config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+    }
+
 
 
    

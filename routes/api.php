@@ -32,7 +32,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
     Route::get('campaign/pdf/{id}',[AdController::class,'getCampaignContract'])->name('contractApi');
     Route::get('campaign/pdf/{id}/{inf_id}',[AdController::class,'getInfluencerContractApi'])->name('InfluencerContractApi');
     Route::get('changeLanguage/{lang}',[AuthController::class,'changeLang']);
-
+    Route::post('/store_contact_message',[AuthController::class,'store_contact_messages']);
 
     Route::get('contact-information',[ContactUsController::class,'contactInformation']);
     Route::post('contact',[ContactController::class,'store_contact_messages']);
