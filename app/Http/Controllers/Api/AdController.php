@@ -494,7 +494,7 @@ class AdController extends Controller
                 });
             }
             $infData = $infData->where([['chosen',0],['status','!=','deleted']])->get()->map(function($item) use($ad){
-                $influencerPrice = $ad->onSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
+                $influencerPrice = $ad->ad_type == 'onsite' ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
                 $isProfitable = $ad->campaignGoals->profitable;
 
                 $remainingBudget = $ad->budget - $ad->price_to_pay;
@@ -593,7 +593,7 @@ class AdController extends Controller
         $ad = Ad::find($ad_id);
 
         $chosen_inf = Influncer::find($chosen_inf_id);
-        $chosenInfPrice = $ad->onSite ? $chosen_inf->ad_onsite_price_with_vat : $chosen_inf->ad_with_vat;
+        $chosenInfPrice = $ad->ad_type == 'onsite' ? $chosen_inf->ad_onsite_price_with_vat : $chosen_inf->ad_with_vat;
 
         if (!$chosen_inf) {
             return response()->json([
@@ -604,7 +604,7 @@ class AdController extends Controller
         
 
         $removed_inf = Influncer::find($removed_inf_id);
-        $oldInfPrice = $ad->onSite ? $removed_inf->ad_onsite_price_with_vat : $removed_inf->ad_with_vat;
+        $oldInfPrice = $ad->ad_type == 'onsite' ? $removed_inf->ad_onsite_price_with_vat : $removed_inf->ad_with_vat;
 
         if (!$removed_inf) {
             return response()->json([
@@ -802,8 +802,8 @@ class AdController extends Controller
         $inf = $user->influncers;
 
         $alldata = $data->matches()->where(['status','!=','deleted'])->where('chosen',0)->get()->map(function($item) use($inf,$data,$removed_inf){
-            $chosenInf = $data->onSite ?$inf->ad_onsite_price:$inf->ad_price;
-            $oldInf = $data->ad_type == 'onsite' ? User::find($removed_inf)->influncers->ad_onsite_price:User::find($removed_inf)->influncers->ad_price;
+            $chosenInf = $data->ad_type == 'onsite' ? $inf->ad_onsite_price_with_vat : $inf->ad_with_vat;
+            $oldInf = $data->ad_type == 'onsite' ? User::find($removed_inf)->influncers->ad_onsite_price_with_vat : User::find($removed_inf)->influncers->ad_with_vat;
             $newBud = $data->budget + $chosenInf - $oldInf;
 
             return[
@@ -927,7 +927,7 @@ class AdController extends Controller
 
         $remainingBudget = $ad->budget - $ad->price_to_pay;
 
-        $chosenInfBudget = $ad->ad_type == 'onsite' ? $addInf->ad_onsite_price : $addInf->ad_price;
+        $chosenInfBudget = $ad->ad_type == 'onsite' ? $addInf->ad_onsite_price_with_vat : $addInf->ad_with_vat;
 
         if($remainingBudget < $chosenInfBudget){
             return response()->json([
