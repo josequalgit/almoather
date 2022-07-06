@@ -968,7 +968,8 @@ echo $remainingBudget. '---';
 
         $data->status = $request->status;
         $data->save();
-        $this->calculateCampaignPrice($data);
+
+        $this->calculateCampaignPrice($ad);
        
         return $this->match_response($ad);
     }
