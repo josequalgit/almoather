@@ -35,6 +35,7 @@ class HomeController extends Controller
         $data = [
             'welcome_message'=>$welcome_page_setting
         ];
+        
         return view('frontEnd.index', compact(
             'data',
             'about_us',

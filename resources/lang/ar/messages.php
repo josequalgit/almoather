@@ -124,7 +124,11 @@ return [
         'influencer_social_media'=>'حساباتك في منصات التواصل الاجتماعي',
         'logo'=>'الشعار',
         'add_cr_file'=>'أدرج السجل التجاري',
-        'dose_your_store_on_marof'=>'هل متجرك موثوق من منصة معروف ؟'
+        'dose_your_store_on_marof'=>'هل متجرك موثوق من منصة معروف ؟',
+        'add_cr_document'=>'ادرج وثائقك التجارية',
+        'are_you_under_added_value'=>'هل انت خاضع لضريبه المضافة؟',
+        'cr_no_note'=>'اتحمل كافة المسؤولية بهذا الاختيار',
+        'ad_relation'=>'علاقتك بالعلامه التجارية'
 
     ],
 ];

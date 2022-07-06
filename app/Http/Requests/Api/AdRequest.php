@@ -50,20 +50,27 @@ class AdRequest extends FormRequest
      *
      * @return array
      */
+    
     public function messages()
     {
         return [
             // 'type.required' => 'Please choose the ad type',
             'store.required' => 'Please add the store name',
+            'about.required' => 'Please add the about text',
+            'about_product.required' => 'Please add about product',
+            'logo.required'  => 'Please add logo',
             'campaign_goals_id.required' => 'Please choose the campaign goal',
             'budget.required' => 'Please add the ad budget',
             'ad_type.required' => 'Please choose if the ad require to be onsite',
             'country_id.required' => 'Please choose the country',
             'city_id.required' => 'Please choose the city',
             'area_id.required' => 'Please choose the area',
+            'prefered_media_id.required' => 'Please add the prefered media id',
+            'required.required' => 'Please add the relation',
             'social_media_id.required' => 'Please add a social media',
             'video.max' => 'The Video Size max should be 100Mb',
             'document.max' => 'The Video Size max should be 100Mb',
+
         ];
     }
 

@@ -42,7 +42,7 @@ use App\Http\Controllers\FrontEnd\AdController as FrontAdController;
 Route::group(['middleware' => 'language'],function(){
     // Route::redirect('/','/dashboard/admins')->name('home');
     Route::get('/test-msg',[ChatController::class,'sendMessageTo'])->name('test');
-
+    Route::get('changeLanguage',[FrontEndAuthController::class,'changeLanguage'])->name('changeLanguage');
     /** GROUP FRONT END */
     Route::group([],function(){
 
@@ -64,10 +64,10 @@ Route::group(['middleware' => 'language'],function(){
             Route::get('/','index')->name('index');
         });
         
-        Route::middleware(['customer_middleware'=>'customer_middleware'])->name('customers.')->prefix('customers')->group(function(){
+        Route::middleware(['jwtAuth'])->name('customers.')->prefix('customers')->group(function(){
             Route::get('/',[FrontEndCustomerController::class,'index'])->name('index');
 
-            Route::name('ads.')->controller(FrontAdController::class)->group(function(){
+            Route::prefix('ad')->name('ads.')->controller(FrontAdController::class)->group(function(){
                 Route::get('/create','create')->name('create');
             });
         });

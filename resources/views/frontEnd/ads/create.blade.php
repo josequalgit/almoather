@@ -29,7 +29,7 @@
                         <input name="store" id="store" type="text" class="form-control mt-3">
                     </div>  
                     <div class="col-lg-12  your-scenario mt-4">
-                        <h3 class="float-start" >{{ trans('messages.frontEnd.cr_number') }}</h3>
+                        <h3 class="float-start" >{{ trans('messages.frontEnd.cr_number') }}</p></h3>
                         <input name="cr_number" id="cr_number" type="number" class="form-control mt-3">
                     </div>
                     <div class="col-lg-12  your-scenario mt-4">
@@ -40,116 +40,62 @@
                         <h3 class="float-start" >{{ trans('messages.frontEnd.dose_your_store_on_marof') }}</h3>
                         <div class="row">
                             <div class="form-check">
-                                <input id="show_marou_num" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                <input   id="show_marou_num" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                                 <label class="form-check-label" for="flexRadioDefault1">
-                                  Yes
+                                    {{ trans('messages.frontEnd.yes') }}
                                 </label>
                               </div>
                               <div class="form-check">
                                 <input id="hide_marou_num" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" >
                                 <label class="form-check-label" for="flexRadioDefault2">
-                                  No
+                                    {{ trans('messages.frontEnd.no') }}
                                 </label>
                               </div>
                         </div>
                     </div>
-                    <div class="col-lg-12  your-scenario mt-4">
+                    <div class="col-lg-12  your-scenario" id="add_cr_document_label">
+                        <h3 class="float-start" >{{ trans('messages.frontEnd.add_cr_document') }}</h3>
+                        <input name="add_cr_document" id="add_cr_document" type="file" class="form-control mt-3">
+                    </div>  
+                    <div id="add_marof_numbe" class="col-lg-12  your-scenario mt-4">
                         <h3 class="float-start" >{{ trans('messages.frontEnd.marof_number') }}</h3>
                         <input name="marouf_num" id="marouf_num" type="number" class="form-control mt-3">
                     </div>
                     <div class="col-lg-12  your-scenario mt-4">
-                        <h3 class="float-start" >{{ trans('messages.frontEnd.ad_type') }}</h3>
-                        <select class="form-control" name="ad_type" id="ad_type">
-                            <option value="onsite">{{ trans('messages.frontEnd.onsite') }}</option>
-                            <option value="online">{{ trans('messages.frontEnd.online') }}</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-12  your-scenario">
-                        <h3 class="float-start" >{{ trans('messages.frontEnd.add_cr_file') }}</h3>
-                        <input name="logo" id="store" type="file" class="form-control mt-3">
-                    </div>  
-                    <div class="col-lg-12  your-scenario mt-4">
-                        <h3 class="float-start" > {{ trans('messages.frontEnd.enter_budget') }} </h3>
-                        <input name="budget" id="budget" type="number" class="form-control mt-3">
-
-                    </div>
-                    <div class="col-lg-12  text-center your-scenario mt-4">
-                       <div class="row justify-content-between">
-                        <div class="col-md-5 col-12 store-input">
-                          <h3  class="float-start"> {{ trans('messages.frontEnd.store_logo') }} </h3>
-                          <input type="text" class="form-control mt-3">
-                        </div>
-                        <div class="col-md-5 col-12 store-input">
-                              <h3 class="float-start"> {{ trans('messages.frontEnd.influencer_social_media') }} </h3>
-                              <input type="text" class="form-control mt-3">
-                        </div>
-                       </div>
-                    </div>
-                    
-                    <div class="col-lg-12  your-scenario mt-4">
-                        <h3 class="float-start" >{{ trans('messages.frontEnd.your_scenario') }}</h3>
-                        <textarea type="text" class="form-control mt-3"></textarea>
-                    </div>
-                    <div class="col-lg-12  your-scenario mt-4">
-                        <h3 class="float-start" > Store Location </h3>
-                        <input type="text" class="form-control mt-3">
-                    </div>
-                    <div class="col-lg-12  your-scenario mt-4">
-                        <h3 class="float-start" > Product Information </h3>
-                        <textarea type="text" class="form-control mt-3"></textarea>
-                    </div>
-                    <div class="col-lg-12  your-scenario mt-4">
-                        <h3 class="float-start" > My Offer </h3>
-                        <input type="text" class="form-control mt-3">
-                    </div>
-                    <div class="col-lg-12  your-scenario mt-4">
-                        <h3 class="float-start" > Commercial Documents </h3>
-                        <input type="text" class="form-control mt-3">
-                    </div>
-                    <div class="col-lg-12  your-scenario mt-4">
-                        <h3 class="float-start" > My Product </h3>
-                    </div>
-                    <div class="col-lg-12  your-scenario d-flex">
+                        <h3 class="float-start" >{{ trans('messages.frontEnd.are_you_under_added_value') }}  <p id="cr_no_note">({{ trans('messages.frontEnd.cr_no_note') }})</h3>
                         <div class="row">
-                          <div class="col-md-4 col-12">
-                            <img src="{{ asset('frontEnd/img/shop-clothing-clothes-shop-hanger-modern-shop-boutique.png') }}" alt="" >
-                          </div>
-                          <div class="col-md-4 col-12">
-                              <img src="{{ asset('frontEnd/img/shop-clothing-clothes-shop-hanger-modern-shop-boutique.png') }}" alt="">
-                          </div>
-                          <div class="col-md-4 col-12">
-                              <img src="{{ asset('frontEnd/img/shop-clothing-clothes-shop-hanger-modern-shop-boutique.png') }}" alt="">
-                          </div>
+                            <div class="form-check">
+                                <input   id="show_cr_num" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    {{ trans('messages.frontEnd.yes') }}
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input id="hide_cr_num" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" >
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    {{ trans('messages.frontEnd.no') }}
+                                </label>
+                              </div>
                         </div>
                     </div>
-                    <div class="col-lg-12  text-center your-scenario mt-4">
-                        <div class="row justify-content-between">
-                            <div class="col-md-5 col-12">
-                              <h3  class="float-start"> Price Before </h3>
-                              <input type="text" class="form-control mt-3">
-                            </div>
-                          <div class="col-md-5 col-12">
-                                <h3 class="float-start"> Price Now </h3>
-                                <input type="text" class="form-control mt-3">
-                          </div>
-                        </div>
+
+
+                    <div id="cr_num" class="col-lg-12  your-scenario mt-4">
+                        <h3 class="float-start" > {{ trans('messages.frontEnd.cr_num') }}</h3>
+                        <input name="cr_num"  type="number" class="form-control mt-3">
                     </div>
-                    <div class="col-lg-12  text-center your-scenario mt-4">
-                      <div class="row justify-content-between">
-                        <div class="col-md-5 col-12">
-                          <h3  class="float-start"> Date </h3>
-                          <input type="text" class="form-control mt-3">
-                        </div>
-                        <div class="col-md-5 col-12">
-                              <h3 class="float-start"> Discount Code </h3>
-                              <input type="text" class="form-control mt-3">
-                        </div>
-                      </div>
-                     </div>
-                     <div class="col-lg-12  your-scenario mt-4">
-                        <h3 class="float-start" > Video about my product </h3>
-                        <img src="{{ asset('frontEnd/img/Video.png') }}" alt="">
+
+                    <div id="cr_num" class="col-lg-12  your-scenario mt-4 input-adv">
+                        <h3 class="float-start" > {{ trans('messages.frontEnd.ad_relation') }}</h3>
+                        <select name="gender" class="form-control" id="gender" >
+                            @foreach ($relations as $item)
+                            <option value="{{ $item->id }}" >{{ $item->title }}</option>                                
+                            @endforeach
+                        </select>
+                       
                     </div>
+                   
+
                 </div>
              </div>
           </div>
@@ -157,15 +103,30 @@
     </div>
   </section>
  </form>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 
 <script>
-    function toggle(status)
-    {
-        if(status == 'no')
-        {
-            $('')
-        }
-    }
+    $('#cr_num').hide();
+    $('#cr_no_note').hide();
+  $('#show_marou_num').click(function(){
+    $('#add_marof_numbe').show();
+    $('#add_cr_document_label').hide();
+  });
+  $('#hide_marou_num').click(function(){
+    $('#add_marof_numbe').hide();
+    $('#add_cr_document_label').show();
+  });
+
+  $('#show_cr_num').click(function(){
+    $('#cr_num').show();
+    $('#cr_no_note').hide();
+  });
+  $('#hide_cr_num').click(function(){
+    $('#cr_num').hide();
+    $('#cr_no_note').show();
+  });
+
 </script>
 
 

@@ -12,7 +12,7 @@ use App\Models\Country;
 use App\Models\Category;
 use App\Models\SocialMedia;
 use App\Models\Bank;
-
+use App;
 class AuthController extends Controller
 {
     public function login()
@@ -28,34 +28,40 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         $token = '';
          if ($token = Auth::guard('api')->attempt(['email'=>$request->username,'password'=>$request->password])) {
-            
+            $bearer = 'Bearer '.$token;
+            Auth::attempt(['email'=>$request->username,'password'=>$request->password]);
+            // $request->headers->set('Authorization',$bearer);
+            setcookie('jwt_token',$bearer);
             if(count(Auth::guard('api')->user()->roles) > 0)
             {
                 Auth::guard('api')->logout();
-               // Alert::toast("Invalid email or password", 'error');
+                Auth::logout();
                 return response()->json([
                     'msg'=>'Invalid email or password',
                     'status'=>config('global.WRONG_VALIDATION_STATUS')
                 ],config('global.WRONG_VALIDATION_STATUS'));
             }
             $is_user_verified = Auth::guard('api')->user()->email_verified_at?true:false;
-            return response()->json([
-                'data'=>[
-                    'url'=>$is_user_verified?route('customers.index'):route('auth.active_code'),
-                    'token'=>$token,
-                    'is_user_verified'=>$is_user_verified,
-                    'status'=>config('global.OK_STATUS')
-                ],
-                'status'=>config('global.OK_STATUS')
-            ],config('global.OK_STATUS'));
+
+            return redirect()->route($is_user_verified?'customers.index':'active_code')->header('Authorization',$bearer);
+            // return response()->json([
+            //     'data'=>[
+            //         'url'=>$is_user_verified?route('customers.index'):route('auth.active_code'),
+            //         'token'=>$token,
+            //         'is_user_verified'=>$is_user_verified,
+            //         'status'=>config('global.OK_STATUS')
+            //     ],
+            //     'status'=>config('global.OK_STATUS')
+            // ],config('global.OK_STATUS'));
         }
         else
         {
-            // Alert::toast('Invalid email or password', 'error');
-            return response()->json([
-                'msg'=>'Invalid email or password',
-                'status'=>config('global.WRONG_VALIDATION_STATUS')
-            ],config('global.WRONG_VALIDATION_STATUS'));
+             Alert::toast('Invalid email or password', 'error');
+             return back();
+            // return response()->json([
+            //     'msg'=>'Invalid email or password',
+            //     'status'=>config('global.WRONG_VALIDATION_STATUS')
+            // ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
     }
@@ -94,4 +100,20 @@ class AuthController extends Controller
 
         return view('frontEnd.auth.active_code',compact('data'));
     }
+
+    public function changeLanguage()
+    {
+        if(App::getLocale() == 'ar')
+        {
+            // session()->put('locale', 'en');
+            setcookie('language','en');
+        }
+        else
+        {
+            // session()->put('locale', 'ar');
+            setcookie('language','ar');
+        }
+        return back();
+    }
+
 }

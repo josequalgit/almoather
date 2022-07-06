@@ -5,6 +5,7 @@
     <div class="py-5">
         <div class="contract text-center">
             <h1>{{ trans('messages.frontEnd.welcome_back') }}</h1>
+         
             <p>{{ auth()->user()->customers->full_name }}</p>
         </div>
     </div>
@@ -62,15 +63,8 @@
 
 @section('scripts')
 <script>
-    // $.ajaxSetup({
-    //     headers: {
-    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //     }
-    // });
-
+  
     getAds('Pending');
-    // getFakeAds();
-
 
     function getFakeAds()
     {

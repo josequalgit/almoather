@@ -46,9 +46,10 @@
                                         <h3>{{ trans('messages.frontEnd.welcome_back') }}</h3>
                                         <span>{{ trans('messages.frontEnd.enter_the_required_data') }}</span>
                                     </div>
-                                    <form class="form mt-2"> 
+                                    <form class="form mt-2" method="POST" action="{{ route('auth.login_submit') }}"> 
+                                        @csrf
                                         <div class="form-group mb-50">
-                                            <input id="email_input" name="email" type="email" class="form-control"  autocomplete="email" autofocus placeholder="Phone Number or Email address">
+                                            <input id="email_input" name="username" type="email" class="form-control"  autocomplete="email" autofocus placeholder="Phone Number or Email address">
                                           </div>
                                           <div class="form-group">
                                             <input id="password_input" type="password" name="password" class="form-control" name="password"  autocomplete="current-password" placeholder="Password">
@@ -60,7 +61,7 @@
                                             </div>
                                         </div>
                                         <div class="mt-3">
-                                            <button type="button" onclick="login()" class="btn btn-none login-button">{{ trans('messages.frontEnd.login') }}</button>
+                                            <button type="submit"  class="btn btn-none login-button">{{ trans('messages.frontEnd.login') }}</button>
                                         </div>
                                     </form>
                                 </div>

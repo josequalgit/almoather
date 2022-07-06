@@ -4,9 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Auth;
 
-class CustomerMiddleware
+class JwtTokenMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,13 +16,11 @@ class CustomerMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if((Auth::guard('api')->check()&&Auth::guard('api')->user()->customers)||(Auth::check()&&Auth::user()->customers))
-        {
-            return $next($request);
-        }
-        else
-        {
-            abort(403);
-        }
+        /** PUTTING THE JWT TOKEN IN THE HEADER */
+        $token = isset($_COOKIE["jwt_token"])?$_COOKIE["jwt_token"]:"";
+        $request->headers->set("Authorization", $token);
+        $response = $next($request);
+
+        return $response;
     }
 }
