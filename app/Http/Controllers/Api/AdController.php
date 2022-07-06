@@ -498,9 +498,6 @@ class AdController extends Controller
                 $isProfitable = $ad->campaignGoals->profitable;
 
                 $remainingBudget = $ad->budget - $ad->price_to_pay;
-echo $ad->budget . '---';
-echo $ad->price_to_pay . '---';
-echo $remainingBudget. '---';
                 $response =  [
                     'id'        => $item->influencers->id,
                     'name'      => $item->influencers->nick_name,
@@ -664,7 +661,7 @@ echo $remainingBudget. '---';
         if(!$data) return response()->json([
             'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
+        ],config('global.NOT_FOUND_STATUS'));\
 
         $cal = $data->budget * 0.10;
 
