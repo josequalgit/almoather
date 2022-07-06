@@ -118,7 +118,7 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
                 
                 <div class="col-lg-6 col-md-12 p-2">
                     <div class="count-box list">
-                        <span> <i class="bx bx-money"></i>Remaining Budget:</span><span class="numbers"><b>{{ number_format($data->budget - $totalPrice - ($data->budget * 0.1)) }}</b></span>
+                        <span> <i class="bx bx-money"></i>Remaining Budget:</span><span class="numbers"><b>{{ number_format($data->budget - $data->price_to_pay) }}</b></span>
                     </div>
                 </div>
             </div>

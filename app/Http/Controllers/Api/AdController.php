@@ -471,6 +471,7 @@ class AdController extends Controller
     {
 
         $ad = Ad::find($campaign_id);
+        
         if (!$ad) {
             return response()->json([
                 'err'=>trans($this->trans_dir.'ad_not_found'),
@@ -494,11 +495,10 @@ class AdController extends Controller
                 });
             }
             $infData = $infData->where([['chosen',0],['status','!=','deleted']])->get()->map(function($item) use($ad){
-                $influencerPrice = $ad->onSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
+                $influencerPrice = $ad->ad_type == 'onsite' ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
                 $isProfitable = $ad->campaignGoals->profitable;
 
                 $remainingBudget = $ad->budget - $ad->price_to_pay;
-
                 $response =  [
                     'id'        => $item->influencers->id,
                     'name'      => $item->influencers->nick_name,
@@ -549,10 +549,11 @@ class AdController extends Controller
             }
             $infData = $infData->where('chosen',0)->get()->map(function($item) use($ad , $ReplacedInfluencer){
                 $remainingBudget = $ad->budget - $ad->price_to_pay;
-                $influencerPrice = $ad->onSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
-                $replaceInfluencerPrice = $ad->onSite ? $ReplacedInfluencer->ad_onsite_price_with_vat : $ReplacedInfluencer->ad_with_vat;
+                $influencerPrice = $ad->ad_type == 'onsite' ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
                 
-                $remainingBudget += $replaceInfluencerPrice;
+                $chosenInfPrice =  $ad->ad_type == 'onsite' ? $ReplacedInfluencer->ad_onsite_price_with_vat : $ReplacedInfluencer->ad_with_vat;
+                $chosenInfPrice -= $remainingBudget;
+
                 $isProfitable = $ad->campaignGoals->profitable;
 
                 $response =  [
@@ -563,7 +564,7 @@ class AdController extends Controller
                     'gender'    => trans($this->trans_dir.$item->influencers->gender),
                     'budget'    => number_format($influencerPrice),
                     'status'    => $item->status,
-                    'eligible'  => $remainingBudget >= $replaceInfluencerPrice
+                    'eligible'  => $chosenInfPrice > $influencerPrice
                 ];
             
                 $response['ROAS'] = null;
@@ -593,7 +594,7 @@ class AdController extends Controller
         $ad = Ad::find($ad_id);
 
         $chosen_inf = Influncer::find($chosen_inf_id);
-        $chosenInfPrice = $ad->onSite ? $chosen_inf->ad_onsite_price_with_vat : $chosen_inf->ad_with_vat;
+        $chosenInfPrice = $ad->ad_type == 'onsite' ? $chosen_inf->ad_onsite_price_with_vat : $chosen_inf->ad_with_vat;
 
         if (!$chosen_inf) {
             return response()->json([
@@ -604,7 +605,7 @@ class AdController extends Controller
         
 
         $removed_inf = Influncer::find($removed_inf_id);
-        $oldInfPrice = $ad->onSite ? $removed_inf->ad_onsite_price_with_vat : $removed_inf->ad_with_vat;
+        $oldInfPrice = $ad->ad_type == 'onsite' ? $removed_inf->ad_onsite_price_with_vat : $removed_inf->ad_with_vat;
 
         if (!$removed_inf) {
             return response()->json([
@@ -802,8 +803,8 @@ class AdController extends Controller
         $inf = $user->influncers;
 
         $alldata = $data->matches()->where(['status','!=','deleted'])->where('chosen',0)->get()->map(function($item) use($inf,$data,$removed_inf){
-            $chosenInf = $data->onSite ?$inf->ad_onsite_price:$inf->ad_price;
-            $oldInf = $data->ad_type == 'onsite' ? User::find($removed_inf)->influncers->ad_onsite_price:User::find($removed_inf)->influncers->ad_price;
+            $chosenInf = $data->ad_type == 'onsite' ? $inf->ad_onsite_price_with_vat : $inf->ad_with_vat;
+            $oldInf = $data->ad_type == 'onsite' ? User::find($removed_inf)->influncers->ad_onsite_price_with_vat : User::find($removed_inf)->influncers->ad_with_vat;
             $newBud = $data->budget + $chosenInf - $oldInf;
 
             return[
@@ -877,9 +878,9 @@ class AdController extends Controller
     }
 
     //Customer Approve/Reject contract
-    public function accept_customer_ad_contract(Request $request , $contract_id)
+    public function accept_customer_ad_contract(Request $request , $ad_id)
     {
-        $data = CampaignContract::find($contract_id);
+        $data = CampaignContract::where('ad_id',$ad_id)->first();
         if(!$data) return response()->json([
             'err'=>trans($this->trans_dir.'contract_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
@@ -926,8 +927,9 @@ class AdController extends Controller
         ],config('global.NOT_FOUND_STATUS'));
 
         $remainingBudget = $ad->budget - $ad->price_to_pay;
+        
+        $chosenInfBudget = $ad->ad_type == 'onsite' ? $addInf->ad_onsite_price_with_vat : $addInf->ad_with_vat;
 
-        $chosenInfBudget = $ad->ad_type == 'onsite' ? $addInf->ad_onsite_price : $addInf->ad_price;
 
         if($remainingBudget < $chosenInfBudget){
             return response()->json([
@@ -940,6 +942,7 @@ class AdController extends Controller
         $data->chosen = 1;
         $data->status = 'not_basic';
         $data->save();
+        $this->calculateCampaignPrice($ad);
 
         return $this->match_response($ad);
 
@@ -966,6 +969,7 @@ class AdController extends Controller
         $data->status = $request->status;
         $data->save();
 
+        $this->calculateCampaignPrice($ad);
        
         return $this->match_response($ad);
     }
@@ -1246,7 +1250,7 @@ class AdController extends Controller
             'status'    => config('global.OK_STATUS'),
 			'data' => [
 				'id'                => $ad->id,
-				'type'              => $ad->type,
+				'type'              => trans($this->$trans_dir . $ad->type),
 				'status'            => $ad->status,
                 'influncers_status' => $admin_approved_influencers ? true : false,
 				'category'          => $ad->categories->name,
@@ -1268,7 +1272,7 @@ class AdController extends Controller
 
             $contract = InfluencerContract::where('influencer_id', $item->influencer_id)->where('ad_id',$ad->id)->first();
 
-            $influencerPrice = $ad->onSite ? $item->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
+            $influencerPrice = $isOnSite ? $item->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
 
             $status = null;
 
