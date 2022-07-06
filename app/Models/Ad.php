@@ -180,8 +180,9 @@ class Ad extends Model implements HasMedia
 			foreach($mediaItems as $item)
 			{
                 $obj = (object)[
-                    'id'=>$item->id,
-                    'url'=>$item->getFullUrl()
+                    'id' => $item->id,
+                    'thumbnail' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIbS95_HsNHOxW05lRFaEOx52YxA2aCxP1TXwDCjwyjB8bBb4mqXf3edVSKdB2KvDsHC4&usqp=CAU',
+                    'url' => $item->getFullUrl()
                 ];
 				// $publicFullUrl = $item->getFullUrl();
 				array_push($publicFullUrl,$obj);
