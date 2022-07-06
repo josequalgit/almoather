@@ -38,7 +38,6 @@ class AdRequest extends FormRequest
             'area_id'=>'required',
             'campaign_goals_id'=>'required',
             'social_media'=>'required',
-            'relation'=>'required',
             'prefered_media_id'=>'required',
             'cr_image'=>'mimes:jpg,bmp,png,pdf|max:2048',
 
@@ -66,7 +65,6 @@ class AdRequest extends FormRequest
             'city_id.required' => 'Please choose the city',
             'area_id.required' => 'Please choose the area',
             'prefered_media_id.required' => 'Please add the prefered media id',
-            'required.required' => 'Please add the relation',
             'social_media_id.required' => 'Please add a social media',
             'video.max' => 'The Video Size max should be 100Mb',
             'document.max' => 'The Video Size max should be 100Mb',
