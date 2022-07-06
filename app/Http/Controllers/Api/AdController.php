@@ -661,7 +661,7 @@ class AdController extends Controller
         if(!$data) return response()->json([
             'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));\
+        ],config('global.NOT_FOUND_STATUS'));
 
         $cal = $data->budget * 0.10;
 
