@@ -402,6 +402,8 @@ class AdController extends Controller
 
         if($request->status == 1)
         {
+            //Todo save influencers contract without variables
+
             $name = $influencer->nick_name;
             $info =[
                 'msg'=>trans($this->trans_dir.'influencer').'"'.$name.'"'. trans($this->trans_dir.'accept_contract'),
@@ -1103,6 +1105,8 @@ class AdController extends Controller
                 $data->update(['status' => 'prepay']);
             }else if($request->type == 'full_payment'){
                 $data->update(['status' => 'fullpayment']);
+
+                //Todo save contract without variables
 
                 $tokens = [];
                 foreach($data->matches as $match){

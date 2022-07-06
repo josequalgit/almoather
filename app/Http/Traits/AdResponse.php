@@ -161,7 +161,7 @@ trait AdResponse
 
             $basicResponse['date'] = $contractData && $contractData->created_at ?  $contractData->created_at->diffForHumans() : '';
 
-            $basicResponse['showExecution'] = $contractData && $contractData->date && Carbon::parse($contractData->date)->gt(Carbon::now()) ? true : false;
+            $basicResponse['showExecution'] = $contractData && $contractData->date && !$contractData->date->gt(Carbon::now()) ? true : false;
         }
 
         //Return Matches if the status is Full payment / Choosing influencer / Progress
@@ -174,8 +174,10 @@ trait AdResponse
                 $status = null;
 
                 $status = trans($this->trans_dir . 'Not Join Yet');
+                $showChat = false; 
                 if ($contract && $contract->is_accepted == 1) {
                     $status = trans($this->trans_dir . 'Joined');
+                    $showChat = true;
                 } 
 
                 $response = [
@@ -184,6 +186,7 @@ trait AdResponse
                     'name' => $item->influencers->nick_name,
                     'match' => $item->match,
                     'status' => $status,
+                    'showChat' => $showChat,
                     'gender'    => trans($this->trans_dir.$item->influencers->gender),
                     'budget'    => number_format($influencerPrice),
                 ];
@@ -256,6 +259,14 @@ trait AdResponse
             return null;
         }
 
+        if ($contract->status == 2 && $contract->admin_status == 1) {
+            return 'Completed';
+        }
+
+        if ($contract->status == 1 && $contract->admin_status == 0) {
+            return 'waiting admin approve';
+        }
+
         if ($contract->is_accepted == 2) {
             return 'Rejected';
         }
@@ -266,14 +277,6 @@ trait AdResponse
 
         if ($contract->is_accepted == 0) {
             return 'Pending';
-        }
-
-        if ($contract->status == 1 && $contract->admin_status == 0) {
-            return 'waiting admin approve';
-        }
-
-        if ($contract->status == 2 && $contract->admin_status == 1) {
-            return 'Completed';
         }
 
         return null;
