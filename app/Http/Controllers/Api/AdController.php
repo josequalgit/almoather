@@ -549,8 +549,8 @@ class AdController extends Controller
             }
             $infData = $infData->where('chosen',0)->get()->map(function($item) use($ad , $ReplacedInfluencer){
                 $remainingBudget = $ad->budget - $ad->price_to_pay;
-                $influencerPrice = $ad->onSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
-                $replaceInfluencerPrice = $ad->onSite ? $ReplacedInfluencer->ad_onsite_price_with_vat : $ReplacedInfluencer->ad_with_vat;
+                $influencerPrice = $ad->ad_type == 'onsite' ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
+                $replaceInfluencerPrice =  $ad->ad_type == 'onsite' ? $ReplacedInfluencer->ad_onsite_price_with_vat : $ReplacedInfluencer->ad_with_vat;
                 
                 $remainingBudget += $replaceInfluencerPrice;
                 $isProfitable = $ad->campaignGoals->profitable;
