@@ -29,7 +29,17 @@ class ContactRequest extends FormRequest
         return [
             'phone'=>'required',
             'message'=>'required',
-            'email'=>'required',
+            'email'=>'required|email',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'phone.required' => 'Please add phone',
+            'message.required' => 'Please add message',
+            'email.required' => 'Please add email',
+            'email.email' => 'Please add correct email',
         ];
     }
 

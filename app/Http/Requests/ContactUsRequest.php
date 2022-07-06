@@ -30,4 +30,15 @@ class ContactUsRequest extends FormRequest
             'message'=>'required',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Please add name',
+            'title.required' => 'Please add title',
+            'email.required' => 'Please add email',
+            'message.required' => 'Please add message',
+            'email.email' => 'Please add correct email',
+        ];
+    }
 }

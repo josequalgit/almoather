@@ -37,7 +37,7 @@ class AdRequest extends FormRequest
             'city_id'=>'required',
             'area_id'=>'required',
             'campaign_goals_id'=>'required',
-            'social_media'=>'required',
+            'social_media'=>'required', 
             'prefered_media_id'=>'required',
             'cr_image'=>'mimes:jpg,bmp,png,pdf|max:2048',
 
