@@ -259,7 +259,7 @@ trait AdResponse
             return null;
         }
 
-        if ($contract->status == 2 && $contract->admin_status == 1) {
+        if ($contract->status == 1 && $contract->admin_status == 1) {
             return 'Completed';
         }
 
