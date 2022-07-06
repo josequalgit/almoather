@@ -71,6 +71,7 @@ class Kernel extends HttpKernel
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'customer_middleware' => \App\Http\Middleware\CustomerMiddleware::class,
+        'jwtAuth' => \App\Http\Middleware\JwtTokenMiddleware::class,
         'localization' => \App\Http\Middleware\localization::class,
 
     ];

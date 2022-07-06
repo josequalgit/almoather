@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html dir="{{ app()->getLocale() == 'ar'?'rtl':'ltr' }}" lang="{{ app()->getLocale() }}"> 
-
 <head>
     <title>Al-Muaathir</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,11 +9,9 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('frontEnd/slick/slick.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('frontEnd/slick/slick-theme.css') }}"/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     @php
           $route = Route::current();
-        $name = $route->getName();
-
+          $name = $route->getName();
     @endphp
     @if($name == 'frontEnd.index')
     <link rel="stylesheet" href="{{ asset('frontEnd/css/style-index-page.css') }}">

@@ -8,6 +8,7 @@ use App;
 
 class LanguageMiddleware
 {
+
     /**
      * Handle an incoming request.
      *
@@ -20,8 +21,14 @@ class LanguageMiddleware
         $lang = $request->header('lang') ? $request->header('lang') : 'ar';
  
         $availLocale=['en','ar'];
-        if(in_array($lang,$availLocale)){
+
+        // $session = $request->getSession();
+        $cookie = isset($_COOKIE["language"])?$_COOKIE["language"]:"";
+        // dd($cookie);
+        if(in_array($cookie,$availLocale)){
             App::setLocale($lang);
+        }if ($cookie && in_array($cookie,$availLocale)) {
+            App::setLocale($cookie);
         }else{
             App::setLocale('ar');
         }

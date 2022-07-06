@@ -13,16 +13,15 @@
     </button>
     @php
        $prefix = Request::route()->getPrefix();
-
        $name = Request::route()->getName();
-      
     @endphp
             <div class="collapse navbar-collapse mx-auto w-auto " style="justify-content:space-evenly ;" id="navbarSupportedContent">
-                @if($prefix == '/customers')
+                @if($prefix == 'customers'||$prefix == "customers/ad")
                 <ul class="navbar-nav nav-bar-menu">
                     <li> <a  id="home" class="nav-item nav-link {{ $name == 'customers.index'?'active':'' }}" href="{{ route('customers.index') }}">{{ trans('messages.frontEnd.profile') }}</a></li> 
                     <li> <a class="nav-item nav-link" href="#">{{ trans('messages.frontEnd.my_ads') }}</a></li> 
                     <li> <a class="nav-item nav-link {{ $name == 'customers.ads.index'?'active':'' }}" href="{{ route('customers.ads.create') }}">{{ trans('messages.frontEnd.create') }}</a></li> 
+                    <li> <a class="nav-item nav-link" href="{{ route('changeLanguage') }}">{{ app()->getLocale() == 'ar'?'English':'العربي' }}</a></li>
                 </ul>
                 @else
                 <ul class="navbar-nav nav-bar-menu">
@@ -30,6 +29,7 @@
                     <li> <a class="nav-item nav-link {{ $name == 'frontEnd.about'?'active':'' }}" href="{{ route('frontEnd.about') }}">{{ trans('messages.frontEnd.about') }}</a></li>
                     <li> <a class="nav-item nav-link {{ $name == 'frontEnd.ourservice'?'active':'' }}" href="{{ route('frontEnd.ourservice') }}">{{ trans('messages.frontEnd.our-service') }}</a></li>
                     <li> <a class="nav-item nav-link {{ $name == 'contact.index'?'active':'' }}" href="{{ route('contact.index') }}">{{ trans('messages.frontEnd.contact') }}</a></li>
+                    <li> <a class="nav-item nav-link" href="{{ route('changeLanguage') }}">{{ app()->getLocale() == 'ar'?'English':'العربي' }}</a></li>
                 </ul>
                 @endif
               
