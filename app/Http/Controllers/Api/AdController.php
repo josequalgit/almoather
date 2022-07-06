@@ -471,6 +471,7 @@ class AdController extends Controller
     {
 
         $ad = Ad::find($campaign_id);
+        
         if (!$ad) {
             return response()->json([
                 'err'=>trans($this->trans_dir.'ad_not_found'),
@@ -494,7 +495,7 @@ class AdController extends Controller
                 });
             }
             $infData = $infData->where([['chosen',0],['status','!=','deleted']])->get()->map(function($item) use($ad){
-                $influencerPrice = $ad->ad_type == 'onsite' ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
+                $influencerPrice = $ad->ad_type == 'onsite' ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
                 $isProfitable = $ad->campaignGoals->profitable;
 
                 $remainingBudget = $ad->budget - $ad->price_to_pay;
@@ -926,8 +927,9 @@ class AdController extends Controller
         ],config('global.NOT_FOUND_STATUS'));
 
         $remainingBudget = $ad->budget - $ad->price_to_pay;
-
+        
         $chosenInfBudget = $ad->ad_type == 'onsite' ? $addInf->ad_onsite_price_with_vat : $addInf->ad_with_vat;
+
 
         if($remainingBudget < $chosenInfBudget){
             return response()->json([
@@ -1248,7 +1250,7 @@ class AdController extends Controller
             'status'    => config('global.OK_STATUS'),
 			'data' => [
 				'id'                => $ad->id,
-				'type'              => $ad->type,
+				'type'              => trans($this->$trans_dir . $ad->type),
 				'status'            => $ad->status,
                 'influncers_status' => $admin_approved_influencers ? true : false,
 				'category'          => $ad->categories->name,
@@ -1270,7 +1272,7 @@ class AdController extends Controller
 
             $contract = InfluencerContract::where('influencer_id', $item->influencer_id)->where('ad_id',$ad->id)->first();
 
-            $influencerPrice = $ad->onSite ? $item->ad_onsite_price_with_vat : $item->influencers->ad_onsite_price_with_vat;
+            $influencerPrice = $isOnSite ? $item->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
 
             $status = null;
 
