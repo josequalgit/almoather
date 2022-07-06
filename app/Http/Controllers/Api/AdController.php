@@ -940,6 +940,7 @@ class AdController extends Controller
         $data->chosen = 1;
         $data->status = 'not_basic';
         $data->save();
+        $this->calculateCampaignPrice($ad);
 
         return $this->match_response($ad);
 
