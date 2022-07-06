@@ -878,9 +878,9 @@ class AdController extends Controller
     }
 
     //Customer Approve/Reject contract
-    public function accept_customer_ad_contract(Request $request , $contract_id)
+    public function accept_customer_ad_contract(Request $request , $ad_id)
     {
-        $data = CampaignContract::find($contract_id);
+        $data = CampaignContract::where('ad_id',$ad_id)->first();
         if(!$data) return response()->json([
             'err'=>trans($this->trans_dir.'contract_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
