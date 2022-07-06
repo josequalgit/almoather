@@ -498,7 +498,9 @@ class AdController extends Controller
                 $isProfitable = $ad->campaignGoals->profitable;
 
                 $remainingBudget = $ad->budget - $ad->price_to_pay;
-
+echo $ad->budget . '---';
+echo $ad->price_to_pay . '---';
+echo $remainingBudget. '---';
                 $response =  [
                     'id'        => $item->influencers->id,
                     'name'      => $item->influencers->nick_name,
@@ -966,7 +968,7 @@ class AdController extends Controller
 
         $data->status = $request->status;
         $data->save();
-
+        $this->calculateCampaignPrice($data);
        
         return $this->match_response($ad);
     }
