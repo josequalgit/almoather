@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\SocialMedia;
 use App\Models\InfluencerContract;
 use DB;
+use URL;
+
 class Ad extends Model implements HasMedia
 {
     use HasFactory , InteractsWithMedia,SoftDeletes;
