@@ -759,6 +759,7 @@ class AdController extends Controller
         $data->addMedia($request->file('file'))
             ->toMediaCollection('adVideos');
         $numberOfVideos = count($data->videos);
+        $last_video = $data->videos[$numberOfVideos - 1];
         
         try {
             FFMpeg::fromDisk('custom')->open($last_video->path)->getFrameFromSeconds(5)->export()->addFilter(function (FrameFilters $filters) {
