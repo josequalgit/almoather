@@ -21,6 +21,14 @@
                                         class="me-2">{{ $data->cr_num }}</span>
                                 </div>
                                 <div class="hashs border-top pt-1 pb-1">
+                                    <b class="me-2">Cr Document : </b><span
+                                        class="me-2"><a href="{{ $data->crImage->url }}" target="_blank">Download</a></span>
+                                </div>
+                                <div class="hashs border-top pt-1 pb-1">
+                                    <b class="me-2">Budget: </b><span
+                                        class="me-2">{{ number_format($data->budget) }}</span>
+                                </div>
+                                <div class="hashs border-top pt-1 pb-1">
                                     <b class="mr-2">Category:</b>
                                     @if ($data->categories)
                                         <span class="tag me-2 category-item">{{ $data->categories->name }}</span>
@@ -110,21 +118,28 @@
                                 
                             </div>
                         </div>
-                        <div class="">
+                        <div class="mt-4">
                             <div class="container">
-                                <div class="row">
-                                    <div class="col-lg-6 col-md-12 p-2">
-                                        <div class="count-box list">
-                                            <span> <i class="bx bx-money"></i>Total Budget:</span><span
-                                                class="numbers">{{ number_format($data->budget) }}</span>
+                                <h4>Commercial Documents</h4>
+                                <div class="row border-top pt-1 pb-1">
+                                    @if($data->document)
+                                    @foreach ($data->document as $key => $document)
+                                    <a class="col-lg-3 col-md-4 col-6 pt-2 pb-2 pl-1 video-item d-flex align-items-center mb-2" href="{{ $document->url }}" target="_blank">
+                                        <div>
+                                            <img src="{{ asset('img/icons/misc/img.png') }}" width="40" />
+                                        </div>
+                                        <div class="ml-2">
+                                            <h6 class="mb-0">Document #{{$key + 1}}</h6>
+                                        </div>
+                                    </a>
+                                    @endforeach
+                                    @else
+                                    <div class="col-12">
+                                        <div class="alert alert-info" role="alert">
+                                            No documents found
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-12 p-2">
-                                        <div class="count-box list">
-                                            <span> <i class="bx bx-user"></i>Influncer:</span><span
-                                                class="numbers">{{ count($matchedInfluencers) }}</span>
-                                        </div>
-                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

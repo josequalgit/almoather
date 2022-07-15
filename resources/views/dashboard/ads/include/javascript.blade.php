@@ -469,7 +469,6 @@
             confirmButtonText: 'Yes, Delete!'
         }).then((result) => {
             if (result.isConfirmed) {
-                alert(id);
                 let url = "{{ route('dashboard.ads.deleteFile', ':id') }}";
                 url = url.replace(':id', id);
                 $.ajax({

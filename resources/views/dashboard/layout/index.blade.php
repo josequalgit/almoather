@@ -10,8 +10,8 @@
     <meta name="author" content="PIXINVENT">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>Al Muaathir Dashboard</title>
-    <link rel="apple-touch-icon" href="{{ asset('main2/images/ico/apple-icon-120.png') }}">
-    <link rel="icon" type="image/x-icon" href="{{ asset('main2/images/logo/logo.png') }}" />
+    <link rel="apple-touch-icon" href="{{ asset('img/favicon/favicon.ico') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/favicon/favicon.ico') }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,600%7CIBM+Plex+Sans:300,400,500,600,700" rel="stylesheet">

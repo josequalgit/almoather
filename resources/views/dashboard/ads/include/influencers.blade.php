@@ -106,7 +106,7 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
                 </div>
                 <div class="col-lg-6 col-md-12 p-2">
                     <div class="count-box list">
-                        <span> <i class="bx bx-money"></i>Influncers Toal Price:</span><span class="numbers"><b>{{ number_format($totalPrice) }}</b></span>
+                        <span> <i class="bx bx-money"></i>Influncers Total Price:</span><span class="numbers"><b>{{ number_format($totalPrice) }}</b></span>
                     </div>
                 </div>
 
