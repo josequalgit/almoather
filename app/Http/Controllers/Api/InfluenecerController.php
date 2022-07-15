@@ -12,6 +12,7 @@ use Auth;
 use DB;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use FFMpeg\Filters\Frame\FrameFilters;
+use Log;
 
 class InfluenecerController extends Controller
 {

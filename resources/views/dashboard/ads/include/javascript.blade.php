@@ -3,6 +3,7 @@
     let choosen_inf_id = 0;
     let removed_inf = 0;
     let fileType = null;
+    let loadButton = null;
     let deletetedFileId = null;
     let chossen_contract_id = 0;
 
@@ -47,15 +48,18 @@
 
         $(document).on('click','.open-choose-video',function(){
             $('#adVideo').trigger('click');
+            loadButton = $(this);
             fileType = 'video';
         });
         $(document).on('click','.open-choose-image',function(){
             $('#addImage').trigger('click');
+            loadButton = $(this);
             fileType = 'image';
         });
 
         $(document).on('input','#adVideo,#addImage',function(){
             var itemId = $(this).attr('id');
+            loadButton.attr('disabled',true);
             let video = document.getElementById(itemId).files[0];
             let formData = new FormData();
             formData.append('file', video);
@@ -77,24 +81,24 @@
                     if (res.status == 200) {
                         if (res.data.added_video) {
                             $('#videoSection').append(`
-                                <div class="col-3 h-25 mt-2">
-                                <div class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
-                                    <a href="${res.data.added_video.url}" target="_blank" rel="noopener noreferrer">
-                                        <img src="{{ asset('img/icons/misc/mp4.jpg') }}" width="40" />
-                                    </a>
-                                <div class="ml-2">
-                                    <h6 class="mb-0">Video #${res.data.number_of_videos}</h6>
-                                    <div class="about"><button onclick="deleteFileModal(${res.data.added_video.id})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
+                                <div class="col-md-4 col-6 mt-2" data-id="${res.data.added_video.id}">
+                                    <div class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
+                                        <a href="${res.data.added_video.url}" target="_blank" rel="noopener noreferrer">
+                                            <img src="${res.data.added_video.thumbnail}" width="40" />
+                                        </a>
+                                    <div class="ml-2">
+                                        <h6 class="mb-0">Video #${res.data.number_of_videos}</h6>
+                                        <div class="about"><button onclick="deleteFileModal(${res.data.added_video.id})" type="button" class="deleteButton"><span class="small">Delete</span></button></div>
+                                        </div>
                                     </div>
-                                </div>
                                 </div> 
                             `);
                         } else {
                             $('#imageSection').append(`
-                                <div class="col-3 h-25 mt-2">
+                                <div class="col-md-4 col-6 mt-2" data-id="${res.data.added_image.id}">
                                 <div class="pt-2 pb-2 pl-1 video-item d-flex align-items-center">
                                     <a href="${res.data.added_image.url}" target="_blank" rel="noopener noreferrer">
-                                        <img src="{{ asset('img/icons/misc/img.png') }}" width="40" />
+                                        <img src="${res.data.added_image.url}" width="40" />
                                     </a>
                                 <div class="ml-2">
                                     <h6 class="mb-0">Image #${res.data.number_of_images}</h6>
@@ -114,6 +118,7 @@
                             title: 'server response :' + res.msg
                         });
                     }
+                    loadButton.attr('disabled',false);
                 },
                 error: (res) => {
                     let msg = res.responseJSON.err;
@@ -122,7 +127,8 @@
                     Toast.fire({
                         icon: 'error',
                         title: msg
-                    })
+                    });
+                    loadButton.attr('disabled',false);
 
                 }
             });
@@ -477,7 +483,7 @@
                     data: {},
                     success: (res) => {
                         console.log('res: ', res);
-                        location.reload();
+                        $('[data-id="'+ id +'"]').remove();
                     },
                     error: (err) => {
                         console.log('err: ', err);

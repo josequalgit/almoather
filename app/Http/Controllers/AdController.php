@@ -25,12 +25,15 @@ use App\Models\Relation;
 use App\Models\SocialMedia;
 use Auth;
 use DB;
+use Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use App\Events\VoluumEvent;
 use App\Http\Traits\AdResponse;
+use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
+use FFMpeg\Filters\Frame\FrameFilters;
 
 class AdController extends Controller
 {
@@ -757,6 +760,15 @@ class AdController extends Controller
             ->toMediaCollection('adVideos');
         $numberOfVideos = count($data->videos);
         $last_video = $data->videos[$numberOfVideos - 1];
+
+        try {
+            FFMpeg::fromDisk('custom')->open($last_video->getPath())->getFrameFromSeconds(5)->export()->addFilter(function (FrameFilters $filters) {
+                $filters->custom('scale=320:180');
+            })->toDisk('local')->save('public/'.$last_video->id.'/thumbnail.png');
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
  
 
         return response()->json([

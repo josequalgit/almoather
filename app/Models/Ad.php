@@ -179,9 +179,14 @@ class Ad extends Model implements HasMedia
         {
 			foreach($mediaItems as $item)
 			{
+                if(file_exists(storage_path('app/public/' . $item->id . '/thumbnail.png'))){
+                    $videoThumbnail = URL::to('/storage/' . $item->id . '/thumbnail.png');
+                }else{
+                    $videoThumbnail = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIbS95_HsNHOxW05lRFaEOx52YxA2aCxP1TXwDCjwyjB8bBb4mqXf3edVSKdB2KvDsHC4&usqp=CAU';
+                }
                 $obj = (object)[
                     'id' => $item->id,
-                    'thumbnail' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIbS95_HsNHOxW05lRFaEOx52YxA2aCxP1TXwDCjwyjB8bBb4mqXf3edVSKdB2KvDsHC4&usqp=CAU',
+                    'thumbnail' => $videoThumbnail,
                     'url' => $item->getFullUrl()
                 ];
 				// $publicFullUrl = $item->getFullUrl();
