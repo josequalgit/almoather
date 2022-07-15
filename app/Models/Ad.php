@@ -187,7 +187,8 @@ class Ad extends Model implements HasMedia
                 $obj = (object)[
                     'id' => $item->id,
                     'thumbnail' => $videoThumbnail,
-                    'url' => $item->getFullUrl()
+                    'url' => $item->getFullUrl(),
+                    'path' => $item->getPath()
                 ];
 				// $publicFullUrl = $item->getFullUrl();
 				array_push($publicFullUrl,$obj);

@@ -762,7 +762,7 @@ class AdController extends Controller
         $last_video = $data->videos[$numberOfVideos - 1];
 
         try {
-            FFMpeg::fromDisk('custom')->open($last_video->getPath())->getFrameFromSeconds(5)->export()->addFilter(function (FrameFilters $filters) {
+            FFMpeg::fromDisk('custom')->open($last_video->path)->getFrameFromSeconds(5)->export()->addFilter(function (FrameFilters $filters) {
                 $filters->custom('scale=320:180');
             })->toDisk('local')->save('public/'.$last_video->id.'/thumbnail.png');
 
