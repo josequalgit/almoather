@@ -10,7 +10,7 @@ return [
         'accepted_campaign_msg'                 => 'مبروك تم قبول اعلانك ":ad_name" الرجاء اكمال الخطوات',
         'admin_accepted_campaign'               => 'قام المسؤول (:admin_name) بتغيير حالة الحملة (:ad_name) الى (:status)',
         'approve_campaign_influencers_title'    => 'تمت الموافقه على قائمة المؤثرين',
-        'approve_campaign_influencers_msg'      => 'تمت الموافقه على قائمة المؤثرين الخاصة بالحملة (:ad_name)',
+        'approve_campaign_influencers_msg'      => 'تمت الموافقه على قائمة المؤثرين الخاصة بالحملة (:ad_name)، يمكنك الان الاطلاع على تفاصيل العقد',
         'admin_approve_campaign_influencers'    => 'قام المسؤول (:admin_name) بالموافقة على فائمة المؤثؤين الخاصة بالحملة (:ad_name)',
         'reject_payment_ad'                     => 'تم رفض عملية الدفع الخاصة بالحملة ":ad_name" الرجاء المحاولة مره اخرى أو التواصل معنا للمساعده',
         'admin_reject_payment_ad'               => 'تم رفض عملية الدفع الخاصة بالحملة ":ad_name"',

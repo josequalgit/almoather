@@ -20,6 +20,11 @@
             text-align: left !important;
         }
 
+        .contract-content p{
+            margin-bottom: 8px;
+            margin-top: 0;
+        }
+
         .container {
             width: 100%;
             padding-right: 15px;
@@ -57,6 +62,7 @@
 
         body {
             font-family: 'Amiri','Geneva','sans-serif';
+            line-height: 18px;
         }
 
         .direction-rtl {

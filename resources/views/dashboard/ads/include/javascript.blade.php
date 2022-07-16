@@ -515,6 +515,7 @@
                         'error'
                     );
                 }
+                $($this).attr('disabled',false).html($($this).text());
             },
             error: (err) => {
                 Swal.fire(

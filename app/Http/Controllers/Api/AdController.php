@@ -1116,7 +1116,7 @@ class AdController extends Controller
             return response()->json([
                 'err'       => trans($this->trans_dir.'ad_dont_have_right_status'),
                 'status'    => config('global.UNAUTHORIZED_VALIDATION_STATUS')
-            ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
+            ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
         $data->status = 'choosing_influencer';

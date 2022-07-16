@@ -374,11 +374,11 @@ class Ad extends Model implements HasMedia
     }
 
     function getAdBudgetWithVatAttribute(){
-        $budget = $this->budget;
+        $budget = $this->price_to_pay;
         $tax = AppSetting::where('key', 'tax')->first();
         if($tax){
             $tax = $tax->value;
-            $budget = $this->budget + ($this->budget * ($tax / 100));
+            $budget = $this->price_to_pay + ($this->price_to_pay * ($tax / 100));
         }
         return $budget;
     }

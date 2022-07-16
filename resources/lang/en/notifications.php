@@ -12,7 +12,7 @@
                 'reject_payment_ad'                     => 'Payment for ":ad_name" has been rejected,Please Try Again or contact support for help.',
                 'admin_reject_payment_ad'               => 'Payment for ":ad_name" has been rejected',
                 'approve_campaign_influencers_title'    => 'Influencers list has been approved',
-                'approve_campaign_influencers_msg'      => 'Influencers list for campaign (:ad_name) has been approved',
+                'approve_campaign_influencers_msg'      => 'Influencers list for campaign (:ad_name) has been approved, You can now examining the contract details',
                 'admin_approve_campaign_influencers'    => 'Admin (:admin_name) approved influencers list for campaign (:ad_name)',
                 'reject_payment_ad_title'               => 'Payment failed!',
                 'success_payment_ad_title'              => 'Payment processed successfully',
