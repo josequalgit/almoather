@@ -1134,7 +1134,7 @@ class AdController extends Controller
             'params'        => $transParams
         ];
         
-        $this->saveAndSendNotification($info,$roles,$users);
+        $this->saveAndSendNotification($info,$roles);
 
         return response()->json([
             'status'    => config('global.OK_STATUS'),
