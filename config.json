@@ -1,17 +1,17 @@
 {
     "server": {
-        "origin": "*",
+        "origin": "almuaathir.josequal.net",
         "port": 3000
     },
     "db": {
-        "host": "josequal.net",
+        "host": "localhost",
         "user": "almuaathir",
         "password": "%L0wri53",
         "database": "almuaathir"
     },
     "redis": {
-        "url": "almoather.com",
+        "url": "almuaathir.josequal.net",
         "port": 6379
     },
-    "environment": "http"
+    "environment": "https"
 }
