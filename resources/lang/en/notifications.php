@@ -20,6 +20,7 @@
                 'success_full_payment_ad'               => 'Payment processed successfully for the campaign ":ad_name", we will contact you ',
                 'admin_first_payment_msg'               => 'Campaign (:ad_name) first payment made ',
                 'admin_last_payment_msg'                => 'Campaign (:ad_name) full payment made ',
+                'customer_confirm_influencers'          => "Customer confirmed the influencers list for campaign (:ad_name)",
 
 
                 'reject_influencers_title'=>'Your account has been rejected',

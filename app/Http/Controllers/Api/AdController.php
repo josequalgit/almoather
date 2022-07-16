@@ -1122,6 +1122,20 @@ class AdController extends Controller
         $data->status = 'choosing_influencer';
         $data->save();
 
+        $title = 'customer_confirm_influencers';
+        $msg = 'customer_confirm_influencers';
+        $transParams = ['ad_name' => $data->store];
+        $roles = ['Business Manager','superAdmin'];
+        $info =[
+            'msg'           => $msg,
+            'title'         => $title,
+            'id'            => $data->id,
+            'type'          => 'Ad',
+            'params'        => $transParams
+        ];
+        
+        $this->saveAndSendNotification($info,$roles,$users);
+
         return response()->json([
             'status'    => config('global.OK_STATUS'),
             'msg'       => trans($this->trans_dir.'data_was_updated')

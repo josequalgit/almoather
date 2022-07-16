@@ -20,6 +20,9 @@ return [
         'success_full_payment_ad'               => 'Payment processed successfully for the campaign ":ad_name", we will contact you ',
         'admin_first_payment_msg'               => 'تم دفع الدفعة الأولى الخاصة بالحملة (:ad_name)',
         'admin_last_payment_msg'                => 'تم دفع الدفعة الكاملة الخاصة بالحملة (:ad_name)',
+        'customer_confirm_influencers'          => "قام العميل بتأكيد فائمة المؤثرين الخاصة بالحملة (:ad_name)",
+
+
 
         'reject_influencers_title'              => 'Your account has been rejected',
         'reject_influencers_msg'=>'The reject reason is ":rejectNote"',
