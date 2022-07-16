@@ -195,7 +195,7 @@ $role = Auth::user()->roles[0]->name;
             toast: true,
             position: 'bottom-end',
             showConfirmButton: false,
-            timer: 7000,
+            timer: 15000,
             timerProgressBar: true,
            
         });

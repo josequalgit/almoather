@@ -61,19 +61,34 @@ trait SendNotification {
 
         Redis::publish($channel, json_encode([
             'id'        => $data->id,
-            "message"   => $data->translatedMsg,
+            "message"   => trans("notifications".$data->msg,$data->params,'en'),
             "date"      => Carbon::now()->diffForHumans(),
             'roles'     => $roles
         ]));
     }
 
-    function saveAndSendNotification($info,$roles = [],$users = [],$params = []){
+    function saveAndSendNotification($info,$roles = [],$users = []){
         //Send notification to admins based on roles
         $UsersNotifications = User::whereIn('id',$users)->orWhereHas('roles',function($q) use($roles) {
             $q->whereIn('name',$roles);
         })->get();
 
         Notification::send($UsersNotifications, new AddInfluencer($info));
-        $this->sendAdminNotification('notification',$info,$roles);
+        if(!empty($roles)){
+            $this->sendAdminNotification('notification',$info,$roles);
+        }
+
+        if(!empty($users)){
+            $tokens = User::whereIn('id',$users)->whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
+            $data = [
+                "title"     => trans("notifications." . $info['title'],$info['params']),
+                "body"      => trans("notifications." . $info['msg'],$info['params']),
+                "type"      => $info['type'],
+                'target_id' => $info['id']             
+            ];
+           
+            $this->sendNotifications($tokens,$data);
+        }
+        
     }
 }

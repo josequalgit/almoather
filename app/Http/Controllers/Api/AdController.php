@@ -207,7 +207,6 @@ class AdController extends Controller
             'id'            => $data->id,
             'type'          => 'Ad',
             'roles'         => $roles,
-            'translatedMsg' => trans("notifications." . $msg,$transParams,'en'),
             'params'        => $transParams
         ];
 
@@ -1192,7 +1191,6 @@ class AdController extends Controller
                 'id'            => $data->id,
                 'type'          => 'Ad',
                 'roles'         => $roles,
-                'translatedMsg' => trans('notifications.' . $msg,$transParams),
                 'params'        => $transParams
             ];
 

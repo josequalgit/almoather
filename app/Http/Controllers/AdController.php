@@ -105,34 +105,38 @@ class AdController extends Controller
             $ad->eng_number = $request->engagement_rate;
             $ad->reject_note = null;
             $ad->save();
-
-            $tokens = [$ad->customers->users->fcm_token];
             
             $title = 'accepted_campaign_title';
             $msg = 'accepted_campaign_msg';
             $transParams = ['ad_name' => $ad->store];
-            $data = [
-                "title"     => trans($this->notification_trans_dir.$title,$transParams),
-                "body"      => trans($this->notification_trans_dir.$msg,$transParams),
-                "type"      => 'Ad',
-                'target_id' =>$ad->id             
+            $users = [$ad->customers->users->id];
+            $info =[
+                'msg'           => $msg,
+                'title'         => $title,
+                'id'            => $ad->id,
+                'type'          => 'Ad',
+                'params'        => $transParams
             ];
-           
-            $this->sendNotifications($tokens,$data);
+            
+            $this->saveAndSendNotification($info,[],$users);
 
             event(new VoluumEvent($ad->id,'offer'));
 
-            activity()->log('Admin "' . Auth::user()->name . '" Updated ad"' . $ad->store . '" to "' . $ad->status . '" status');
+            $msg = 'admin_accepted_campaign';
+            $title = 'admin_accepted_campaign';
+            $roles = ['superAdmin'];
+            $transParams = ['ad_name' => $ad->store,'admin_name' => Auth::user()->name,'status' => $ad->status];
 
-            $users = [User::find(1), User::find($ad->customers->users->id)];
-            $info = [
-                'title'     => $title,
-                'msg'       => $msg,
-                'type'      => 'Ad',
-                'id'        => $ad->id,
-                'params'    => $transParams
+            $info =[
+                'msg'           => $msg,
+                'title'         => $title,
+                'id'            => $ad->id,
+                'type'          => 'Ad',
+                'params'        => $transParams
             ];
-            Notification::send($users, new AddInfluencer($info));
+
+            $this->saveAndSendNotification($info,$roles);
+            activity()->log(trans("notifications.".$msg,$transParams,'en'));
 
             return response()->json([
                 'msg' => 'status was changed',
@@ -241,6 +245,7 @@ class AdController extends Controller
         return $noInfluencerReasons;
     }
 
+    //Todo Remove this function
     public function changeStatus(Request $request,$contract_id)
     {
         $data = InfluencerContract::find($contract_id);
@@ -550,6 +555,36 @@ class AdController extends Controller
         $newBudget = $this->getNewPrice($ad);
         $ad->update(['admin_approved_influencers' => 1,'price_to_pay' => $newBudget]);
         $this->create_customer_contract($ad);
+
+        $title = 'approve_campaign_influencers_title';
+        $msg = 'approve_campaign_influencers_msg';
+        $transParams = ['ad_name' => $ad->store];
+        $users = [$ad->customers->users->id];
+        $info =[
+            'msg'           => $msg,
+            'title'         => $title,
+            'id'            => $ad->id,
+            'type'          => 'Ad',
+            'params'        => $transParams
+        ];
+        
+        $this->saveAndSendNotification($info,[],$users);
+
+        $msg = 'admin_approve_campaign_influencers';
+        $title = 'admin_approve_campaign_influencers';
+        $roles = ['superAdmin'];
+        $transParams = ['ad_name' => $ad->store,'admin_name' => Auth::user()->name];
+
+        $info =[
+            'msg'           => $msg,
+            'title'         => $title,
+            'id'            => $ad->id,
+            'type'          => 'Ad',
+            'params'        => $transParams
+        ];
+
+        $this->saveAndSendNotification($info,$roles);
+        activity()->log(trans("notifications.".$msg,$transParams,'en'));
 
         return response()->json([
             'msg'=>'status was changed',
