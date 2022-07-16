@@ -61,7 +61,7 @@ trait SendNotification {
 
         Redis::publish($channel, json_encode([
             'id'        => $data->id,
-            "message"   => trans("notifications".$data->msg,$data->params,'en'),
+            "message"   => trans("notifications.".$data->msg,$data->params,'en'),
             "date"      => Carbon::now()->diffForHumans(),
             'roles'     => $roles
         ]));

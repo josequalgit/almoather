@@ -637,7 +637,7 @@ class AdController extends Controller
         return $this->match_response($ad);
     }
     
-    //Todo Explain this
+    //this function showing the list of influencers before user pay the first payment
     public function before_payment($id)
     {
         $data = Ad::find($id);
@@ -653,23 +653,6 @@ class AdController extends Controller
             'err'=>trans($this->trans_dir.'ad_dont_have_right_status'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
-
-        // dd(Auth::user()->customers);
-        $name = Auth::guard('api')->user()->customers->full_name;
-        $info =[
-            'msg' => trans($this->trans_dir.'customer') . " $name " . trans($this->trans_dir.'payed_five_percent') . " ($cal) " . trans($this->trans_dir.'for') . " " . $data->store,
-            'id' => $data->id,
-            'type' => 'Ad'
-        ];
-
-        $this->sendAdminNotification('contract_manager_notification',$info);
-
-        $getContactManagers = User::whereHas('roles',function($q){
-            $q->where('name','Contracts Manager')
-            ->orWhere('name','superAdmin');
-        })->get();
-
-        Notification::send($getContactManagers, new AddInfluencer($info));
         
         $isProfitable =  $data->campaignGoals->profitable;
         $isOnSite = $data->ad_type == 'onsite';
