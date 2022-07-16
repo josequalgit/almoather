@@ -613,7 +613,7 @@ class AdController extends Controller
             ],config('global.NOT_FOUND_STATUS'));
         }
 
-        $newBudget = $this->getNewPrice($ad,$removed_inf_id->id,$chosen_inf_id);
+        $newBudget = $this->getNewPrice($ad,$removed_inf_id,$chosen_inf_id);
 
         if ($newBudget > $ad->budget) {
             return response()->json([
