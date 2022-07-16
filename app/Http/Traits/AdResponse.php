@@ -289,7 +289,7 @@ trait AdResponse
         return number_format($number, 0, '.', ',');
     }
 
-    public function generateContractPdf($contract,$title = ''){
+    public function generateContractPdf($contract,$title = '',$stamp = false){
         $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
         $fontDirs = $defaultConfig['fontDir'];
 
@@ -313,13 +313,15 @@ trait AdResponse
             ],
             'default_font' => 'Amiri'
         ]);
+       // return view('dashboard.contract.pdf',compact('contract','title'));
+        
         $pdf->SetTitle($title);
         $pdf->setAutoTopMargin = 'stretch';
         $pdf->SetDisplayMode('fullpage');
-        $html = view('dashboard.contract.pdf',compact('contract','title'))->render();
+        $html = view('dashboard.contract.pdf',compact('contract','title','stamp'))->render();
         $pdf->autoScriptToLang = true;
         $pdf->autoLangToFont = true;
-        $pdf->SetWatermarkImage(public_path('img/avatars/logo-almuaather-full.jpg'),0.2,array(130,130));
+        $pdf->SetWatermarkImage(public_path('img/avatars/logo-almuaather-full.jpg'),0.10,array(130,130));
         $pdf->showWatermarkImage = true;
         $pdf->SetDefaultBodyCSS('background', "url('".asset('img/avatars/pdf-bg.jpg')."')");
         $pdf->SetDefaultBodyCSS('background-image-resize', 6);

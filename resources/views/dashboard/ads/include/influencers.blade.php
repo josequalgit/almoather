@@ -2,7 +2,7 @@
 @php 
 $totalPrice = 0;
 $notShowSinarioStatuses = ['prepay','pending','cancelled','approved'];  
-$notShowfluencersActions = ['progress','cancelled','complete'];  
+$notShowfluencersActions = ['progress','cancelled','complete','active','fullpayment'];  
 @endphp
 <section>
     <div class="add-section">
@@ -90,7 +90,9 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
             @if ($data->admin_approved_influencers == 1)
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-secondary mr-1" onclick="printContract(this)" >Print Contract</button>
-                    <button  type="button" onclick="viewContract(this)" class="btn btn-danger">Update Contract</button>
+                    @if (!in_array($data->status,$notShowfluencersActions))
+                        <button  type="button" onclick="viewContract(this)" class="btn btn-danger">Update Contract</button>
+                    @endif
                 </div> 
             @endif
             <div class="row mt-2">

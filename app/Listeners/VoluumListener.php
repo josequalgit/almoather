@@ -34,7 +34,7 @@ class VoluumListener implements ShouldQueue
      *
      * @var int
      */
-    public $delay = 60;
+    public $delay = 0;
 
 
     public $afterCommit = true;
