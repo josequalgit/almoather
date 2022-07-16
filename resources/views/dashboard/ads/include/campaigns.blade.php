@@ -63,7 +63,7 @@
                                 @endif
                                 <div class="hashs border-top pt-1 pb-1">
                                     <b class="me-2">Relationship With Brand: </b><span
-                                        class="me-2">{{ $data->relation }}</span>
+                                        class="me-2">{{ $data->relations ? $data->relations->title : $data->relation }}</span>
                                 </div>
 
                                 <div class="hashs border-top pt-1 pb-1">
@@ -83,7 +83,7 @@
 
                                 <div class="border-top pt-1 pb-1">
                                     <b class="me-2">Type:</b> <span
-                                        class="me-2">{{ ucfirst($data->ad_type) }}</span>
+                                        class="me-2">{{ trans('messages.frontEnd.'.$data->ad_type) }}</span>
                                 </div>
 
                                 <div class="border-top pt-1 pb-1">

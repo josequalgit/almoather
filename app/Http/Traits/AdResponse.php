@@ -3,6 +3,7 @@
 namespace App\Http\Traits;
 
 use App\Models\CampaignContract;
+use App\Models\Influncer;
 use App\Models\Contract;
 use App\Models\InfluencerContract;
 use Auth;
@@ -330,5 +331,32 @@ trait AdResponse
 
         $pdf->Output();
         
+    }
+
+    //Calculate new budget for influencers
+    function getNewPrice($ad,$remove_inf = 0,$add_inf = 0){
+        $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
+        $budgetSum = 0;
+        foreach($matchedInfluencers as $match){
+            $price = $ad->ad_type == 'online' ? $match->influencers->ad_with_vat : $match->influencers->ad_onsite_price_with_vat;
+            $budgetSum += $price;
+        }
+
+        if($remove_inf){
+            $removeInfluencer = Influncer::find($remove_inf);
+            $price = $ad->ad_type == 'online' ? $removeInfluencer->ad_with_vat : $remove_inf->ad_onsite_price_with_vat;
+            $budgetSum -= $price;
+        }
+
+        if($add_inf){
+            $addInfluencer = Influncer::find($add_inf);
+            $price = $ad->ad_type == 'online' ? $addInfluencer->ad_with_vat : $addInfluencer->ad_onsite_price_with_vat;
+            $budgetSum += $price;
+        }
+
+        $relation = $ad->relations ? $ad->relations->app_profit : 10;
+        $budgetSum += $relation / 100 * $budgetSum;
+
+        return $budgetSum;
     }
 }

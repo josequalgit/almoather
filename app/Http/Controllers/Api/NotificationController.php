@@ -12,7 +12,7 @@ use Auth , DB , App;
 
 class NotificationController extends Controller
 {
-    private $trans_dir = 'messages.api.';
+    private $trans_dir = 'notifications.';
 
     public function index($type = null)
     {

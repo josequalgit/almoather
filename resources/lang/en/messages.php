@@ -128,6 +128,12 @@ return [
         "bank_not_found"=>"bank not found",
         "please_add_file"=>"Please add a file",
         "all_relation"=>'All Relations',
+        'please_wait_until_we_approve_influencers_list'=>'Please wait until we approve influencers list',
+        'influencer_not_found'=>'Influencer not found',
+        'you_dont_have_enough_budget_to_replace_this_influencer'=>"You don\'t have enough budget to replace this influencer",
+        'file_was_not_found'=>'File was not found',
+        'file_was_removed'=>'File was removed',
+        'file_was_uploaded'=>'File was uploaded',
         'status_response_label'=>[
             "pending"=>"Under review",
             "approve"=>"Waiting for first payment",

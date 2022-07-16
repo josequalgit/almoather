@@ -201,7 +201,11 @@
                 $($this).attr('disabled',false).html(`<i class="bx bx-check"></i>`);
             },
             error: (err) => {
-                console.log(err);
+                Swal.fire(
+                    'Error!',
+                    err.responseJSON.message,
+                    'error'
+                );
                 $($this).attr('disabled',false).html(`<i class="bx bx-check"></i>`);
             }
         });

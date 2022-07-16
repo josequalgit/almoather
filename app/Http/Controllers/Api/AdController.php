@@ -496,11 +496,13 @@ class AdController extends Controller
                     $q->where('nick_name','LIKE','%'.urldecode($request->search).'%');
                 });
             }
+
             $infData = $infData->where([['chosen',0],['status','!=','deleted']])->get()->map(function($item) use($ad){
                 $influencerPrice = $ad->ad_type == 'onsite' ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
                 $isProfitable = $ad->campaignGoals->profitable;
 
-                $remainingBudget = $ad->budget - $ad->price_to_pay;
+                $newBudget = $this->getNewPrice($ad,0,$item->influencer_id);
+
                 $response =  [
                     'id'        => $item->influencers->id,
                     'name'      => $item->influencers->nick_name,
@@ -509,7 +511,7 @@ class AdController extends Controller
                     'gender'    => trans($this->trans_dir.$item->influencers->gender),
                     'budget'    => number_format($influencerPrice),
                     'status'    => $item->status,
-                    'eligible'  => $remainingBudget >= $influencerPrice
+                    'eligible'  => $ad->budget >= $newBudget
                 ];
                
                 $response['ROAS'] = null;
@@ -543,45 +545,43 @@ class AdController extends Controller
         }
 
         $infData =$ad->matches();
-            if($request->search)
-            {
-               $infData = $infData->whereHas('influencers',function($q) use($request){
-                    $q->where('nick_name','%'.$request->search.'%');
-                });
-            }
-            $infData = $infData->where('chosen',0)->get()->map(function($item) use($ad , $ReplacedInfluencer){
-                $remainingBudget = $ad->budget - $ad->price_to_pay;
-                $influencerPrice = $ad->ad_type == 'onsite' ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
-                
-                $chosenInfPrice =  $ad->ad_type == 'onsite' ? $ReplacedInfluencer->ad_onsite_price_with_vat : $ReplacedInfluencer->ad_with_vat;
-                $chosenInfPrice -= $remainingBudget;
-
-                $isProfitable = $ad->campaignGoals->profitable;
-
-                $response =  [
-                    'id'        => $item->influencers->id,
-                    'name'      => $item->influencers->nick_name,
-                    'image'     => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
-                    'match'     => $item->match,
-                    'gender'    => trans($this->trans_dir.$item->influencers->gender),
-                    'budget'    => number_format($influencerPrice),
-                    'status'    => $item->status,
-                    'eligible'  => $chosenInfPrice > $influencerPrice
-                ];
-            
-                $response['ROAS'] = null;
-                $response['engagement_rate'] = null;
-                $response['AOAF'] = null;
-
-                if($isProfitable){
-                    $response['ROAS'] = $item->match . '%';
-                }else{
-                    $response['engagement_rate'] = $item->match . '%';
-                    $response['AOAF'] = $item->AOAF;
-                }
-
-                return $response;
+        if($request->search)
+        {
+            $infData = $infData->whereHas('influencers',function($q) use($request){
+                $q->where('nick_name','%'.$request->search.'%');
             });
+        }
+        $infData = $infData->where('chosen',0)->get()->map(function($item) use($ad , $ReplacedInfluencer){
+            $remainingBudget = $ad->budget - $ad->price_to_pay;
+            $influencerPrice = $ad->ad_type == 'onsite' ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
+            
+            $newBudget = $this->getNewPrice($ad,$ReplacedInfluencer->id,$item->influencer_id);
+            $isProfitable = $ad->campaignGoals->profitable;
+
+            $response =  [
+                'id'        => $item->influencers->id,
+                'name'      => $item->influencers->nick_name,
+                'image'     => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
+                'match'     => $item->match,
+                'gender'    => trans($this->trans_dir.$item->influencers->gender),
+                'budget'    => number_format($influencerPrice),
+                'status'    => $item->status,
+                'eligible'  => $ad->budget >= $newBudget
+            ];
+        
+            $response['ROAS'] = null;
+            $response['engagement_rate'] = null;
+            $response['AOAF'] = null;
+
+            if($isProfitable){
+                $response['ROAS'] = $item->match . '%';
+            }else{
+                $response['engagement_rate'] = $item->match . '%';
+                $response['AOAF'] = $item->AOAF;
+            }
+
+            return $response;
+        });
 
         return response()->json([
             'msg'=>trans($this->trans_dir.'all_matched_under_budget'),
@@ -596,7 +596,7 @@ class AdController extends Controller
         $ad = Ad::find($ad_id);
 
         $chosen_inf = Influncer::find($chosen_inf_id);
-        $chosenInfPrice = $ad->ad_type == 'onsite' ? $chosen_inf->ad_onsite_price_with_vat : $chosen_inf->ad_with_vat;
+        
 
         if (!$chosen_inf) {
             return response()->json([
@@ -607,7 +607,6 @@ class AdController extends Controller
         
 
         $removed_inf = Influncer::find($removed_inf_id);
-        $oldInfPrice = $ad->ad_type == 'onsite' ? $removed_inf->ad_onsite_price_with_vat : $removed_inf->ad_with_vat;
 
         if (!$removed_inf) {
             return response()->json([
@@ -616,10 +615,9 @@ class AdController extends Controller
             ],config('global.NOT_FOUND_STATUS'));
         }
 
-        $remainingBudget = $ad->budget - $ad->price_to_pay;
-        $chosenInfPrice -= $remainingBudget;
+        $newBudget = $this->getNewPrice($ad,$removed_inf_id->id,$chosen_inf_id);
 
-        if ($chosenInfPrice > $oldInfPrice) {
+        if ($newBudget > $ad->budget) {
             return response()->json([
                 'msg' => 'You don\'t have enough budget to replace this influencer',
                 'status' => 401,
@@ -636,24 +634,9 @@ class AdController extends Controller
         $changeNew->status = 'not_basic';
         $changeNew->save();
 
-        $this->calculateCampaignPrice($ad);
+        $ad->update(['price_to_pay' => $newBudget]);
 
         return $this->match_response($ad);
-    }
-
-    //Calculate Campaign price
-    private function calculateCampaignPrice($ad){
-        $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
-        $budgetSum = 0;
-        foreach($matchedInfluencers as $match){
-            $price = $ad->ad_type == 'online' ? $match->influencers->ad_with_vat : $match->influencers->ad_onsite_price_with_vat;
-            $budgetSum += $price;
-        }
-
-        $relation = $ad->relations ? $ad->relations->app_profit : 10;
-        $budgetSum += $relation / 100 * $budgetSum;
-
-        $ad->update(['price_to_pay' => $budgetSum]);
     }
     
     //Todo Explain this
@@ -928,9 +911,7 @@ class AdController extends Controller
             'status'    => config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        $remainingBudget = $ad->budget - $ad->price_to_pay;
-        
-        $chosenInfBudget = $ad->ad_type == 'onsite' ? $addInf->ad_onsite_price_with_vat : $addInf->ad_with_vat;
+        $newBudget = $this->getNewPrice($ad,0,$request->influncer_id);
 
 
         if($remainingBudget < $chosenInfBudget){
@@ -940,11 +921,10 @@ class AdController extends Controller
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
         
-        
         $data->chosen = 1;
         $data->status = 'not_basic';
         $data->save();
-        $this->calculateCampaignPrice($ad);
+        $ad->update(['price_to_pay' => $newBudget]);
 
         return $this->match_response($ad);
 
@@ -970,8 +950,6 @@ class AdController extends Controller
 
         $data->status = $request->status;
         $data->save();
-
-        $this->calculateCampaignPrice($ad);
        
         return $this->match_response($ad);
     }

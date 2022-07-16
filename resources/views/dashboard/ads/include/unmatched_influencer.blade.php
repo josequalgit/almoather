@@ -36,9 +36,9 @@
                     <td>{{ $item->AOAF ?? 0 }}</td>
                 @endif
                 <td>{{ $item->influencers->TypeInfluencerSubscriber }}</td>
-                <td>{{ $price <= $influencerPrice ? 'No' : 'Yes'  }}</td>
+                <td>{{ $item->canAdd ? 'Yes' : 'No'  }}</td>
                 <td>
-                    @if ($price <= $influencerPrice)
+                    @if ($item->canAdd)
                         @if($type == 'replace')
                             <button class="btn btn-secondary" onclick="replaceInfluncer(this,'{{ $item->influencers->id }}')"> <i class="bx bx-check"></i></button>
                         @else
