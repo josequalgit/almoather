@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
 use Auth;
 use Illuminate\Support\Facades\Notification;
+use App\Notifications\AddInfluencer;
+use App\Models\User;
 
 trait SendNotification {
     function sendNotifications($tokens,$data,$topic = false){
@@ -49,25 +51,30 @@ trait SendNotification {
 			Log::error('result fcm: ' . $result);
             Log::error('Curl failed: ' . curl_error($ch));
         }
-        
-        
     }
-    function sendAdminNotification($channel,$data)
+
+
+    function sendAdminNotification($channel,$data,$roles = [])
     {
         $data = (object) $data;
         $ad = null;
         if($data->id == null || $data->msg == null) throw new \Exception('Error Adding Data To Admin Notification function. Please Check The Data object');
-        if($data->type == 'ad')
-        {
-            $ad = Ad::find($data->id);
-            Notification::send([$ad->customers->users], new AddInfluencer($info));
-        }
-
 
         Redis::publish($channel, json_encode([
-            'id'=> $data->id,
-            "message" => trans($data->msg,['ad_name'=>$ad?$ad->name:'']),
-            "date" => Carbon::now()->diffForHumans(),
+            'id'        => $data->id,
+            "message"   => $data->translatedMsg,
+            "date"      => Carbon::now()->diffForHumans(),
+            'roles'     => $roles
         ]));
+    }
+
+    function saveAndSendNotification($info,$roles = [],$users = []){
+        //Send notification to admins based on roles
+        $UsersNotifications = User::whereIn('id',$users)->orWhereHas('roles',function($q) use($roles) {
+            $q->whereIn('name',$roles);
+        })->get();
+
+        Notification::send($UsersNotifications, new AddInfluencer($info));
+        $this->sendAdminNotification('notification',$info,$roles);
     }
 }

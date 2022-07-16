@@ -191,14 +191,16 @@ $role = Auth::user()->roles[0]->name;
 @include('sweetalert::alert')
 
 <script>
-const Toast = Swal.mixin({
+    const Toast = Swal.mixin({
             toast: true,
             position: 'bottom-end',
             showConfirmButton: false,
             timer: 7000,
             timerProgressBar: true,
            
-        })
+        });
+    const role = '{{ Auth::user()->roles[0]->name }}';
+
     var socket = io.connect('{{env("SOCKET_URL")}}',{transports: ['websocket'],upgrade: false});
     socket.on('connect', function (err) {
         console.log('connected');
@@ -212,72 +214,48 @@ const Toast = Swal.mixin({
         console.log('error',err);
     });
 
-    @if ($role == 'superAdmin' || $role == 'Contracts Manager')
+    
+    socket.on('notification', (data) => {
+        if(inArray(role,data.roles)){
+            incress_notification(data);
+        }
+    });
 
-        @if($role == 'superAdmin')
-        socket.on('super_admin_notification', (data) => {
-            console.log('super admin notification',data);
-            incress_notification(data)
-
-        });
-        socket.on('contract_manager_notification', (data) => {
-            console.log('contract manager notification');
-            incress_notification(data)
-
-        });
-        socket.on('supportMessages',(data)=>{
-            console.log('support message: ',data);
-            $('#message_counter').empty();
-            $('#message_counter').append(data);
-        })
-        @else
-        socket.on('contract_manager_notification', (data) => {
-            console.log('contract manager notification');
-            incress_notification(data)
-
-        });
-
-
-
-        @endif
-
-
-        function incress_notification(data)
-        {
-            data = JSON.parse(data);
-            
-            /**  inccress the notification counter **/
+    function incress_notification(data)
+    {
+        data = JSON.parse(data);
+        
+        /**  inccress the notification counter **/
         let notification_number = Number('{{auth()->user()->unreadNotifications()->count()}}')+1;
         console.log(notification_number)
         $('#notification_counter1').empty();
         $('#notification_counter2').empty();
         $('#notification_counter1').append(notification_number);
         $('#notification_counter2').append(`${notification_number} new Notification`);
-            let route = "{{ route('dashboard.readNotification','id:') }}";
-            let replaceId = route.replace('id:',data.not_id);
-            
-            /** prepend the notification item **/
-            let div = `</a><a href="${replaceId}" class="d-flex justify-content-between cursor-pointer" href="javascript:void(0);">
-                    <div class="media d-flex align-items-center">
-                            <div class="media-left pr-0">
-                            <div class="avatar bg-rgba-danger m-0 mr-1 p-25">
-                            <div class="avatar-content"><i class="bx bx-detail text-danger"></i></div>
-                    </div>
+        let route = "{{ route('dashboard.readNotification','id:') }}";
+        let replaceId = route.replace('id:',data.not_id);
+        
+        /** prepend the notification item **/
+        let div = `</a><a href="${replaceId}" class="d-flex justify-content-between cursor-pointer" href="javascript:void(0);">
+                <div class="media d-flex align-items-center">
+                        <div class="media-left pr-0">
+                        <div class="avatar bg-rgba-danger m-0 mr-1 p-25">
+                        <div class="avatar-content"><i class="bx bx-detail text-danger"></i></div>
                 </div>
-                <div class="media-body">
-                <h6 class="media-heading"><span class="text-bold-500">
-                    ${data.message}</span></h6><small class="notification-text">${data.date}</small>
-                </div>
-            </div>`
+            </div>
+            <div class="media-body">
+            <h6 class="media-heading"><span class="text-bold-500">
+                ${data.message}</span></h6><small class="notification-text">${data.date}</small>
+            </div>
+        </div>`
 
-         $('#notification_list').prepend(div);
-            Toast.fire({
-                icon: 'info',
-                title: 'New Notification',
-                text: data.message,
-            })
-        }
-    @endif
+        $('#notification_list').prepend(div);
+        Toast.fire({
+            icon: 'info',
+            title: 'New Notification',
+            text: data.message,
+        })
+    }
 </script>
 
 

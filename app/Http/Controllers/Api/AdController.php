@@ -210,7 +210,7 @@ class AdController extends Controller
             'type'=>'Ad'
         ];
 
-       $this->sendAdminNotification('contract_manager_notification',$info);
+       $this->sendAdminNotification('notification',$info);
 
         $c_not = Notification::send($getAdmin, new AddInfluencer($info));
 
@@ -1173,9 +1173,9 @@ class AdController extends Controller
 
             foreach ($request->social_media as $value) {
                 DB::table('social_media_id')->insert([
-                   'ad_id'=>$data->id,
-                   'social_media_id'=>$value['type']??$value->type,
-                   'link'=>$value['link']??$value->type
+                   'ad_id'              => $data->id,
+                   'social_media_id'    => $value['type']??$value->type,
+                   'link'               => $value['link'] ?? $value->type
                 ]);
 			
             }
@@ -1184,10 +1184,23 @@ class AdController extends Controller
 
         if($data->update($arr))
         {
+
+            $msg = "User ({$data->customers->full_name}) Update his campaign ({$data->store})";
+            $roles = ['Business Manager','superAdmin'];
+            $info =[
+                'msg'           => $msg,
+                'id'            => $data->id,
+                'type'          => 'Ad',
+                'roles'         => $roles,
+                'translatedMsg' => $msg
+            ];
+
+            $this->saveAndSendNotification($info,$roles);
+
             return response()->json([
-                'msg'=>trans($this->trans_dir.'ad_was_updated'),
-                'data'=>$data,
-                'status'=>config('global.OK_STATUS')
+                'msg'       => trans($this->trans_dir.'ad_was_updated'),
+                'data'      => $data,
+                'status'    => config('global.OK_STATUS')
             ],config('global.OK_STATUS'));
         }
         else
