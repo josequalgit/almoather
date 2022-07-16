@@ -29,9 +29,10 @@ class NotificationController extends Controller
         $data = $user->notifications()->select(['data','id'])->paginate(config('global.PAGINATION_NUMBER'));
 
         $data->getCollection()->transform(function($item){
-
-            $msg = trans($this->trans_dir.$item->data['msg'],$item->data['params'] ?? []);
-            $title = trans($this->trans_dir.$item->data['title'] ?? $item->data['msg'],$item->data['params'] ?? []);
+            $title = $item->data['title'] ?? $item->data['msg'];
+            $params = $item->data['params'] ?? [];
+            $msg = trans($this->trans_dir.$item->data['msg'],$params);
+            $title = trans($this->trans_dir.$title,$params);
             
 
             return [
