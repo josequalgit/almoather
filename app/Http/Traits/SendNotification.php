@@ -57,7 +57,6 @@ trait SendNotification {
     function sendAdminNotification($channel,$data,$roles = [])
     {
         $data = (object) $data;
-        $ad = null;
         if($data->id == null || $data->msg == null) throw new \Exception('Error Adding Data To Admin Notification function. Please Check The Data object');
 
         Redis::publish($channel, json_encode([

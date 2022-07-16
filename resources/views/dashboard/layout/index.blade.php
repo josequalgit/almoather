@@ -216,15 +216,16 @@ $role = Auth::user()->roles[0]->name;
 
     
     socket.on('notification', (data) => {
-        if(inArray(role,data.roles)){
+        var data = JSON.parse(data);
+        console.log(data);
+        if($.inArray(role,data.roles) !== -1){
             incress_notification(data);
         }
     });
 
     function incress_notification(data)
     {
-        data = JSON.parse(data);
-        
+
         /**  inccress the notification counter **/
         let notification_number = Number('{{auth()->user()->unreadNotifications()->count()}}')+1;
         console.log(notification_number)
@@ -254,10 +255,11 @@ $role = Auth::user()->roles[0]->name;
             icon: 'info',
             title: 'New Notification',
             text: data.message,
-        })
+        });
+        var audio = new Audio("{{ asset('audio/notification.mp3') }}");
+        audio.play();
     }
 </script>
-
 
 </body>
 <!-- END: Body-->
