@@ -666,7 +666,7 @@ class AdController extends Controller
                 'format_budget' => $this->formateMoneyNumber($data->budget),
                 'price' => $cal,
                 'budget' => $data->budget,
-                'matches' => $data->matches()->where('status','!=','deleted')->get()->map(function($item) use($isProfitable,$isOnSite){
+                'matches' => $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($isProfitable,$isOnSite){
                     $price = $isOnSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
                     $response = [
                         'id'            => $item->influencers->id,
