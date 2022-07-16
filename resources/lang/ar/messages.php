@@ -2,6 +2,12 @@
 
 return [
     'api'=>[
+        'payment_successfully'      => 'تمت عملية الدفع بنجاح',
+        'payment_failed'            => 'لم تتم العملية بنجاح! الرجاء المحاولة مره اخرى او التواصل معنا للمساعده',
+
+
+
+        
         'not_found'                 => 'لم يتم العثور على المعلومات المطلوبة',
         'influencer_not_found'      => 'المؤثر غير مصرح له بالحصول على إعلانات بهذا التمثال',
         'Male'                      => 'ذكر',
@@ -18,6 +24,7 @@ return [
         'Joined'                    => 'تم الإنضمام',
         'rejected_campaign_title'   => 'تم رفض اعلان ":ad_name"',
         'accepted_campaign'         => 'تم قبول اعلان ":ad_name"',
+        
         'ad_small'=>'اعلان',
         'data_was_updated'=>'تم التحديث',
         'search_result'=>'نتائج البحث',
@@ -41,8 +48,8 @@ return [
         'one_of_the_matches_was_not_found'=>'لم يتم العثور على أحد المطابقات',
         'you_have_passed_the_budget'=>'لقد تجاوزت الميزانية',
         'match_was_not_found'=>'لم يتم العثور على تطابق',
-        'payment_failed'=>'عملية الدفع فشلت',
-        'payment_successfully'=>'الدفع بنجاح',
+        
+        
         'ad_was_updated'=>'تم تحديث الإعلان',
         'something_wrong'=>'خطب ما',
         'please_add_a_marouf _number'=>'الرجاء إضافة رقم معروف',

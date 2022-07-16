@@ -2,8 +2,14 @@
 
 return [
     'api'=>[
-        'not_found'=>'Not Found',
-        'rejected_campaign_title'=>'Ad ":ad_name" was rejected',
+        'payment_failed'            => 'Payment failed! Please try agian or contact us for help',
+        'payment_successfully'      => 'Payment processed successfully',
+
+
+
+        
+        'not_found'                 => 'Not Found',
+        'rejected_campaign_title'   => 'Ad ":ad_name" was rejected',
         'inf_wrong_status'=>'influencer is not authorized to get ads with this status',
         'get_all_ads'=>'get all ads with the status',
         'customer_wrong_status'=>'customer is not authorized to get ads with this status',

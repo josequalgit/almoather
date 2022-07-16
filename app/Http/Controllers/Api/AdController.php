@@ -695,62 +695,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    /** NOT IN USE */
-    //Todo Remove
-    public function pay_now($id)
-    { 
-        $data = Ad::find($id);
-
-        if(!$data) return response()->json([
-            'err' => trans($this->trans_dir.'ad_not_found'),
-            'status' => config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
-
-        if($data->status !== 'approve' && $data->status !=='prepay') return response()->json([
-            'err' => trans($this->trans_dir.'ad_don\'t_have_right_status'),
-            'status' => config('global.WRONG_VALIDATION_STATUS')
-        ],config('global.WRONG_VALIDATION_STATUS'));
-        
-        $cal = $data->budget * 0.1;
-
-        return response()->json([
-            'msg' => trans($this->trans_dir.'all_matched'),
-            'data' => [
-				'id' => $data->id,
-                'type' => trans($this->trans_dir.$data->type),
-                'category' => $data->categories?$data->categories->name:null,
-                'price' => $data->budget - $cal,
-                'budget' => $data->budget,
-                'match' => $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($data){
-                    $response = [
-                        'id'        => $item->influencers->id,
-                        'name'      => $item->influencers->nick_name,
-                        'image'     => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
-                        'match'     => $item->match,
-                        'status'    => $item->status
-                    ];
-
-                    $isOnSite = $data->ad_type == 'onsite';
-
-                    $response['ROAS'] = null;
-                    $response['engagement_rate'] = null;
-                    $response['AOAF'] = null;
-                    
-                    if($isProfitable){
-                        $response['ROAS'] = $item->match  . '%';
-                    }else{
-                        $response['engagement_rate'] = $item->match  . '%';
-                        $response['AOAF'] = $item->AOAF;
-                    }
-
-                    return $response;
-                })
-            ],
-            'status'=>config('global.OK_STATUS')
-        ],config('global.OK_STATUS'));
-    }
-
-    //Todo Explain this
+    //show the list of not choosen influencers that the user want to replace with them
     public function back_up_influencers($id,$removed_inf)
     {
         $data = Ad::find($id);
@@ -935,7 +880,7 @@ class AdController extends Controller
         return $this->match_response($ad);
     }
 
-    //Return Influencers mathces before customer pay full payment
+    //Return Influencers matches before customer pay full payment
     public function get_ad_influencers_match($ad_id)
     {
         $data = Ad::find($ad_id);
@@ -974,7 +919,7 @@ class AdController extends Controller
             'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
-       // return dd('here');
+
         if((string)$request->ResponseCode !== '000')
         {
             /**
@@ -983,26 +928,45 @@ class AdController extends Controller
              * 
              */
             Payment::create([
-                'ad_id' => $ad_id,
-                'trans_id' => $request->TranId,
-                'amount' => $request->amount,
-                'status' => $request->result,
-                'status_code' => $request->ResponseCode,
-                'type' => $request->type,
+                'ad_id'         => $ad_id,
+                'trans_id'      => $request->TranId,
+                'amount'        => $request->amount,
+                'status'        => $request->result,
+                'status_code'   => $request->ResponseCode,
+                'type'          => $request->type,
             ]);
 
             /**
              * Send notification to customer when the payment failed
              */
-            $tokens = [ $data->customers->users->fcm_token ];
-
-            $data = [
-                "title" =>trans($this->trans_dir_notification.'reject_payment_ad_title'),
-                "body" => trans($this->trans_dir_notification.'reject_payment_ad',['ad_name'=>$data->store]),
-                "type" => 'Ad',
-                'target_id' =>$ad->id
+            $title = 'reject_payment_ad_title';
+            $msg = 'reject_payment_ad';
+            $transParams = ['ad_name' => $data->store];
+            $users = [$data->customers->users->id];
+            $info =[
+                'msg'           => $msg,
+                'title'         => $title,
+                'id'            => $data->id,
+                'type'          => 'Ad',
+                'params'        => $transParams
             ];
-			$this->sendNotifications($tokens,$data);
+            
+            $this->saveAndSendNotification($info,[],$users);
+    
+            $msg = 'admin_reject_payment_ad';
+            $title = 'admin_reject_payment_ad';
+            $roles = ['Business Manager','superAdmin'];
+    
+            $info =[
+                'msg'           => $msg,
+                'title'         => $title,
+                'id'            => $ad->id,
+                'type'          => 'Ad',
+                'params'        => $transParams
+            ];
+    
+            $this->saveAndSendNotification($info,$roles);
+
              return response()->json([
                 'err' => trans($this->trans_dir.'payment_failed'),
                 'status' => config('global.WRONG_VALIDATION_STATUS')
@@ -1062,45 +1026,83 @@ class AdController extends Controller
             
             if($request->type == 'sub_payment'){
                 $data->update(['status' => 'prepay']);
+
+                $title = 'success_payment_ad_title';
+                $msg = 'success_first_payment_ad';
+                $transParams = ['ad_name' => $data->store];
+                $users = [$data->customers->users->id];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $data->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+                
+                $this->saveAndSendNotification($info,[],$users);
+        
+                $msg = 'admin_first_payment_msg';
+                $title = 'admin_first_payment_msg';
+                $roles = ['Business Manager','superAdmin'];
+        
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $ad->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+        
+                $this->saveAndSendNotification($info,$roles);
             }else if($request->type == 'full_payment'){
                 $data->update(['status' => 'fullpayment']);
 
                 //Todo save contract without variables
 
-                $tokens = [];
-                foreach($data->matches as $match){
-                    $tokens[] = $match->influencers->users->fcm_token;
-                }
 
-                if(!empty($tokens)){
-                    $title = trans($this->trans_dir.'new_campaign_request');
-                    $msg = trans($this->trans_dir.'new_campaign_request_msg',[":name" => $data->store]);
+                $title = 'success_payment_ad_title';
+                $msg = 'success_last_payment_ad';
+                $transParams = ['ad_name' => $data->store];
+                $users = [$data->customers->users->id];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $data->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
                 
-                    $data = [
-                        "title"     => $title,
-                        "body"      => $msg,
-                        "type"      => 'Ad',
-                        'target_id' => $data->id
-                    ];
-    
-                    $this->sendNotifications($tokens,$data);
-                }
+                $this->saveAndSendNotification($info,[],$users);
+        
+                $msg = 'admin_last_payment_msg';
+                $title = 'admin_last_payment_msg';
+                $roles = ['Business Manager','superAdmin'];
+        
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $ad->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+        
+                $this->saveAndSendNotification($info,$roles);
                 
             }
             
             Payment::create([
-                'ad_id' => $ad_id,
-                'trans_id' => $request->TranId,
-                'amount' => $request->amount,
-                'status' => $request->result,
-                'status_code' => $request->ResponseCode,
-                'type' => $request->type,
+                'ad_id'         => $ad_id,
+                'trans_id'      => $request->TranId,
+                'amount'        => $request->amount,
+                'status'        => $request->result,
+                'status_code'   => $request->ResponseCode,
+                'type'          => $request->type,
             ]);
 
             return response()->json([
-                'msg' => trans($this->trans_dir.'payment_successfully'),
-                'ad_status' => $data->status,
-                'status' => config('global.OK_STATUS'),
+                'msg'           => trans($this->trans_dir.'payment_successfully'),
+                'ad_status'     => $data->status,
+                'status'        => config('global.OK_STATUS'),
             ],config('global.OK_STATUS'));
         }
     
