@@ -695,7 +695,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    //show the list of not choosen influencers that the user want to replace with them
+    //show the list of not chosen influencers that the user want to replace with them
     public function back_up_influencers($id,$removed_inf)
     {
         $data = Ad::find($id);
@@ -863,15 +863,15 @@ class AdController extends Controller
         $ad = Ad::findOrFail($request->ad_id);
         
         if(!$ad) return response()->json([
-            'err'=>trans($this->trans_dir.'ad_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
+            'err'       => trans($this->trans_dir.'ad_not_found'),
+            'status'    => config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         $data = AdsInfluencerMatch::where([['ad_id',$request->ad_id],['influencer_id',$request->influncer_id]])->first();
 
         if(!$data) return response()->json([
-            'err'=>trans($this->trans_dir.'match_was_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
+            'err'       => trans($this->trans_dir.'match_was_not_found'),
+            'status'    => config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         $data->status = $request->status;
@@ -915,63 +915,11 @@ class AdController extends Controller
     public function check_payment(CheckPaymentRequest $request ,$ad_id)
     {
         $data = Ad::find($ad_id);
+        
         if(!$data) return response()->json([
             'err'=>trans($this->trans_dir.'ad_not_found'),
             'status'=>config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
-
-        if((string)$request->ResponseCode !== '000')
-        {
-            /**
-            * 
-             * Save in the database
-             * 
-             */
-            Payment::create([
-                'ad_id'         => $ad_id,
-                'trans_id'      => $request->TranId,
-                'amount'        => $request->amount,
-                'status'        => $request->result,
-                'status_code'   => $request->ResponseCode,
-                'type'          => $request->type,
-            ]);
-
-            /**
-             * Send notification to customer when the payment failed
-             */
-            $title = 'reject_payment_ad_title';
-            $msg = 'reject_payment_ad';
-            $transParams = ['ad_name' => $data->store];
-            $users = [$data->customers->users->id];
-            $info =[
-                'msg'           => $msg,
-                'title'         => $title,
-                'id'            => $data->id,
-                'type'          => 'Ad',
-                'params'        => $transParams
-            ];
-            
-            $this->saveAndSendNotification($info,[],$users);
-    
-            $msg = 'admin_reject_payment_ad';
-            $title = 'admin_reject_payment_ad';
-            $roles = ['Business Manager','superAdmin'];
-    
-            $info =[
-                'msg'           => $msg,
-                'title'         => $title,
-                'id'            => $ad->id,
-                'type'          => 'Ad',
-                'params'        => $transParams
-            ];
-    
-            $this->saveAndSendNotification($info,$roles);
-
-             return response()->json([
-                'err' => trans($this->trans_dir.'payment_failed'),
-                'status' => config('global.WRONG_VALIDATION_STATUS')
-            ],config('global.WRONG_VALIDATION_STATUS'));
-        }
 
         $terminalId = config('global.PAYMENT_USERNAME');
         $password = config('global.PAYMENT_PASSWORD');
@@ -1048,7 +996,7 @@ class AdController extends Controller
                 $info =[
                     'msg'           => $msg,
                     'title'         => $title,
-                    'id'            => $ad->id,
+                    'id'            => $data->id,
                     'type'          => 'Ad',
                     'params'        => $transParams
                 ];
@@ -1081,7 +1029,7 @@ class AdController extends Controller
                 $info =[
                     'msg'           => $msg,
                     'title'         => $title,
-                    'id'            => $ad->id,
+                    'id'            => $data->id,
                     'type'          => 'Ad',
                     'params'        => $transParams
                 ];
@@ -1105,10 +1053,52 @@ class AdController extends Controller
                 'status'        => config('global.OK_STATUS'),
             ],config('global.OK_STATUS'));
         }
+
+        Payment::create([
+            'ad_id'         => $ad_id,
+            'trans_id'      => $request->TranId,
+            'amount'        => $request->amount,
+            'status'        => $request->result,
+            'status_code'   => $request->ResponseCode,
+            'type'          => $request->type,
+        ]);
+
+        $title = 'reject_payment_ad_title';
+        $msg = 'reject_payment_ad';
+        $transParams = ['ad_name' => $data->store];
+        $users = [$data->customers->users->id];
+        $info = [
+            'msg'           => $msg,
+            'title'         => $title,
+            'id'            => $data->id,
+            'type'          => 'Ad',
+            'params'        => $transParams
+        ];
+        
+        $this->saveAndSendNotification($info,[],$users);
+
+        $msg = 'admin_reject_payment_ad';
+        $title = 'admin_reject_payment_ad';
+        $roles = ['Business Manager','superAdmin'];
+
+        $info = [
+            'msg'           => $msg,
+            'title'         => $title,
+            'id'            => $data->id,
+            'type'          => 'Ad',
+            'params'        => $transParams
+        ];
+
+        $this->saveAndSendNotification($info,$roles);
+
+        return response()->json([
+            'err'       => trans($this->trans_dir.'payment_failed'),
+            'status'    => config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
     
         return response()->json([
-            'err'=>trans($this->trans_dir.'payment_failed'),
-            'status'=>config('global.WRONG_VALIDATION_STATUS')
+            'err'       => trans($this->trans_dir.'payment_failed'),
+            'status'    => config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
     }
 
@@ -1117,15 +1107,15 @@ class AdController extends Controller
     {
         $data = Ad::find($ad_id);
         if(!$data) return response()->json([
-            'err'=>trans($this->trans_dir.'ad_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
+            'err'       => trans($this->trans_dir.'ad_not_found'),
+            'status'    => config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         if($data->status != 'prepay')
         {
             return response()->json([
-                'err'=>trans($this->trans_dir.'ad_dont_have_right_status'),
-                'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
+                'err'       => trans($this->trans_dir.'ad_dont_have_right_status'),
+                'status'    => config('global.UNAUTHORIZED_VALIDATION_STATUS')
             ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
         }
 
@@ -1133,8 +1123,8 @@ class AdController extends Controller
         $data->save();
 
         return response()->json([
-            'status'=>config('global.OK_STATUS'),
-            'msg'=>trans($this->trans_dir.'data_was_updated')
+            'status'    => config('global.OK_STATUS'),
+            'msg'       => trans($this->trans_dir.'data_was_updated')
         ],config('global.OK_STATUS'));
 
     }
@@ -1145,8 +1135,8 @@ class AdController extends Controller
         #GET THE AD AND CHECK IF THE AD EXIST
         $data = Ad::find($ad_id);
         if(!$data) return response()->json([
-            'err'=>trans($this->trans_dir.'ad_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
+            'err'       => trans($this->trans_dir.'ad_not_found'),
+            'status'    => config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         
@@ -1201,13 +1191,13 @@ class AdController extends Controller
         #GET THE AD AND CHECK IF THE AD EXIST
         $data = Ad::find($ad_id);
         if(!$data) return response()->json([
-            'err'=>trans($this->trans_dir.'ad_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
+            'err'       => trans($this->trans_dir.'ad_not_found'),
+            'status'    => config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         return response()->json([
-            'data' => $data,
-            'status' => config('global.OK_STATUS')
+            'data'      => $data,
+            'status'    => config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
 
@@ -1229,7 +1219,7 @@ class AdController extends Controller
             'status'    => config('global.OK_STATUS'),
 			'data' => [
 				'id'                => $ad->id,
-				'type'              => trans($this->$trans_dir . $ad->type),
+				'type'              => trans($this->trans_dir . $ad->type),
 				'status'            => $ad->status,
                 'influncers_status' => $admin_approved_influencers ? true : false,
 				'category'          => $ad->categories->name,
