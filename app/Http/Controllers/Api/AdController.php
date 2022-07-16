@@ -840,7 +840,7 @@ class AdController extends Controller
         $newBudget = $this->getNewPrice($ad,0,$request->influncer_id);
 
 
-        if($remainingBudget < $chosenInfBudget){
+        if($newBudget > $ad->budget){
             return response()->json([
                 'msg' => trans($this->trans_dir.'Your budget didn\'t enough to add a new influencer'),
                 'status' => config('global.WRONG_VALIDATION_STATUS')
