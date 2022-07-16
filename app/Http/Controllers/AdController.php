@@ -1087,7 +1087,7 @@ class AdController extends Controller
         }
 
         $content = $contract->content;
-        if(!$contract->is_accepted){
+        if(!in_array($ad->status,['fullpayment','active','progress','complete'])){
             $startDate = $ad->InfluencerContract()->orderBy('date','asc')->first();
             $endDate = $ad->InfluencerContract()->orderBy('date','desc')->first();
 

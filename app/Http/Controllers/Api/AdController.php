@@ -336,8 +336,9 @@ class AdController extends Controller
         }
 
         $title = $contract->ads->store;
+        $stamp = in_array($ad->status,['progress','cancelled','complete','active','fullpayment']);
 
-        return $this->generateContractPdf($content,$title);
+        return $this->generateContractPdf($content,$title,$stamp);
 
     }
 
