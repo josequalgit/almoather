@@ -199,20 +199,19 @@ class AdController extends Controller
             ->toMediaCollection('logos');
         }
 
-        $users = [User::find(1)];
-        $getAdmin = User::whereHas('roles',function($q){
-            $q->where('name','superAdmin');
-        })->get();
-
+        $msg = "add_campaign";
+        $roles = ['Business Manager','superAdmin'];
+        $transParams = ["user_name" => $data->customers->full_name,"ad_name" => $data->store];
         $info =[
-            'msg'=>trans($this->trans_dir.'customer').'"'.Auth::guard('api')->user()->customers->first_name.''.trans($this->trans_dir.'added_new_ad'),
-            'id'=>$data->id,
-            'type'=>'Ad'
+            'msg'           => $msg,
+            'id'            => $data->id,
+            'type'          => 'Ad',
+            'roles'         => $roles,
+            'translatedMsg' => trans("notifications." . $msg,$transParams,'en'),
+            'params'        => $transParams
         ];
 
-       $this->sendAdminNotification('notification',$info);
-
-        $c_not = Notification::send($getAdmin, new AddInfluencer($info));
+        $this->saveAndSendNotification($info,$roles);
 
         return response()->json([
             'msg'=>trans($this->trans_dir.'ad_was_created'),
@@ -1185,14 +1184,16 @@ class AdController extends Controller
         if($data->update($arr))
         {
 
-            $msg = "User ({$data->customers->full_name}) Update his campaign ({$data->store})";
+            $msg = "update_campaign";
             $roles = ['Business Manager','superAdmin'];
+            $transParams = ['user_name' => $data->customers->full_name,'ad_name' => $data->store];
             $info =[
                 'msg'           => $msg,
                 'id'            => $data->id,
                 'type'          => 'Ad',
                 'roles'         => $roles,
-                'translatedMsg' => $msg
+                'translatedMsg' => trans('notifications.' . $msg,$transParams),
+                'params'        => $transParams
             ];
 
             $this->saveAndSendNotification($info,$roles);

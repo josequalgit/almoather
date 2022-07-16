@@ -1,11 +1,13 @@
 <?php 
 
 return [
-        'accept_ad_to_influencer'=>'لديك اعلان جديد',
-        'rejected_campaign_title'=>'تم رفض اعلان ":ad_name"',
-        'rejected_campaign_msg'=>'تم رفض ااعلان ":ad_name" بسبب (:reject_reason)',
-        'accepted_campaign_title'=>'تم قبول اعلان ":ad_name"',
-        'accepted_campaign_msg'=>'مبروك تم قبول اعلانك ":ad_name" الرجاء اكمال الخطوات',
+        'update_campaign'               => "العميل (:user_name) قام بتحديث الحملة (:ad_name)",
+        'add_campaign'                  => "العميل (:user_name) قام بإضافة حملة جديدة (:ad_name)",
+        'accept_ad_to_influencer'       => 'لديك اعلان جديد',
+        'rejected_campaign_title'       => 'تم رفض اعلان ":ad_name"',
+        'rejected_campaign_msg'         => 'تم رفض الاعلان ":ad_name" بسبب (:reject_reason)',
+        'accepted_campaign_title'       => 'تم قبول الاعلان ":ad_name"',
+        'accepted_campaign_msg'         => 'مبروك تم قبول اعلانك ":ad_name" الرجاء اكمال الخطوات',
         'reject_payment_ad'=>'Your payment for ":ad_name" has been rejected,Please Try Again.',
         'reject_payment_ad_title'=>'Payment failed!',
         'reject_influencers_title'=>'Your account has been rejected',

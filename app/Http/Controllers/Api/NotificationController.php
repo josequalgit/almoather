@@ -29,42 +29,27 @@ class NotificationController extends Controller
         $data = $user->notifications()->select(['data','id'])->paginate(config('global.PAGINATION_NUMBER'));
 
         $data->getCollection()->transform(function($item){
-            if(array_key_exists('msg', $item->data))
-            {
-                $name = 'not found';
-                $data = Ad::find($item->data['id']);
-                $msg = $item->data['msg'];
-                if($data) $name = $data->store;
 
-                if(!$data->reject_note && isset($item->data['title'])){
-                    $msg = trans($this->trans_dir.$item->data['title'],['ad_name'=>$name]);
-                }else{
-                    $msg = trans($this->trans_dir.$item->data['msg'],['ad_name'=>$name , 'reject_reason' => $data->reject_note]);
-                }
+            $msg = trans($this->trans_dir.$item->data['msg'],$item->data['params'] ?? []);
+            $title = trans($this->trans_dir.$item->data['title'] ?? $item->data['msg'],$item->data['params'] ?? []);
+            
 
-                if(isset($item->data['title'])){
-                    $title = trans($this->trans_dir.$item->data['title'],['ad_name'=>$name]);
-                }else{
-                    $title = trans($this->trans_dir.$item->data['msg'],['ad_name'=>$name]);
-                }
-                
-
-                return [
-                    'id'        => $item->id,
-                    'title'     => $title,
-                    'msg'       => $msg,
-                    'text'      => $msg,
-                    'data_id'   => $item->data['id'] ? $item->data['id'] : null,
-                    'type'      => $item->data['type'],
-                    'read'      => $item->read_at ? true : false
-                ];
-            }
+            return [
+                'id'        => $item->id,
+                'title'     => $title,
+                'msg'       => $msg,
+                'text'      => $msg,
+                'data_id'   => $item->data['id'] ? $item->data['id'] : null,
+                'type'      => $item->data['type'],
+                'read'      => $item->read_at ? true : false
+            ];
+            
         });
         return response()->json([
-            'msg'=>trans($this->trans_dir.'user_notification'),
-            'data'=>$data,
-            'type'=>$type,
-            'status'=>config('global.OK_STATUS')
+            'msg'       => trans($this->trans_dir.'user_notification'),
+            'data'      => $data,
+            'type'      => $type,
+            'status'    => config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
 

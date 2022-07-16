@@ -67,7 +67,7 @@ trait SendNotification {
         ]));
     }
 
-    function saveAndSendNotification($info,$roles = [],$users = []){
+    function saveAndSendNotification($info,$roles = [],$users = [],$params = []){
         //Send notification to admins based on roles
         $UsersNotifications = User::whereIn('id',$users)->orWhereHas('roles',function($q) use($roles) {
             $q->whereIn('name',$roles);

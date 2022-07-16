@@ -22,7 +22,7 @@
                                 </div>
                                 <div class="hashs border-top pt-1 pb-1">
                                     <b class="me-2">Cr Document : </b><span
-                                        class="me-2"><a href="{{ $data->crImage->url }}" target="_blank">Download</a></span>
+                                        class="me-2"><a href="{{ $data->crImage->url ?? '' }}" target="_blank">Download</a></span>
                                 </div>
                                 <div class="hashs border-top pt-1 pb-1">
                                     <b class="me-2">Budget: </b><span

@@ -110,11 +110,11 @@ class AdController extends Controller
             
             $title = 'accepted_campaign_title';
             $msg = 'accepted_campaign_msg';
-
+            $transParams = ['ad_name' => $ad->store];
             $data = [
-                "title" => trans($this->notification_trans_dir.$title,['ad_name' => $ad->store]),
-                "body" => trans($this->notification_trans_dir.$msg,['ad_name' => $ad->store]),
-                "type" => 'Ad',
+                "title"     => trans($this->notification_trans_dir.$title,$transParams),
+                "body"      => trans($this->notification_trans_dir.$msg,$transParams),
+                "type"      => 'Ad',
                 'target_id' =>$ad->id             
             ];
            
@@ -126,10 +126,11 @@ class AdController extends Controller
 
             $users = [User::find(1), User::find($ad->customers->users->id)];
             $info = [
-                'title' => $title,
-                'msg'   => $msg,
-                'type'  => 'Ad',
-                'id'    => $ad->id,
+                'title'     => $title,
+                'msg'       => $msg,
+                'type'      => 'Ad',
+                'id'        => $ad->id,
+                'params'    => $transParams
             ];
             Notification::send($users, new AddInfluencer($info));
 
@@ -1092,9 +1093,10 @@ class AdController extends Controller
             $title = 'rejected_campaign_title';
             $msg = 'rejected_campaign_msg';
 
+            $transParams = ['ad_name' => $ad->store,'reject_reason' => $request->reject_note];
             $data = [
-                "title"     => trans($this->notification_trans_dir.$title,['ad_name' => $ad->store]),
-                "body"      => trans($this->notification_trans_dir.$msg,['ad_name' => $ad->store,'reject_reason' => $request->reject_note]),
+                "title"     => trans($this->notification_trans_dir.$title,$transParams),
+                "body"      => trans($this->notification_trans_dir.$msg,$transParams),
                 "type"      => 'Ad',
                 'target_id' => $ad->id
             ];
@@ -1103,10 +1105,11 @@ class AdController extends Controller
 
             $users = [User::find(1), User::find($ad->customers->users->id)];
             $info = [
-                'title' => $title,
-                'msg'   => $msg,
-                'type'  => 'Ad',
-                'id'    => $ad->id,
+                'title'     => $title,
+                'msg'       => $msg,
+                'type'      => 'Ad',
+                'id'        => $ad->id,
+                'params'    => $transParams
             ];
             Notification::send($users, new AddInfluencer($info));
         }

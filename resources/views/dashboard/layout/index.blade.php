@@ -82,7 +82,7 @@
                                             </div>
                                         </div>
                                         <div class="media-body">
-                                            <h6 class="media-heading"><span class="text-bold-500">{{ $item->data['msg'] }}</span></h6><small class="notification-text">{{ $item->created_at->diffForHumans() }}</small>
+                                            <h6 class="media-heading"><span class="text-bold-500">{{ trans("notifications.".$item->data['msg'],$item->data['params'] ?? [],'en') }}</span></h6><small class="notification-text">{{ $item->created_at->diffForHumans() }}</small>
                                         </div>
                                     </div>
                                  @endforeach

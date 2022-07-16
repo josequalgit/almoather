@@ -1,8 +1,10 @@
 <?php 
 
 return [
-        'accept_ad_to_influencer'=>'You have new ad',
-        'rejected_campaign_title'=>'Your campaign ":ad_name" has been rejected',
+        'update_campaign'               => "Customer (:user_name) updated his campaign (:ad_name)",
+        'add_campaign'                  => "Customer (:user_name) added a new campaign (:ad_name)",
+        'accept_ad_to_influencer'       => 'You have new ad',
+        'rejected_campaign_title'       => 'Your campaign ":ad_name" has been rejected',
         'rejected_campaign_msg'=>'Your campaign ":ad_name" rejected because (:reject_reason)',
         'accepted_campaign_title'=>'Your campaign ":ad_name" has been accepted',
         'accepted_campaign_msg'=>'Congratulation! Your campaign ":ad_name" accepted Please go to campaign and complete the steps',
