@@ -304,30 +304,36 @@ class AdController extends Controller
     }
 
     //Get campaign Contract
-    public function getCampaignContract($campaign_id){
+    public function getCampaignContract($campaign_id,$saveContract = false){
         $ad = Ad::find($campaign_id);
         $contract = CampaignContract::where('ad_id',$campaign_id)->first();
 
         $content = $contract->content;
 
-        $startDate = $ad->InfluencerContract()->orderBy('date','asc')->first();
-        $endDate = $ad->InfluencerContract()->orderBy('date','desc')->first();
-
-        $content = str_replace("[[_CONTRACT_NUM_]]", $ad->id, $content);
-        $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
-        $content = str_replace("[[_CUSTOMER_NAME_]]", $ad->customers->full_name, $content);
-        $content = str_replace("[[_STORE_NAME_]]", $ad->store, $content);
-        $content = str_replace("[[_CUSTOMER_NATIONALITY_]]", $ad->customers->nationalities->getTranslation('name','ar'), $content);
-        $content = str_replace("[[_CR_NUM_]]", $ad->cr_num, $content);
-        $content = str_replace("[[_NATIONAL_NUM_]]", $ad->customers->id_number, $content);
-        $content = str_replace("[[_PHONE_]]", $ad->customers->users->phone, $content);
-        $content = str_replace("[[_EMAIL_]]", $ad->customers->users->email, $content);
-        $content = str_replace("[[_PRICE_WITH_TAX_]]", number_format($ad->adBudgetWithVat), $content);
-        $content = str_replace("[[_PRICE_]]", number_format($ad->budget), $content);
-        $content = str_replace("[[_START_DATE_]]", $startDate->date->format('d/m/Y'), $content);
-        $content = str_replace("[[_END_DATE_]]", $endDate->date->format('d/m/Y'), $content);
-        $content = str_replace("[[_CAMPAIGN_GOAL_]]", $ad->campaignGoals->getTranslation('title','ar'), $content);
+        if(!in_array($ad->status,['fullpayment','active','progress','complete']) || $saveContract){
+            $startDate = $ad->InfluencerContract()->orderBy('date','asc')->first();
+            $endDate = $ad->InfluencerContract()->orderBy('date','desc')->first();
+    
+            $content = str_replace("[[_CONTRACT_NUM_]]", $ad->id, $content);
+            $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
+            $content = str_replace("[[_CUSTOMER_NAME_]]", $ad->customers->full_name, $content);
+            $content = str_replace("[[_STORE_NAME_]]", $ad->store, $content);
+            $content = str_replace("[[_CUSTOMER_NATIONALITY_]]", $ad->customers->nationalities->getTranslation('name','ar'), $content);
+            $content = str_replace("[[_CR_NUM_]]", $ad->cr_num, $content);
+            $content = str_replace("[[_NATIONAL_NUM_]]", $ad->customers->id_number, $content);
+            $content = str_replace("[[_PHONE_]]", $ad->customers->users->phone, $content);
+            $content = str_replace("[[_EMAIL_]]", $ad->customers->users->email, $content);
+            $content = str_replace("[[_PRICE_WITH_TAX_]]", number_format($ad->adBudgetWithVat), $content);
+            $content = str_replace("[[_PRICE_]]", number_format($ad->budget), $content);
+            $content = str_replace("[[_START_DATE_]]", $startDate->date->format('d/m/Y'), $content);
+            $content = str_replace("[[_END_DATE_]]", $endDate->date->format('d/m/Y'), $content);
+            $content = str_replace("[[_CAMPAIGN_GOAL_]]", $ad->campaignGoals->getTranslation('title','ar'), $content);
+        }
         
+        if($saveContract){
+            $contract->update(['content' => $content]);
+            return true;
+        }
 
         $title = $contract->ads->store;
 
@@ -1004,9 +1010,7 @@ class AdController extends Controller
                 $this->saveAndSendNotification($info,$roles);
             }else if($request->type == 'full_payment'){
                 $data->update(['status' => 'fullpayment']);
-
-                //Todo save contract without variables
-
+                $this->getCampaignContract($data->id,true);
 
                 $title = 'success_payment_ad_title';
                 $msg = 'success_last_payment_ad';
