@@ -524,8 +524,8 @@ class AdController extends Controller
         $ad = Ad::find($campaign_id);
         if (!$ad) {
             return response()->json([
-                'msg' => 'Campaign not found',
-                'status' => false,
+                'msg'       => 'Campaign not found',
+                'status'    => false,
             ], config('global.NOT_FOUND_STATUS'));
         }
 
@@ -549,7 +549,7 @@ class AdController extends Controller
         }
 
         foreach($matches as $match){
-            event(new VoluumEvent($match->contract->id,'campaign'));
+            $this->create_influencer_contract($match->contract);
         }
 
         $newBudget = $this->getNewPrice($ad);
@@ -702,16 +702,16 @@ class AdController extends Controller
     public function sendContractToInfluencer(Request $request, $ad_id)
     {
         $data = $request->validate([
-            "scenario"    => "required",
-            "date"  => "required",
-            "influncers_id"  => "required",
+            "scenario"      => "required",
+            "date"          => "required",
+            "influncers_id" => "required",
         ]);
 
         $ad = Ad::find($ad_id);
         if (!$ad) {
             return response()->json([
-                'message' => 'AD not found',
-                'status' => false,
+                'message'   => 'AD not found',
+                'status'    => false,
             ], config('global.NOT_FOUND_STATUS'));
         }
 
@@ -732,6 +732,7 @@ class AdController extends Controller
         ], config('global.OK_STATUS'));
     }
 
+    //Todo Remove This function
     public function sendContractToCustomer(Request $request, $id)
     {
         $data = Contract::find($id);
@@ -981,28 +982,26 @@ class AdController extends Controller
         ], 200);
     }
 
-    private function create_influencer_contract($ad_id = null, $customer)
+    private function create_influencer_contract($contract)
     {
         $contractData = AppSetting::where('key', 'Influencer Contract')->first();
         
         $content = json_decode($contractData->value);
-        $startDate = $ad->InfluencerContract()->orderBy('date','asc')->first();
-        $endDate = $ad->InfluencerContract()->orderBy('date','desc')->first();
 
-        $content = str_replace("[[_CONTRACT_NUM_]]", $ad->id, $content);
-        $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
-        $content = str_replace("[[_CUSTOMER_NAME_]]", $ad->customers->full_name, $content);
-        $content = str_replace("[[_STORE_NAME_]]", $ad->store, $content);
-        $content = str_replace("[[_CUSTOMER_NATIONALITY_]]", $ad->customers->nationalities->getTranslation('name','ar'), $content);
-        $content = str_replace("[[_CR_NUM_]]", $ad->cr_num, $content);
-        $content = str_replace("[[_NATIONAL_NUM_]]", $ad->customers->id_number, $content);
-        $content = str_replace("[[_PHONE_]]", $ad->customers->users->phone, $content);
-        $content = str_replace("[[_EMAIL_]]", $ad->customers->users->email, $content);
-        $content = str_replace("[[_PRICE_WITH_TAX_]]", number_format($ad->adBudgetWithVat), $content);
-        $content = str_replace("[[_PRICE_]]", number_format($ad->budget), $content);
-        $content = str_replace("[[_START_DATE_]]", $startDate->date->format('d/m/Y'), $content);
-        $content = str_replace("[[_END_DATE_]]", $endDate->date->format('d/m/Y'), $content);
-        $content = str_replace("[[_CAMPAIGN_GOAL_]]", $ad->campaignGoals->getTranslation('title','ar'), $content);
+        $priceWithVat = $contract->ads->ad_type == 'online' ? $influencer->ad_with_vat : $influencer->ad_onsite_price_with_vat;
+        $price = $contract->ads->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
+
+        $content = str_replace("[[_ID_]]", $contract->id, $content);
+        #$content = str_replace("[[_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
+        $content = str_replace("[[_INFLUENCER_]]", $contract->influencers->full_name, $content);
+        $content = str_replace("[[_TAX_]]", $contract->influencers->tax_registration_number, $content);
+        $content = str_replace("[[_ID_NUMBER_]]", $contract->influencers->id_number, $content);
+        $content = str_replace("[[_PHONE_]]", $contract->influencers->phone, $content);
+        $content = str_replace("[[_EMAIL_]]", $contract->influencers->users->email, $content);
+        $content = str_replace("[[_PRICE_]]", number_format($price), $content);
+        $content = str_replace("[[_PRICE_WITH_TAX_]]", number_format($priceWithVat), $content);
+        $content = str_replace("[[_EXEC_DATE_]]", $contract->date->format('d/m/Y'), $content);
+        $content = str_replace("[[_CAMPAIGN_GOAL_]]", $contract->ads->campaignGoals->getTranslation('title','ar'), $content);
         
         if ($contractData) {
             return CampaignContract::updateOrCreate(['ad_id' => $ad->id],[

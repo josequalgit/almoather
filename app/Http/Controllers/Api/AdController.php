@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
 use Log;
 use DB;
+use App\Events\VoluumEvent;
 
 class AdController extends Controller
 {
@@ -386,43 +387,49 @@ class AdController extends Controller
         $influencer = Influncer::find($data->influencer_id);
 
         if($request->status == 0 && $request->rejectNote){
-            $name = $influencer->nick_name;
-            
+            $title = 'influencer_reject_campaign';
+            $msg = 'influencer_reject_campaign_msg';
+            $roles = ['Business Manager','superAdmin'];
+            $transParams = ['inf_name' => $contract->influencers->nick_name,"ad_name" => $contract->ads->store,"reject_note" => $request->rejectNote];
+            $users = [];
             $info =[
-                'msg'=>trans($this->trans_dir.'influencer').'"'.$name.'"'. trans($this->trans_dir.'reject_contract') .'"'.$data->rejectNote.'"'.' '.trans($this->trans_dir.'ad_small'),
-                'id'=>$influencer->users->id,
-                'type'=>'Influencer'
+                'msg'           => $msg,
+                'title'         => $title,
+                'id'            => $data->id,
+                'type'          => 'Ad',
+                'params'        => $transParams
             ];
-
-            $this->sendAdminNotification('contract_manager_notification',$info);
-            $this->sendNotifications($data->ads->customers->users->fcm_token,$info);
-            $getContactManagers = User::whereHas('roles',function($q){
-                $q->where('name','Contracts Manager')
-                ->orWhere('name','superAdmin');
-            })->get();
-
-            Notification::send($getContactManagers, new AddInfluencer($info));
+            
+            $this->saveAndSendNotification($info,$roles,$users);
 
         }
 
         if($request->status == 1)
         {
-            //Todo save influencers contract without variables
+            $content = str_replace("[[_DATE_]]", Carbon::now()->format('d/m/Y'), $data->content);
+            $contract->update(['content' => $content]);
 
-            $name = $influencer->nick_name;
+            //Todo save influencers contract without variables
+            event(new VoluumEvent($data->id,'campaign'));
+            $title = 'influencer_joined_campaign';
+            $msg = 'influencer_joined_campaign_msg';
+            $roles = ['Business Manager','superAdmin'];
+            $transParams = ['inf_name' => $contract->influencers->nick_name,"ad_name" => $contract->ads->store,"exec_date" => $contract->date->format('d/m/Y')];
+            $users = [$contract->ads->customers->users->id];
             $info =[
-                'msg'=>trans($this->trans_dir.'influencer').'"'.$name.'"'. trans($this->trans_dir.'accept_contract'),
-                'id'=>$influencer->users->id,
-                'type'=>'Influencer'
+                'msg'           => $msg,
+                'title'         => $title,
+                'id'            => $data->id,
+                'type'          => 'Ad',
+                'params'        => $transParams
             ];
-            $this->sendNotifications($data->ads->customers->users->fcm_token,$info);
+            
+            $this->saveAndSendNotification($info,$roles,$users);
         }
 
-        //ToDo Send notification for admin and customer campaign order
-
         return response()->json([
-            'msg'=>trans($this->trans_dir.'data_was_updated'),
-            'status'=>config('global.OK_STATUS')
+            'msg'       => trans($this->trans_dir.'data_was_updated'),
+            'status'    => config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
 
@@ -924,8 +931,8 @@ class AdController extends Controller
         $data = Ad::find($ad_id);
         
         if(!$data) return response()->json([
-            'err'=>trans($this->trans_dir.'ad_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
+            'err'       => trans($this->trans_dir.'ad_not_found'),
+            'status'    => config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         $terminalId = config('global.PAYMENT_USERNAME');
@@ -1040,6 +1047,23 @@ class AdController extends Controller
                 ];
         
                 $this->saveAndSendNotification($info,$roles);
+
+                $matches = $ad->matches()->where('chosen', 1)->where('status','!=','deleted')->get();
+                foreach($matches as $match){
+                    $influencersUsers[] = $match->influencers->users->id; 
+                }
+                $title = 'new_contract_title';
+                $msg = 'new_contract_msg';
+                $transParams = ['ad_name' => $ad->store];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $ad->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+                
+                $this->saveAndSendNotification($info,[],$influencersUsers);
                 
             }
             

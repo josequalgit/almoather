@@ -21,6 +21,12 @@
                 'admin_first_payment_msg'               => 'Campaign (:ad_name) first payment made ',
                 'admin_last_payment_msg'                => 'Campaign (:ad_name) full payment made ',
                 'customer_confirm_influencers'          => "Customer confirmed the influencers list for campaign (:ad_name)",
+                'new_contract_title'                    => 'New request to participate in the campaign',
+                'new_contract_msg'                      => 'You have been selected to participate in the campaign (:ad_name), please review the contract and respond to the request',
+                'influencer_joined_campaign'            => "Influencer (:inf_name) joined campaign (:ad_name)",
+                'influencer_joined_campaign_msg'        => "Influencer (:inf_name) joined campaign (:ad_name), the execution date will be on (:exec_date)",
+                'influencer_reject_campaign'            => "Influencer (:inf_name) reject join campaign (:ad_name)",
+                'influencer_reject_campaign_msg'        => "Influencer (:inf_name) reject join campaign (:ad_name), because (:reject_note)",
 
 
                 'reject_influencers_title'=>'Your account has been rejected',

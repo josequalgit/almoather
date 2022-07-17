@@ -21,6 +21,12 @@ return [
         'admin_first_payment_msg'               => 'تم دفع الدفعة الأولى الخاصة بالحملة (:ad_name)',
         'admin_last_payment_msg'                => 'تم دفع الدفعة الكاملة الخاصة بالحملة (:ad_name)',
         'customer_confirm_influencers'          => "قام العميل بتأكيد فائمة المؤثرين الخاصة بالحملة (:ad_name)",
+        'new_contract_title'                    => 'طلب جديد للمشاركة في حملة',
+        'new_contract_msg'                      => 'لقد تم اختيارك للاشتراك في الحملة (:ad_name)، يرجى مراجعة العقد والرد على الطلب',
+        'influencer_joined_campaign'            => "تم انضمام المؤثر (:inf_name) الى الحملة (:ad_name)",
+        'influencer_joined_campaign_msg'        => "تم انضمام المؤثر (:inf_name) الى الحملة (:ad_name), تاريخ التنفيذ سيكون بـ (:exec_date)",
+        'influencer_reject_campaign'            => "المؤثر (:inf_name) رفض الإنضمام الى الحملة (:ad_name)",
+        'influencer_reject_campaign_msg'        => "المؤثر (:inf_name) رفض الإنضمام الى الحملة (:ad_name), بسبب (:reject_note)",
 
 
 
