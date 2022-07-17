@@ -25,9 +25,9 @@ class LanguageMiddleware
         // $session = $request->getSession();
         $cookie = isset($_COOKIE["language"])?$_COOKIE["language"]:"";
         // dd($cookie);
-        if(in_array($cookie,$availLocale)){
+        if($request->header('lang') && in_array($lang,$availLocale)){
             App::setLocale($lang);
-        }if ($cookie && in_array($cookie,$availLocale)) {
+        }if (in_array($cookie,$availLocale)) {
             App::setLocale($cookie);
         }else{
             App::setLocale('ar');

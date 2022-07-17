@@ -988,8 +988,8 @@ class AdController extends Controller
         
         $content = json_decode($contractData->value);
 
-        $priceWithVat = $contract->ads->ad_type == 'online' ? $influencer->ad_with_vat : $influencer->ad_onsite_price_with_vat;
-        $price = $contract->ads->ad_type == 'online' ? $influencer->ad_price : $influencer->ad_onsite_price;
+        $priceWithVat = $contract->ads->ad_type == 'online' ? $contract->influencers->ad_with_vat : $contract->influencers->ad_onsite_price_with_vat;
+        $price = $contract->ads->ad_type == 'online' ? $contract->influencers->ad_price : $contract->influencers->ad_onsite_price;
 
         $content = str_replace("[[_ID_]]", $contract->id, $content);
         #$content = str_replace("[[_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
@@ -1003,14 +1003,10 @@ class AdController extends Controller
         $content = str_replace("[[_EXEC_DATE_]]", $contract->date->format('d/m/Y'), $content);
         $content = str_replace("[[_CAMPAIGN_GOAL_]]", $contract->ads->campaignGoals->getTranslation('title','ar'), $content);
         
-        if ($contractData) {
-            return CampaignContract::updateOrCreate(['ad_id' => $ad->id],[
-                'content' => $content,
-                'is_accepted' => 0,
-            ]);
-        } else {
-            return false;
-        }
+        return $contract->update([
+            'content' => $content,
+            'is_accepted' => 0,
+        ]);
 
     }
 
