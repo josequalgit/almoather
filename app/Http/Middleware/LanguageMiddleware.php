@@ -27,7 +27,7 @@ class LanguageMiddleware
         // dd($cookie);
         if($request->header('lang') && in_array($lang,$availLocale)){
             App::setLocale($lang);
-        }if (in_array($cookie,$availLocale)) {
+        }else if (in_array($cookie,$availLocale)) {
             App::setLocale($cookie);
         }else{
             App::setLocale('ar');
