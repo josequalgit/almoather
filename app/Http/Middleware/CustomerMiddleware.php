@@ -17,13 +17,13 @@ class CustomerMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if((Auth::guard('api')->check()&&Auth::guard('api')->user()->customers)||(Auth::check()&&Auth::user()->customers))
+        if((Auth::guard('api')->check()&&Auth::guard('api')->user()->customers)&&(Auth::check()&&Auth::user()->customers))
         {
             return $next($request);
         }
         else
         {
-            abort(403);
+            return redirect()->route('auth.login');
         }
     }
 }

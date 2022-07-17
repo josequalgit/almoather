@@ -65,7 +65,7 @@
                             <div class="our-service-image-1">
                                 <h4>{{ trans('messages.frontEnd.our-service') }}</h4>
                                 <p> consectetur adipiscing elit, sed do eiusmod tempor</p>
-                                <a href="#" class="read-more-text">{{ trans('messages.frontEnd.read_more') }}<i class="fa-solid fa-arrow-right"></i></a>
+                                <a href="#" class="read-more-text">{{ trans('messages.frontEnd.read_more') }}<i class="fa-solid fa-arrow-{{ app()->getLocale() == 'en'?'right':'left' }}"></i></a>
                             </div>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
                     <div class="our-service-text">
                         <h4>Our service</h4>
                         <p> consectetur adipiscing elit, sed do eiusmod tempor</p>
-                        <a href="#" class="read-more-text">{{ trans('messages.frontEnd.read_more') }}<i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="#" class="read-more-text">{{ trans('messages.frontEnd.read_more') }}<i class="fa-solid fa-arrow-{{ app()->getLocale() == 'en'?'right':'left' }}"></i></a>
                     </div>
                 </div>
             </div>
@@ -152,7 +152,7 @@
                         </div>
                         @endforeach
                     
-                        <a href="#" class="read-more mt-3">{{ trans('messages.frontEnd.read_more') }} <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="#" class="read-more mt-3">{{ trans('messages.frontEnd.read_more') }} <i class="fa-solid fa-arrow-{{ app()->getLocale() == 'en'?'right':'left' }}"></i></a>
 
                     </div>
 
@@ -210,7 +210,7 @@
             </div>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 text-center read-more-contact"><a href="#">{{ trans('messages.frontEnd.read_more') }} <i
-        class="fa-solid fa-arrow-right"></i></a></div>
+        class="fa-solid fa-arrow-{{ app()->getLocale() == 'en'?'right':'left' }}"></i></a></div>
     </div>
     <div class="right-face">
         <img src="{{ asset('frontEnd/img/Icon3.png') }}" width="200px" height="200px" alt="">

@@ -104,7 +104,7 @@
                      if(res.data.token)
                      {
                          localStorage.setItem('token',res.data.token)
-                         window.location.href = res.data.url
+                        //  window.location.href = res.data.url
                      }
                  },
                  error:(err)=>{
