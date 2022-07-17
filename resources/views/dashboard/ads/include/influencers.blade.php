@@ -2,7 +2,7 @@
 @php 
 $totalPrice = 0;
 $notShowSinarioStatuses = ['prepay','pending','cancelled','approved'];  
-$notShowfluencersActions = ['progress','cancelled','complete'];  
+$notShowfluencersActions = ['progress','cancelled','complete','active','fullpayment'];  
 @endphp
 <section>
     <div class="add-section">
@@ -28,6 +28,9 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
                             @if(!in_array($data->status,$notShowSinarioStatuses))
                             <th>Date</th>
                             <th>Sinario</th>
+                            @endif
+                            @if(in_array($data->status,$notShowfluencersActions))
+                            <th>Join Status</th>
                             @endif
                             <th>Type</th>
                             <th>Status</th>
@@ -60,10 +63,19 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
                                     <td class="date {{ $contract && $contract->date ? 'has-content' : ''}}" data-date="{{ $contract && $contract->date ? $contract->date->format('Y-m-d') : '' }}">{{ $contract && $contract->date ? $contract->date->format('d/m/Y') : 'Not set' }}</td>
                                     <td class="sinario {{ $contract && $contract->scenario ? 'has-content' : ''}}">{{ $contract && $contract->scenario? $contract->scenario : 'Not set' }}</td>
                                 @endif
+                                @if(in_array($data->status,$notShowfluencersActions))
+                                    @if($item->contract && $item->contract->is_accepted == 1)
+                                        <td class="text-success">Joined</td>
+                                    @elseif($item->contract && $item->contract->is_accepted == 2)
+                                        <td class="text-danger">Rejected ({{ $item->contract->rejectNote }})</td>
+                                    @else
+                                        <td class="text-warning">Not Joined</td>
+                                    @endif
+                                @endif
                                 <td>{{ $item->influencers->TypeInfluencerSubscriber }}</td>
                                 <td>{{ ucwords(str_replace('_',' ',$item->status)) }}</td>
                                 <td>
-                                    @if(!in_array($data->status,$notShowfluencersActions))
+                                    @if(!in_array($data->status,$notShowfluencersActions) || ($item->contract && $item->contract->is_accepted == 2))
                                     <button type="button" onclick="getUnchosenInfulncers(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm mb-1">
                                         <i class="fas fa-exchange-alt"></i>
                                     </button>
@@ -73,6 +85,9 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
                                     @endif
                                     @if (!in_array($data->status,$notShowSinarioStatuses))
                                         <button  type="button" onclick="openInfluencerDataModal(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm mb-1"><i class="fas fa-file-signature"></i></button>
+                                    @endif
+                                    @if($item->contract && $data->admin_approved_influencers)
+                                    <button  type="button" onclick="getInfluencerContract(this,'{{ $item->contract->id }}')" class="btn btn-secondary btn-sm mb-1">Contract</button>
                                     @endif
                                 
                                 </td>
@@ -90,7 +105,9 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
             @if ($data->admin_approved_influencers == 1)
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-secondary mr-1" onclick="printContract(this)" >Print Contract</button>
-                    <button  type="button" onclick="viewContract(this)" class="btn btn-danger">Update Contract</button>
+                    @if (!in_array($data->status,$notShowfluencersActions))
+                        <button  type="button" onclick="viewContract(this)" class="btn btn-danger">Update Contract</button>
+                    @endif
                 </div> 
             @endif
             <div class="row mt-2">
@@ -106,7 +123,7 @@ $notShowfluencersActions = ['progress','cancelled','complete'];
                 </div>
                 <div class="col-lg-6 col-md-12 p-2">
                     <div class="count-box list">
-                        <span> <i class="bx bx-money"></i>Influncers Toal Price:</span><span class="numbers"><b>{{ number_format($totalPrice) }}</b></span>
+                        <span> <i class="bx bx-money"></i>Influncers Total Price:</span><span class="numbers"><b>{{ number_format($totalPrice) }}</b></span>
                     </div>
                 </div>
 

@@ -12,7 +12,7 @@ use Auth , DB , App;
 
 class NotificationController extends Controller
 {
-    private $trans_dir = 'messages.api.';
+    private $trans_dir = 'notifications.';
 
     public function index($type = null)
     {
@@ -28,29 +28,29 @@ class NotificationController extends Controller
 
         $data = $user->notifications()->select(['data','id'])->paginate(config('global.PAGINATION_NUMBER'));
 
-           $data->getCollection()->transform(function($item){
-            if(array_key_exists('msg', $item->data))
-            {
-                $name = 'not found';
-                $data = Ad::find($item->data['id']);
-                $msg = $item->data['msg'];
-                if($data) $name = $data->store;
-                if($item->data['type'] == 'Ad') $msg = trans($this->trans_dir.$item->data['msg'],['ad_name'=>$name]);
-                return [
-                    'id'=>$item->id,
-                    'msg'=>$msg,
-                    'text'=>trans($this->trans_dir.$item->data['msg'],['ad_name'=>$name]),
-                    'data_id'=>$item->data['id']?$item->data['id']:null,
-                    'type'=>$item->data['type'],
-                    'read'=>$item->read_at?true:false
-                ];
-            }
-            });
+        $data->getCollection()->transform(function($item){
+            $title = $item->data['title'] ?? $item->data['msg'];
+            $params = $item->data['params'] ?? [];
+            $msg = trans($this->trans_dir.$item->data['msg'],$params);
+            $title = trans($this->trans_dir.$title,$params);
+            
+
+            return [
+                'id'        => $item->id,
+                'title'     => $title,
+                'msg'       => $msg,
+                'text'      => $msg,
+                'data_id'   => $item->data['id'] ? $item->data['id'] : null,
+                'type'      => $item->data['type'],
+                'read'      => $item->read_at ? true : false
+            ];
+            
+        });
         return response()->json([
-            'msg'=>trans($this->trans_dir.'user_notification'),
-            'data'=>$data,
-            'type'=>$type,
-            'status'=>config('global.OK_STATUS')
+            'msg'       => trans($this->trans_dir.'user_notification'),
+            'data'      => $data,
+            'type'      => $type,
+            'status'    => config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
 

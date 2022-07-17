@@ -20,6 +20,11 @@
             text-align: left !important;
         }
 
+        .contract-content p{
+            margin-bottom: 8px;
+            margin-top: 0;
+        }
+
         .container {
             width: 100%;
             padding-right: 15px;
@@ -57,6 +62,7 @@
 
         body {
             font-family: 'Amiri','Geneva','sans-serif';
+            line-height: 18px;
         }
 
         .direction-rtl {
@@ -86,6 +92,8 @@
             background-position: top right;
 
         }
+
+        
         .clearfix{
             clear: both;
         }
@@ -109,7 +117,13 @@
     </htmlpageheader>
     <div class="container text-right direction-rtl text-dark contract-content">
         {!! $contract !!}
+        @if($stamp)
+        <div style="text-align: left">
+            <img src="{{ asset('img/avatars/stamp.jpg') }}" alt="Almuather Stamp" style="width: 170px" class="logo">
+        </div>
+        @endif
     </div>
+    
     <htmlpagefooter name="page-footer">
         <footer class="container" style="margin-top: 10px;border-top: 3px solid #8486AB;font-size: 12px">
             <div class="row">

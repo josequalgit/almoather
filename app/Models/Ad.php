@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\SocialMedia;
 use App\Models\InfluencerContract;
 use DB;
+use URL;
+
 class Ad extends Model implements HasMedia
 {
     use HasFactory , InteractsWithMedia,SoftDeletes;
@@ -179,10 +181,16 @@ class Ad extends Model implements HasMedia
         {
 			foreach($mediaItems as $item)
 			{
+                if(file_exists(storage_path('app/public/' . $item->id . '/thumbnail.png'))){
+                    $videoThumbnail = URL::to('/storage/' . $item->id . '/thumbnail.png');
+                }else{
+                    $videoThumbnail = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIbS95_HsNHOxW05lRFaEOx52YxA2aCxP1TXwDCjwyjB8bBb4mqXf3edVSKdB2KvDsHC4&usqp=CAU';
+                }
                 $obj = (object)[
                     'id' => $item->id,
-                    'thumbnail' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIbS95_HsNHOxW05lRFaEOx52YxA2aCxP1TXwDCjwyjB8bBb4mqXf3edVSKdB2KvDsHC4&usqp=CAU',
-                    'url' => $item->getFullUrl()
+                    'thumbnail' => $videoThumbnail,
+                    'url' => $item->getFullUrl(),
+                    'path' => $item->getPath()
                 ];
 				// $publicFullUrl = $item->getFullUrl();
 				array_push($publicFullUrl,$obj);
@@ -366,11 +374,11 @@ class Ad extends Model implements HasMedia
     }
 
     function getAdBudgetWithVatAttribute(){
-        $budget = $this->budget;
+        $budget = $this->price_to_pay;
         $tax = AppSetting::where('key', 'tax')->first();
         if($tax){
             $tax = $tax->value;
-            $budget = $this->budget + ($this->budget * ($tax / 100));
+            $budget = $this->price_to_pay + ($this->price_to_pay * ($tax / 100));
         }
         return $budget;
     }

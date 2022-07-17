@@ -11,15 +11,15 @@ class AddInfluencer extends Notification
 {
     use Queueable;
 
-    private $influncerData;
+    private $influencerData;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($influncerData)
+    public function __construct($influencerData)
     {
-        $this->influncerData = $influncerData;
+        $this->influencerData = $influencerData;
     }
 
     /**
@@ -34,20 +34,6 @@ class AddInfluencer extends Notification
     }
 
     /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    // public function toMail($notifiable)
-    // {
-    //     return (new MailMessage)
-    //                 ->line($this->influncerData['name'])
-    //                 ->action($this->influncerData['email'], url('/'))
-    //                 ->line('Thank you for using our application!');
-    // }
-
-    /**
      * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable
@@ -56,10 +42,12 @@ class AddInfluencer extends Notification
     public function toDatabase ($notifiable)
     {
         return [
-            'msg'=>$this->influncerData['msg'],
-            'type'=>$this->influncerData['type'],
-            'id'=>$this->influncerData['id'],
-            'not_id'=>$this->id
+            'title'     => $this->influencerData['title'] ?? '',
+            'msg'       => $this->influencerData['msg'],
+            'type'      => $this->influencerData['type'],
+            'id'        => $this->influencerData['id'],
+            'not_id'    => $this->id,
+            'params'    => $this->influencerData['params'] ?? []
         ];
     }
 }

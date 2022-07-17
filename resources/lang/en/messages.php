@@ -2,17 +2,23 @@
 
 return [
     'api'=>[
-        'not_found'=>'Not Found',
-        'rejected_campaign_title'=>'Ad ":ad_name" was rejected',
+        'payment_failed'            => 'Payment failed! Please try agian or contact us for help',
+        'payment_successfully'      => 'Payment processed successfully',
+
+
+
+        
+        'not_found'                 => 'Not Found',
+        'rejected_campaign_title'   => 'Ad ":ad_name" was rejected',
         'inf_wrong_status'=>'influencer is not authorized to get ads with this status',
         'get_all_ads'=>'get all ads with the status',
         'customer_wrong_status'=>'customer is not authorized to get ads with this status',
         'get_ads_with_status'=>'get all ads with the status',
         'upload_doc_or_add_auth_num'=>'please upload a document or add the authentication number',
         'no_contract_in_system'=>'There is no contract in the system',
-        'customer'=>'Customer',
-        'added_new_ad'=>'added new ad',
-        'ad_was_created'=>'ad was created',
+        'customer'          => 'Customer',
+        'added_new_ad'      => 'Customer (:user_name) added new campaign (:ad_name)',
+        'ad_was_created'    => 'Campaign was created successfully',
         'ad_not_found'=>'ad not found',
         'ad_details'=>'ad details',
         'no_contract_for_ad'=>'there is no contract for the ad because ad status is',
@@ -128,6 +134,12 @@ return [
         "bank_not_found"=>"bank not found",
         "please_add_file"=>"Please add a file",
         "all_relation"=>'All Relations',
+        'please_wait_until_we_approve_influencers_list'=>'Please wait until we approve influencers list',
+        'influencer_not_found'=>'Influencer not found',
+        'you_dont_have_enough_budget_to_replace_this_influencer'=>"You don\'t have enough budget to replace this influencer",
+        'file_was_not_found'=>'File was not found',
+        'file_was_removed'=>'File was removed',
+        'file_was_uploaded'=>'File was uploaded',
         'status_response_label'=>[
             "pending"=>"Under review",
             "approve"=>"Waiting for first payment",

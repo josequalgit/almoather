@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
 use Log;
 use DB;
+use App\Events\VoluumEvent;
 
 class AdController extends Controller
 {
@@ -200,23 +201,18 @@ class AdController extends Controller
             ->toMediaCollection('logos');
         }
 
-        $users = [User::find(1)];
-        $getAdmin = User::whereHas('roles',function($q){
-            $q->where('name','superAdmin');
-        })->get();
-
+        $msg = "add_campaign";
+        $roles = ['Business Manager','superAdmin'];
+        $transParams = ["user_name" => $data->customers->full_name,"ad_name" => $data->store];
         $info =[
-            'msg'=>trans($this->trans_dir.'customer').'"'.Auth::guard('api')->user()->customers->first_name.''.trans($this->trans_dir.'added_new_ad'),
-            'id'=>$data->id,
-            'type'=>'Ad'
+            'msg'           => $msg,
+            'id'            => $data->id,
+            'type'          => 'Ad',
+            'roles'         => $roles,
+            'params'        => $transParams
         ];
 
-        /** Removed just for testing in local */
-        //Todo uncomment the notification code
-
-    //    $this->sendAdminNotification('contract_manager_notification',$info);
-
-    //     $c_not = Notification::send($getAdmin, new AddInfluencer($info));
+        $this->saveAndSendNotification($info,$roles);
 
         return response()->json([
             'msg'=>trans($this->trans_dir.'ad_was_created'),
@@ -310,34 +306,41 @@ class AdController extends Controller
     }
 
     //Get campaign Contract
-    public function getCampaignContract($campaign_id){
+    public function getCampaignContract($campaign_id,$saveContract = false){
         $ad = Ad::find($campaign_id);
         $contract = CampaignContract::where('ad_id',$campaign_id)->first();
 
         $content = $contract->content;
 
-        $startDate = $ad->InfluencerContract()->orderBy('date','asc')->first();
-        $endDate = $ad->InfluencerContract()->orderBy('date','desc')->first();
-
-        $content = str_replace("[[_CONTRACT_NUM_]]", $ad->id, $content);
-        $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
-        $content = str_replace("[[_CUSTOMER_NAME_]]", $ad->customers->full_name, $content);
-        $content = str_replace("[[_STORE_NAME_]]", $ad->store, $content);
-        $content = str_replace("[[_CUSTOMER_NATIONALITY_]]", $ad->customers->nationalities->getTranslation('name','ar'), $content);
-        $content = str_replace("[[_CR_NUM_]]", $ad->cr_num, $content);
-        $content = str_replace("[[_NATIONAL_NUM_]]", $ad->customers->id_number, $content);
-        $content = str_replace("[[_PHONE_]]", $ad->customers->users->phone, $content);
-        $content = str_replace("[[_EMAIL_]]", $ad->customers->users->email, $content);
-        $content = str_replace("[[_PRICE_WITH_TAX_]]", number_format($ad->adBudgetWithVat), $content);
-        $content = str_replace("[[_PRICE_]]", number_format($ad->budget), $content);
-        $content = str_replace("[[_START_DATE_]]", $startDate->date->format('d/m/Y'), $content);
-        $content = str_replace("[[_END_DATE_]]", $endDate->date->format('d/m/Y'), $content);
-        $content = str_replace("[[_CAMPAIGN_GOAL_]]", $ad->campaignGoals->getTranslation('title','ar'), $content);
+        if(!in_array($ad->status,['fullpayment','active','progress','complete']) || $saveContract){
+            $startDate = $ad->InfluencerContract()->orderBy('date','asc')->first();
+            $endDate = $ad->InfluencerContract()->orderBy('date','desc')->first();
+    
+            $content = str_replace("[[_CONTRACT_NUM_]]", $ad->id, $content);
+            $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
+            $content = str_replace("[[_CUSTOMER_NAME_]]", $ad->customers->full_name, $content);
+            $content = str_replace("[[_STORE_NAME_]]", $ad->store, $content);
+            $content = str_replace("[[_CUSTOMER_NATIONALITY_]]", $ad->customers->nationalities->getTranslation('name','ar'), $content);
+            $content = str_replace("[[_CR_NUM_]]", $ad->cr_num, $content);
+            $content = str_replace("[[_NATIONAL_NUM_]]", $ad->customers->id_number, $content);
+            $content = str_replace("[[_PHONE_]]", $ad->customers->users->phone, $content);
+            $content = str_replace("[[_EMAIL_]]", $ad->customers->users->email, $content);
+            $content = str_replace("[[_PRICE_WITH_TAX_]]", number_format($ad->adBudgetWithVat), $content);
+            $content = str_replace("[[_PRICE_]]", number_format($ad->budget), $content);
+            $content = str_replace("[[_START_DATE_]]", $startDate->date->format('d/m/Y'), $content);
+            $content = str_replace("[[_END_DATE_]]", $endDate->date->format('d/m/Y'), $content);
+            $content = str_replace("[[_CAMPAIGN_GOAL_]]", $ad->campaignGoals->getTranslation('title','ar'), $content);
+        }
         
+        if($saveContract){
+            $contract->update(['content' => $content]);
+            return true;
+        }
 
         $title = $contract->ads->store;
+        $stamp = in_array($ad->status,['progress','cancelled','complete','active','fullpayment']);
 
-        return $this->generateContractPdf($content,$title);
+        return $this->generateContractPdf($content,$title,$stamp);
 
     }
 
@@ -385,43 +388,48 @@ class AdController extends Controller
         $influencer = Influncer::find($data->influencer_id);
 
         if($request->status == 0 && $request->rejectNote){
-            $name = $influencer->nick_name;
-            
+            $title = 'influencer_reject_campaign';
+            $msg = 'influencer_reject_campaign_msg';
+            $roles = ['Business Manager','superAdmin'];
+            $transParams = ['inf_name' => $contract->influencers->nick_name,"ad_name" => $contract->ads->store,"reject_note" => $request->rejectNote];
+            $users = [];
             $info =[
-                'msg'=>trans($this->trans_dir.'influencer').'"'.$name.'"'. trans($this->trans_dir.'reject_contract') .'"'.$data->rejectNote.'"'.' '.trans($this->trans_dir.'ad_small'),
-                'id'=>$influencer->users->id,
-                'type'=>'Influencer'
+                'msg'           => $msg,
+                'title'         => $title,
+                'id'            => $data->id,
+                'type'          => 'Ad',
+                'params'        => $transParams
             ];
-
-            $this->sendAdminNotification('contract_manager_notification',$info);
-            $this->sendNotifications($data->ads->customers->users->fcm_token,$info);
-            $getContactManagers = User::whereHas('roles',function($q){
-                $q->where('name','Contracts Manager')
-                ->orWhere('name','superAdmin');
-            })->get();
-
-            Notification::send($getContactManagers, new AddInfluencer($info));
+            
+            $this->saveAndSendNotification($info,$roles,$users);
 
         }
 
         if($request->status == 1)
         {
-            //Todo save influencers contract without variables
+            $content = str_replace("[[_DATE_]]", Carbon::now()->format('d/m/Y'), $data->content);
+            $data->update(['content' => $content]);
 
-            $name = $influencer->nick_name;
+            event(new VoluumEvent($data->id,'campaign'));
+            $title = 'influencer_joined_campaign';
+            $msg = 'influencer_joined_campaign_msg';
+            $roles = ['Business Manager','superAdmin'];
+            $transParams = ['inf_name' => $data->influencers->nick_name,"ad_name" => $data->ads->store,"exec_date" => $data->date->format('d/m/Y')];
+            $users = [$data->ads->customers->users->id];
             $info =[
-                'msg'=>trans($this->trans_dir.'influencer').'"'.$name.'"'. trans($this->trans_dir.'accept_contract'),
-                'id'=>$influencer->users->id,
-                'type'=>'Influencer'
+                'msg'           => $msg,
+                'title'         => $title,
+                'id'            => $data->id,
+                'type'          => 'Ad',
+                'params'        => $transParams
             ];
-            $this->sendNotifications($data->ads->customers->users->fcm_token,$info);
+            
+            $this->saveAndSendNotification($info,$roles,$users);
         }
 
-        //ToDo Send notification for admin and customer campaign order
-
         return response()->json([
-            'msg'=>trans($this->trans_dir.'data_was_updated'),
-            'status'=>config('global.OK_STATUS')
+            'msg'       => trans($this->trans_dir.'data_was_updated'),
+            'status'    => config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
 
@@ -500,11 +508,13 @@ class AdController extends Controller
                     $q->where('nick_name','LIKE','%'.urldecode($request->search).'%');
                 });
             }
+
             $infData = $infData->where([['chosen',0],['status','!=','deleted']])->get()->map(function($item) use($ad){
                 $influencerPrice = $ad->ad_type == 'onsite' ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
                 $isProfitable = $ad->campaignGoals->profitable;
 
-                $remainingBudget = $ad->budget - $ad->price_to_pay;
+                $newBudget = $this->getNewPrice($ad,0,$item->influencer_id);
+
                 $response =  [
                     'id'        => $item->influencers->id,
                     'name'      => $item->influencers->nick_name,
@@ -513,7 +523,7 @@ class AdController extends Controller
                     'gender'    => trans($this->trans_dir.$item->influencers->gender),
                     'budget'    => number_format($influencerPrice),
                     'status'    => $item->status,
-                    'eligible'  => $remainingBudget >= $influencerPrice
+                    'eligible'  => $ad->budget >= $newBudget
                 ];
                
                 $response['ROAS'] = null;
@@ -547,45 +557,43 @@ class AdController extends Controller
         }
 
         $infData =$ad->matches();
-            if($request->search)
-            {
-               $infData = $infData->whereHas('influencers',function($q) use($request){
-                    $q->where('nick_name','%'.$request->search.'%');
-                });
-            }
-            $infData = $infData->where('chosen',0)->get()->map(function($item) use($ad , $ReplacedInfluencer){
-                $remainingBudget = $ad->budget - $ad->price_to_pay;
-                $influencerPrice = $ad->ad_type == 'onsite' ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
-                
-                $chosenInfPrice =  $ad->ad_type == 'onsite' ? $ReplacedInfluencer->ad_onsite_price_with_vat : $ReplacedInfluencer->ad_with_vat;
-                $chosenInfPrice -= $remainingBudget;
-
-                $isProfitable = $ad->campaignGoals->profitable;
-
-                $response =  [
-                    'id'        => $item->influencers->id,
-                    'name'      => $item->influencers->nick_name,
-                    'image'     => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
-                    'match'     => $item->match,
-                    'gender'    => trans($this->trans_dir.$item->influencers->gender),
-                    'budget'    => number_format($influencerPrice),
-                    'status'    => $item->status,
-                    'eligible'  => $chosenInfPrice > $influencerPrice
-                ];
-            
-                $response['ROAS'] = null;
-                $response['engagement_rate'] = null;
-                $response['AOAF'] = null;
-
-                if($isProfitable){
-                    $response['ROAS'] = $item->match . '%';
-                }else{
-                    $response['engagement_rate'] = $item->match . '%';
-                    $response['AOAF'] = $item->AOAF;
-                }
-
-                return $response;
+        if($request->search)
+        {
+            $infData = $infData->whereHas('influencers',function($q) use($request){
+                $q->where('nick_name','%'.$request->search.'%');
             });
+        }
+        $infData = $infData->where('chosen',0)->get()->map(function($item) use($ad , $ReplacedInfluencer){
+            $remainingBudget = $ad->budget - $ad->price_to_pay;
+            $influencerPrice = $ad->ad_type == 'onsite' ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
+            
+            $newBudget = $this->getNewPrice($ad,$ReplacedInfluencer->id,$item->influencer_id);
+            $isProfitable = $ad->campaignGoals->profitable;
+
+            $response =  [
+                'id'        => $item->influencers->id,
+                'name'      => $item->influencers->nick_name,
+                'image'     => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
+                'match'     => $item->match,
+                'gender'    => trans($this->trans_dir.$item->influencers->gender),
+                'budget'    => number_format($influencerPrice),
+                'status'    => $item->status,
+                'eligible'  => $ad->budget >= $newBudget
+            ];
+        
+            $response['ROAS'] = null;
+            $response['engagement_rate'] = null;
+            $response['AOAF'] = null;
+
+            if($isProfitable){
+                $response['ROAS'] = $item->match . '%';
+            }else{
+                $response['engagement_rate'] = $item->match . '%';
+                $response['AOAF'] = $item->AOAF;
+            }
+
+            return $response;
+        });
 
         return response()->json([
             'msg'=>trans($this->trans_dir.'all_matched_under_budget'),
@@ -600,7 +608,7 @@ class AdController extends Controller
         $ad = Ad::find($ad_id);
 
         $chosen_inf = Influncer::find($chosen_inf_id);
-        $chosenInfPrice = $ad->ad_type == 'onsite' ? $chosen_inf->ad_onsite_price_with_vat : $chosen_inf->ad_with_vat;
+        
 
         if (!$chosen_inf) {
             return response()->json([
@@ -611,7 +619,6 @@ class AdController extends Controller
         
 
         $removed_inf = Influncer::find($removed_inf_id);
-        $oldInfPrice = $ad->ad_type == 'onsite' ? $removed_inf->ad_onsite_price_with_vat : $removed_inf->ad_with_vat;
 
         if (!$removed_inf) {
             return response()->json([
@@ -620,10 +627,9 @@ class AdController extends Controller
             ],config('global.NOT_FOUND_STATUS'));
         }
 
-        $remainingBudget = $ad->budget - $ad->price_to_pay;
-        $chosenInfPrice -= $remainingBudget;
+        $newBudget = $this->getNewPrice($ad,$removed_inf_id,$chosen_inf_id);
 
-        if ($chosenInfPrice > $oldInfPrice) {
+        if ($newBudget > $ad->budget) {
             return response()->json([
                 'msg' => 'You don\'t have enough budget to replace this influencer',
                 'status' => 401,
@@ -640,27 +646,12 @@ class AdController extends Controller
         $changeNew->status = 'not_basic';
         $changeNew->save();
 
-        $this->calculateCampaignPrice($ad);
+        $ad->update(['price_to_pay' => $newBudget]);
 
         return $this->match_response($ad);
     }
-
-    //Calculate Campaign price
-    private function calculateCampaignPrice($ad){
-        $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
-        $budgetSum = 0;
-        foreach($matchedInfluencers as $match){
-            $price = $ad->ad_type == 'online' ? $match->influencers->ad_with_vat : $match->influencers->ad_onsite_price_with_vat;
-            $budgetSum += $price;
-        }
-
-        $relation = $ad->relations ? $ad->relations->app_profit : 10;
-        $budgetSum += $relation / 100 * $budgetSum;
-
-        $ad->update(['price_to_pay' => $budgetSum]);
-    }
     
-    //Todo Explain this
+    //this function showing the list of influencers before user pay the first payment
     public function before_payment($id)
     {
         $data = Ad::find($id);
@@ -676,23 +667,6 @@ class AdController extends Controller
             'err'=>trans($this->trans_dir.'ad_dont_have_right_status'),
             'status'=>config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
-
-        // dd(Auth::user()->customers);
-        $name = Auth::guard('api')->user()->customers->full_name;
-        $info =[
-            'msg' => trans($this->trans_dir.'customer') . " $name " . trans($this->trans_dir.'payed_five_percent') . " ($cal) " . trans($this->trans_dir.'for') . " " . $data->store,
-            'id' => $data->id,
-            'type' => 'Ad'
-        ];
-
-        $this->sendAdminNotification('contract_manager_notification',$info);
-
-        $getContactManagers = User::whereHas('roles',function($q){
-            $q->where('name','Contracts Manager')
-            ->orWhere('name','superAdmin');
-        })->get();
-
-        Notification::send($getContactManagers, new AddInfluencer($info));
         
         $isProfitable =  $data->campaignGoals->profitable;
         $isOnSite = $data->ad_type == 'onsite';
@@ -706,7 +680,7 @@ class AdController extends Controller
                 'format_budget' => $this->formateMoneyNumber($data->budget),
                 'price' => $cal,
                 'budget' => $data->budget,
-                'matches' => $data->matches()->where('status','!=','deleted')->get()->map(function($item) use($isProfitable,$isOnSite){
+                'matches' => $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($isProfitable,$isOnSite){
                     $price = $isOnSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
                     $response = [
                         'id'            => $item->influencers->id,
@@ -735,62 +709,7 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
-    /** NOT IN USE */
-    //Todo Remove
-    public function pay_now($id)
-    { 
-        $data = Ad::find($id);
-
-        if(!$data) return response()->json([
-            'err' => trans($this->trans_dir.'ad_not_found'),
-            'status' => config('global.NOT_FOUND_STATUS')
-        ],config('global.NOT_FOUND_STATUS'));
-
-        if($data->status !== 'approve' && $data->status !=='prepay') return response()->json([
-            'err' => trans($this->trans_dir.'ad_don\'t_have_right_status'),
-            'status' => config('global.WRONG_VALIDATION_STATUS')
-        ],config('global.WRONG_VALIDATION_STATUS'));
-        
-        $cal = $data->budget * 0.1;
-
-        return response()->json([
-            'msg' => trans($this->trans_dir.'all_matched'),
-            'data' => [
-				'id' => $data->id,
-                'type' => trans($this->trans_dir.$data->type),
-                'category' => $data->categories?$data->categories->name:null,
-                'price' => $data->budget - $cal,
-                'budget' => $data->budget,
-                'match' => $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($data){
-                    $response = [
-                        'id'        => $item->influencers->id,
-                        'name'      => $item->influencers->nick_name,
-                        'image'     => $item->influencers->users->InfulncerImage ? $item->influencers->users->InfulncerImage : null,
-                        'match'     => $item->match,
-                        'status'    => $item->status
-                    ];
-
-                    $isOnSite = $data->ad_type == 'onsite';
-
-                    $response['ROAS'] = null;
-                    $response['engagement_rate'] = null;
-                    $response['AOAF'] = null;
-                    
-                    if($isProfitable){
-                        $response['ROAS'] = $item->match  . '%';
-                    }else{
-                        $response['engagement_rate'] = $item->match  . '%';
-                        $response['AOAF'] = $item->AOAF;
-                    }
-
-                    return $response;
-                })
-            ],
-            'status'=>config('global.OK_STATUS')
-        ],config('global.OK_STATUS'));
-    }
-
-    //Todo Explain this
+    //show the list of not chosen influencers that the user want to replace with them
     public function back_up_influencers($id,$removed_inf)
     {
         $data = Ad::find($id);
@@ -932,23 +851,20 @@ class AdController extends Controller
             'status'    => config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
-        $remainingBudget = $ad->budget - $ad->price_to_pay;
-        
-        $chosenInfBudget = $ad->ad_type == 'onsite' ? $addInf->ad_onsite_price_with_vat : $addInf->ad_with_vat;
+        $newBudget = $this->getNewPrice($ad,0,$request->influncer_id);
 
 
-        if($remainingBudget < $chosenInfBudget){
+        if($newBudget > $ad->budget){
             return response()->json([
                 'msg' => trans($this->trans_dir.'Your budget didn\'t enough to add a new influencer'),
                 'status' => config('global.WRONG_VALIDATION_STATUS')
             ],config('global.WRONG_VALIDATION_STATUS'));
         }
         
-        
         $data->chosen = 1;
         $data->status = 'not_basic';
         $data->save();
-        $this->calculateCampaignPrice($ad);
+        $ad->update(['price_to_pay' => $newBudget]);
 
         return $this->match_response($ad);
 
@@ -961,26 +877,24 @@ class AdController extends Controller
         $ad = Ad::findOrFail($request->ad_id);
         
         if(!$ad) return response()->json([
-            'err'=>trans($this->trans_dir.'ad_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
+            'err'       => trans($this->trans_dir.'ad_not_found'),
+            'status'    => config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         $data = AdsInfluencerMatch::where([['ad_id',$request->ad_id],['influencer_id',$request->influncer_id]])->first();
 
         if(!$data) return response()->json([
-            'err'=>trans($this->trans_dir.'match_was_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
+            'err'       => trans($this->trans_dir.'match_was_not_found'),
+            'status'    => config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         $data->status = $request->status;
         $data->save();
-
-        $this->calculateCampaignPrice($ad);
        
         return $this->match_response($ad);
     }
 
-    //Return Influencers mathces before customer pay full payment
+    //Return Influencers matches before customer pay full payment
     public function get_ad_influencers_match($ad_id)
     {
         $data = Ad::find($ad_id);
@@ -1015,44 +929,11 @@ class AdController extends Controller
     public function check_payment(CheckPaymentRequest $request ,$ad_id)
     {
         $data = Ad::find($ad_id);
+        
         if(!$data) return response()->json([
-            'err'=>trans($this->trans_dir.'ad_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
+            'err'       => trans($this->trans_dir.'ad_not_found'),
+            'status'    => config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
-       // return dd('here');
-        if((string)$request->ResponseCode !== '000')
-        {
-            /**
-            * 
-             * Save in the database
-             * 
-             */
-            Payment::create([
-                'ad_id' => $ad_id,
-                'trans_id' => $request->TranId,
-                'amount' => $request->amount,
-                'status' => $request->result,
-                'status_code' => $request->ResponseCode,
-                'type' => $request->type,
-            ]);
-
-            /**
-             * Send notification to customer when the payment failed
-             */
-            $tokens = [ $data->customers->users->fcm_token ];
-
-            $data = [
-                "title" =>trans($this->trans_dir_notification.'reject_payment_ad_title'),
-                "body" => trans($this->trans_dir_notification.'reject_payment_ad',['ad_name'=>$data->store]),
-                "type" => 'Ad',
-                'target_id' =>$ad->id
-            ];
-			$this->sendNotifications($tokens,$data);
-             return response()->json([
-                'err' => trans($this->trans_dir.'payment_failed'),
-                'status' => config('global.WRONG_VALIDATION_STATUS')
-            ],config('global.WRONG_VALIDATION_STATUS'));
-        }
 
         $terminalId = config('global.PAYMENT_USERNAME');
         $password = config('global.PAYMENT_PASSWORD');
@@ -1107,51 +988,146 @@ class AdController extends Controller
             
             if($request->type == 'sub_payment'){
                 $data->update(['status' => 'prepay']);
+
+                $title = 'success_payment_ad_title';
+                $msg = 'success_first_payment_ad';
+                $transParams = ['ad_name' => $data->store];
+                $users = [$data->customers->users->id];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $data->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+                
+                $this->saveAndSendNotification($info,[],$users);
+        
+                $msg = 'admin_first_payment_msg';
+                $title = 'admin_first_payment_msg';
+                $roles = ['Business Manager','superAdmin'];
+        
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $data->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+        
+                $this->saveAndSendNotification($info,$roles);
             }else if($request->type == 'full_payment'){
                 $data->update(['status' => 'fullpayment']);
+                $this->getCampaignContract($data->id,true);
 
-                //Todo save contract without variables
-
-                $tokens = [];
-                foreach($data->matches as $match){
-                    $tokens[] = $match->influencers->users->fcm_token;
-                }
-
-                if(!empty($tokens)){
-                    $title = trans($this->trans_dir.'new_campaign_request');
-                    $msg = trans($this->trans_dir.'new_campaign_request_msg',[":name" => $data->store]);
+                $title = 'success_payment_ad_title';
+                $msg = 'success_last_payment_ad';
+                $transParams = ['ad_name' => $data->store];
+                $users = [$data->customers->users->id];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $data->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
                 
-                    $data = [
-                        "title"     => $title,
-                        "body"      => $msg,
-                        "type"      => 'Ad',
-                        'target_id' => $data->id
-                    ];
-    
-                    $this->sendNotifications($tokens,$data);
+                $this->saveAndSendNotification($info,[],$users);
+        
+                $msg = 'admin_last_payment_msg';
+                $title = 'admin_last_payment_msg';
+                $roles = ['Business Manager','superAdmin'];
+        
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $data->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+        
+                $this->saveAndSendNotification($info,$roles);
+
+                $matches = $ad->matches()->where('chosen', 1)->where('status','!=','deleted')->get();
+                foreach($matches as $match){
+                    $influencersUsers[] = $match->influencers->users->id; 
                 }
+                $title = 'new_contract_title';
+                $msg = 'new_contract_msg';
+                $transParams = ['ad_name' => $ad->store];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $ad->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+                
+                $this->saveAndSendNotification($info,[],$influencersUsers);
                 
             }
             
             Payment::create([
-                'ad_id' => $ad_id,
-                'trans_id' => $request->TranId,
-                'amount' => $request->amount,
-                'status' => $request->result,
-                'status_code' => $request->ResponseCode,
-                'type' => $request->type,
+                'ad_id'         => $ad_id,
+                'trans_id'      => $request->TranId,
+                'amount'        => $request->amount,
+                'status'        => $request->result,
+                'status_code'   => $request->ResponseCode,
+                'type'          => $request->type,
             ]);
 
             return response()->json([
-                'msg' => trans($this->trans_dir.'payment_successfully'),
-                'ad_status' => $data->status,
-                'status' => config('global.OK_STATUS'),
+                'msg'           => trans($this->trans_dir.'payment_successfully'),
+                'ad_status'     => $data->status,
+                'status'        => config('global.OK_STATUS'),
             ],config('global.OK_STATUS'));
         }
+
+        Payment::create([
+            'ad_id'         => $ad_id,
+            'trans_id'      => $request->TranId,
+            'amount'        => $request->amount,
+            'status'        => $request->result,
+            'status_code'   => $request->ResponseCode,
+            'type'          => $request->type,
+        ]);
+
+        $title = 'reject_payment_ad_title';
+        $msg = 'reject_payment_ad';
+        $transParams = ['ad_name' => $data->store];
+        $users = [$data->customers->users->id];
+        $info = [
+            'msg'           => $msg,
+            'title'         => $title,
+            'id'            => $data->id,
+            'type'          => 'Ad',
+            'params'        => $transParams
+        ];
+        
+        $this->saveAndSendNotification($info,[],$users);
+
+        $msg = 'admin_reject_payment_ad';
+        $title = 'admin_reject_payment_ad';
+        $roles = ['Business Manager','superAdmin'];
+
+        $info = [
+            'msg'           => $msg,
+            'title'         => $title,
+            'id'            => $data->id,
+            'type'          => 'Ad',
+            'params'        => $transParams
+        ];
+
+        $this->saveAndSendNotification($info,$roles);
+
+        return response()->json([
+            'err'       => trans($this->trans_dir.'payment_failed'),
+            'status'    => config('global.WRONG_VALIDATION_STATUS')
+        ],config('global.WRONG_VALIDATION_STATUS'));
     
         return response()->json([
-            'err'=>trans($this->trans_dir.'payment_failed'),
-            'status'=>config('global.WRONG_VALIDATION_STATUS')
+            'err'       => trans($this->trans_dir.'payment_failed'),
+            'status'    => config('global.WRONG_VALIDATION_STATUS')
         ],config('global.WRONG_VALIDATION_STATUS'));
     }
 
@@ -1160,24 +1136,38 @@ class AdController extends Controller
     {
         $data = Ad::find($ad_id);
         if(!$data) return response()->json([
-            'err'=>trans($this->trans_dir.'ad_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
+            'err'       => trans($this->trans_dir.'ad_not_found'),
+            'status'    => config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         if($data->status != 'prepay')
         {
             return response()->json([
-                'err'=>trans($this->trans_dir.'ad_dont_have_right_status'),
-                'status'=>config('global.UNAUTHORIZED_VALIDATION_STATUS')
-            ],config('global.UNAUTHORIZED_VALIDATION_STATUS'));
+                'err'       => trans($this->trans_dir.'ad_dont_have_right_status'),
+                'status'    => config('global.UNAUTHORIZED_VALIDATION_STATUS')
+            ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
         $data->status = 'choosing_influencer';
         $data->save();
 
+        $title = 'customer_confirm_influencers';
+        $msg = 'customer_confirm_influencers';
+        $transParams = ['ad_name' => $data->store];
+        $roles = ['Business Manager','superAdmin'];
+        $info =[
+            'msg'           => $msg,
+            'title'         => $title,
+            'id'            => $data->id,
+            'type'          => 'Ad',
+            'params'        => $transParams
+        ];
+        
+        $this->saveAndSendNotification($info,$roles);
+
         return response()->json([
-            'status'=>config('global.OK_STATUS'),
-            'msg'=>trans($this->trans_dir.'data_was_updated')
+            'status'    => config('global.OK_STATUS'),
+            'msg'       => trans($this->trans_dir.'data_was_updated')
         ],config('global.OK_STATUS'));
 
     }
@@ -1188,8 +1178,8 @@ class AdController extends Controller
         #GET THE AD AND CHECK IF THE AD EXIST
         $data = Ad::find($ad_id);
         if(!$data) return response()->json([
-            'err'=>trans($this->trans_dir.'ad_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
+            'err'       => trans($this->trans_dir.'ad_not_found'),
+            'status'    => config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         
@@ -1199,9 +1189,9 @@ class AdController extends Controller
 
             foreach ($request->social_media as $value) {
                 DB::table('social_media_id')->insert([
-                   'ad_id'=>$data->id,
-                   'social_media_id'=>$value['type']??$value->type,
-                   'link'=>$value['link']??$value->type
+                   'ad_id'              => $data->id,
+                   'social_media_id'    => $value['type']??$value->type,
+                   'link'               => $value['link'] ?? $value->type
                 ]);
 			
             }
@@ -1210,10 +1200,24 @@ class AdController extends Controller
 
         if($data->update($arr))
         {
+
+            $msg = "update_campaign";
+            $roles = ['Business Manager','superAdmin'];
+            $transParams = ['user_name' => $data->customers->full_name,'ad_name' => $data->store];
+            $info =[
+                'msg'           => $msg,
+                'id'            => $data->id,
+                'type'          => 'Ad',
+                'roles'         => $roles,
+                'params'        => $transParams
+            ];
+
+            $this->saveAndSendNotification($info,$roles);
+
             return response()->json([
-                'msg'=>trans($this->trans_dir.'ad_was_updated'),
-                'data'=>$data,
-                'status'=>config('global.OK_STATUS')
+                'msg'       => trans($this->trans_dir.'ad_was_updated'),
+                'data'      => $data,
+                'status'    => config('global.OK_STATUS')
             ],config('global.OK_STATUS'));
         }
         else
@@ -1230,13 +1234,13 @@ class AdController extends Controller
         #GET THE AD AND CHECK IF THE AD EXIST
         $data = Ad::find($ad_id);
         if(!$data) return response()->json([
-            'err'=>trans($this->trans_dir.'ad_not_found'),
-            'status'=>config('global.NOT_FOUND_STATUS')
+            'err'       => trans($this->trans_dir.'ad_not_found'),
+            'status'    => config('global.NOT_FOUND_STATUS')
         ],config('global.NOT_FOUND_STATUS'));
 
         return response()->json([
-            'data' => $data,
-            'status' => config('global.OK_STATUS')
+            'data'      => $data,
+            'status'    => config('global.OK_STATUS')
         ],config('global.OK_STATUS'));
     }
 
@@ -1258,7 +1262,7 @@ class AdController extends Controller
             'status'    => config('global.OK_STATUS'),
 			'data' => [
 				'id'                => $ad->id,
-				'type'              => trans($this->$trans_dir . $ad->type),
+				'type'              => trans($this->trans_dir . $ad->type),
 				'status'            => $ad->status,
                 'influncers_status' => $admin_approved_influencers ? true : false,
 				'category'          => $ad->categories->name,

@@ -61,7 +61,7 @@
                         <label for="relation_id" class="form-label">Relation</label>
                         <select name="relation_id" class="form-control" aria-label="Default select example" id="relation_id">
                             @foreach ($realations as $item)
-                            <option {{ $data->relation_id == $item->id?'selected':'' }} value="owner">{{ $item->title }}</option>
+                            <option {{ $data->relation_id == $item->id ? 'selected':'' }} value="{{$item->id}}">{{ $item->title }}</option>
                             @endforeach
                           </select>
                       </div>

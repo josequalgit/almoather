@@ -3,6 +3,7 @@
 namespace App\Http\Traits;
 
 use App\Models\CampaignContract;
+use App\Models\Influncer;
 use App\Models\Contract;
 use App\Models\InfluencerContract;
 use Auth;
@@ -288,7 +289,7 @@ trait AdResponse
         return number_format($number, 0, '.', ',');
     }
 
-    public function generateContractPdf($contract,$title = ''){
+    public function generateContractPdf($contract,$title = '',$stamp = false){
         $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
         $fontDirs = $defaultConfig['fontDir'];
 
@@ -312,13 +313,15 @@ trait AdResponse
             ],
             'default_font' => 'Amiri'
         ]);
+       // return view('dashboard.contract.pdf',compact('contract','title'));
+        
         $pdf->SetTitle($title);
         $pdf->setAutoTopMargin = 'stretch';
         $pdf->SetDisplayMode('fullpage');
-        $html = view('dashboard.contract.pdf',compact('contract','title'))->render();
+        $html = view('dashboard.contract.pdf',compact('contract','title','stamp'))->render();
         $pdf->autoScriptToLang = true;
         $pdf->autoLangToFont = true;
-        $pdf->SetWatermarkImage(public_path('img/avatars/logo-almuaather-full.jpg'),0.2,array(130,130));
+        $pdf->SetWatermarkImage(public_path('img/avatars/logo-almuaather-full.jpg'),0.10,array(130,130));
         $pdf->showWatermarkImage = true;
         $pdf->SetDefaultBodyCSS('background', "url('".asset('img/avatars/pdf-bg.jpg')."')");
         $pdf->SetDefaultBodyCSS('background-image-resize', 6);
@@ -330,5 +333,32 @@ trait AdResponse
 
         $pdf->Output();
         
+    }
+
+    //Calculate new budget for influencers
+    function getNewPrice($ad,$remove_inf = 0,$add_inf = 0){
+        $matchedInfluencers = $ad->matches()->where([['chosen', 1],['status','!=','deleted']])->get();
+        $budgetSum = 0;
+        foreach($matchedInfluencers as $match){
+            $price = $ad->ad_type == 'online' ? $match->influencers->ad_with_vat : $match->influencers->ad_onsite_price_with_vat;
+            $budgetSum += $price;
+        }
+
+        if($remove_inf){
+            $removeInfluencer = Influncer::find($remove_inf);
+            $price = $ad->ad_type == 'online' ? $removeInfluencer->ad_with_vat : $remove_inf->ad_onsite_price_with_vat;
+            $budgetSum -= $price;
+        }
+
+        if($add_inf){
+            $addInfluencer = Influncer::find($add_inf);
+            $price = $ad->ad_type == 'online' ? $addInfluencer->ad_with_vat : $addInfluencer->ad_onsite_price_with_vat;
+            $budgetSum += $price;
+        }
+
+        $relation = $ad->relations ? $ad->relations->app_profit : 10;
+        $budgetSum += $relation / 100 * $budgetSum;
+
+        return $budgetSum;
     }
 }
