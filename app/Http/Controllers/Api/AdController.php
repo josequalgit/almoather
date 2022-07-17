@@ -47,8 +47,8 @@ class AdController extends Controller
     //Return the list of ads based on Type (Customer / Influencer)
     public function index($status)
     {
+        
         $user_id = Auth::guard('api')->user()->influncers ? Auth::guard('api')->user()->influncers->id :Auth::guard('api')->user()->customers->id;
-      
         if(Auth::guard('api')->user()->influncers)
         {
             if(!in_array($status,config('global.INFLUENCER_ADS_STATUS'))){
@@ -171,11 +171,12 @@ class AdController extends Controller
 		 if(count($request->social_media) > 0)
         {
             foreach ($request->social_media as $value) {
+              //  dd($value['type']);
 
                 DB::table('social_media_id')->insert([
                    'ad_id'=>$data->id,
-                   'social_media_id'=>$value['type']??$value->type,
-                   'link'=>$value['link']??$value->type
+                   'social_media_id'=>$value['type']?$value['type']:$value['type'],
+                   'link'=>$value['link']?$value['link']:''
                 ]);
 			
             }
@@ -210,9 +211,12 @@ class AdController extends Controller
             'type'=>'Ad'
         ];
 
-       $this->sendAdminNotification('contract_manager_notification',$info);
+        /** Removed just for testing in local */
+        //Todo uncomment the notification code
 
-        $c_not = Notification::send($getAdmin, new AddInfluencer($info));
+    //    $this->sendAdminNotification('contract_manager_notification',$info);
+
+    //     $c_not = Notification::send($getAdmin, new AddInfluencer($info));
 
         return response()->json([
             'msg'=>trans($this->trans_dir.'ad_was_created'),
@@ -243,7 +247,7 @@ class AdController extends Controller
         {
             return trans($this->trans_dir.'should_categories_influencer');
         }
-        if(isset($request->isVat)&&!$request->tax_registration_number)
+        if(isset($request->isVat)&&!$request->tax_value)
         {
             return trans($this->trans_dir.'tax_registration_number_required');
         }

@@ -13,6 +13,8 @@ use App\Models\Category;
 use App\Models\SocialMedia;
 use App\Models\Bank;
 use App;
+
+
 class AuthController extends Controller
 {
     public function login()
@@ -31,7 +33,9 @@ class AuthController extends Controller
             $bearer = 'Bearer '.$token;
             Auth::attempt(['email'=>$request->username,'password'=>$request->password]);
             // $request->headers->set('Authorization',$bearer);
-            setcookie('jwt_token',$bearer);
+           
+           $cookie =  \Cookie::make('jwt_token',$bearer,time() + (10 * 365 * 24 * 60 * 60));
+           
             if(count(Auth::guard('api')->user()->roles) > 0)
             {
                 Auth::guard('api')->logout();
@@ -43,7 +47,7 @@ class AuthController extends Controller
             }
             $is_user_verified = Auth::guard('api')->user()->email_verified_at?true:false;
 
-            return redirect()->route($is_user_verified?'customers.index':'active_code')->header('Authorization',$bearer);
+            return redirect()->route($is_user_verified?'customers.index':'active_code')->withCookie($cookie);
             // return response()->json([
             //     'data'=>[
             //         'url'=>$is_user_verified?route('customers.index'):route('auth.active_code'),
@@ -114,6 +118,13 @@ class AuthController extends Controller
             setcookie('language','ar');
         }
         return back();
+    }
+
+    public function logout(){
+        $cookie =  \Cookie::forget('jwt_token');
+        // Auth::guard('api')->logout();
+        Auth::logout();
+        return redirect()->route('auth.login');
     }
 
 }

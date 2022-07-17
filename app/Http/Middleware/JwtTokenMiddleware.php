@@ -17,9 +17,10 @@ class JwtTokenMiddleware
     public function handle(Request $request, Closure $next)
     {
         /** PUTTING THE JWT TOKEN IN THE HEADER */
-        $token = isset($_COOKIE["jwt_token"])?$_COOKIE["jwt_token"]:"";
+        $token = \Cookie::get('jwt_token');
         $request->headers->set("Authorization", $token);
         $response = $next($request);
+
 
         return $response;
     }

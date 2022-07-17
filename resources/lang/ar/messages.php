@@ -114,7 +114,7 @@ return [
         'more' =>'المزيد',
         'store_name'=>'اسم العلامة التجارية',
         'ad_type'=>'نوع الحملة',
-        'my_ads'=>'علاني',
+        'my_ads'=>'اعلاني',
         'please_add_the_ad_information_in_the_form_below'=>'الرجاء اضافة معلومات الاعلان',
         'marof_number'=>'ادخل رقم التوثيق',
         'onsite'=>'حضوري',
@@ -128,7 +128,27 @@ return [
         'add_cr_document'=>'ادرج وثائقك التجارية',
         'are_you_under_added_value'=>'هل انت خاضع لضريبه المضافة؟',
         'cr_no_note'=>'اتحمل كافة المسؤولية بهذا الاختيار',
-        'ad_relation'=>'علاقتك بالعلامه التجارية'
+        'ad_relation'=>'علاقتك بالعلامه التجارية',
+        'about_company'=>'نبذة عن الشركة/العلامة التجارية',
+        'about_product'=>'اوصف منتجك/خدمتك',
+        'campaign_goals'=>'أهداف الحملة',
+        'ad_location'=>'الموقع الرئيسي للعلامة التجارية',
+        'area'=>'المنطقة',
+        'onsite'=>'حضوري',
+        'online'=>'عن بعد',
+        'enter_budget'=>'أدخل ميزانيتك',
+        'store_link'=>'رابط المتجر',
+        'choose_influncer_platform'=>'أختر المنصة المضلة لاطلاق حملتك',
+        'send'=>'أرسل',
+        'create_ads'=>'انشاء اعلان',
+        'logout'=>'تسجيل خروج',
+        'commercial_doc'=>'وثيقة تجارية',
+        'tax_value'=>'قيمة الضريبة',
+        'account_link'=>'اضف رابط الحساب الخاص بك',
+        'details'=>'تفاصيل'
+
+
+
 
     ],
 ];

@@ -32,60 +32,57 @@
          
 
            @canany(['Edit Ads','Create Ads','See Ads','Delete Ads'])
-           
-           <li class="menu-item  {{ ($name == 'dashboard.ads.index'|| $name == 'dashboard.ads.create'|| $name == 'dashboard.ads.edit') ? 'open active':''  }} ">
-             <a href="javascript:void(0);" class="menu-link menu-toggle">
-               <i class="menu-icon tf-icons bx bx-money"></i>
-               <div data-i18n="Invoice" class="d-flex jsutify-content-center align-items-center">Campaigns @if($pending_ads > 0)<span class="badge badge-danger">{{ $pending_ads }}</span>@endif</div>
-             </a>
-             <ul class="menu-sub">
+            <li class="menu-item  {{ ($name == 'dashboard.ads.index'|| $name == 'dashboard.ads.create'|| $name == 'dashboard.ads.edit') ? 'open active':''  }} ">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-money"></i>
+                <div data-i18n="Invoice" class="d-flex jsutify-content-center align-items-center">Campaigns @if($pending_ads > 0)<span class="badge badge-danger">{{ $pending_ads }}</span>@endif</div>
+              </a>
+              <ul class="menu-sub">
 
-               <li class="menu-item
-               {{ (($name == 'dashboard.ads.index'&&$para == null)|| ($name == 'dashboard.ads.create'&&$para == null)||($name == 'dashboard.ads.edit')&&$para == null) ? 'active':''  }}
-               ">
-                 <a href="{{ route('dashboard.ads.index','All') }}" class="menu-link">
-                   <div data-i18n="List">All</div>
-                 </a>
-               </li>
-               <li class="menu-item
-               {{ (($name == 'dashboard.ads.index'&&$para == 'UnderReview')|| ($name == 'dashboard.ads.create'&&$para == 'UnderReview')||($name == 'dashboard.ads.edit')&&$para == 'UnderReview') ? 'active':''  }}
-               ">
-                 <a href="{{ route('dashboard.ads.index','UnderReview') }}" class="menu-link">
-                   <div data-i18n="List" class="d-flex jsutify-content-center align-items-center">Under Review <span class="badge badge-danger">{{ $pending_ads }}</span></div>
-                 </a>
-               </li>
-               <li class="menu-item
-               {{ (($name == 'dashboard.ads.index'&&$para == 'Pending')|| ($name == 'dashboard.ads.create'&&$para == 'Pending')||($name == 'dashboard.ads.edit')&&$para == 'Pending') ? 'active':''  }}
-               ">
-                 <a href="{{ route('dashboard.ads.index','Pending') }}" class="menu-link">
-                   <div data-i18n="List">Pending</div>
-                 </a>
-               </li>
-               <li class="menu-item 
-               {{ (($name == 'dashboard.ads.index'&&$para == 'Active')|| ($name == 'dashboard.ads.create'&&$para == 'Active')||($name == 'dashboard.ads.edit')&&$para == 'Active') ? 'active':''  }}">
-                 <a href="{{ route('dashboard.ads.index','Active') }}" class="menu-link">
-                   <div data-i18n="List">Active</div>
-                 </a>
-               </li>
-               <li class="menu-item
-               {{ (($name == 'dashboard.ads.index'&&$para == 'Finished')|| ($name == 'dashboard.ads.create'&&$para == 'Finished')||($name == 'dashboard.ads.edit')&&$para == 'Finished') ? 'active':''  }}
-               ">
-                 <a href="{{ route('dashboard.ads.index','Finished') }}" class="menu-link">
-                   <div data-i18n="List">Finished</div>
-                 </a>
-               </li>
-               <li class="menu-item
-               {{ (($name == 'dashboard.ads.index'&&$para == 'Rejected')|| ($name == 'dashboard.ads.create'&&$para == 'Rejected')||($name == 'dashboard.ads.edit')&&$para == 'Rejected') ? 'active':''  }}
+                <li class="menu-item
+                {{ (($name == 'dashboard.ads.index'&&$para == null)|| ($name == 'dashboard.ads.create'&&$para == null)||($name == 'dashboard.ads.edit')&&$para == null) ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.ads.index','All') }}" class="menu-link">
+                    <div data-i18n="List">All</div>
+                  </a>
+                </li>
+                <li class="menu-item
+                {{ (($name == 'dashboard.ads.index'&&$para == 'UnderReview')|| ($name == 'dashboard.ads.create'&&$para == 'UnderReview')||($name == 'dashboard.ads.edit')&&$para == 'UnderReview') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.ads.index','UnderReview') }}" class="menu-link">
+                    <div data-i18n="List" class="d-flex jsutify-content-center align-items-center">Under Review <span class="badge badge-danger">{{ $pending_ads }}</span></div>
+                  </a>
+                </li>
+                <li class="menu-item
+                {{ (($name == 'dashboard.ads.index'&&$para == 'Pending')|| ($name == 'dashboard.ads.create'&&$para == 'Pending')||($name == 'dashboard.ads.edit')&&$para == 'Pending') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.ads.index','Pending') }}" class="menu-link">
+                    <div data-i18n="List">Pending</div>
+                  </a>
+                </li>
+                <li class="menu-item 
+                {{ (($name == 'dashboard.ads.index'&&$para == 'Active')|| ($name == 'dashboard.ads.create'&&$para == 'Active')||($name == 'dashboard.ads.edit')&&$para == 'Active') ? 'active':''  }}">
+                  <a href="{{ route('dashboard.ads.index','Active') }}" class="menu-link">
+                    <div data-i18n="List">Active</div>
+                  </a>
+                </li>
+                <li class="menu-item
+                {{ (($name == 'dashboard.ads.index'&&$para == 'Finished')|| ($name == 'dashboard.ads.create'&&$para == 'Finished')||($name == 'dashboard.ads.edit')&&$para == 'Finished') ? 'active':''  }}
+                ">
+                  <a href="{{ route('dashboard.ads.index','Finished') }}" class="menu-link">
+                    <div data-i18n="List">Finished</div>
+                  </a>
+                </li>
+                <li class="menu-item
+                {{ (($name == 'dashboard.ads.index'&&$para == 'Rejected')|| ($name == 'dashboard.ads.create'&&$para == 'Rejected')||($name == 'dashboard.ads.edit')&&$para == 'Rejected') ? 'active':''  }}
 
-               ">
-                 <a href="{{ route('dashboard.ads.index','Rejected') }}" class="menu-link">
-                   <div data-i18n="List">Rejected</div>
-                 </a>
-               </li>
-             
-               
-             </ul>
-           </li>
+                ">
+                  <a href="{{ route('dashboard.ads.index','Rejected') }}" class="menu-link">
+                    <div data-i18n="List">Rejected</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
            @endcanany
 
 
