@@ -407,7 +407,7 @@ class AdController extends Controller
         if($request->status == 1)
         {
             $content = str_replace("[[_DATE_]]", Carbon::now()->format('d/m/Y'), $data->content);
-            $contract->update(['content' => $content]);
+            $data->update(['content' => $content]);
 
             //Todo save influencers contract without variables
             event(new VoluumEvent($data->id,'campaign'));
