@@ -409,13 +409,12 @@ class AdController extends Controller
             $content = str_replace("[[_DATE_]]", Carbon::now()->format('d/m/Y'), $data->content);
             $data->update(['content' => $content]);
 
-            //Todo save influencers contract without variables
             event(new VoluumEvent($data->id,'campaign'));
             $title = 'influencer_joined_campaign';
             $msg = 'influencer_joined_campaign_msg';
             $roles = ['Business Manager','superAdmin'];
-            $transParams = ['inf_name' => $contract->influencers->nick_name,"ad_name" => $contract->ads->store,"exec_date" => $contract->date->format('d/m/Y')];
-            $users = [$contract->ads->customers->users->id];
+            $transParams = ['inf_name' => $data->influencers->nick_name,"ad_name" => $data->ads->store,"exec_date" => $data->date->format('d/m/Y')];
+            $users = [$data->ads->customers->users->id];
             $info =[
                 'msg'           => $msg,
                 'title'         => $title,
