@@ -151,7 +151,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
         Route::prefix('campaign')->controller(AdController::class)->group(function(){
             Route::get('get/{status}','index')->name('getAdsApi');
             Route::post('create','store')->name('storeAdApi')->middleware('check_customer');
-            Route::get('details/{id}','details');
+            Route::get('details/{id}','details')->name('apiAdDetails');
             Route::get('contract/{ad_id}','get_ad_contract');
             Route::post('contract/accept_contract/{contract_id}','accept_ad_contract');
             Route::post('contract/customer/accept_contract/{contract_id}','accept_customer_ad_contract');
