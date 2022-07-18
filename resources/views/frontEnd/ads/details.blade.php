@@ -166,6 +166,7 @@
     let ad_id = '{{ $data->id }}';
     let payment_amount = 0;
     let addAdId = route.replace(':id',ad_id)
+    $('#influencer_list').hide();
     $.ajax({
         url:addAdId,
         beforeSend: function (xhr) {
@@ -204,6 +205,10 @@
                 $('#customer_action_button').hide();
                 getBluredInfluncers()
                 // $('#customer_action_button').append('{{ trans("messages.frontEnd.contract_and_pay") }}');
+            }
+            if(ad.status == 'prepay')
+            {
+                getMatchedInfluncers();
             }
 
             let videos = ad.videos;
@@ -278,6 +283,8 @@
             },
             type:'GET',
             success:(res)=>{
+                $('#influencer_list').show();
+
                 let matches = res.data.matches;
                 
                 let item_classification = res.data.type;
@@ -316,7 +323,7 @@
                     <th scope="row"><img height='50px' width='50px'; src='https://img.freepik.com/free-vector/blurred-background-with-light-colors_1034-245.jpg?w=2000' /></th>
                     <td>**********</td>
                     <td>${element.gender}</td>
-                    <td>${ new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'SAR' ,maximumSignificantDigits:3}).format(element.budget) }</td>
+                    <td>${ element.budget }</td>
                     <td>${element.ROAS}</td>
                     <td>${element.AOAF ?? 0}</td>
                     <td>${element.engagement_rate ?? 0}</td>
@@ -345,22 +352,10 @@
                         if(result.isConfirmed)
                         {
                             let get_matches = '{{ route("get_ad_influencers_match",":id") }}';
-                            let routeWithId = get_matches.replace(':id',ad_id);
+                            /** ***/
                              pay_now();
                              /**  GET MATHCH INFLUNCERS **/
-                        //    $.ajax({
-                        //     url:routeWithId,
-                        //     beforeSend:function (xhr) {
-                        //         xhr.setRequestHeader('Authorization', `${token}`);
-                        //     },
-                        //     type:'GET',
-                        //     success:(res)=>{
-                        //         console.log('full match response: ',res)
-                        //     },
-                        //     error:(err)=>{
-                        //         console.log('error: ',err)
-                        //     }
-                        //    })
+                       
                         }
 
                     });
@@ -380,7 +375,148 @@
     {
         $('#ad_id').val(ad_id);
         $('#amount').val(payment_amount);
-        $('#paymentRequest').submit();
+        // $('#paymentRequest').submit();
+
+        getMatchedInfluncers();
+    }
+
+    function getMatchedInfluncers()
+    {
+        let route = '{{ route("get_ad_influencers_match",":id") }}';
+        let url = route.replace(':id',ad_id);
+        $.ajax({
+            url:url,
+            beforeSend:function (xhr) {
+                xhr.setRequestHeader('Authorization', `${token}`);
+            },
+            type:'GET',
+            success:(res)=>{
+                $('#influencer_list').show();
+
+                let tabel = `
+                    <table class="table zero-configuration table-influencers col-12">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Price</th>
+                                <th>ROAS</th>
+                                <th>AOAF</th>
+                                <th>Engagment Rate</th>
+                                <th>Is Primary</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id='table_body'>
+                            
+                        </tbody>
+                        </table>                
+                    `;
+
+            $(tabel).appendTo('#influencer_list');
+
+            let matches = res.data.match;
+
+                matches.forEach((e)=>{
+                    let table_item = `
+                <tr data-id="${e.id}">
+                                    <td>
+                                        <div class="thumb">
+                                            <img width='50px' height='50px' class="img-fluid inf-image" src="${e.image.url}" alt="">
+                                        </div>
+                                    </td>
+                                    <td>${e.name}</td>
+                                    <td>${e.gender}</td>
+                                    <td>$${e.budget}</td>
+                                    <td>${e.AOAF ?? 0}</td>
+                                    <td>${e.ROAS ?? 0}</td>
+                                    <td>${e.engagement_rate ?? 0}%</td>
+                                    <td>
+                                       <button onclick='changePrmaryStatus("${e.id}","${e.is_primary?'not_basic':'basic'}")' class='btn btn-primary'>${e.is_primary?'Yes':'No'}</button>
+                                    </td>
+                                    <td>
+                                        <button class='btn btn-primary'>Replace</button>    
+                                        <button onclick='changePrmaryStatus("${e.id}","deleted")' class='btn btn-danger'>Delete</button>    
+                                    </td>
+                                </tr>
+            ` 
+                $('#table_body').append(table_item);
+                })
+
+          
+            
+
+                console.log('full match response: ',res)
+            },
+            error:(err)=>{
+                console.log('error: ',err)
+            }
+        })
+    }
+
+    function changePrmaryStatus(influncere_id,status)
+    {
+        let url = '{{ route("changeMatchedStatus") }}';
+        $.ajax({
+            url,
+            type:'POST',
+            beforeSend:function (xhr) {
+                xhr.setRequestHeader('Authorization', `${token}`);
+            },
+            data:{
+                'ad_id':ad_id,
+                'influncer_id':influncere_id,
+                'status':status
+            },
+            success:(res)=>{
+                let matches = res.data.match;
+                $('#table_body').empty();
+                matches.forEach((e)=>{
+                    let table_item = `
+                    <tr data-id="${e.id}">
+                                        <td>
+                                            <div class="thumb">
+                                                <img width='50px' height='50px' class="img-fluid inf-image" src="${e.image.url}" alt="">
+                                            </div>
+                                        </td>
+                                        <td>${e.name}</td>
+                                        <td>${e.gender}</td>
+                                        <td>$${e.budget}</td>
+                                        <td>${e.AOAF ?? 0}</td>
+                                        <td>${e.ROAS ?? 0}</td>
+                                        <td>${e.engagement_rate ?? 0}%</td>
+                                        <td>
+                                        <button onclick='changePrmaryStatus("${e.id}","${e.is_primary?'not_basic':'basic'}")' class='btn btn-primary'>${e.is_primary?'Yes':'No'}</button>
+                                        </td>
+                                        <td>
+                                            <button class='btn btn-primary'>Replace</button>    
+                                            <button class='btn btn-danger'>Delete</button>    
+                                        </td>
+                                    </tr>
+                    ` 
+                    $('#table_body').append(table_item);
+                })
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                    })
+
+                Toast.fire({
+                icon: 'success',
+                title: res.msg
+                })
+
+            },
+            error:(err)=>{}
+        })
     }
 </script>
 @endsection

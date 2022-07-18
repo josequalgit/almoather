@@ -169,7 +169,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
             Route::post('fullPayment/{ad_id}','full_payment');
             Route::get('completeAd/{ad_id}','completeAd');
             Route::post('addMatch','addMatch');
-            Route::post('changeMatchedStatus','changeMatchStatus');
+            Route::post('changeMatchedStatus','changeMatchStatus')->name('changeMatchedStatus');
             Route::post('check_payment/{ad_id}','check_payment');
             Route::get('get_ad_influencers_match/{ad_id}','get_ad_influencers_match');
             Route::get('get_camping_influencers_match/{ad_id}','get_ad_influencers_match')->name('get_ad_influencers_match');
