@@ -1193,7 +1193,7 @@ class AdController extends Controller
      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
      curl_setopt($ch, CURLOPT_HTTPHEADER, array( 
            'Content-Type: application/json', 
-           'Content-Length: ' . strlen($data)) 
+           'Content-Length: ' . strlen($data))  
           ); 
      curl_setopt($ch, CURLOPT_TIMEOUT, 5); 
      curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5); 
