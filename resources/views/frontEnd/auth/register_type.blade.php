@@ -4,16 +4,28 @@
     <title>Al-Muaathir</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap && Css -->
+    
+    @if( app()->getLocale() == 'en' )
     <link rel="stylesheet" href="{{ asset('frontEnd/css/bootstrap.min.css') }}">
+    @else
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.rtl.min.css" integrity="sha384-gXt9imSW0VcJVHezoNQsP+TNrjYXoGcrqBZJpry9zJt8PCQjobwmhMGaDHTASo9N" crossorigin="anonymous">
+    @endif
+
+    @if(app()->getLocale() == 'ar' )
+    <link rel="stylesheet" href="{{ asset('frontEnd/css/ar/style.css') }}">
+    @else
     <link rel="stylesheet" href="{{ asset('frontEnd/css/style.css') }}">
+    @endif
+
     <link rel="stylesheet" href="{{ asset('frontEnd/css/all.min.css') }}">
+    
   </head>
   <!-- All Images In Regular Size Are Hidden For Responsive Size (600 / 990) -->
   <body class="body">
     <!-- menu section -->
    
       <!-- end menu section -->
-      <section class="background-page5 min-height-100 position-relative d-flex align-items-center">
+      <section class="background-page5 min-height-100 position-relative d-flex align-items-center" style="background-image: url('{{ asset('frontEnd/img/Mask Group.png') }}')">
         <div class="container">
            <div class="login text-center p-5">
                <div class="container">
@@ -33,7 +45,7 @@
                                    </div>
                            </div>
                        </div>
-                       <img class="arrow-img2" src="{{ asset('frontEnd/img/Group 50667.png') }}" alt="">
+                       <img class="arrow-img2" src="{{ asset(app()->getLocale() == 'ar'?'frontEnd/img/Group 50667-ar.png':'frontEnd/img/Group 50667.png') }}" alt="">
                        <div class="col-md-6 col-12 text-center">
                            <div>
                                <div class="title">
