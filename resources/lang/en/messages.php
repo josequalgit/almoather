@@ -174,6 +174,7 @@ return [
         'accordion_item'=>'Accordion item',
         'location'=>'Location',
         'next'=>'Next',
+        'cancel'=>'Cancel',
         'phone'=>'Phone',
         'mail'=>'Mail',
         'social_media'=>'Social Media',
@@ -286,6 +287,13 @@ return [
         'commercial_doc'=>'Commercial Document',
         'tax_value'=>'Tax Value',
         'account_link'=>'Add the link of your account',
-        'details'=>'Details'
+        'details'=>'Details',
+        'influncer_blured'=>'Recommended Influencers',
+        'please_wait'=>'Your ad is under review, please wait until approval from the admin',
+        'contract_and_pay'=>'Contract & Payment',
+        'type'=>'Type',
+        'item_classification_of_the_product'=>'Item Classification of the product',
+        'unlock_influencer_message' => 'To view the details of the influencers nominated for the campaign,and to obtain the feature of deletion and replacement, a payment of the amount :price is required,which is a fee that is refundable according to the refund policy in the event that you do not want to continue',
+
     ]
 ];

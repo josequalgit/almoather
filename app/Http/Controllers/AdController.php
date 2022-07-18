@@ -1150,4 +1150,73 @@ class AdController extends Controller
         ],config('global.OK_STATUS'));
     }
 
+    public function send_payment(Request $request){
+
+        $idorder = $request->ad_id;//Customer Order ID
+        $terminalId = config('global.PAYMENT_USERNAME');// Will be provided by URWAY
+        $password = config('global.PAYMENT_PASSWORD');// Will be provided by URWAY
+        $merchant_key = config('global.PAYMENT_KEY');// Will be provided by URWAY
+        $currencycode = "SAR";
+        $amount = number_format((float)$request->amount, 2, '.', '');
+
+
+       
+        $ipp = $request->ip();
+        
+        //Generate Hash
+        $txn_details= $idorder.'|'.$terminalId.'|'.$password.'|'.$merchant_key.'|'.$amount.'|'.$currencycode; 
+        $hash=hash('sha256', $txn_details); 
+    
+    
+    $fields = array( 
+                'trackid' => $idorder, 
+                'terminalId' => $terminalId, 
+                'customerEmail' => 'customer@email.com', //Todo change the customer email
+                'action' => "1",  // action is always 1 
+                'merchantIp' =>$ipp, 
+                'password'=> $password, 
+                'currency' => $currencycode, 
+                'country'=>"SA", 
+                'amount' => $amount,  
+                 "udf1"              =>"Test1",
+                "udf2"              =>"https://urway.sa/urshop/scripts/response.php",//Response page URL
+                 "udf3"              =>"",
+                  "udf4"              =>"",
+                "udf5"              =>"Test5",
+                'requestHash' => $hash  //generated Hash  
+                );    
+                
+      $data = json_encode($fields);  
+    $ch=curl_init('https://payments-dev.urway-tech.com/URWAYPGService/transaction/jsonProcess/JSONrequest'); // Will be provided by URWAY
+     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST"); 
+     curl_setopt($ch, CURLOPT_POSTFIELDS, $data); 
+     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+     curl_setopt($ch, CURLOPT_HTTPHEADER, array( 
+           'Content-Type: application/json', 
+           'Content-Length: ' . strlen($data)) 
+          ); 
+     curl_setopt($ch, CURLOPT_TIMEOUT, 5); 
+     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5); 
+     //execute post 
+     $server_output =curl_exec($ch); 
+     //close connection 
+     curl_close($ch); 
+         $result = json_decode($server_output);
+         if (!empty($result->payid) && !empty($result->targetUrl)) {
+           $url = $result->targetUrl . '?paymentid=' .  $result->payid;
+            header('Location: '. $url, true, 307);//Redirect to Payment Page
+         }else{
+    
+       print_r($result);
+      echo "<br/><br/>";
+       print_r($data);
+       die();
+
+
+
+
+
+    };
+}
+
 }

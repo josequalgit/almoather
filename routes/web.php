@@ -41,6 +41,7 @@ use App\Http\Controllers\FrontEnd\AdController as FrontAdController;
 
 Route::group(['middleware' => 'language'],function(){
     // Route::redirect('/','/dashboard/admins')->name('home');
+    Route::post('payment',[AdController::class,'send_payment'])->name('send_payment');
     Route::get('/test-msg',[ChatController::class,'sendMessageTo'])->name('test');
     Route::get('changeLanguage',[FrontEndAuthController::class,'changeLanguage'])->name('changeLanguage');
     /** GROUP FRONT END */
