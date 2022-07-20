@@ -66,7 +66,9 @@ class AdController extends Controller
                 'Active'    => 1
             ];
 
-            $data = Auth::guard('api')->user()->influncers->contracts()->whereHas('ads');
+            $data = Auth::guard('api')->user()->influncers->contracts()->whereHas('ads',function($query){
+                return $query->whereIn('status',['fullpayment','active','progress','complete'])
+            });
 
             if($status == 'Completed'){
                 $itemsPaginated =  $data->where('status',1)->where('is_accepted',$statusCode[$status]);
