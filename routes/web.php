@@ -500,7 +500,7 @@ Route::group(['middleware' => 'language'],function(){
 
 
     Route::get('voluum',function(){
-        $voluum = new App\Voluum\Offer;
-        $voluum->createOffer(1);
+        $voluum = new App\Voluum\Campaign;
+        $voluum->createCampaign(56);
     });
 });

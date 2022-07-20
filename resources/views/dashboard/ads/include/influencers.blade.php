@@ -89,6 +89,9 @@ $notShowfluencersActions = ['progress','cancelled','complete','active','fullpaym
                                     @if($item->contract && $data->admin_approved_influencers)
                                     <button  type="button" onclick="getInfluencerContract(this,'{{ $item->contract->id }}')" class="btn btn-secondary btn-sm mb-1">Contract</button>
                                     @endif
+                                    @if($item->contract && $item->contract->is_accepted == 2)
+                                    <button  type="button" onclick="resendContract(this,'{{ $item->contract->id }}')" class="btn btn-secondary btn-sm mb-1">Resend Contract</button>
+                                    @endif
                                 
                                 </td>
                             </tr>
