@@ -353,7 +353,7 @@ class AdController extends Controller
 
         $content = $contract->content;
 
-        $content = str_replace("[[_DATE_]]", Carbon::now()->format('d/m/Y'), $data->content);
+        $content = str_replace("[[_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
         
 
         $title = $ad->store;
