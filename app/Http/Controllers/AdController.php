@@ -991,10 +991,13 @@ class AdController extends Controller
         $priceWithVat = $contract->ads->ad_type == 'online' ? $contract->influencers->ad_with_vat : $contract->influencers->ad_onsite_price_with_vat;
         $price = $contract->ads->ad_type == 'online' ? $contract->influencers->ad_price : $contract->influencers->ad_onsite_price;
 
-        $content = str_replace("[[_ID_]]", $contract->id, $content);
-        #$content = str_replace("[[_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
+        $content = str_replace("[[_ID_]]", $contract->id . '-' . $contract->ads->id, $content);
         $content = str_replace("[[_INFLUENCER_]]", $contract->influencers->full_name, $content);
+        $content = str_replace("[[_INFLUENCER_NAME_]]", $contract->influencers->full_name, $content);
+        $content = str_replace("[[_NICK_NAME_]]", $contract->influencers->nick_name, $content);
         $content = str_replace("[[_TAX_]]", $contract->influencers->tax_registration_number, $content);
+        $content = str_replace("[[_CR_NUMBER_]]", $contract->influencers->commercial_registration_no, $content);
+        $content = str_replace("[[_NATIONALITY_]]", $contract->influencers->nationalities->getTranslation('name','ar'), $content);
         $content = str_replace("[[_ID_NUMBER_]]", $contract->influencers->id_number, $content);
         $content = str_replace("[[_PHONE_]]", $contract->influencers->phone, $content);
         $content = str_replace("[[_EMAIL_]]", $contract->influencers->users->email, $content);

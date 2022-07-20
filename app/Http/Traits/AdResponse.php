@@ -35,7 +35,7 @@ trait AdResponse
         $start_date = null;
         $end_date = null;
         
-        if($ad->InfluencerContract){
+        if($ad->InfluencerContract && in_array($ad->status,['fullpayment','active','progress','complete'])){
             $contractData = $ad->InfluencerContract()->orderBy('date','asc')->first();
             if($contractData && $contractData->date){
                 $start_date = $contractData->date->format('d/m/Y');
