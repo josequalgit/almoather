@@ -67,7 +67,7 @@ class AdController extends Controller
             ];
 
             $data = Auth::guard('api')->user()->influncers->contracts()->whereHas('ads',function($query){
-                return $query->whereIn('status',['fullpayment','active','progress','complete'])
+                return $query->whereIn('status',['fullpayment','active','progress','complete']);
             });
 
             if($status == 'Completed'){
