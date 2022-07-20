@@ -151,8 +151,8 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
         Route::prefix('campaign')->controller(AdController::class)->group(function(){
             Route::get('get/{status}','index')->name('getAdsApi');
             Route::post('create','store')->name('storeAdApi')->middleware('check_customer');
-            Route::get('details/{id}','details');
-            Route::get('contract/{ad_id}','get_ad_contract');
+            Route::get('details/{id}','details')->name('apiAdDetails');
+            Route::get('contract/{ad_id}','get_ad_contract')->name('getAdContract');
             Route::post('contract/accept_contract/{contract_id}','accept_ad_contract');
             Route::post('contract/customer/accept_contract/{contract_id}','accept_customer_ad_contract');
             Route::get('search/{query}','search');
@@ -161,7 +161,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
             Route::get('matched/Influencer/{id}','getMatchedInfluencers');
             Route::get('matched/not_chosen_inf/{id}/{removed_inf_id}','getMatchedInfluencersNotChosen');
             Route::get('matched/replace_influencer/{id}/{removed_influencer}/{chosen_influencer}','replace_matched_influencer');
-            Route::get('preview_ad_matches/{id}','before_payment');
+            Route::get('preview_ad_matches/{id}','before_payment')->name('getBlurredInfluncer');
             Route::post('confirm_matches/{id}','confirm_matches');
             Route::get('completePay/{id}','pay_now');
             Route::get('back_up_influencers/{id}/{removed_inf}','back_up_influencers');
@@ -169,9 +169,10 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
             Route::post('fullPayment/{ad_id}','full_payment');
             Route::get('completeAd/{ad_id}','completeAd');
             Route::post('addMatch','addMatch');
-            Route::post('changeMatchedStatus','changeMatchStatus');
+            Route::post('changeMatchedStatus','changeMatchStatus')->name('changeMatchedStatus');
             Route::post('check_payment/{ad_id}','check_payment');
             Route::get('get_ad_influencers_match/{ad_id}','get_ad_influencers_match');
+            Route::get('get_camping_influencers_match/{ad_id}','get_ad_influencers_match')->name('get_ad_influencers_match');
             Route::post('update/{ad_id}','update');
             Route::get('ad_details_update/{ad_id}','ad_details_update');
             Route::post('/upload_media/{file_id}/{type}','uploadMedia')->where('type','remove|add|replace');

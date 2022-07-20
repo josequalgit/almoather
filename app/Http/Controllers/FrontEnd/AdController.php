@@ -6,12 +6,29 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SocialMedia;
 use App\Models\Relation;
+use App\Models\CampaignGoal;
+use App\Models\Country;
+use App\Models\Ad;
+
 class AdController extends Controller
 {
     public function create()
     {
         $socialMedia = SocialMedia::get();
         $relations = Relation::get();
-        return view('frontEnd.ads.create',compact('socialMedia','relations'));
+        $goals = CampaignGoal::get();
+        
+        $countries = Country::where('is_location',1)->get();
+
+        
+        return view('frontEnd.ads.create',compact('socialMedia','relations','goals','countries'));
+    }
+
+    public function details($id)
+    {
+        $data = Ad::findOrFail($id);
+        $cookie =  \Cookie::get('jwt_token');
+
+        return view('frontEnd.ads.details',compact('data'))->withCookie($cookie);
     }
 }

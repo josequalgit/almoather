@@ -41,6 +41,7 @@ use App\Http\Controllers\FrontEnd\AdController as FrontAdController;
 
 Route::group(['middleware' => 'language'],function(){
     // Route::redirect('/','/dashboard/admins')->name('home');
+    Route::post('payment',[AdController::class,'send_payment'])->name('send_payment');
     Route::get('/test-msg',[ChatController::class,'sendMessageTo'])->name('test');
     Route::get('changeLanguage',[FrontEndAuthController::class,'changeLanguage'])->name('changeLanguage');
     /** GROUP FRONT END */
@@ -53,6 +54,7 @@ Route::group(['middleware' => 'language'],function(){
             Route::get('/customer/register','customer_register')->name('customer_register');
             Route::get('/influencer/register','influencer_register')->name('influencer_register');
             Route::get('/active/code','active_code')->name('active_code');
+            Route::get('logout','logout')->name('frontEnd.logout');
         });
 
         Route::name('contact.')->prefix('contact')->controller(FrontContactController::class)->group(function(){
@@ -64,11 +66,12 @@ Route::group(['middleware' => 'language'],function(){
             Route::get('/','index')->name('index');
         });
         
-        Route::middleware(['jwtAuth'])->name('customers.')->prefix('customers')->group(function(){
+        Route::middleware(['jwtAuth','customer_middleware'])->name('customers.')->prefix('customers')->group(function(){
             Route::get('/',[FrontEndCustomerController::class,'index'])->name('index');
 
             Route::prefix('ad')->name('ads.')->controller(FrontAdController::class)->group(function(){
                 Route::get('/create','create')->name('create');
+                Route::get('/details/{id}','details')->name('details');
             });
         });
 
