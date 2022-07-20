@@ -381,7 +381,7 @@ class AdController extends Controller
             $title = 'influencer_reject_campaign';
             $msg = 'influencer_reject_campaign_msg';
             $roles = ['Business Manager','superAdmin'];
-            $transParams = ['inf_name' => $contract->influencers->nick_name,"ad_name" => $contract->ads->store,"reject_note" => $request->rejectNote];
+            $transParams = ['inf_name' => $data->influencers->nick_name,"ad_name" => $data->ads->store,"reject_note" => $request->rejectNote];
             $users = [];
             $info =[
                 'msg'           => $msg,

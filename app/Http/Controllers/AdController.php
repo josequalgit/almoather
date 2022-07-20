@@ -670,10 +670,30 @@ class AdController extends Controller
 
     public function editContract($ad_id)
     {
-        // dd('here');
         $data = Ad::findOrFail($ad_id)->contacts;
-        // return $data;
         return view('dashboard.ads.editContract', compact('data'));
+    }
+
+    public function updateInfluencerContract(Request $request,$contract_id)
+    {
+        $data = $request->validate([
+            "content"    => "required"
+        ]);
+        $contract = InfluencerContract::find($contract_id);
+
+        if(!$contract){
+            return response()->json([
+                'message' => 'Contract not found',
+                'status' => false,
+            ], config('global.NOT_FOUND_STATUS'));
+        }
+
+        $contract->update(['content' => $request->content]);
+        
+        return response()->json([
+            'message' => 'Data Saved Successfully',
+            'status' => true,
+        ], config('global.OK_STATUS'));
     }
 
     //Update Campaign contract
@@ -982,6 +1002,26 @@ class AdController extends Controller
         ], 200);
     }
 
+    function show_influencer_contract($contract_id){
+        $contract = InfluencerContract::find($contract_id);
+        if(!$contract){
+            return response()->json([
+                'message' => 'Contract not found',
+                'status' => false,
+            ], 404);
+        }
+
+        $content = $contract->content;
+        $content = str_replace("[[_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
+
+        return response()->json([
+            'message'   => '',
+            'id'        => $contract->id,
+            'contract'  => mb_convert_encoding( $content, 'UTF-8', 'UTF-8'),
+            'status'    => true,
+        ], 200);
+    }
+
     private function create_influencer_contract($contract)
     {
         $contractData = AppSetting::where('key', 'Influencer Contract')->first();
@@ -1046,6 +1086,63 @@ class AdController extends Controller
             'status'=> true
         ],config('global.OK_STATUS'));
 
+    }
+
+    //Get influencer Contract In json format
+    public function printInfluencerContract($contract_id){
+        $contract = InfluencerContract::find($contract_id);
+        if (!$contract) {
+            return response()->json([
+                'message' => 'Campaign not found',
+                'status' => false,
+            ], config('global.NOT_FOUND_STATUS'));
+        }
+
+        $content = $contract->content;
+
+        $content = str_replace("[[_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
+        
+
+        $title = $contract->ads->store;
+        $title .= ' - ' . $contract->influencers->nick_name;
+
+        $stamp = $contract->is_accepted == 1 ? true : false;
+        return $this->generateContractPdf($content,$title,$stamp);
+    }
+
+    function resendContract($contract_id){
+        $contract = InfluencerContract::find($contract_id);
+
+        if(!$contract) return response()->json([
+            'message'    => trans($this->trans_dir.'contract_not_found'),
+            'status' => false
+        ],config('global.NOT_FOUND_STATUS'));
+
+        $contract->is_accepted = 0;
+        $contract->save();
+        $influencer = Influncer::find($contract->influencer_id);
+
+
+        $title = 'resend_influencer_contract';
+        $msg = 'resend_influencer_contract_msg';
+        $roles = [];
+        $transParams = ["ad_name" => $contract->ads->store];
+        $users = [$influencer->users->id];
+        $info =[
+            'msg'           => $msg,
+            'title'         => $title,
+            'id'            => $contract->id,
+            'type'          => 'Ad',
+            'params'        => $transParams
+        ];
+        
+        $this->saveAndSendNotification($info,$roles,$users);
+
+        
+        return response()->json([
+            'message'    => trans($this->trans_dir.'data_was_updated'),
+            'status' => true
+        ],200);
     }
 
     //Get campaign Contract

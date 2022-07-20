@@ -116,12 +116,12 @@
     <div class="modal-dialog full-modal-dialog" role="document">
         <div class="modal-content full-modal-content">
             <div class="modal-body contract-modal-body">
-                <form action="{{route('dashboard.ads.editContract',$data->id)}}">
-                    <textarea id="contract-text" name="contract"></textarea>
-                </form>
+                <textarea id="contract-influencer-text" name="contract"></textarea>
+                <input type="hidden" id="contract-influencer-id" value="" />
             </div>
             <div class="modal-footer border-0 py-1 justify-content-center">
-                <button type="button" class="btn btn-secondary" onclick="updateInfluencerContract(this)">Update</button>
+                <button type="button" class="btn btn-secondary update-influencer-btn" onClick="updateInfluencerContract(this)">Update</button>
+                <button type="button" class="btn btn-primary" onClick="printInfluencerContract()">Print</button>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
             </div>
         </div>

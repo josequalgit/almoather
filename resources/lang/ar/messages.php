@@ -50,7 +50,7 @@ return [
         'match_was_not_found'=>'لم يتم العثور على تطابق',
         
         
-        'ad_was_updated'=>'تم تحديث الإعلان',
+        'ad_was_updated'=>'تم تحديث الحملة',
         'something_wrong'=>'خطب ما',
         'please_add_a_marouf _number'=>'الرجاء إضافة رقم معروف',
         'please_add_cr_number'=>'الرجاء إضافة رقم الرقم الضريبي',

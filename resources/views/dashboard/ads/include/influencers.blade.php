@@ -27,7 +27,7 @@ $notShowfluencersActions = ['progress','cancelled','complete','active','fullpaym
                             @endif
                             @if(!in_array($data->status,$notShowSinarioStatuses))
                             <th>Date</th>
-                            <th>Sinario</th>
+                            <th>Scenario</th>
                             @endif
                             @if(in_array($data->status,$notShowfluencersActions))
                             <th>Join Status</th>
@@ -84,13 +84,16 @@ $notShowfluencersActions = ['progress','cancelled','complete','active','fullpaym
                                     </button>
                                     @endif
                                     @if (!in_array($data->status,$notShowSinarioStatuses))
-                                        <button  type="button" onclick="openInfluencerDataModal(this,'{{ $item->influencers->id }}')" class="btn btn-secondary btn-sm mb-1"><i class="fas fa-file-signature"></i></button>
+                                        <button  type="button" onclick="openInfluencerDataModal(this,'{{ $item->influencers->id }}')" class="btn btn-primary btn-sm mb-1">Scenario and date</button>
                                     @endif
-                                    @if($item->contract && $data->admin_approved_influencers)
-                                    <button  type="button" onclick="getInfluencerContract(this,'{{ $item->contract->id }}')" class="btn btn-secondary btn-sm mb-1">Contract</button>
+                                    @if($item->contract && $data->admin_approved_influencers && $item->contract->is_accepted != 1)
+                                    <button  type="button" onclick="getInfluencerContract(this,'{{ $item->contract->id }}')" class="btn btn-info btn-sm mb-1">Contract</button>
                                     @endif
                                     @if($item->contract && $item->contract->is_accepted == 2)
-                                    <button  type="button" onclick="resendContract(this,'{{ $item->contract->id }}')" class="btn btn-secondary btn-sm mb-1">Resend Contract</button>
+                                    <button  type="button" onclick="resendContract(this,'{{ $item->contract->id }}')" class="btn btn-warning btn-sm mb-1">Resend Contract</button>
+                                    @endif
+                                    @if($item->contract && $item->contract->is_accepted == 1)
+                                    <button  type="button" onclick="printInfluencerContract('{{ $item->contract->id }}')" class="btn btn-warning btn-sm mb-1">Print Contract</button>
                                     @endif
                                 
                                 </td>
