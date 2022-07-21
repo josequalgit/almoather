@@ -53,7 +53,7 @@ return [
         'match_was_not_found'=>'match was not found',
         'payment_failed'=>'payment failed',
         'payment_successfully'=>'payment successfully',
-        'ad_was_updated'=>'ad was updated',
+        'ad_was_updated'=>'Campaign was updated',
         'something_wrong'=>'something wrong',
         'please_add_a_marouf _number'=>'Please add a marouf  number',
         'please_add_cr_number'=>'Please add a cr number',

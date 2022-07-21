@@ -16,6 +16,7 @@
                 'admin_approve_campaign_influencers'    => 'Admin (:admin_name) approved influencers list for campaign (:ad_name)',
                 'reject_payment_ad_title'               => 'Payment failed!',
                 'success_payment_ad_title'              => 'Payment processed successfully',
+                'success_last_payment_ad'               => 'The payment process for the campaign :ad_name has been successfully completed, we will notify you when the influencers join the campaign. If you have any inquiries, please contact the marketing department via chat or contact us',
                 'success_first_payment_ad'              => 'Payment processed successfully for the campaign ":ad_name", You can now examining the influencers list',
                 'success_full_payment_ad'               => 'Payment processed successfully for the campaign ":ad_name", we will contact you ',
                 'admin_first_payment_msg'               => 'Campaign (:ad_name) first payment made ',
@@ -27,6 +28,8 @@
                 'influencer_joined_campaign_msg'        => "Influencer (:inf_name) joined campaign (:ad_name), the execution date will be on (:exec_date)",
                 'influencer_reject_campaign'            => "Influencer (:inf_name) reject join campaign (:ad_name)",
                 'influencer_reject_campaign_msg'        => "Influencer (:inf_name) reject join campaign (:ad_name), because (:reject_note)",
+                'resend_influencer_contract'            => "New request to participate in the campaign",
+                'resend_influencer_contract_msg'        => "The marketing section resubmitted the contract for the campaign :ad_name, Please check it and feel free to contact us if you have any questions",
 
 
                 'reject_influencers_title'=>'Your account has been rejected',

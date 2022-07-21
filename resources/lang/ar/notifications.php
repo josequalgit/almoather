@@ -16,8 +16,9 @@ return [
         'admin_reject_payment_ad'               => 'تم رفض عملية الدفع الخاصة بالحملة ":ad_name"',
         'reject_payment_ad_title'               => 'تم رفض عملية الدفع!',
         'success_payment_ad_title'              => 'تمت عملية الدفع بنجاح',
+        'success_last_payment_ad'               => 'تمت عملية الدفع الخاصة بالحملة :ad_name بنجاح، سوف نقوم لاعلامك عند انضمام المؤثؤين الى الحملة في حال وجود اي استفسارات يرجى التواصل مع قسم التسويق عبر الدردشة او الاتصال بنا',
         'success_first_payment_ad'              => 'تمت عملية الدفع الخاصة بالحملة ":ad_name" بنجاح يمكنك الان الإطلاع على قائمة المؤثرين',
-        'success_full_payment_ad'               => 'Payment processed successfully for the campaign ":ad_name", we will contact you ',
+        'success_full_payment_ad'               => 'تمت عملية الدفع الخاصة بالحملة ":ad_name" بنجاح يمكنك الان الإطلاع على قائمة المؤثرين',
         'admin_first_payment_msg'               => 'تم دفع الدفعة الأولى الخاصة بالحملة (:ad_name)',
         'admin_last_payment_msg'                => 'تم دفع الدفعة الكاملة الخاصة بالحملة (:ad_name)',
         'customer_confirm_influencers'          => "قام العميل بتأكيد فائمة المؤثرين الخاصة بالحملة (:ad_name)",
@@ -27,6 +28,8 @@ return [
         'influencer_joined_campaign_msg'        => "تم انضمام المؤثر (:inf_name) الى الحملة (:ad_name), تاريخ التنفيذ سيكون بـ (:exec_date)",
         'influencer_reject_campaign'            => "المؤثر (:inf_name) رفض الإنضمام الى الحملة (:ad_name)",
         'influencer_reject_campaign_msg'        => "المؤثر (:inf_name) رفض الإنضمام الى الحملة (:ad_name), بسبب (:reject_note)",
+        'resend_influencer_contract'            => "طلب جديد للمشاركة في حملة",
+        'resend_influencer_contract_msg'        => "قام قسم التسويق بإعادة تقديم عقد الحملة :ad_name ، يرجى التحقق منه ولا تتردد في الاتصال بنا إذا كان لديك أي أسئلة",
 
 
 

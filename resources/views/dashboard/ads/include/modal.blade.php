@@ -111,3 +111,19 @@
         </div>
     </div>
 </div>
+
+<div id="influencer-contract-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog full-modal-dialog" role="document">
+        <div class="modal-content full-modal-content">
+            <div class="modal-body contract-modal-body">
+                <textarea id="contract-influencer-text" name="contract"></textarea>
+                <input type="hidden" id="contract-influencer-id" value="" />
+            </div>
+            <div class="modal-footer border-0 py-1 justify-content-center">
+                <button type="button" class="btn btn-secondary update-influencer-btn" onClick="updateInfluencerContract(this)">Update</button>
+                <button type="button" class="btn btn-primary" onClick="printInfluencerContract()">Print</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

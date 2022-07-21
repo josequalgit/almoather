@@ -35,6 +35,14 @@
             allowedContent: true
         });
 
+        CKEDITOR.replace('contract-influencer-text', {
+            extraPlugins: 'justify,placeholder,colorbutton,font,indent,indentblock,indentlist',
+            height: 600,
+            contentsLangDirection: 'rtl',
+            removeButtons: 'PasteFromWord',
+            allowedContent: true
+        });
+
         $(document).on('change','#ad-type',function(){
             $('#ad-category').html('');
             let items = $('#ad-type option[value="'+$(this).val()+'"]').attr('data-items');
@@ -587,6 +595,126 @@
     function openModal($this,modalId){
         $('#' + modalId).modal('show');
         return false;
+    }
+
+    //Get Influencer Contract
+    function getInfluencerContract($this,contract_id){
+        let url = '{{ route("dashboard.ads.show_influencer_contract",["contract_id" => ":contract_id"]) }}';
+        url = url.replace(':contract_id',contract_id);
+        $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i> ` + $($this).text());
+        $.ajax({
+            type: 'GET',
+            url: url,
+            dataType: 'json',
+            success: (res) => {
+                if(res.status){
+                    CKEDITOR.instances['contract-influencer-text'].setData(res.contract);
+                    $('#contract-influencer-id').val(contract_id);
+                    $('#influencer-contract-modal').modal('show');
+                }else{
+                    Swal.fire(
+                        'Error!',
+                        res.message,
+                        'error'
+                    );
+                }
+                $($this).attr('disabled',false).html($($this).text());
+            },
+            error: (err) => {
+                console.log(err);
+                $($this).attr('disabled',false).html($($this).text());
+            }
+        });
+    }
+
+    //Update Contract for influencer
+    function updateInfluencerContract($this){
+        let contract_id = $('#contract-influencer-id').val();
+        let url = '{{ route("dashboard.ads.updateInfluencerContract",["contract_id" => ":contract_id"]) }}';
+        url = url.replace(':contract_id',contract_id);
+        $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i> ` + $($this).text());
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {'content': CKEDITOR.instances['contract-influencer-text'].getData()},
+            dataType: 'json',
+            success: (res) => {
+                if(res.status){
+                    Swal.fire(
+                        'Success!',
+                        res.message,
+                        'success'
+                    );
+                }else{
+                    Swal.fire(
+                        'Error!',
+                        res.message,
+                        'error'
+                    );
+                }
+                $($this).attr('disabled',false).html($($this).text());
+            },
+            error: (err) => {
+                console.log(err);
+                $($this).attr('disabled',false).html($($this).text());
+            }
+        });
+    }
+
+    //Open Contract Pdf
+    function printInfluencerContract(contract_id = false){
+        if(!contract_id){
+            contract_id = $('#contract-influencer-id').val();
+        }
+        
+        let url = "{{ route('dashboard.ads.printInfluencerContract',':contract_id') }}";
+        url = url.replace(':contract_id',contract_id);
+        window.open(url, "_blank");
+    }
+
+    //Resend Contract for influencer
+    function resendContract($this,contract_id){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Notification will send to influencer to infform him that you are resend the contract!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Approve!'
+        }).then((result) => {
+            if(result.isConfirmed){
+                let url = '{{ route("dashboard.ads.resendContract",["contract_id" => ":contract_id"]) }}';
+                url = url.replace(':contract_id',contract_id);
+                $($this).attr('disabled',true).html(`<i class="fa fa-spinner fa-spin"></i> ` + $($this).text());
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    dataType: 'json',
+                    success: (res) => {
+                        if(res.status){
+                            Swal.fire(
+                                'Success!',
+                                res.message,
+                                'success'
+                            );
+                            window.location.reload();
+                        }else{
+                            Swal.fire(
+                                'Error!',
+                                res.message,
+                                'error'
+                            );
+                        }
+                        $($this).attr('disabled',false).html($($this).text());
+                    },
+                    error: (err) => {
+                        console.log(err);
+                        $($this).attr('disabled',false).html($($this).text());
+                    }
+                });
+            }
+        });
     }
 
 </script>

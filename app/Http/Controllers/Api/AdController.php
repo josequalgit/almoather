@@ -66,7 +66,9 @@ class AdController extends Controller
                 'Active'    => 1
             ];
 
-            $data = Auth::guard('api')->user()->influncers->contracts()->whereHas('ads');
+            $data = Auth::guard('api')->user()->influncers->contracts()->whereHas('ads',function($query){
+                return $query->whereIn('status',['fullpayment','active','progress','complete']);
+            });
 
             if($status == 'Completed'){
                 $itemsPaginated =  $data->where('status',1)->where('is_accepted',$statusCode[$status]);
@@ -351,19 +353,7 @@ class AdController extends Controller
         $contract = $ad->InfluencerContract()->where('influencer_id',$inf_id)->first();
         $content = $contract->content;
 
-        $content = str_replace("[[_CONTRACT_NUM_]]", $ad->id, $content);
-        $content = str_replace("[[_CURRENT_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
-        $content = str_replace("[[_CUSTOMER_NAME_]]", $ad->customers->full_name, $content);
-        $content = str_replace("[[_STORE_NAME_]]", $ad->store, $content);
-        $content = str_replace("[[_CUSTOMER_NATIONALITY_]]", $ad->customers->nationalities->getTranslation('name','ar'), $content);
-        $content = str_replace("[[_CR_NUM_]]", $ad->cr_num, $content);
-        $content = str_replace("[[_NATIONAL_NUM_]]", $ad->customers->id_number, $content);
-        $content = str_replace("[[_PHONE_]]", $ad->customers->users->phone, $content);
-        $content = str_replace("[[_EMAIL_]]", $ad->customers->users->email, $content);
-        $content = str_replace("[[_PRICE_WITH_TAX_]]", number_format($ad->adBudgetWithVat), $content);
-        $content = str_replace("[[_PRICE_]]", number_format($ad->budget), $content);
-        $content = str_replace("[[_START_DATE_]]", $contract->date->format('d/m/Y'), $content);
-        $content = str_replace("[[_CAMPAIGN_GOAL_]]", $ad->campaignGoals->getTranslation('title','ar'), $content);
+        $content = str_replace("[[_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
         
 
         $title = $ad->store;
@@ -391,7 +381,7 @@ class AdController extends Controller
             $title = 'influencer_reject_campaign';
             $msg = 'influencer_reject_campaign_msg';
             $roles = ['Business Manager','superAdmin'];
-            $transParams = ['inf_name' => $contract->influencers->nick_name,"ad_name" => $contract->ads->store,"reject_note" => $request->rejectNote];
+            $transParams = ['inf_name' => $data->influencers->nick_name,"ad_name" => $data->ads->store,"reject_note" => $request->rejectNote];
             $users = [];
             $info =[
                 'msg'           => $msg,
@@ -1049,17 +1039,17 @@ class AdController extends Controller
         
                 $this->saveAndSendNotification($info,$roles);
 
-                $matches = $ad->matches()->where('chosen', 1)->where('status','!=','deleted')->get();
+                $matches = $data->matches()->where('chosen', 1)->where('status','!=','deleted')->get();
                 foreach($matches as $match){
                     $influencersUsers[] = $match->influencers->users->id; 
                 }
                 $title = 'new_contract_title';
                 $msg = 'new_contract_msg';
-                $transParams = ['ad_name' => $ad->store];
+                $transParams = ['ad_name' => $data->store];
                 $info =[
                     'msg'           => $msg,
                     'title'         => $title,
-                    'id'            => $ad->id,
+                    'id'            => $data->id,
                     'type'          => 'Ad',
                     'params'        => $transParams
                 ];
@@ -1121,11 +1111,6 @@ class AdController extends Controller
 
         $this->saveAndSendNotification($info,$roles);
 
-        return response()->json([
-            'err'       => trans($this->trans_dir.'payment_failed'),
-            'status'    => config('global.WRONG_VALIDATION_STATUS')
-        ],config('global.WRONG_VALIDATION_STATUS'));
-    
         return response()->json([
             'err'       => trans($this->trans_dir.'payment_failed'),
             'status'    => config('global.WRONG_VALIDATION_STATUS')

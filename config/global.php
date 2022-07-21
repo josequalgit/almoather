@@ -22,7 +22,7 @@ return [
     'SOCKET_URL' => 'ws://127.0.0.1:3000',
     'PAYMENT_USERNAME'=>'almuu',
     'PAYMENT_PASSWORD'=>'almuu@123',
-    'PAYMENT_KEY'=>'almuu',
+    'PAYMENT_KEY'=>'5cb5d43decb30818e4223a573f8708af6b7fefce1f1e3e88109027729a383839',
     'TAX'=> 15,
 
 ]

@@ -119,7 +119,7 @@
         {!! $contract !!}
         @if($stamp)
         <div style="text-align: left">
-            <img src="{{ asset('img/avatars/stamp.jpg') }}" alt="Almuather Stamp" style="width: 170px" class="logo">
+            <img src="{{ asset('img/avatars/stamp.jpg') }}" alt="Almuather Stamp" style="width: 150px" class="logo">
         </div>
         @endif
     </div>

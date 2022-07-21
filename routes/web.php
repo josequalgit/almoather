@@ -183,6 +183,7 @@ Route::group(['middleware' => 'language'],function(){
                 Route::get('/campaign/seeMatched/{ad_id}','seeMatched')->name('seeMatched');
                 Route::get('/campaign/contract/edit/{ad_id}','editContract')->name('editContract');
                 Route::post('/campaign/contract/update/{ad_id}','updateContract')->name('updateContract');
+                Route::post('/campaign/influencer/contract/update/{contract_id}','updateInfluencerContract')->name('updateInfluencerContract');
                 Route::post('/campaign/contract/changeStatus/{contract_id}','changeStatus')->name('changeStatus');
                 Route::post('/campaign/UpdateAddress/{id}','updateAddress')->name('updateAddress');
                 Route::post('/campaign/contract/influencers/{ad_id}','sendContractToInfluencer')->name('sendContractToInfluncer');
@@ -193,10 +194,15 @@ Route::group(['middleware' => 'language'],function(){
                 Route::delete('/campaign/delete-match-influencers/{ad_id}/{influencer_id}','deleteMatchInfluencers')->name('deleteMatchInfluencers');
                 Route::get('/update_info/{id}','update_info_view')->name('update_info_view');
                 Route::get('/view-contract/{id}','show_contract')->name('show_contract');
+                Route::get('/view-influencer-contract/{contract_id}','show_influencer_contract')->name('show_influencer_contract');
                 Route::post('/update_info_submit/{id}','update_info_submit')->name('update_info_submit');
                 Route::get('campaign/pdf/{id}','getCampaignContract')->name('contract-pdf');
                 Route::get('campaign/pdf/print/{id}','printContract')->name('printContract');
+                Route::post('campaign/influencer/resend-contract/{contract_id}','resendContract')->name('resendContract');
+                Route::get('campaign/influencer/pdf/print/{contract_id}','printInfluencerContract')->name('printInfluencerContract');
                 Route::post('campaign/update-reject-note','updateRejectNote')->name('updateRejectNote');
+                
+
             });
 
             Route::middleware('role_or_permission:superAdmin|Edit Slide|See Slide|Create Slide|Delete Slide')->name('slides.')->controller(SlideController::class)->group(function(){
@@ -500,7 +506,7 @@ Route::group(['middleware' => 'language'],function(){
 
 
     Route::get('voluum',function(){
-        $voluum = new App\Voluum\Offer;
-        $voluum->createOffer(1);
+        $voluum = new App\Voluum\Campaign;
+        $voluum->createCampaign(56);
     });
 });
