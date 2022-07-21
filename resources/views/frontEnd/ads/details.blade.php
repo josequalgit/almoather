@@ -499,6 +499,12 @@
                     $('#table_body').append(table_content);
                 })
 
+                let form = `
+                    <from style='display:none;' id="payment_form" method='POST' action='{{ route("check_payment") }}'>
+                        <input name=''
+                    </from>
+                `
+
                 let full_payment_button = `<button id="show_influncer" class="btn btn-primary mt-3 mb-3">Show influncers details</button>`;
 
                 $('#influencer_list').append(full_payment_button);
@@ -541,11 +547,32 @@
     }
     function pay_now()
     {
-        $('#ad_id').val(ad_id);
-        $('#amount').val(payment_amount);
+        let route = '{{ route("send_payment",":id") }}';
+        let url = route.replace(':id',ad_id);
+
+        $.ajax({
+            url,
+            type:'POST',
+            
+            data:{
+                _token:'{{ csrf_token() }}',
+                ad_id,
+                amount:55
+            },
+            success:(res)=>{
+                console.log('send payment: ',res)
+            },
+            error:(err)=>{
+                console.log('erro: ',err)
+            }
+        });
+
+        console.log(url);
+        // $('#ad_id').val(ad_id);
+        // $('#amount').val(payment_amount);
         // $('#paymentRequest').submit();
 
-        getMatchedInfluncers();
+        // getMatchedInfluncers();
     }
 
     function getMatchedInfluncers()
