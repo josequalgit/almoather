@@ -138,7 +138,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
 
         
         #USER DETAILS
-        Route::get('users/details/{id?}/{type?}',[AuthController::class,'details'])->where('type', 'customer|influencer');
+        Route::get('users/details/{id?}/{type?}',[AuthController::class,'details'])->where('type', 'customer|influencer')->name('usersDetails');
         # AUTH ROUTES
         Route::controller(AuthController::class)->group(function(){
             Route::post('logout','logout');
@@ -154,15 +154,15 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
             Route::get('details/{id}','details')->name('apiAdDetails');
             Route::get('contract/{ad_id}','get_ad_contract')->name('getAdContract');
             Route::post('contract/accept_contract/{contract_id}','accept_ad_contract');
-            Route::post('contract/customer/accept_contract/{contract_id}','accept_customer_ad_contract');
+            Route::post('contract/customer/accept_contract/{contract_id}','accept_customer_ad_contract')->name('acceptAdContract');
             Route::get('search/{query}','search');
             Route::get('influencers/{influncer_id}/{status?}','get_influencer_ads');
             Route::get('customers/{customer_id}/{status?}','get_customers_ads');
             Route::get('matched/Influencer/{id}','getMatchedInfluencers');
-            Route::get('matched/not_chosen_inf/{id}/{removed_inf_id}','getMatchedInfluencersNotChosen');
-            Route::get('matched/replace_influencer/{id}/{removed_influencer}/{chosen_influencer}','replace_matched_influencer');
+            Route::get('matched/not_chosen_inf/{id}/{removed_inf_id}','getMatchedInfluencersNotChosen')->name('getMatchedInfluencersNotChosen');
+            Route::get('matched/replace_influencer/{id}/{removed_influencer}/{chosen_influencer}','replace_matched_influencer')->name('replaceMatchedInfluencer');
             Route::get('preview_ad_matches/{id}','before_payment')->name('getBlurredInfluncer');
-            Route::post('confirm_matches/{id}','confirm_matches');
+            Route::post('confirm_matches/{id}','confirm_matches')->name('confirmInfluncerList');
             Route::get('completePay/{id}','pay_now');
             Route::get('back_up_influencers/{id}/{removed_inf}','back_up_influencers');
             Route::get('/campaign/contract/{ad_id}','get_ad_contract');

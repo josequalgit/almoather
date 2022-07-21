@@ -346,7 +346,8 @@ trait AdResponse
 
         if($remove_inf){
             $removeInfluencer = Influncer::find($remove_inf);
-            $price = $ad->ad_type == 'online' ? $removeInfluencer->ad_with_vat : $remove_inf->ad_onsite_price_with_vat;
+           
+            $price = $ad->ad_type == 'online' ? $removeInfluencer->ad_with_vat : $removeInfluencer->ad_onsite_price_with_vat;
             $budgetSum -= $price;
         }
 
