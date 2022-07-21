@@ -1537,7 +1537,7 @@ class AdController extends Controller
         {
             return response()->json([
                 'msg'       => '',
-                'count'     => $data,
+                'count'     => 0,
                 'status'    => config('global.NOT_FOUND_STATUS')
             ],config('global.NOT_FOUND_STATUS'));
         }
