@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Voluum\Influencer;
 use App\Voluum\Offer;
+use App\Voluum\Campaign;
 use Illuminate\Support\Facades\Log;
 use App\Jobs\VoluumJob;
 

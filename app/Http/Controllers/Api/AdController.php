@@ -1531,6 +1531,27 @@ class AdController extends Controller
     {
         return number_format($number,0,'.',',');
     }
+
+    function getNewRequestsCount(){
+        if(!Auth::guard('api')->user()->influncers)
+        {
+            return response()->json([
+                'msg'       => '',
+                'count'     => $data,
+                'status'    => config('global.NOT_FOUND_STATUS')
+            ],config('global.NOT_FOUND_STATUS'));
+        }
+
+        $data = Auth::guard('api')->user()->influncers->contracts()->whereHas('ads',function($query){
+            return $query->whereIn('status',['fullpayment','active','progress','complete']);
+        })->where('is_accepted',0)->count();
+
+        return response()->json([
+            'msg'       => '',
+            'count'     => $data,
+            'status'    => config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
+    }
     
     
 }

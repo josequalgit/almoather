@@ -177,6 +177,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
             Route::get('ad_details_update/{ad_id}','ad_details_update');
             Route::post('/upload_media/{file_id}/{type}','uploadMedia')->where('type','remove|add|replace');
             Route::get('get_ad_relation','get_ads_relation');
+            Route::get('campaign/count','getNewRequestsCount');
         });
 
         #CATEGORIES ROUTES
