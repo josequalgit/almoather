@@ -377,7 +377,7 @@ class AdController extends Controller
         $data->save();
         $influencer = Influncer::find($data->influencer_id);
 
-        if($request->status == 0 && $request->rejectNote){
+        if($data->is_accepted == 2 && $request->rejectNote){
             $title = 'influencer_reject_campaign';
             $msg = 'influencer_reject_campaign_msg';
             $roles = ['Business Manager','superAdmin'];
