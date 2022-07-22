@@ -386,7 +386,7 @@ class AdController extends Controller
             $info =[
                 'msg'           => $msg,
                 'title'         => $title,
-                'id'            => $data->id,
+                'id'            => $data->ads->id,
                 'type'          => 'Ad',
                 'params'        => $transParams
             ];
