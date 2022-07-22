@@ -163,6 +163,8 @@ trait AdResponse
             $basicResponse['date'] = $contractData && $contractData->created_at ?  $contractData->created_at->diffForHumans() : '';
 
             $basicResponse['showExecution'] = $contractData && $contractData->date && !$contractData->date->gt(Carbon::now()) ? true : false;
+        }else{
+            $basicResponse['hasReturn'] = $ad->relation_id == 3 ? false : true;
         }
 
         //Return Matches if the status is Full payment / Choosing influencer / Progress
