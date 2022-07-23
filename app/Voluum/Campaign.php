@@ -65,7 +65,8 @@ class Campaign extends Voluum{
         $response = $this->put(Endpoints::updateCampaignEndpoint($campaignId),$data);
         if($response && isset($response['id'])){
             $campaign->update([
-                'voluum_id' => $response['id']
+                'voluum_id' => $response['id'],
+                'campaign_url' => $response['url']
             ]);
             return ['status' => true,'data' => $response];
         }
@@ -80,7 +81,8 @@ class Campaign extends Voluum{
         
         if($response && isset($response['id'])){
             $campaign->update([
-                'voluum_id' => $response['id']
+                'voluum_id' => $response['id'],
+                'campaign_url' => $response['url']
             ]);
             return ['status' => true,'data' => $response];
         }

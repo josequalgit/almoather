@@ -96,9 +96,11 @@ class Offer extends Voluum{
             ],
             "currencyCode"  => "USD",
             "tags"          => [str_replace(' ','_',$offer->categories->getTranslation('name','en'))],
-            "workspace"     => null,
+            "workspace"     => [
+                'id' => "5270d276-5604-43ae-a7a7-a417e03d6251"
+            ],
             "conversionTrackingMethod"  => "S2S_POSTBACK_URL",
-            "preferredTrackingDomain"   => "courcusesinding.com"
+            "preferredTrackingDomain"   => "track.almuaathir.com"
         ];
 
         if($offerId){

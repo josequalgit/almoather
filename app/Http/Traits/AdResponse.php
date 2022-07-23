@@ -157,7 +157,7 @@ trait AdResponse
             
             $basicResponse['status'] = $this->getStatusForInf($ad);
             if($basicResponse['status'] == 'Progress'){
-                $basicResponse['camp_link'] = 'https://josequal.com';
+                $basicResponse['camp_link'] = $contractData->campaign_url;
             }
 
             $basicResponse['date'] = $contractData && $contractData->contract_send_at ?  $contractData->contract_send_at->diffForHumans() : '';
