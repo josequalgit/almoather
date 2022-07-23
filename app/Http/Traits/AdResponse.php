@@ -160,7 +160,7 @@ trait AdResponse
                 $basicResponse['camp_link'] = 'https://josequal.com';
             }
 
-            $basicResponse['date'] = $contractData && $contractData->created_at ?  $contractData->created_at->diffForHumans() : '';
+            $basicResponse['date'] = $contractData && $contractData->contract_send_at ?  $contractData->contract_send_at->diffForHumans() : '';
 
             $basicResponse['showExecution'] = $contractData && $contractData->date && !$contractData->date->gt(Carbon::now()) ? true : false;
             $basicResponse['scenario'] = $contractData->scenario;

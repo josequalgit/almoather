@@ -19,6 +19,7 @@ class GeneralController extends Controller
                 'campaign_first_payment_reminder' => config('global.CAMPAIGN_FIRST_PAYMENT_REMINDER'),
                 'campaign_full_payment_period' => config('global.CAMPAIGN_FULL_PAYMENT_PERIOD'),
                 'campaign_full_payment_reminder' => config('global.CAMPAIGN_FULL_PAYMENT_REMINDER'),
+                'campaign_influencer_contract_cancelled' => config('global.CAMPAIGN_INFLUENCER_CONTRACT_CANCELLED'),
             ];
         }
         $data = (object) $data;

@@ -49,6 +49,8 @@ class Ad extends Model implements HasMedia
         'eng_number',
         'admin_approved_influencers',
         'relation_id',
+        'status_updated_at',
+        'last_notification_time',
     ];
 
     protected $append = 
@@ -60,6 +62,11 @@ class Ad extends Model implements HasMedia
         'logo',
         'adBudgetWithVat','location'
     ];
+
+    protected $casts = [
+        'last_notification_time' => 'datetime:Y-m-d',
+        'status_updated_at' => 'datetime:Y-m-d'
+     ];
 
     public function socialMedias()
     {

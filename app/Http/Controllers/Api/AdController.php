@@ -1041,6 +1041,9 @@ class AdController extends Controller
                 $matches = $data->matches()->where('chosen', 1)->where('status','!=','deleted')->get();
                 foreach($matches as $match){
                     $influencersUsers[] = $match->influencers->users->id; 
+                    influencerContract::where(['ad_id' => $match->ad_id,'influencer_id' => $match->influencer_id])->update([
+                        'contract_send_at' => Carbon::now()
+                    ]);
                 }
                 $title = 'new_contract_title';
                 $msg = 'new_contract_msg';
