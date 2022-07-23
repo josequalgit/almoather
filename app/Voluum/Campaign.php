@@ -23,11 +23,13 @@ class Campaign extends Voluum{
         if($campaign->influencers->voluum_id == null){
             $influencer = new Influencer;
             $influencer->addInfluencer($campaign->influencers->id);
+            $campaign = InfluencerContract::find($campaign->id);
         }
 
         if($campaign->ads->voluum_id == null){
             $offer = new Offer;
             $offer->createOffer($campaign->ads->id);
+            $campaign = InfluencerContract::find($campaign->id);
         }   
 
         $checkCampaign = $this->checkCampaignExists($campaign);
