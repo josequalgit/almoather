@@ -23,13 +23,6 @@
     right: -35px;
 }
 
-
-
-
-
-
-
-
 /**************************************/
 .nav-bar-menu {
     position: relative;
@@ -39,8 +32,6 @@
 #home {
     color: #CA9B3D;
 }
-
-
 
 #signup {
     background-color: #CA9B3D;
@@ -90,11 +81,6 @@
 
 }
 
-
-
-
-
-
 .right-dotted {
     position: absolute;
     left: 80%;
@@ -110,15 +96,11 @@
     left: 11%;
 }
 
-
-
 .right-bg {
     position: absolute;
     left: 65%;
     bottom: 44%;
 }
-
-
 
 @media only screen and (max-width: 600px) {
     .right-dotted {
@@ -202,10 +184,6 @@
 
 
 }
-
-
-
-
 
 .group-images img {
     object-fit: cover;
@@ -299,8 +277,6 @@
 .our-service-text h3 {
     font-size: 17px;
     font-weight: bold;
-
-
 }
 
 .border {
@@ -742,4 +718,22 @@ section.contact-section {
     }
 
     
+}
+
+.accordion-item {
+    margin-bottom: 10px;
+}
+
+@media (max-width: 770px) {
+    .phone_img {
+        margin-top: 25px;
+    }
+
+    .right-flowo {
+        display: none;
+    }
+
+    .footer-bg {
+        background-size: cover;
+    }
 }

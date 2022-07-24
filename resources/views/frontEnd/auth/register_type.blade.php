@@ -25,19 +25,19 @@
     <!-- menu section -->
    
       <!-- end menu section -->
-      <section class="background-page5 min-height-100 position-relative d-flex align-items-center" style="background-image: url('{{ asset('frontEnd/img/Mask Group.png') }}')">
+      <section class="register_type background-page5 min-height-100 position-relative d-flex align-items-center" style="background-image: url('{{ asset('frontEnd/img/Mask Group.png') }}')">
         <div class="container">
-           <div class="login text-center p-5">
+           <div class="login text-center">
                <div class="container">
                    <div class="row">
                        <div class="col-md-6 col-12 login2">
                            <div class="left-side">
                                <div class="col-12">
-                                   <div >
+                                   <div class="img_c">
                                     <img src="{{ asset('frontEnd/img/Rectangle_16251-r.png') }}"  alt="">
                                 </div>
                                </div>
-                               <div class="col-8 mt-3">
+                               <div class="col-12 mt-3">
                                    <div class="text-left-side">
                                     <h3>{{ $data->title->{app()->getlocale()} }}</h3>
                                     <p>{{ $data->description->{app()->getlocale()} }} </p>
@@ -55,8 +55,8 @@
                                    <h3>{{ trans('messages.frontEnd.choose_membership') }}</h3>
                                </div>
                                <form > 
-                                   <div class="d-flex justify-content-sm-between justify-content-center flex-wrap mt-5">
-                                       <div class="pb-3">
+                                   <div class="d-flex justify-content-sm-between justify-content-center mt-5">
+                                       <div class="custom_mrl">
                                            <label class="Advertiser" for="user_type">
                                                <input type="radio" name="user_type" class="d-none" value="{{ route('auth.influencer_register') }}">
                                                <div class="px-3 py-4">
@@ -65,7 +65,7 @@
                                                <h3>{{ trans('messages.frontEnd.influencer') }}</h3>
                                            </label>
                                        </div>
-                                       <div class="pb-3">
+                                       <div class="">
                                            <label class="Advertiser" for="user_type">
                                                <input type="radio" name="user_type" class="d-none" value="{{ route('auth.customer_register') }}">
                                                <div class="px-3 py-4">

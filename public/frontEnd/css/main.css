@@ -165,6 +165,14 @@ a{
     width: 350px;
 }
 
+.card-slider-att img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: auto;
+}
+
 
 
 
@@ -204,4 +212,82 @@ a{
     .dotted {
         top: -20px;
     }
+}
+
+section.about_who {
+    background-color: #E6E7E8;
+}
+
+.custom_flex {
+    display: flex;
+}
+
+@media (max-width: 770px) {
+    .custom_flex {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media (max-width: 770px) {
+    .footer-bg {
+        background-size: cover;
+    }
+
+    .footer_links {
+        margin-top: 0px;
+        text-align: center;
+    }
+    .footer_contact {
+        margin-top: 0px;
+        text-align: center;
+    }
+    .contact-form {
+        max-width: 100%;
+    }
+    .contact-form .form-input,
+    .form-text-area {
+        height: 50px;
+        padding-left: 16px;
+        text-align: end;
+    }
+    .footer_logo {
+        text-align: center;
+    }
+    .footer-details {
+        text-align: center;
+    }
+    .Social.Media {
+        text-align: center;
+    }
+    .Social.Media .social {
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+    }
+    .right-flowo {
+        display: none;
+    }
+}
+
+.accordion-item {
+    margin-bottom: 10px;
+}
+
+.video_shadow {
+    background-color: #00000052;
+    width: 100%;
+    right: 0;
+    left: 0;
+    top: 0;
+    height: 100%;
+    position: absolute;
+}
+
+.margin_left {
+    margin-left: 15px;
 }

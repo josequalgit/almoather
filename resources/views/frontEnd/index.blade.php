@@ -61,7 +61,7 @@
         <div class="row group-images space-row mt-5">
             <div class="col-lg-6 col-md-12 col-sm-12">
                 <div class="row">
-                    <div class="col-6 p-1 position-relative">
+                    <div class="col-6 col-md-6 col-lg-6 p-1 position-relative">
                         <div id="image1" class="h-100 w-100" alt="">
                             <div class="our-service-image-1">
                                 <h4>{{ trans('messages.frontEnd.our-service') }}</h4>
@@ -70,21 +70,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 p-1">
+                    <div class="col-6 col-md-6 col-lg-6 p-1">
                         <div class="process_details">
                             <div class="img_shadow"></div>
                             <img src="{{ asset('frontEnd/img/smiley.png') }}" class="h-100 w-100" alt="">
                             <p class="our-service "> Our Service</p>
                         </div>
                     </div>
-                    <div class="col-8 p-1">
+                    <div class="col-6 col-md-8 col-lg-8 p-1">
                         <div class="process_details">
                             <div class="img_shadow4"></div>
                             <img src="{{ asset('frontEnd/img/creative.png') }}" class="h-100 w-100" alt="">
                             <p class="our-service text-start"> Our Service</p>
                         </div>
                     </div>
-                    <div class="col-4 p-1">
+                    <div class="col-6 col-md-4 col-lg-4 p-1">
                         <div class="process_details">
                             <div class="img_shadow3"></div>
                             <img src="{{ asset('frontEnd/img/d1.png') }}" class="h-100 w-100" alt="">

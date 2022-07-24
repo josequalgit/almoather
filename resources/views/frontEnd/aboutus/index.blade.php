@@ -7,31 +7,26 @@
   </section>
 
   <section class="map">
-    <div class="container position-relative ">
-  
+    <div class="container position-relative">
       <div class="row">
-        <div class="col-lg-6 col-md-12 col-sm-12 ">
-        
+        <div class="col-lg-6 col-md-12 col-sm-12">
             <h1>{{ app()->getLocale() == 'ar'?$data->contentData->section_one->title_ar:$data->contentData->section_one->title_en}}</h1>
             <p>{{ app()->getLocale() == 'ar'?$data->contentData->section_one->description_ar:$data->contentData->section_one->description_en}}</p>
-          </div>
+        </div>
         <div class="col-lg-6  col-md-12 col-sm-12 position-relative d-flex">
-          
-          <div class="mt-5 text-end">
+          <div class="custom_about mt-5">
             <img id="business2" src="{{ $data->aboutUsSectionOneImage }}"  alt="">
             <div class="Rectangle-page2">
                 <img   src="{{  $data->aboutUsSectionOneImage  }}"   alt="">
               </div>
           </div>
-        
         </div>
-        
       </div>
     </div>
   </section>
 
 
-  <section class="background-gray position-relative py-5 my-4">
+  <section class="about_who position-relative my-4">
       <div class="container py-5">
             <div class="row how-it-work pt-5 pb-3">
                 <div class="col-lg-6 col-md-12 col-sm-12">
@@ -91,7 +86,7 @@
     <div class="background-gray2">
       <div class="container">
         <div class="row">
-            <div class="col-lg-12 col-md-3 col-sm-3 d-flex p-5">
+            <div class="col-lg-12 col-md-3 col-sm-3 p-5 custom_flex">
                 <div class="col-3 text-center ">
                     <img src="{{ asset('frontEnd/img/Menu.png') }}" alt="" width="100px" height="100px">
                     <div class="icon-last-section">
