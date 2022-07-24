@@ -7,7 +7,7 @@ use App\Notifications\AddInfluencer;
 use Carbon\Carbon;
 use App\Models\Ad;
 use App\Models\User;
-use App\Models\Contract;
+use App\Models\InfluencerContract;
 use App\Models\Influncer;
 use App\Http\Traits\SendNotification;
 use App\Models\AppSetting;
@@ -51,220 +51,294 @@ class CheckAdsCommand extends Command
 
     public function handle()
     {   
-            $setting = AppSetting::where('key','expired_info')->first();
-            $warningDaysPeriod = config('global.WARNING_DAYS_PERIOD');
-            $canceledDaysPeriod = config('global.CANCELED_DAYS_PERIOD');
-            $resetDaysPeriod = config('global.CANCELED_DAYS_PERIOD');
-            if($setting)
-            {
-                $ser = json_decode($setting->value);
-                // $warningDaysPeriod = $ser['warning_days_period'];
-                // $canceledDaysPeriod = $ser['canceled_days_period'];
-            }
-            $ads = Ad::get();
-            $canceledDaysPeriod = $warningDaysPeriod;
-            $warningDaysPeriod = $warningDaysPeriod;
-            $cDate = Carbon::parse()->now();
-
-            foreach($ads as $item)
-            {
-                $countDiffDays = $item->updated_at->diffInDays($cDate);
-
-                /** SEND NOTIFICATION FOR THE CUSTOMER HOW'S ADS WILL BE CANCELED SOON */
-                if($countDiffDays == $warningDaysPeriod)
-                {
-                    $info =[
-                        'en'=>[
-                            'msg'=>'Please add a payment for "'."$item->store".'" ad or it will be canceled',
-                            'type'=>'Ad',
-                            'id'=>$item->id
-                        ],
-                        'ar'=>[
-                            'msg'=>'الرجاء اضافة طريق الدفع "'."$item->store".'" لعدم الالغاء',
-                            'type'=>'Ad',
-                            'id'=>$item->id
-                        ],
-                    ];
-
-                    $adminMessage =[
-                        'en'=>[
-                            'msg'=>'Notification was sent to "'.$item->customers->first_name.' '.$item->customers->last_name.'" about canceling "'.$item->store.'" campaign',
-                            'type'=>'Ad',
-                            'id'=>$item->id
-                        ],
-                        'ar'=>[
-                            'msg'=>'تم ارسال الاشعار الى "'.$item->customers->first_name.' '.$item->customers->last_name.'" حول الغاء الحملة "'.$item->store.'"',
-                            'type'=>'Ad',
-                            'id'=>$item->id
-                        ]
-                    ];
-                    #SEND NOTIFICATION TO CUSTOMER ABOUT THE AD
-                    $sendTo = User::where('id',[$item->customers->users->id])->get();
-                    $lang = $item->customers->users->lang;
-                    $data = [
-                        "title" => "Ads " . $ad->store . " Reminder",
-                        "body" => $info[$lang],
-                        "type" => 'Ad',
-                        'target_id' =>$ad->id            
-                    ];
-                    $tokens = [$ad->customers->users->fcm_token];
-
-                    $this->sendNotifications($tokens,$data);
-                    Notification::send($sendTo, new AddInfluencer($adminMessage[$lang??'en']));    
-                    
-                    #SEND NOTIFICATION TO ADMIN ABOUT THE AD
-                    $sendTo = User::where('id',[1])->get();
-                    Notification::send($sendTo, new AddInfluencer($adminMessage[$lang??'en']));    
-                }
-                 #CHECK FOR ANY AD WAS ADDED AND WASN'T AND THE CUSTOMER DID'T PAY FOR 28 DAYS
-                elseif($countDiffDays == $canceledDaysPeriod || $countDiffDays > $canceledDaysPeriod)
-                {
-                    $item->status = 'cancelled';
-                    $item->save();
-                }
-               
+        $setting = AppSetting::where('key','expired_info')->first();
+        $setting = (array) json_decode($setting->value);
+        
+        $firstPaymentWarning = isset($setting['campaign_first_payment_reminder']) ? $setting['campaign_first_payment_reminder'] : config('global.CAMPAIGN_FIRST_PAYMENT_REMINDER');
+        $firstPaymentCancel = isset($setting['campaign_first_payment_period']) ? $setting['campaign_first_payment_period'] : config('global.CAMPAIGN_FIRST_PAYMENT_PERIOD');
+        
+        $firstPaymentAds = Ad::where('status','approve')->get();
+        
+        
+        foreach($firstPaymentAds as $item)
+        {
+            $countDiffDays = $item->status_updated_at->diffInDays(Carbon::now());
+            $lastNotification = $item->last_notification_time->diffInHours(Carbon::now());
+            
+            if($lastNotification < 24){
+                continue;
             }
 
-            // check if there is no response for the contracts
-            $contracts = Contract::get();
-          
-            foreach ($contracts as $item) {
-                if($item->ads)
-                {
-                    $adminMessage =[
-                        'en'=>[
-                            'msg'=>'Please add response to "'.$item->ads->store.'"ad contract"'
-                        ],
-                        'ar'=>[
-                            'msg'=>'الرجاء الرد على عقد "'.$item->ads->store.'"'
-                        ]
-                        ];
+            /** SEND NOTIFICATION FOR THE CUSTOMER HOW'S ADS WILL BE CANCELED SOON */
+            if($firstPaymentWarning <= $countDiffDays && $firstPaymentCancel > $countDiffDays)
+            {
+                $title = 'campaign_expire_soon';
+                $msg = 'campaign_expire_soon_msg';
+                $transParams = ['ad_name' => $item->store];
+                $users = [$item->customers->users->id];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $item->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
 
-                }
+                $this->saveAndSendNotification($info,[],$users,$item->customers->users->lang);
 
+                $title = 'campaign_expire_soon_admin';
+                $msg = 'campaign_expire_soon_admin_msg';
+                $transParams = ['ad_name' => $item->store,'customer_name' => $item->customers->full_name];
+                $users = [$item->customers->users->id];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $item->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
                 
-                #SEND NOTIFICATION TO INFLUENCER ABOUT THE AD
-                $remind_about_ad_date = [];
-                if($item->influencers)
-                {
-                    $before2DaysDate = date("Y-m-d", strtotime("-2 day"));
-                    $before1DaysDate = date("Y-m-d", strtotime("-1 day"));
-                    $beforeTodayDate = date("Y-m-d");
-                    $date = $item->date;
-                    if($before2DaysDate == $date)
-                    {
-                        $sendTo = User::find($item->influencers->users->id);
-                        $lang = $item->influencers->users->lang;
-                        Notification::send($sendTo, new AddInfluencer($adminMessage[$lang??'en']));
-                    }
-                    if($before1DaysDate == $date)
-                    {
-                        $message_body = [
-                            "title" => trans($this->notification_trans_dir.'ad_reminder_before_one_day_title'),
-                            "body" => trans($this->notification_trans_dir.'ad_reminder_before_one_day',['ad_name'=>$item->ads->store]),
-                            "type" => 'influencers',
-                            'target_id' =>$item->ads->id
-                        ];
-                        $this->sendNotifications([$item->influencers->users->fcm_token],$message_body);
-
-                    }
-                    if($beforeTodayDate == $date)
-                    {
-                        $message_body = [
-                            "title" => trans($this->notification_trans_dir.'ad_reminder_before_one_day_title'),
-                            "body" => trans($this->notification_trans_dir.'ad_reminder_for_today',['ad_name'=>$item->ads->store]),
-                            "type" => 'influencers',
-                            'target_id' =>$item->ads->id
-                        ];
-                        $this->sendNotifications([$item->influencers->users->fcm_token],$message_body);
-
-                    }
-                }
+                $this->saveAndSendNotification($info,['Business Manager','superAdmin']);
+                $item->last_notification_time = Carbon::now();
+                $item->save();
             }
-
-            // CHECK WHEN THE LAST TIME THE USER UPDATED HE'S SUBSCRIBERS
-            $influencers = Influncer::get();
-            $checkSubscription =[
-                'en'=>[
-                    'msg'=>'Please Update Your Subscription Number'
-                ],
-                'ar'=>[
-                    'msg'=>'الرجاء تحديث عدد متابعينك'
-                ]
-                ];
-            $checkSubscriptionTitle =[
-                'en'=>[
-                    'msg'=>'Update Subscribers!'
-                ],
-                'ar'=>[
-                    'msg'=>'تحديث المشتركين'
-                ]
-                ];
-
-              
-                $tokens = [];
-                $tokens_for_reminder = [];
-            foreach ($influencers as $value) 
+                #CHECK FOR ANY AD WAS ADDED AND WASN'T AND THE CUSTOMER DID'T PAY FOR 28 DAYS
+            elseif($firstPaymentCancel <= $countDiffDays)
             {
-                $countDiffDays = Carbon::parse($value->subscribers_update)->diffInDays($cDate);
+                $title = 'campaign_expire';
+                $msg = 'campaign_expire_msg';
+                $transParams = ['ad_name' => $item->store];
+                $users = [$item->customers->users->id];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $item->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+                
+                $this->saveAndSendNotification($info,['Business Manager','superAdmin'],$users,$item->customers->users->lang);
 
-                if($countDiffDays >= $canceledDaysPeriod)
-                {
-                    if($countDiffDays >= $resetDaysPeriod)
-                    {
-                        $influencers->update([
-                            'subscribers'=>50000,
-                            'subscribers_update'=>Carbon::parse()->now()
-                        ]);
-                        $message_body_for_resting_subscribers = [
-                            "title" => trans($this->notification_trans_dir,'ad_influencer_before_one_day_title'),
-                            "body" => trans($this->notification_trans_dir,'influencer_reset_message'),
-                            "type" => 'influencers',
-                            'target_id' =>$value->users->id
-                        ];
-                        $this->sendNotifications([$value->users->fcm_token],$message_body_for_resting_subscribers);
+                $item->status = 'rejected';
+                $item->reject_note = "لقد تم رفض الحملة بسبب عدم دفع المبلغ المطلوب";
+                $item->last_notification_time = Carbon::now();
+                $item->save();
+            }
+            
+        }
 
-                    }
-                    $message_body = [
-                        "title" => $checkSubscriptionTitle[$lang??'en'],
-                        "body" => $checkSubscription[$lang??'en'],
-                        "type" => 'influencers',
-                        'target_id' =>$value->users->id
-                    ];
-                    $sendTo = User::find($value->users->id);
-                    $lang = $item->customers->users->lang;
-                   // array_push($tokens,$sendTo->users->fcm_token);
-                    $this->sendNotifications([$sendTo->users->fcm_token],$message_body);
-                    Notification::send($sendTo, new AddInfluencer($checkSubscription[$lang??'en']));    
-                }
+        $fullPaymentWarning = isset($setting['campaign_full_payment_reminder']) ? $setting['campaign_full_payment_reminder'] : config('global.CAMPAIGN_FULL_PAYMENT_REMINDER');
+        $fullPaymentCancel = isset($setting['campaign_full_payment_period']) ? $setting['campaign_full_payment_period'] : config('global.CAMPAIGN_FULL_PAYMENT_PERIOD');
+        
+        $fullPaymentAds = Ad::where(['status' => 'choosing_influencer','admin_approved_influencers' => 1])->get();
 
-                #INFLUENCERS REMINDER FOR THE AD DATE 
-                foreach ($value->contracts as $key => $value) {
+        foreach($fullPaymentAds as $item)
+        {
+            $countDiffDays = $item->status_updated_at->diffInDays(Carbon::now());
+            $lastNotification = $item->last_notification_time->diffInHours(Carbon::now());
+            
+            if($lastNotification < 24){
+                continue;
+            }
 
-                    $message_body_for_reminder = [
-                        "title" => trans($this->notification_trans_dir.'influencers_ad_reminder_msg',['ad_name'=>$value->ads->store]),
-                        "body" => $checkSubscription[$lang??'en'],
-                        "type" => 'influencers',
-                        'target_id' =>$value->influencers->users->id
-                    ];
+            /** SEND NOTIFICATION FOR THE CUSTOMER HOW'S ADS WILL BE CANCELED SOON */
+            if($fullPaymentWarning <= $countDiffDays && $fullPaymentCancel > $countDiffDays)
+            {
+                $title = 'campaign_expire_soon';
+                $msg = 'campaign_expire_soon_msg';
+                $transParams = ['ad_name' => $item->store];
+                $users = [$item->customers->users->id];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $item->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
 
-                    array_push($tokens_for_reminder,$value->influencers->users->fcm_token);
-                    $this->sendNotifications([$value->influencers->users->fcm_token],$message_body_for_reminder);
-                }
+                $this->saveAndSendNotification($info,[],$users,$item->customers->users->lang);
+
+                $title = 'campaign_expire_soon_admin';
+                $msg = 'campaign_expire_soon_admin_msg';
+                $transParams = ['ad_name' => $item->store,'customer_name' => $item->customers->full_name];
+                $users = [$item->customers->users->id];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $item->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+                
+                $this->saveAndSendNotification($info,['Business Manager','superAdmin']);
+                $item->last_notification_time = Carbon::now();
+                $item->save();
+            }
+                #CHECK FOR ANY AD WAS ADDED AND WASN'T AND THE CUSTOMER DID'T PAY FOR 28 DAYS
+            elseif($fullPaymentCancel <= $countDiffDays)
+            {
+                $title = 'campaign_expire';
+                $msg = 'campaign_expire_msg';
+                $transParams = ['ad_name' => $item->store];
+                $users = [$item->customers->users->id];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $item->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+                
+                $this->saveAndSendNotification($info,['Business Manager','superAdmin'],$users,$item->customers->users->lang);
+
+                $item->status = 'cancelled';
+                $item->reject_note = "لقد تم الغاء الحملة بسبب عدم دفع المبلغ المطلوب";
+                $item->last_notification_time = Carbon::now();
+                $item->save();
+            }               
+        }
+
+        // check if there is no response for the contracts
+        $contracts = InfluencerContract::whereHas('ads',function($query){
+            return $query->whereIn('status',['fullpayment','active','progress','complete']);
+        })->where('is_accepted',0)->get();
+
+        $contractPeriod = isset($setting['campaign_influencer_contract_cancelled']) ? $setting['campaign_influencer_contract_cancelled'] : config('global.CAMPAIGN_INFLUENCER_CONTRACT_CANCELLED');
+
+        
+        foreach ($contracts as $item) {
+            $countDiffDays = $item->contract_send_at->diffInDays(Carbon::now());
+            $lastNotification = $item->last_notification_time->diffInHours(Carbon::now());
+            
+            if($lastNotification < 24){
+                continue;
+            }
+
+            if($contractPeriod > $countDiffDays){
+                $title = 'contract_expire_soon';
+                $msg = 'contract_expire_soon_msg';
+                $transParams = ['ad_name' => $item->ads->store];
+                $users = [$item->influencers->users->id];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $item->ads->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+                
+                $this->saveAndSendNotification($info,[],$users,$item->influencers->users->lang);
+
+                $title = 'contract_expire_admin_soon';
+                $msg = 'contract_expire_admin_soon_msg';
+                $transParams = ['ad_name' => $item->ads->store,'inf_name' => $item->influencers->full_name];
+                
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $item->ads->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+                
+                $this->saveAndSendNotification($info,['Business Manager','superAdmin']);
+
+                $item->last_notification_time = Carbon::now();
+                $item->save();
+            }else{
+                $title = 'contract_expired';
+                $msg = 'contract_expired_msg';
+                $transParams = ['ad_name' => $item->ads->store];
+                $users = [$item->influencers->users->id];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $item->ads->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+                
+                $this->saveAndSendNotification($info,[],$users,$item->influencers->users->lang);
+
+                $title = 'contract_expired_admin';
+                $msg = 'contract_expired_admin_msg';
+                $transParams = ['ad_name' => $item->ads->store,'inf_name' => $item->influencers->full_name];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $item->ads->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+                
+                $this->saveAndSendNotification($info,['Business Manager','superAdmin']);
+
+                $item->last_notification_time = Carbon::now();
+                $item->is_accepted = 2;
+                $item->rejectNote = 'لم بتم الرد على العقد بالوقت المطلوب';
+                $item->save();
+            }
+        }
 
 
-                /** UPDATE SUBSCRIPTION REMINDER */
-               
-
+        $contracts = InfluencerContract::where('is_accepted',1)->where('status',0)->get();
+        foreach ($contracts as $item) {
+            $countDiffHours = $item->date->diffInHours(Carbon::now());
+            $lastNotification = $item->last_notification_time->diffInHours(Carbon::now());
+            
+            if($lastNotification < 24){
+                continue;
             }
 
 
+            if($countDiffHours < 48 && $item->date->greaterThan(Carbon::now())){
+                $title = 'campaign_execute_reminder';
+                $msg = 'campaign_execute_reminder_msg';
+                $transParams = ['ad_name' => $item->ads->store];
+                $users = [$item->influencers->users->id];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $item->ads->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+                
+                $this->saveAndSendNotification($info,[],$users,$item->influencers->users->lang);
+                $item->last_notification_time = Carbon::now();
+                $item->save();
+            }else if($item->date->lessThan(Carbon::now())){
+                $title = 'campaign_execute_reminder';
+                $msg = 'campaign_execute_now_reminder_msg';
+                $transParams = ['ad_name' => $item->ads->store];
+                $users = [$item->influencers->users->id];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $item->ads->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+                
+                $this->saveAndSendNotification($info,[],$users,$item->influencers->users->lang);
 
-
-
-
-
-
+                $title = 'campaign_execute_reminder';
+                $msg = 'campaign_execute_now_admin_msg';
+                $transParams = ['ad_name' => $item->ads->store,'inf_name' => $item->influencers->full_name,'exec_date' => $item->date->format('d/m/Y')];
+                $users = [$item->influencers->users->id];
+                $info =[
+                    'msg'           => $msg,
+                    'title'         => $title,
+                    'id'            => $item->ads->id,
+                    'type'          => 'Ad',
+                    'params'        => $transParams
+                ];
+                
+                $this->saveAndSendNotification($info,['Business Manager','superAdmin']);
+                $item->last_notification_time = Carbon::now();
+                $item->save();
+            }
+        }
     }
 
 

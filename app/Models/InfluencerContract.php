@@ -22,10 +22,14 @@ class InfluencerContract extends Model
         'rejectNote',
         'link',
         'scenario',
+        'last_notification_time',
+        'contract_send_at'
     ];
 
     protected $casts = [
         'date' => 'datetime:Y-m-d',
+        'contract_send_at' => 'datetime:Y-m-d',
+        'last_notification_time' => 'datetime:Y-m-d',
      ];
 
     public function ads()

@@ -328,7 +328,7 @@ class AdController extends Controller
             $content = str_replace("[[_PHONE_]]", $ad->customers->users->phone, $content);
             $content = str_replace("[[_EMAIL_]]", $ad->customers->users->email, $content);
             $content = str_replace("[[_PRICE_WITH_TAX_]]", number_format($ad->adBudgetWithVat), $content);
-            $content = str_replace("[[_PRICE_]]", number_format($ad->budget), $content);
+            $content = str_replace("[[_PRICE_]]", number_format($ad->price_to_pay), $content);
             $content = str_replace("[[_START_DATE_]]", $startDate->date->format('d/m/Y'), $content);
             $content = str_replace("[[_END_DATE_]]", $endDate->date->format('d/m/Y'), $content);
             $content = str_replace("[[_CAMPAIGN_GOAL_]]", $ad->campaignGoals->getTranslation('title','ar'), $content);
@@ -377,7 +377,7 @@ class AdController extends Controller
         $data->save();
         $influencer = Influncer::find($data->influencer_id);
 
-        if($request->status == 0 && $request->rejectNote){
+        if($data->is_accepted == 2 && $request->rejectNote){
             $title = 'influencer_reject_campaign';
             $msg = 'influencer_reject_campaign_msg';
             $roles = ['Business Manager','superAdmin'];
@@ -386,7 +386,7 @@ class AdController extends Controller
             $info =[
                 'msg'           => $msg,
                 'title'         => $title,
-                'id'            => $data->id,
+                'id'            => $data->ads->id,
                 'type'          => 'Ad',
                 'params'        => $transParams
             ];
@@ -1042,6 +1042,9 @@ class AdController extends Controller
                 $matches = $data->matches()->where('chosen', 1)->where('status','!=','deleted')->get();
                 foreach($matches as $match){
                     $influencersUsers[] = $match->influencers->users->id; 
+                    influencerContract::where(['ad_id' => $match->ad_id,'influencer_id' => $match->influencer_id])->update([
+                        'contract_send_at' => Carbon::now()
+                    ]);
                 }
                 $title = 'new_contract_title';
                 $msg = 'new_contract_msg';
@@ -1531,6 +1534,27 @@ class AdController extends Controller
     private function formateMoneyNumber($number)
     {
         return number_format($number,0,'.',',');
+    }
+
+    function getNewRequestsCount(){
+        if(!Auth::guard('api')->user()->influncers)
+        {
+            return response()->json([
+                'msg'       => '',
+                'count'     => 0,
+                'status'    => config('global.NOT_FOUND_STATUS')
+            ],config('global.NOT_FOUND_STATUS'));
+        }
+
+        $data = Auth::guard('api')->user()->influncers->contracts()->whereHas('ads',function($query){
+            return $query->whereIn('status',['fullpayment','active','progress','complete']);
+        })->where('is_accepted',0)->count();
+
+        return response()->json([
+            'msg'       => '',
+            'count'     => $data,
+            'status'    => config('global.OK_STATUS')
+        ],config('global.OK_STATUS'));
     }
     
     

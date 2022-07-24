@@ -14,8 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('ads', function (Blueprint $table) {
-            $table->bigInteger('relation_id')->unsigned()->nullable();
-            $table->foreign('relation_id')->references('id')->on('relations')->onDelete('cascade');
+            $table->timestamp('last_notification_time')->default(DB::raw('CURRENT_TIMESTAMP'))->after('updated_at');
         });
     }
 
@@ -27,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('ads', function (Blueprint $table) {
-            //
+            $table->dropColumn('last_notification_time');
         });
     }
 };

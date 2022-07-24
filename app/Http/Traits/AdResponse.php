@@ -157,12 +157,15 @@ trait AdResponse
             
             $basicResponse['status'] = $this->getStatusForInf($ad);
             if($basicResponse['status'] == 'Progress'){
-                $basicResponse['camp_link'] = 'https://josequal.com';
+                $basicResponse['camp_link'] = $contractData->campaign_url;
             }
 
-            $basicResponse['date'] = $contractData && $contractData->created_at ?  $contractData->created_at->diffForHumans() : '';
+            $basicResponse['date'] = $contractData && $contractData->contract_send_at ?  $contractData->contract_send_at->diffForHumans() : '';
 
             $basicResponse['showExecution'] = $contractData && $contractData->date && !$contractData->date->gt(Carbon::now()) ? true : false;
+            $basicResponse['scenario'] = $contractData->scenario;
+        }else{
+            $basicResponse['hasReturn'] = $ad->relation_id == 3 ? false : true;
         }
 
         //Return Matches if the status is Full payment / Choosing influencer / Progress

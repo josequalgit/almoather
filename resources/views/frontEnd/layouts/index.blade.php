@@ -19,6 +19,9 @@
           $name = $route->getName();
           $prefix = $route->getPrefix();
     @endphp
+    
+    <link rel="stylesheet" href="{{ asset('frontEnd/css/main.css') }}">
+
     @if($name == 'frontEnd.index')
         @if(app()->getLocale() == 'ar' )
             <link rel="stylesheet" href="{{ asset('frontEnd/css/ar/style-index-page.css') }}">

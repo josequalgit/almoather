@@ -23,11 +23,13 @@ class Campaign extends Voluum{
         if($campaign->influencers->voluum_id == null){
             $influencer = new Influencer;
             $influencer->addInfluencer($campaign->influencers->id);
+            $campaign = InfluencerContract::find($campaign->id);
         }
 
         if($campaign->ads->voluum_id == null){
             $offer = new Offer;
             $offer->createOffer($campaign->ads->id);
+            $campaign = InfluencerContract::find($campaign->id);
         }   
 
         $checkCampaign = $this->checkCampaignExists($campaign);
@@ -63,7 +65,8 @@ class Campaign extends Voluum{
         $response = $this->put(Endpoints::updateCampaignEndpoint($campaignId),$data);
         if($response && isset($response['id'])){
             $campaign->update([
-                'voluum_id' => $response['id']
+                'voluum_id' => $response['id'],
+                'campaign_url' => $response['url']
             ]);
             return ['status' => true,'data' => $response];
         }
@@ -78,7 +81,8 @@ class Campaign extends Voluum{
         
         if($response && isset($response['id'])){
             $campaign->update([
-                'voluum_id' => $response['id']
+                'voluum_id' => $response['id'],
+                'campaign_url' => $response['url']
             ]);
             return ['status' => true,'data' => $response];
         }

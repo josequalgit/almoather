@@ -735,15 +735,17 @@ class AdController extends Controller
             ], config('global.NOT_FOUND_STATUS'));
         }
 
+        $contract = InfluencerContract::where(['ad_id' => $ad_id,'influencer_id' => $data['influncers_id']])->first();
+
         $data = InfluencerContract::updateOrCreate([
             'ad_id' => $ad_id,
             'influencer_id' => $data['influncers_id']
         ],[
             'date' => $data['date'],
             'scenario' => $data['scenario'],
-            'is_accepted' => 0,
-            'af' => 0,
-            'content' => '',
+            'is_accepted' => $contract ? $contract->is_accepted : 0,
+            'af' =>  $contract ? $contract->af : 0,
+            'content' => $contract ? $contract->content : '',
         ]);
 
         return response()->json([

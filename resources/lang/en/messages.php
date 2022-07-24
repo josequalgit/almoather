@@ -294,6 +294,6 @@ return [
         'type'=>'Type',
         'item_classification_of_the_product'=>'Item Classification of the product',
         'unlock_influencer_message' => 'To view the details of the influencers nominated for the campaign,and to obtain the feature of deletion and replacement, a payment of the amount :price is required,which is a fee that is refundable according to the refund policy in the event that you do not want to continue',
-
+        'start_btn' => 'Get Started'
     ]
 ];

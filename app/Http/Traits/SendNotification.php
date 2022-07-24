@@ -67,7 +67,7 @@ trait SendNotification {
         ]));
     }
 
-    function saveAndSendNotification($info,$roles = [],$users = []){
+    function saveAndSendNotification($info,$roles = [],$users = [],$lang = false){
         //Send notification to admins based on roles
         $UsersNotifications = User::whereIn('id',$users)->orWhereHas('roles',function($q) use($roles) {
             $q->whereIn('name',$roles);
@@ -78,11 +78,17 @@ trait SendNotification {
             $this->sendAdminNotification('notification',$info,$roles);
         }
 
+        if($lang){
+            $language = $lang;
+        }else{
+            $language = app()->getLocale();
+        }
+
         if(!empty($users)){
             $tokens = User::whereIn('id',$users)->whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
             $data = [
-                "title"     => trans("notifications." . $info['title'],$info['params']),
-                "body"      => trans("notifications." . $info['msg'],$info['params']),
+                "title"     => trans("notifications." . $info['title'],$info['params'],$language),
+                "body"      => trans("notifications." . $info['msg'],$info['params'],$language),
                 "type"      => $info['type'],
                 'target_id' => $info['id']             
             ];
