@@ -32,11 +32,10 @@ class AuthController extends Controller
          if ($token = Auth::guard('api')->attempt(['email'=>$request->username,'password'=>$request->password])) {
             $bearer = 'Bearer '.$token;
             Auth::attempt(['email'=>$request->username,'password'=>$request->password]);
-            // $request->headers->set('Authorization',$bearer);
            
            $cookie =  \Cookie::make('jwt_token',$bearer,time() + (10 * 365 * 24 * 60 * 60));
-           
-            if(count(Auth::guard('api')->user()->roles) > 0)
+
+           if(count(Auth::guard('api')->user()->roles) > 0)
             {
                 Auth::guard('api')->logout();
                 Auth::logout();
@@ -47,25 +46,21 @@ class AuthController extends Controller
             }
             $is_user_verified = Auth::guard('api')->user()->email_verified_at?true:false;
 
-            return redirect()->route($is_user_verified?'customers.index':'active_code')->withCookie($cookie);
-            // return response()->json([
-            //     'data'=>[
-            //         'url'=>$is_user_verified?route('customers.index'):route('auth.active_code'),
-            //         'token'=>$token,
-            //         'is_user_verified'=>$is_user_verified,
-            //         'status'=>config('global.OK_STATUS')
-            //     ],
-            //     'status'=>config('global.OK_STATUS')
-            // ],config('global.OK_STATUS'));
+            if(Auth::guard('api')->user()->influncers)
+            {
+                $route = 'influencers.index';
+            }
+            else
+            {
+                $route = 'customers.index';
+            }
+
+            return redirect()->route($is_user_verified?$route:'active_code')->withCookie($cookie);
         }
         else
         {
              Alert::toast('Invalid email or password', 'error');
              return back();
-            // return response()->json([
-            //     'msg'=>'Invalid email or password',
-            //     'status'=>config('global.WRONG_VALIDATION_STATUS')
-            // ],config('global.WRONG_VALIDATION_STATUS'));
         }
 
     }

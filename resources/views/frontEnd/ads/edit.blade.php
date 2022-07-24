@@ -4,8 +4,8 @@
 <section class="background-page14 position-relative py5" style="background-image: url({{ asset('frontEnd/img/handsome-2.png')}})">
     <div class="py-5">
         <div class="contract text-center position-relative">
-            <h1>{{ trans('messages.frontEnd.create_ads') }}</h1>
-            <p>{{ trans('messages.frontEnd.please_add_the_ad_information_in_the_form_below') }}</p>
+            <h1>{{ trans('messages.frontEnd.update_ads') }}</h1>
+            {{-- <p>{{ trans('messages.frontEnd.please_add_the_ad_information_in_the_form_below') }}</p> --}}
         </div>
         <div class="img-first-page2 position-absolute text-center">
             
@@ -533,6 +533,26 @@
                 last = +this.value;
         };
 }(0));
+
+
+function getAdDetails()
+{
+    let route = '{{ route("apiAdDetails",":id") }}';
+    let addAdId = route.replace(':id',ad_id);
+    $.ajax({
+        url:addAdId,
+        beforeSend: function (xhr) {
+         xhr.setRequestHeader('Authorization', `${token}`);
+        },
+        type:'GET',
+        success:(res)=>{
+            console.log(res)
+        },
+        error:(err)=>{
+            console.log('error: ',err);
+        }
+    });
+}
 
 
 

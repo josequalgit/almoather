@@ -18,10 +18,17 @@
           $route = Route::current();
           $name = $route->getName();
           $prefix = $route->getPrefix();
+         
     @endphp
     
     <link rel="stylesheet" href="{{ asset('frontEnd/css/main.css') }}">
 
+    @if($prefix == 'customers/ad'||$prefix == '/influencers')
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo&family=El+Messiri:wght@500&display=swap" rel="stylesheet">
+    @endif
+    
     @if($name == 'frontEnd.index')
         @if(app()->getLocale() == 'ar' )
             <link rel="stylesheet" href="{{ asset('frontEnd/css/ar/style-index-page.css') }}">
@@ -43,14 +50,19 @@
 
     <!-- end menu section -->
     <!-- text & image section -->
-    @if($prefix == '/customers'||$prefix == 'customers/ad')
+   
+    @if($prefix == '/customers'||$prefix == '/influencers')
     <section class="background-page10 position-relative py-5" style="background-image: url({{ asset('frontEnd/img/handsome-caucasian-bearded-freelancer-with-toothy-smile-sitting-office-late-night-using-tablet-surfing-internet-social-media-concept.png')}})">
         
         <div class="py-5">
             <div class="contract text-center">
                 <h1>{{ trans('messages.frontEnd.welcome_back') }}</h1>
              
-                <p>{{ auth()->user()->customers->full_name }}</p>
+                @if(auth()->user()->customers)
+                <p>{{ auth()->user()->customers?auth()->user()->customers->full_name:auth()->user()->influncers->full_name }}</p>
+                @else
+                <p>{{ auth()->user()->influncers?auth()->user()->influncers->full_name:'' }}</p>
+                @endif
             </div>
         </div>
         <div class="position-absolute flower">

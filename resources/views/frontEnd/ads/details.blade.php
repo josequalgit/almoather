@@ -84,10 +84,19 @@
                                     <label for="exampleInputEmail1">To: <span id="to"></span></label>
                                 </div>
                             </div>
+                            <div class="col-lg-6 mx-auto">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Status: <span id="status"></span></label>
+                                </div>
+                            </div>
                     </div>
                 </div>
                 <div id="customer_action_area" class="text-center">
-                    <button id="customer_action_button" class="btn btn-primary mt-2 w-25"></button>   
+                    <button id="customer_action_button" class="btn btn-primary mt-2 w-25 align-self-center"></button>
+                    <div class="update_ad alert alert-danger w-75 m-auto mt-3" role="alert">
+                        {{ $data->reject_note }}
+                      </div>                      
+                    <a href="{{ route('customers.ads.edit',$data->id) }}" class="btn btn-danger mt-2 w-25 update_ad">Update Campaign</a>   
                 </div>
                 <div id="social-media" class="row mt-4"></div>
                 <div class="mt-5 card w-75 m-auto align-items-center ">
@@ -316,11 +325,14 @@
     let route = '{{ route("apiAdDetails",":id") }}';
     let ad_id = '{{ $data->id }}';
     let payment_amount = 0;
-    let addAdId = route.replace(':id',ad_id)
+    let addAdId = route.replace(':id',ad_id);
+    let influncer_counter = 0;
     let removed_influencer = null;
+    let ad = null;
     $('#confirmListButton').hide();
     $('#influencer_list').hide();
     $('#fullPaymentButton').hide();
+    $('.update_ad').hide();
 
     $.ajax({
         url:addAdId,
@@ -329,7 +341,7 @@
         },
         type:'GET',
         success:(res)=>{
-            let ad = res.data;
+            ad = res.data;
             console.log('ad data: ',ad)
             console.log('get ad response: ',ad.store_name)
 
@@ -347,6 +359,7 @@
             $('#to').append(ad.end_date)
             $('#location').append(ad.country.name+','+ad.city.name+','+ad.area.name);
             $('#store').append(ad.store_name)
+            $('#status').append(ad.status)
             $('#logo').attr('src',ad.logo.url)
 
             /** Handel button status **/
@@ -354,6 +367,12 @@
             {
                 $('#customer_action_button').attr('disabled',true);
                 $('#customer_action_button').append('{{ trans("messages.frontEnd.please_wait") }}');
+            }
+            if(ad.status == 'rejected')
+            {
+                $('#customer_action_button').hide();
+                $('.update_ad').show();
+
             }
             if(ad.status == 'approve')
             {
@@ -368,16 +387,22 @@
                 /*** APPEND CONFIRM BUTTON ***/
 
             }
-            if(ad.status == "choosing_influencer" )
+            if(ad.status == "choosing_influencer")
             {
-                $('#fullPaymentButton').show();
-                getConfirmedMatchedInfluncers()
+                $('#customer_action_button').hide();
+
+                $('#fullPaymentButton').show()
+                getConfirmedMatchedInfluncers(ad.status)
             }
             if(ad.status == "fullpayment")
             {
-                $('#fullPaymentButton').hide();
-                getConfirmedMatchedInfluncers()
+                $('#customer_action_button').hide();
+
+                if(ad.status == "fullpayment") $('#fullPaymentButton').hide();
+                getConfirmedMatchedInfluncers(ad.status)
+
             }
+          
 
             let videos = ad.videos;
             let images = ad.image;
@@ -454,7 +479,6 @@
                 $('#influencer_list').show();
 
                 let matches = res.data.matches;
-                
                 let item_classification = res.data.type;
                 let item_category = res.data.category;
                 payment_amount = res.data.format_price;
@@ -466,7 +490,7 @@
 
 
                 let tabel = `
-                    <table class="table">
+                    <table id='matchTabel' class="table">
                     <thead>
                         <tr>
                         <th scope="col">Image</th>
@@ -483,6 +507,7 @@
                     </tbody>
                     </table>                
                 `;
+                $(tabel).appendTo('#matchTabel')
                 $(tabel).appendTo('#influencer_list')
                
 
@@ -500,8 +525,8 @@
                 })
 
                 let form = `
-                    <from style='display:none;' id="payment_form" method='POST' action='{{ route("check_payment") }}'>
-                        <input name=''
+                    <from style='display:none;' id="payment_form" method='POST' action='{{ route("check_payment",$data->id) }}'>
+                        <input name='' />
                     </from>
                 `
 
@@ -527,9 +552,11 @@
                         {
                             let get_matches = '{{ route("get_ad_influencers_match",":id") }}';
                             /** ***/
-                             pay_now();
+                            //  pay_now();
                              /**  GET MATHCH INFLUNCERS **/
-                       
+                             $('#show_influncer').remove();
+                             $('#confirmListButton').show();
+                             getMatchedInfluncers();
                         }
 
                     });
@@ -547,6 +574,7 @@
     }
     function pay_now()
     {
+        /**  NOT YET READY **/
         let route = '{{ route("send_payment",":id") }}';
         let url = route.replace(':id',ad_id);
 
@@ -587,7 +615,8 @@
             type:'GET',
             success:(res)=>{
                 $('#influencer_list').show();
-
+                $('#table_body').remove();
+                $('#matchTabel').remove();
                 let tabel = `
                     <table class="table zero-configuration table-influencers col-12">
                         <thead>
@@ -612,6 +641,11 @@
             $(tabel).appendTo('#influencer_list');
 
                 let matches = res.data.match;
+                influncer_counter = matches.length;
+           if(influncer_counter == 0)
+            {
+                $('#confirmListButton').hide();        
+            }        
                 showMatchesOnModal(matches)
                 console.log('full match response: ',res)
 
@@ -657,6 +691,11 @@
             },
             success:(res)=>{
                 let matches = res.data.match;
+                influncer_counter = matches.length;
+                if(influncer_counter == 0)
+            {
+                $('#confirmListButton').hide();        
+            }        
                 $('#table_body').empty();
                 matches.forEach((e)=>{
                     let table_item = `
@@ -683,6 +722,8 @@
                                     </tr>
                     ` 
                     $('#table_body').append(table_item);
+
+                    
                 })
                 const Toast = Swal.mixin({
                     toast: true,
@@ -720,6 +761,7 @@
             },
             success:(res)=>{
                 let matches = res.data;
+                influncer_counter = matches.length;
                 $('#notChoosenInfluncersModal').modal('show');
                 $('#influncer_list').empty();
                 matches.forEach((e)=>{
@@ -766,6 +808,7 @@
             success:(res)=>{
 
                 let matches = res.data.match;
+                influncer_counter = matches.length;
                 showMatchesOnModal(matches);
                 $('#notChoosenInfluncersModal').modal('hide');
 
@@ -803,6 +846,7 @@
     function showMatchesOnModal(matches)
     {
                 $('#table_body').empty();
+                influncer_counter = matches.length;
                 matches.forEach((e)=>{
                     let table_item = `
                     <tr data-id="${e.id}">
@@ -929,7 +973,7 @@
             })
     }
 
-    function getConfirmedMatchedInfluncers()
+    function getConfirmedMatchedInfluncers(status)
     {
         let route = '{{ route("get_ad_influencers_match",":id") }}';
         let url = route.replace(':id',ad_id);
@@ -941,7 +985,6 @@
             type:'GET',
             success:(res)=>{
                 $('#influencer_list').show();
-
                 let tabel = `
                     <table class="table zero-configuration table-influencers col-12">
                         <thead>
@@ -960,15 +1003,40 @@
                         </tbody>
                         </table>                
                     `;
+                if(status == 'fullpayment')
+                {
+                    tabel = `
+                    <table class="table zero-configuration table-influencers col-12">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Price</th>
+                                <th>ROAS</th>
+                                <th>AOAF</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Engagment Rate</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id='table_body'>
+                            
+                        </tbody>
+                        </table>                
+                    `;
+                }
+
 
             $(tabel).appendTo('#influencer_list');
 
                 let matches = res.data.match;
                 if(res.influncers_status)
                 {
-                    
+                    // influncer_counter = matches.length;
                 }
-                showConfirmedMatchesOnModal(matches)
+                showConfirmedMatchesOnModal(status == 'fullpayment'?ad.matches:matches,status)
                 console.log('full match response: ',res)
 
             },
@@ -978,10 +1046,11 @@
         })
     }
 
-    function showConfirmedMatchesOnModal(matches)
+    function showConfirmedMatchesOnModal(matches , status)
     {
                 $('#table_body').empty();
                 matches.forEach((e)=>{
+                    console.log('e: ',e)
                     let table_item = `
                     <tr data-id="${e.id}">
                                         <td>
@@ -992,9 +1061,12 @@
                                         <td>${e.name}</td>
                                         <td>${e.gender}</td>
                                         <td>$${e.budget}</td>
-                                        <td>${e.AOAF ?? 0}</td>
                                         <td>${e.ROAS ?? 0}</td>
+                                        <td>${e.AOAF ?? 0}</td>
+                                        <td>${e.start_date}</td>
+                                        <td>${e.status}
                                         <td>${e.engagement_rate ?? 0}%</td>
+                                        <td><button onclick='userDetails("${e.id}")' class='btn btn-info'>Details</button></td>
                                     </tr>
                     ` 
                     $('#table_body').append(table_item);

@@ -11,11 +11,11 @@
         </ul>
     </div>
     @php
-    $checkStatus = array_key_exists("status", request()->route()->parameters);
-    $route = Route::current();
-    $name = $route->getName();
-    $para = $checkStatus ? request()->route()->parameters['status'] : null;
-    $role = Auth::user()->roles[0]->name
+      $checkStatus = array_key_exists("status", request()->route()->parameters);
+      $route = Route::current();
+      $name = $route->getName();
+      $para = $checkStatus ? request()->route()->parameters['status'] : null;
+      $role = Auth::user()->roles[0]->name
     @endphp
     <div class="main-menu-content marginFromLogo">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation" data-icon-style="lines">
