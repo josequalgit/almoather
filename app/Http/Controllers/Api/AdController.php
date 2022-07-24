@@ -661,6 +661,8 @@ class AdController extends Controller
         $isProfitable =  $data->campaignGoals->profitable;
         $isOnSite = $data->ad_type == 'onsite';
 
+        $hasReturn = $data->relation_id == 3 ? false : true;
+
         return response()->json([
             'msg' => trans($this->trans_dir.'all_matched_blurred'),
             'data' => [
@@ -669,6 +671,7 @@ class AdController extends Controller
                 'format_price' => $this->formateMoneyNumber($cal),
                 'format_budget' => $this->formateMoneyNumber($data->budget),
                 'price' => $cal,
+                'hasReturn' => $hasReturn,
                 'budget' => $data->budget,
                 'matches' => $data->matches()->where('status','!=','deleted')->where('chosen',1)->get()->map(function($item) use($isProfitable,$isOnSite){
                     $price = $isOnSite ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
