@@ -46,7 +46,7 @@
                     <a href="#" class="me-2">
                         <div class="icon-box d-flex justify-content-center align-items-center"><img src="{{ asset('frontEnd/img/Search.svg') }}" alt=""></div>
                     </a>
-                    <a href="{{ route('customers.index') }}" class="me-2">
+                    <a href="{{ auth()->user()->customers?route('customers.index'):route('influencers.index') }}" class="me-2">
                         <div class="icon-box d-flex justify-content-center align-items-center"><img src="{{ asset('frontEnd/img/user.svg') }}" alt=""></div>
                     </a>
                     @else

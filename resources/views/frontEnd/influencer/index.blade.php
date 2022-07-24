@@ -34,7 +34,7 @@
                         <button onclick="getAds('Rejected')" class="nav-link btn btn-none" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">{{ trans('messages.frontEnd.rejected') }}</button>
                       </li>
                       <li class="nav-item content-button col-md-3 col-6" role="presentation">
-                        <button onclick="getAds('Finished')" class="nav-link btn btn-none" id="pills-Canceled-tab" data-bs-toggle="pill" data-bs-target="#pills-Canceled" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">{{ trans('messages.frontEnd.completed') }}</button>
+                        <button onclick="getAds('Completed')" class="nav-link btn btn-none" id="pills-Canceled-tab" data-bs-toggle="pill" data-bs-target="#pills-Canceled" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">{{ trans('messages.frontEnd.completed') }}</button>
                     </li>
                   </ul>
                   <div class="container">
@@ -65,7 +65,7 @@
                         <div  class="tab-pane fade" id="pills-Canceled" role="tabpanel" aria-labelledby="pills-Canceled-tab">
 
 
-                            <div id="ad_content_Finished" class="row text-center mt-3 ads-container">
+                            <div id="ad_content_Completed" class="row text-center mt-3 ads-container">
                                 Completed
                             </div>
 
@@ -170,33 +170,43 @@ $token = Cookie::get('jwt_token');
 
     function adsResponse(data_array)
     {
+        console.log(data_array);
+        let div = '';
         for (let index = 0; index < data_array.length; index++) {
-                 const element = data_array[index];
-                 let route = "{{ route('customers.ads.details',':id') }}";
+                 var element = data_array[index];
+                 console.log(element);
+                 let route = "{{ route('influencers.ads.details',':id') }}";
                  let addIdToRoute = route.replace(':id',element.id);
-                  let div = `<div class="col-sm-4 mt-2">
+                   div += `<div class="col-sm-4 mt-2">
+                  
                                        <div class="card background-box-content">
+                                        <div class='text-end'>
+                                                <p>#${element.id}</p>
+                                            </div>
                                          <div class="card-body">
+                                            
                                              <div class="row">
                                                  <div class="col text-end">
-                                                     <img src="${element.logo.url}" alt="" width="60px" height="60px">
+                                                     <img src="${element.logo.url}">
                                                  </div>
                                                  <div class="col text-start above-text">
                                                      <p >${element.store_name}</p>  
                                                      <span>${element.product_type ?? ''}</span>  
                                                  </div>
                                                  <hr class="mt-2 hr-content" width="80px">
-                                                 <div class="col text-start left-text">
-                                                     <p>${element.is_onSite}</p>  
-                                                     <span>${element.country.name}</span>   
-                                                 </div>
-                                                 <div class="col text-end right-text">
-                                                     <p>${element.budget}</p>  
-                                                     <span>(${element.date})</span>  
-                                                 </div>
                                              </div>
-                                            
-                                         </div>
+                                                <div class='col text-center' width="80px">
+                                                    <label>{{ trans('messages.frontEnd.date') }}:${element.start_date}</label>
+                                                </div>
+                                         
+                                                <div class='col text-center' width="80px">
+                                                    <label>{{ trans('messages.frontEnd.type') }}:${element.is_onSite}</label>
+                                                </div>
+                                         
+                                                <div class='col text-center mb-2' width="80px">
+                                                    <label>{{ trans('messages.frontEnd.location') }}:${element.location}</label>
+                                                </div>
+
                                          <div class='text-center'>
                                                 <a href="${addIdToRoute}" class="btn btn-primary w-75">{{ trans('messages.frontEnd.details') }}</a>    
                                             </div>
@@ -204,9 +214,10 @@ $token = Cookie::get('jwt_token');
                                      </div>`;
                                      
 
-                 $("#ad_content_"+current_status).append(div)
+                
                  
              }
+             $("#ad_content_"+current_status).html(div)
     }
 </script>
 @endsection

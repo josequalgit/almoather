@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('frontEnd/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontEnd/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('frontEnd/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontEnd/telphone/css/intlTelInput.css') }}">
   </head>
   <!-- All Images In Regular Size Are Hidden For Responsive Size (600 / 990) -->
 
@@ -28,6 +29,9 @@
 }
 .danger-border{
     border-color: red;
+}
+.iti--allow-dropdown{
+    display: block;
 }
   </style>
 
@@ -100,7 +104,7 @@
                                 <div class="col-md-6 col-12">
                                     <div class="mt-3">
                                         <label for="country_code" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.country_code') }}</label>
-                                        <input name="country_code" id="country_code" type="number" class="form-control required1" placeholder="{{ trans('messages.frontEnd.country_code') }}">
+                                        <input name="country_code" id="country_code" type="tel" class="form-control required1" placeholder="{{ trans('messages.frontEnd.country_code') }}">
                                     </div>
         
                                 </div>
@@ -127,8 +131,8 @@
                             <div class="row input-adv">
                                 
                                 <div class="col-md-6 col-12  mt-3">
-                                    <label for="phone" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.phone') }}</label>
-                                    <input name="phone" id="phone" type="number" class="form-control required1"  placeholder="{{ trans('messages.frontEnd.phone') }}">
+                                    <label for="phone" class="mb-1 d-block label-advertiser">{{ trans('messages.frontEnd.phone') }}</label>
+                                    <input name="phone" id="phone" type="tel" class="form-control required1"  placeholder="{{ trans('messages.frontEnd.phone') }}">
                                 </div>
                                 <div class="col-md-6 col-12  mt-3">
                                     <label for="dial_code" class="mb-1 float-left label-advertiser">{{ trans('messages.frontEnd.dial_code') }}</label>
@@ -388,6 +392,7 @@
      <!--JAVASCRIPT-->
      <script type='text/javascript' src='{{ asset('frontEnd/js/jquery-3.6.0.min.js') }}'></script>
      <script type='text/javascript' src='{{ asset('frontEnd/js/bootstrap.min.js') }}'></script>
+     <script type="text/javascript" src="{{ asset('frontEnd/telphone/js/intlTelInput-jquery.js') }}"></script>
      <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
      <!--End JAVASCRIPT-->
@@ -776,5 +781,14 @@
                 return true;
     }
     
+    var input = document.querySelector("#telephone");
+
+    $("#phone").intlTelInput({
+        utilsScript: '{{ asset("frontEnd/telphone/js/utils.js") }}',
+        preferredCountries: ["sa","jo" ],
+
+    });
+
+ 
 
 </script>

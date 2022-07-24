@@ -153,7 +153,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
             Route::post('create','store')->name('storeAdApi')->middleware('check_customer');
             Route::get('details/{id}','details')->name('apiAdDetails');
             Route::get('contract/{ad_id}','get_ad_contract')->name('getAdContract');
-            Route::post('contract/accept_contract/{contract_id}','accept_ad_contract');
+            Route::post('contract/accept_contract/{contract_id}','accept_ad_contract')->name('acceptAdContractInfluncere');
             Route::post('contract/customer/accept_contract/{contract_id}','accept_customer_ad_contract')->name('acceptAdContract');
             Route::get('search/{query}','search');
             Route::get('influencers/{influncer_id}/{status?}','get_influencer_ads');
@@ -167,7 +167,7 @@ Route::group(['prefix'=>'auth','middleware' => 'language'],function(){
             Route::get('back_up_influencers/{id}/{removed_inf}','back_up_influencers');
             Route::get('/campaign/contract/{ad_id}','get_ad_contract');
             Route::post('fullPayment/{ad_id}','full_payment');
-            Route::get('completeAd/{ad_id}','completeAd');
+            Route::get('completeAd/{ad_id}','completeAd')->name('completeAd');
             Route::post('addMatch','addMatch');
             Route::post('changeMatchedStatus','changeMatchStatus')->name('changeMatchedStatus');
             Route::post('check_payment/{ad_id}','check_payment')->name('check_payment');

@@ -9,6 +9,7 @@ use App\Models\Relation;
 use App\Models\CampaignGoal;
 use App\Models\Country;
 use App\Models\Ad;
+use Auth;
 
 class AdController extends Controller
 {
@@ -33,7 +34,7 @@ class AdController extends Controller
         $goals = CampaignGoal::get();
         
         $countries = Country::where('is_location',1)->get();
-
+        
         return view('frontEnd.ads.edit',compact('data','socialMedia','relations','goals','countries'))->withCookie($cookie);
     }
 
@@ -41,8 +42,10 @@ class AdController extends Controller
     {
         $data = Ad::findOrFail($id);
         $cookie =  \Cookie::get('jwt_token');
+        $resourceView = 'edit';
+        if(Auth::user()->influncers) $resourceView = 'influncerDetails';
 
-        return view('frontEnd.ads.details',compact('data'))->withCookie($cookie);
+        return view('frontEnd.ads.'.$resourceView,compact('data'))->withCookie($cookie);
     }
 
     public function go_to_payment()
