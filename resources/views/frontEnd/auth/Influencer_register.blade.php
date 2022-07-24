@@ -128,7 +128,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="row input-adv">
+                            <div class="row input-adv"> 
                                 
                                 <div class="col-md-6 col-12  mt-3">
                                     <label for="phone" class="mb-1 d-block label-advertiser">{{ trans('messages.frontEnd.phone') }}</label>
