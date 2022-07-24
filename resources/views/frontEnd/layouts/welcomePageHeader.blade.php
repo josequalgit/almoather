@@ -1,12 +1,10 @@
 <section class="section-menu py-3">
     <div class="container">
-        <div class="right-star">
-            <img src="{{ asset('frontEnd/img/star.svg') }}" width="200px" height="200px" alt="">
-        </div>
+        
         <nav class="navbar navbar-expand-lg navbar-light bg-faded">
             <div>
                 <a href="{{ URL::to('/') }}">
-                    <img class="img" src="{{ asset('frontEnd/img/logo.png') }}" width="70px" height="70px" alt="">
+                    <img class="img" src="{{ asset('frontEnd/img/logo.png') }}" width="90px" alt="Almuuathir">
                 </a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,7 +14,7 @@
        $prefix = Request::route()->getPrefix();
        $name = Request::route()->getName();
     @endphp
-            <div class="collapse navbar-collapse mx-auto w-auto " style="justify-content:space-evenly ;" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse" style="justify-content:space-evenly ;" id="navbarSupportedContent">
                 @if($prefix == 'customers'||$prefix == "customers/ad"||$prefix == '/customers')
                 <ul class="navbar-nav nav-bar-menu">
                     <li> <a  id="home" class="nav-item nav-link {{ $name == 'customers.index'?'active':'' }}" href="{{ route('customers.index') }}">{{ trans('messages.frontEnd.profile') }}</a></li> 

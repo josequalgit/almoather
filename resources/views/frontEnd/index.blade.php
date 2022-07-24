@@ -3,18 +3,20 @@
 <section class="section">
 
     <div class="container">
+        <div class="right-star">
+            <img src="{{ asset('frontEnd/img/star.svg') }}" alt="">
+        </div>
         <div class="left-bg">
-            <img src="{{ asset('frontEnd/img/bg-color.png') }}" width="600px" height="600px" alt="">
+            <img src="{{ asset('frontEnd/img/bg-color.png') }}" alt="">
         </div>
         <div class="row">
-            <div class="col-lg-5 col-md-12 col-sm-12 pt-5 mt-3 position-relative best-influencer">
-                <img class="star" src="{{ asset('frontEnd/img/star.png') }}" width="50px" height="50px" alt="">
-                {{-- @php
-                dd($data['welcome_message']?->description);
-                @endphp --}}
+            <div class="col-lg-5 col-md-12 col-sm-12 mt-3 best-influencer">
+                <div class="text-center">
+                    <img class="star" src="{{ asset('frontEnd/img/star.png') }}" width="50" alt="">
+                </div>
                 <h1> {{ $data['welcome_message']?->title }} </h1>
                 <p>{{ $data['welcome_message']?->description }}</p>
-                <a href="#" class="button-started btn btn-none " type="submit"> Get Started</a>
+                <a href="#" class="button-started btn btn-none " type="submit">{{ trans('messages.frontEnd.start_btn') }}</a>
             </div>
             <div class="col-lg-7 col-md-12 col-sm-12 img-influencer">
                 <img src="{{ asset('frontEnd/img/inf.png') }}" alt="">
@@ -33,7 +35,7 @@
                 </div>  
                 <img id="img-section2" src="{{ $about_us->image }}" alt="">
             </div>
-            <div class="col-lg-6 col-md-12 col-sm-12 text-section2">
+            <div class="col-lg-6 col-md-12 col-sm-12 text-section2 px-md-3 p-2 mt-md-0 mt-4">
                 <h1>{{ $about_us->title }} </h1>
                 <p>{{ $about_us->description }}</p>
                 <a href="{{ route('frontEnd.about') }}" class="button-more-about btn btn-none ">{{ trans('messages.frontEnd.more_about_us') }}</a>
@@ -53,7 +55,6 @@
         <div class="row ">
             <div class="col-12 text-center our-working-Process">
                 <h1>{{ trans('messages.frontEnd.our_working_process') }}</h1>
-                <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua </p>
             </div>
 
         </div>
@@ -127,25 +128,24 @@
             </div>
         </div>
     </div>
-    <div class=" position-relative section-down">
-        <div id="color-section">
-        </div>
+    <div class="position-relative">
+        <div id="color-section"></div>
         <div class="container">
             <div class="row">
 
-                <div class="col-6 col-md-6 col-lg-6 full-border faq-col">
+                <div class="col-md-6 col-lg-6 full-border faq-col">
 
                     <div class="accordion" id="accordionExample">
                         @foreach ($faqItems as $key => $item)
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    {{ trans('messages.frontEnd.accordion_item') }} #{{ $key+1 }}
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{$key}}" aria-expanded="true" aria-controls="collapseOne">
+                                    {{ $item->question }}
                                 </button>
                             </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div id="collapse{{$key}}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
-                                    <strong>{{ $item->question }}</strong>
+                                    <strong></strong>
                                     <p>{{ $item->answer }}</p>
                                 </div>
                             </div>
@@ -157,7 +157,7 @@
                     </div>
 
                 </div>
-                <div class="col-6 col-md-6 col-lg-6">
+                <div class="col-md-6 col-lg-6">
                     <img id="radius-image" src="{{asset('frontEnd/img/d1.png')}}" alt="">
                 </div>
             </div>
@@ -169,51 +169,5 @@
     </div>
 </section>
 
-<section class="contact-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 contact-us text-center">
-                <h1> {{ $contact_us->title }}</h1>
-                <p> {{ $contact_us->description }} </p>
-            </div>
-        </div>
-        <div class="row space-row mt-4">
-            <div class="col-lg-6 col-md-12 col-sm-12">
-                <div class="contact-us-text d-flex mt-5">
-                    <i class="fa-solid fa-location-dot fa-3x px-4" style="color:#9686AA ;"></i>
-                    <div>
-                        
-                        <p>{{ $contact_info?->location }} </p>
-                        <span>{{ trans('messages.frontEnd.location') }}</span>
-                    </div>
 
-                </div>
-                <div class="contact-us-text d-flex mt-5">
-                    <i class="fa-solid fa-phone fa-3x px-4" style="color:#9686AA ;"></i>
-                    <div>
-                        <p>{{ $contact_info?->phone }} </p>
-                        <span>{{ trans('messages.frontEnd.phone') }}</span>
-                    </div>
-
-                </div>
-                <div class="contact-us-text d-flex mt-5">
-                    <i class="fa-solid fa-envelope fa-3x px-4" style="color:#9686AA;"></i>
-                    <div class="webmail">
-                        <a href="{{ $contact_info?->email }}">{{ $contact_info?->email }}</a><br>
-                        <span>{{ trans('messages.frontEnd.mail') }}</span>
-                    </div>
-
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-12 col-sm-12">
-                <img id="phone" src="{{ asset('frontEnd/img/phone.png') }}" alt="">
-            </div>
-        </div>
-        <div class="col-lg-12 col-md-12 col-sm-12 text-center read-more-contact"><a href="#">{{ trans('messages.frontEnd.read_more') }} <i
-        class="fa-solid fa-arrow-{{ app()->getLocale() == 'en'?'right':'left' }}"></i></a></div>
-    </div>
-    <div class="right-face">
-        <img src="{{ asset('frontEnd/img/Icon3.png') }}" width="200px" height="200px" alt="">
-    </div>
-</section>
 @endsection

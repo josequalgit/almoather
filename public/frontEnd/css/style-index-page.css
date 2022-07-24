@@ -1,53 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-body {
-  font-family: 'Roboto', sans-serif;
-}
-
-.body {
-    background-color: #ffffff;
-    background-image: url(../img/footer-image.png);
-    background-size: contain;
-    background-position: bottom;
-    background-repeat: no-repeat;
-}
-
-a{
-    text-decoration: unset;
-}
-
-.navbar {
-    position: relative;
-    height: 76px;
-    width: 1640;
-}
 
 .nav-bar-menu {
     position: relative;
 
 }
 
-.nav-bar-menu li a {
-    font-size: 15px;
-    color: #66666D;
-    font-weight: bold;
-    margin-right: 18px;
-}
 
 #home {
     color: #CA9B3D;
 }
-
-.button-a {
-    border-color: #CA9B3D;
-    color: #66666D;
-    height: 31px;
-    font-size: 13px;
-    font-weight: bold;
-    border-radius: 5px;
-}
-
-.form-button {}
 
 #signup {
     background-color: #CA9B3D;
@@ -61,8 +22,6 @@ a{
 .img {
     text-indent: 50px;
 }
-
-.our-working-Process {}
 
 .our-working-Process h1 {
     font-weight: bold;
@@ -131,10 +90,6 @@ a{
     font-size: 44px;
 }
 
-.best-influencer p {
-    color: #66666D;
-}
-
 .right-dotted {
     position: absolute;
     left: 80%;
@@ -150,10 +105,7 @@ a{
     left: 11%;
 }
 
-.right-face {
-    position: absolute;
-    left: 80%;
-}
+
 
 .right-bg {
     position: absolute;
@@ -161,12 +113,6 @@ a{
     bottom: 44%;
 }
 
-.right-star {
-    position: absolute;
-    left: 78%;
-    top: 18%;
-
-}
 
 @media only screen and (max-width: 600px) {
     .right-dotted {
@@ -189,39 +135,9 @@ a{
         display: none;
     }
 
-    .left-bg {
-        display: none;
-    }
-
     .right-bg {
         display: none;
     }
-
-    .right-star {
-        display: none;
-    }
-
-    .star {
-        display: none;
-    }
-
-    .section {
-        margin-top: 1px
-    }
-
-    .dotted {
-        display: none;
-
-    }
-
-    /* .dotted{
-        width: 100%;
-        max-height: 500px;
-        position: absolute;
-        z-index: -1;
-        top: -91px;
-        left: 63px;
-    } */
 }
 
 @media only screen and (max-width: 992px) {
@@ -245,65 +161,14 @@ a{
         display: none;
     }
 
-    .left-bg {
-        display: none;
-    }
-
     .right-bg {
         display: none;
     }
-
-    .right-star {
-        display: none;
-    }
-
-    .section {
-        margin-top: 1px
-    }
-
-    .star {
-        display: none;
-    }
-
-    .dotted {
-        display: none;
-
-    }
-
-    /* .dotted{
-        width: 100%;
-        max-height: 500px;
-        position: absolute;
-        z-index: -1;
-        top: -91px;
-        left: 63px;
-    } */
 }
 
 .left-youtube {
     position: absolute;
     left: -2%;
-}
-
-.left-bg {
-    position: absolute;
-    left: 0%;
-    top: -33%;
-    z-index: -1;
-}
-
-.star {
-    position: absolute;
-    top: 3%;
-    right: 32%;
-}
-
-@media only screen and (max-width: 600px) {
-    .star {
-        top: 8%;
-        right: 0%;
-    }
-
 }
 
 .star2 {
@@ -312,8 +177,6 @@ a{
     top: -5%;
     left: -42px;
 }
-
-.bg-color {}
 
 .img-influencer img {
     max-width: 90%;
@@ -332,64 +195,9 @@ a{
 
 }
 
-.dotted {
-    max-width: 100%;
-    max-height: 500px;
-    position: absolute;
-    z-index: -1;
-    top: -59px;
-    left: -53px;
-    right: 39%;
-}
 
-.dotted img {
-    max-width: 100%;
-}
 
-.text-section2 {
-    padding: 40px;
-    color: #66666D;
 
-}
-
-.text-section2 p {
-    font-size: 15px;
-}
-
-.text-section2 h1 {
-    font-size: 33px;
-    font-weight: bold;
-}
-
-.section {
-    margin-top: 100px
-}
-
-.button-more-about {
-    border-color: #9686AA;
-    background-color: #9686AA;
-    color: white;
-    width: 142px;
-    height: 31px;
-    font-size: 13px;
-    font-weight: bold;
-    border-radius: 5px;
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
-    outline: none;
-}
-
-.button-more-about:hover {
-    border-color: #9686AA;
-    background-color: #ffffff;
-    color: #9686AA;
-    width: 142px;
-    height: 31px;
-    font-size: 13px;
-    font-weight: bold;
-    border-radius: 5px;
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
-    outline: none;
-}
 
 .group-images img {
     object-fit: cover;
@@ -829,23 +637,6 @@ section.contact-section {
 
 .quick_links {
     padding: 0;
-}
-
-.quick_links li a{
-    color: #66666D;
-}
-
-.right-flowo {
-    position: absolute;
-    left: 89%;
-    bottom: 1%;
-}
-
-@media (max-width: 1700px) {
-    .right-flowo {
-        left: 85%;
-        bottom: 1%;
-    }
 }
 
 .faq-col {

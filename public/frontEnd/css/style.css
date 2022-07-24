@@ -1,36 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-body {
-    font-family: 'Roboto', sans-serif;
-}
 
-.body {
-    background-color: #ffffff;
-    background-image: url(../img/footer-image.png);
-    background-size: contain;
-    background-position: bottom;
-    background-repeat: no-repeat;
-    min-height: 100vh;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-weight: bold;
-    color: #000000;
-}
-
-.min-height-100 {
-    min-height: 100vh;
-}
-
-.navbar {
-    position: relative;
-    height: 76px;
-    width: 1640;
-}
 
 .nav-bar-menu {
     position: relative;
@@ -1058,10 +1026,6 @@ ul {
 
 .quick_links {
     padding: 0;
-}
-
-.quick_links li a {
-    color: #000000;
 }
 
 .banner-wrapper {
