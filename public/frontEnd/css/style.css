@@ -2028,12 +2028,6 @@ header {
     color: #000000;
 }
 
-.card-slider-att img {
-    width: 150px;
-    margin: auto;
-    border-radius: 50%;
-}
-
 .slick-next:before {
     content: '→';
     color: black;

@@ -2018,14 +2018,7 @@ header {
     color: #000000;
 }
 
-.card-slider-att img {
-    width: 150px;
-    position: absolute;
-    top: -64px;
-    left: -50%;
-    margin: auto;
-    right: -50%;
-}
+
 
 .social-image {
     width: 50px;
