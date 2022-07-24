@@ -349,8 +349,8 @@ class AdController extends Controller
     //Get campaign Contract
     public function getInfluencerContractApi($campaign_id,$inf_id){
         $ad = Ad::find($campaign_id);
+        
         $contract = $ad->InfluencerContract()->where('influencer_id',$inf_id)->first();
-
         $content = $contract->content;
 
         $content = str_replace("[[_DATE_]]", Carbon::now()->format('d/m/Y'), $content);
@@ -475,7 +475,6 @@ class AdController extends Controller
     {
 
         $ad = Ad::find($campaign_id);
-        
         if (!$ad) {
             return response()->json([
                 'err'=>trans($this->trans_dir.'ad_not_found'),
@@ -498,7 +497,6 @@ class AdController extends Controller
                     $q->where('nick_name','LIKE','%'.urldecode($request->search).'%');
                 });
             }
-
             $infData = $infData->where([['chosen',0],['status','!=','deleted']])->get()->map(function($item) use($ad){
                 $influencerPrice = $ad->ad_type == 'onsite' ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
                 $isProfitable = $ad->campaignGoals->profitable;
@@ -553,8 +551,11 @@ class AdController extends Controller
                 $q->where('nick_name','%'.$request->search.'%');
             });
         }
+
         $infData = $infData->where('chosen',0)->get()->map(function($item) use($ad , $ReplacedInfluencer){
             $remainingBudget = $ad->budget - $ad->price_to_pay;
+            //print_r ($item->influencers->id);
+
             $influencerPrice = $ad->ad_type == 'onsite' ? $item->influencers->ad_onsite_price_with_vat : $item->influencers->ad_with_vat;
             
             $newBudget = $this->getNewPrice($ad,$ReplacedInfluencer->id,$item->influencer_id);

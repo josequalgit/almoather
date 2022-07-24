@@ -23,6 +23,13 @@
                     <li> <a class="nav-item nav-link" href="{{ route('changeLanguage') }}">{{ app()->getLocale() == 'ar'?'English':'العربي' }}</a></li>
                     <li> <a class="nav-item nav-link" href="{{ route('auth.frontEnd.logout') }}">{{ trans('messages.frontEnd.logout') }}</a></li>
                 </ul>
+                @elseif($prefix == '/influencers')
+                <ul class="navbar-nav nav-bar-menu">
+                    <li> <a  id="home" class="nav-item nav-link {{ $name == 'customers.index'?'active':'' }}" href="{{ route('influencers.index') }}">{{ trans('messages.frontEnd.profile') }}</a></li> 
+                    <li> <a class="nav-item nav-link" href="{{ route('influencers.index') }}">{{ trans('messages.frontEnd.my_ads') }}</a></li> 
+                    <li> <a class="nav-item nav-link" href="{{ route('changeLanguage') }}">{{ app()->getLocale() == 'ar'?'English':'العربي' }}</a></li>
+                    <li> <a class="nav-item nav-link" href="{{ route('auth.frontEnd.logout') }}">{{ trans('messages.frontEnd.logout') }}</a></li>
+                </ul>
                 @else
                 <ul class="navbar-nav nav-bar-menu">
                     <li> <a id="home" class="nav-item nav-link {{ $name == 'frontEnd.index'?'active':'' }}" href="{{ route('frontEnd.index') }}">{{ trans('messages.frontEnd.home') }}</a></li>
@@ -30,7 +37,6 @@
                     <li> <a class="nav-item nav-link {{ $name == 'frontEnd.ourservice'?'active':'' }}" href="{{ route('frontEnd.ourservice') }}">{{ trans('messages.frontEnd.our-service') }}</a></li>
                     <li> <a class="nav-item nav-link {{ $name == 'contact.index'?'active':'' }}" href="{{ route('contact.index') }}">{{ trans('messages.frontEnd.contact') }}</a></li>
                     <li> <a class="nav-item nav-link" href="{{ route('changeLanguage') }}">{{ app()->getLocale() == 'ar'?'English':'العربي' }}</a></li>
-
                 </ul>
                 @endif
               
@@ -40,7 +46,7 @@
                     <a href="#" class="me-2">
                         <div class="icon-box d-flex justify-content-center align-items-center"><img src="{{ asset('frontEnd/img/Search.svg') }}" alt=""></div>
                     </a>
-                    <a href="{{ route('customers.index') }}" class="me-2">
+                    <a href="{{ auth()->user()->customers?route('customers.index'):route('influencers.index') }}" class="me-2">
                         <div class="icon-box d-flex justify-content-center align-items-center"><img src="{{ asset('frontEnd/img/user.svg') }}" alt=""></div>
                     </a>
                     @else

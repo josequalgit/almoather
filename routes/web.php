@@ -63,7 +63,7 @@ Route::group(['middleware' => 'language'],function(){
         });
 
         Route::name('influencers.')->prefix('influencers')->controller(FrontInfluencerController::class)->group(function(){
-            Route::get('/','index')->name('index');
+            Route::get('/ad','index')->name('index');
         });
         
         Route::middleware(['jwtAuth','customer_middleware'])->name('customers.')->prefix('customers')->group(function(){
@@ -71,6 +71,17 @@ Route::group(['middleware' => 'language'],function(){
 
             Route::prefix('ad')->name('ads.')->controller(FrontAdController::class)->group(function(){
                 Route::get('/create','create')->name('create');
+                Route::get('/edit/{id}','edit')->name('edit');
+                Route::get('/details/{id}','details')->name('details');
+            });
+        });
+
+        Route::middleware(['jwtAuth','influencer_middleware'])->name('influencers.')->prefix('influencers')->group(function(){
+            Route::get('/',[FrontInfluencerController::class,'index'])->name('index');
+
+            Route::prefix('ad')->name('ads.')->controller(FrontAdController::class)->group(function(){
+                Route::get('/create','create')->name('create');
+                Route::get('/edit/{id}','edit')->name('edit');
                 Route::get('/details/{id}','details')->name('details');
             });
         });

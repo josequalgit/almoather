@@ -35,53 +35,17 @@
                         <div class="row d-flex flex-wrap align-items-center ">
                             <div class="col-lg-6 mx-auto">
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Tax Record No: <span id="tax_number"></span></label>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mx-auto">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Relationship with brand: <span id="relation"></span></label>
-                                </div>
-                            </div>
-                            
-                            <div class="col-lg-6 mx-auto">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Campaign Goals: <span id="goal"></span></label>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mx-auto">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Location: <span id="location"></span></label>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mx-auto">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Budget: <span id="budget"></span></label>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mx-auto">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Marouf Number: <span id="marouf_num"></span></label>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mx-auto">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Number of tax: <span id="tax_value"></span></label>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mx-auto">
-                                <div class="form-group">
                                     <label for="exampleInputEmail1">Store Link: <span id="store_link"></span></label>
                                 </div>
                             </div>
                             <div class="col-lg-6 mx-auto">
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">From: <span id="from"></span></label>
+                                    <label for="exampleInputEmail1">Required execution date: <span id="to"></span></label>
                                 </div>
                             </div>
                             <div class="col-lg-6 mx-auto">
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">To: <span id="to"></span></label>
+                                    <label for="exampleInputEmail1"> Approved By Marpuf: <span id="marouf_num"></span></label>
                                 </div>
                             </div>
                             <div class="col-lg-6 mx-auto">
@@ -92,7 +56,8 @@
                     </div>
                 </div>
                 <div id="customer_action_area" class="text-center">
-                    <button id="customer_action_button" class="btn btn-primary mt-2 w-25 align-self-center"></button>
+                    <button onclick="getInfluncerContract()" id="influncer_action_button" class="btn btn-primary mt-2 w-25 align-self-center"></button>
+                    <button onclick="seeContractData()" id="see_contarct_data" class="btn btn-primary mt-2 w-25 align-self-center">See Contract</button>
                     <div class="update_ad alert alert-danger w-75 m-auto mt-3" role="alert">
                         {{ $data->reject_note }}
                       </div>                      
@@ -107,10 +72,8 @@
                     </div>
                     <div class="row d-flex flex-wrap align-items-center p-3">
                          <p id="about_ad">
-                             
                          </p>                        
                 </div>
-                
             </div>
             <div class="mt-5 card w-75 m-auto align-items-center ">
                 <div class="col mt-2">
@@ -120,35 +83,23 @@
                 </div>
                 <div class="row d-flex flex-wrap align-items-center p-3">
                      <p id="about_brand">
-                         
                      </p>                        
             </div>
-            
-            
         </div>
         <div id="influencer_list" class="mt-5 p-1 card w-75 m-auto align-items-center ">
             
         </div>
         <div class="text-center mt-2">
-            <button onclick="getCustomerContract()" class="btn btn-primary" id="fullPaymentButton">Contract & Payment</button>
+            <button onclick="getCustomerContract()" class="btn btn-primary " id="fullPaymentButton">Contract & Payment</button>
             <button  id="confirmListButton" onclick="confirmList()" class="btn btn-success w-50">Confirm List</button>
         </div>
-
-     
-
         <div class="mt-5 card w-75 m-auto align-items-center ">
             <div class="col mt-2">
                 <div class="form-group">
                     <label for="exampleInputEmail1"><p class="title">Videos</p></span></label>
                 </div>
             </div>
-            <div id="videos" class="row d-flex flex-wrap ">
-               
-                
-                                     
-        </div>
-        
-        
+            <div id="videos" class="row d-flex flex-wrap "></div>
     </div>
         <div class="mt-5 card w-75 m-auto align-items-center ">
             <div class="col mt-2">
@@ -156,13 +107,7 @@
                     <label for="exampleInputEmail1"><p class="title">Images</p></span></label>
                 </div>
             </div>
-            <div id="images" class="row d-flex flex-wrap ">
-               
-                
-                                     
-        </div>
-        
-        
+            <div id="images" class="row d-flex flex-wrap "></div>
     </div>
 
     <div id="notChoosenInfluncersModal" class="modal" tabindex="-1" role="dialog">
@@ -289,8 +234,8 @@
         </div>
         <div class="modal-footer">
             <button onclick="closeModal('contractData')" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button onclick="acceptAdContract(0,true)" type="button" class="btn btn-danger" data-dismiss="modal">Reject</button>
-            <button onclick="acceptAdContract(1)" type="button" class="btn btn-primary">Accept and changes</button>
+            <button onclick="acceptAdContract(0,true)" type="button" class="btn btn-danger contract_action" data-dismiss="modal">Reject</button>
+            <button onclick="acceptAdContract(1)" type="button" class="btn btn-primary contract_action">Accept and changes</button>
         </div>
       </div>
     </div>
@@ -333,6 +278,7 @@
     $('#influencer_list').hide();
     $('#fullPaymentButton').hide();
     $('.update_ad').hide();
+    
 
     $.ajax({
         url:addAdId,
@@ -345,42 +291,41 @@
             console.log('ad data: ',ad)
             console.log('get ad response: ',ad.store_name)
 
-            $('#budget').append(ad.format_budget)
-            $('#tax_value').append(ad.tax_value)
-            $('#tax_number').append(ad.cr_num)
 
-            $('#relation').append(ad.relation.name)
-            $('#goal').append(ad.campaign_goal.title)
-            $('#marouf_num').append(ad.marouf_num)
             $('#about_ad').append(ad.about_product)
             $('#about_brand').append(ad.about)
-            $('#from').append(ad.date)
+            $('#from').append(ad.start)
             $('#store_link').append(`<a target="_blank" href="${ad.store_link}">click here!</a>`)
             $('#to').append(ad.end_date)
-            $('#location').append(ad.country.name+','+ad.city.name+','+ad.area.name);
             $('#store').append(ad.store_name)
             $('#status').append(ad.status)
+            $('#marouf_num').append(ad.marouf_num?'Yes':'No')
             $('#logo').attr('src',ad.logo.url)
+
+            if(ad.status != 'pending')
+            {
+                $('.contract_action').hide();
+            }
 
             /** Handel button status **/
             if(ad.status == 'pending')
             {
-                $('#customer_action_button').attr('disabled',true);
-                $('#customer_action_button').append('{{ trans("messages.frontEnd.please_wait") }}');
+                $('#influncer_action_button').attr('disabled',true);
+                $('#influncer_action_button').append('{{ trans("messages.frontEnd.please_wait") }}');
             }
             if(ad.status == 'rejected')
             {
-                $('#customer_action_button').hide();
+                $('#influncer_action_button').hide();
                 $('.update_ad').show();
 
             }
             if(ad.status == 'approve')
             {
-                $('#customer_action_button').hide();
+                $('#influncer_action_button').hide();
                 getBluredInfluncers()
-                // $('#customer_action_button').append('{{ trans("messages.frontEnd.contract_and_pay") }}');
+                // $('#influncer_action_button').append('{{ trans("messages.frontEnd.contract_and_pay") }}');
             }
-                if(ad.status == 'prepay')
+            if(ad.status == 'prepay')
             {
                 $('#confirmListButton').show();
                 getMatchedInfluncers();
@@ -389,18 +334,43 @@
             }
             if(ad.status == "choosing_influencer")
             {
-                $('#customer_action_button').hide();
+                $('#influncer_action_button').hide();
 
                 $('#fullPaymentButton').show()
                 getConfirmedMatchedInfluncers(ad.status)
             }
             if(ad.status == "fullpayment")
             {
-                $('#customer_action_button').hide();
+                $('#influncer_action_button').hide();
 
                 if(ad.status == "fullpayment") $('#fullPaymentButton').hide();
                 getConfirmedMatchedInfluncers(ad.status)
 
+            }
+            if(ad.status == 'Pending')
+            {
+                $('#influncer_action_button').append('Approve Contract')
+            }
+            if(ad.status == 'Progress')
+            {
+                $('#influncer_action_button').append('Ad Done')
+                $('#influncer_action_button').attr('onclick','')
+              
+                $('#influncer_action_button').attr('onclick','completeAd()')
+            }
+            if(ad.status == 'Progress')
+            {
+                $('#influncer_action_button').append('Ad Done')
+                $('#influncer_action_button').attr('onclick','')
+              
+                $('#influncer_action_button').attr('onclick','completeAd()')
+            }
+            if(ad.status == 'waiting admin approve')
+            {
+                $('#influncer_action_button').append(ad.status)
+                $('#influncer_action_button').attr('onclick','')
+              
+                $('#influncer_action_button').attr('disabled',true)
             }
           
 
@@ -1073,11 +1043,12 @@
         });
     }
 
-    function getCustomerContract()
+    function getInfluncerContract()
     {
         let route = '{{ route("contractApi",":id") }}';
         let addIdToUrl = route.replace(":id",ad_id)
         $('#contractData').modal('show');
+
         // $('#pdf_file').attr('src','http://www.africau.edu/images/default/sample.pdf');
         // $.ajax({
         //     url:addIdToUrl,
@@ -1090,14 +1061,22 @@
         // });
     }
 
+    function seeContractData()
+    {
+        $('#contractData').modal('show');
+    }
+
     function acceptAdContract(status,openModal)
     {
+        //console.log('ad :',ad.contractId)
         if(openModal)$('#rejectNoteModal').modal('show');
-        let route = '{{ route("acceptAdContract",":ad_id") }}';
-        let url = route.replace(':ad_id',ad_id);
+        let route = '{{ route("acceptAdContractInfluncere",":contract_id") }}';
+        let url = route.replace(':contract_id',ad.contractId);
+
+        console.log(url);
         $.ajax({
             url,
-            type:'POST',
+            type:'post',
             beforeSend:function (xhr) {
                 xhr.setRequestHeader('Authorization', `${token}`);
             },
@@ -1116,6 +1095,45 @@
             }
             
         })
+    }
+
+    function completeAd()
+    {
+        Swal.fire({
+                title: 'Are you sure?',
+                text: "You Want to complete",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    /** SEND API REQUEST **/
+                    let route = '{{ route("completeAd",":id") }}';
+                    let url = route.replace(':id',ad.contractId);
+                    $.ajax({
+                        url,
+                        type:'GET',
+                        data:{},
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader('Authorization', `${token}`);
+                        },
+                        success:(res)=>{
+                            console.log('response: ',res);
+                            if(res.status == 200)
+                            {
+                                $('#confirmListButton').hide();
+                            }
+                        },
+                        error:(err)=>{
+                            console.log('error: ',err);
+                        }
+                    });
+                    
+
+                }
+            })
     }
 
 </script>

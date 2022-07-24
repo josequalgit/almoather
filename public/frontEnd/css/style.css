@@ -1,5 +1,3 @@
-
-
 .nav-bar-menu {
     position: relative;
 }
@@ -2151,6 +2149,44 @@ header {
     border-color: #CA9B3D !important;
 }
 
+<<<<<<< HEAD
+.danger-border {
+    border-color: red;
+}
+
+.your-scenario h3 {
+    color: #000000;
+    font-size: 22px;
+    font-weight: 500;
+    font-family: 'El Messiri', sans-serif;
+}
+
+.contract h1 {
+    font-size: 26px;
+    font-weight: bold;
+    color: #ffffff;
+    font-weight: 500;
+    font-family: 'El Messiri', sans-serif;
+}
+
+.contract p {
+    font-size: 26px;
+    font-weight: bold;
+    color: #ffffff;
+    font-weight: 500;
+    font-family: 'El Messiri', sans-serif;
+}
+
+#account_media_title {
+    color: #000000;
+    font-size: 22px;
+    font-weight: 500;
+    font-family: 'El Messiri', sans-serif;
+}
+
+.fab {
+    font-size: 2rem;
+=======
 .footer-bg {
     background-size: 100% 100%;
 }
@@ -2184,4 +2220,5 @@ section.register_type {
 
 .custom_mrl {
     margin-right: 15px;
+>>>>>>> 17f233d20d68fdec1637340438e7f39991d0698b
 }
