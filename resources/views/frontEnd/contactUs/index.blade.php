@@ -1,7 +1,7 @@
 @extends('frontEnd.layouts.index')
 
 @section('content')
-<section class="section section2">
+<section class="section contact_section" style="background-image: url('{{asset('frontEnd/img/page2-section.png')}}')">
     <div class="right-img-page2">
       <img  src="{{ asset('frontEnd/img/Group50.png') }}" width="200px" height="200px" alt="">
     </div>

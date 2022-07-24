@@ -39,7 +39,7 @@
                     <p class="pt-4" >{{ app()->getLocale() == 'ar'?$data->contentData->description_ar_section_one:$data->contentData->description_en_section_one }}</p>
                 </div>
                 <div class="col-lg-6 col-md-12 col-sm-12 text-right d-flex w-45" >
-                  <div class="col-6" style="display:grid ;">
+                  <div class="col-6 margin_left" style="display:grid ;">
                     <div id="support1" class="support">
                       <img  src="{{ asset('frontEnd/img/gift.png') }}" width="40px" height="40px" alt="">
                       <h6 class="mt-3">{{ app()->getLocale() == 'ar'?$data->contentData->card_one_title_ar:$data->contentData->card_one_title_en }}</h6>
@@ -71,7 +71,7 @@
       
       <section class="map position-relative">
         <div class="video-section py-5" style="background-image: url('{{ $data->servicePageFiles->video_backgroundImage }}');">
-            <div class="opacity-bg"></div>
+            <div class="video_shadow"></div>
             <div class=" d-flex flex-column align-items-center justify-content-center position-relative py-5" style="z-index: 1;">
                 <button onclick="openVideoModel()" href="#" style="background: none;
                 color: inherit;
@@ -93,11 +93,9 @@
             <img  src="{{ asset('frontEnd/img/Group2.png') }}" width="300px" height="300px" alt="">
           </div>
           <div class="row">
-            <div class="col-lg-6  col-md-12 col-sm-12 d-flex">
-  
+            <div class="col-lg-6 col-md-12 col-sm-12 d-flex">
               <div class="col-6 mt-5">
                 <img class="radius-20" id="business" src="{{ asset('frontEnd/img/business-team-manager-meeting.png') }}"  alt="">
-                
               </div>
               <div class="col-6 px-4" style="display:grid ;">
                 <div class="Rectangle position-relative me-5 mb-4">

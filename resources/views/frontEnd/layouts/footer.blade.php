@@ -38,7 +38,9 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12 col-sm-12">
-                    <img id="phone" src="{{ asset('frontEnd/img/phone.png') }}" alt="">
+                    <div class="phone_img">
+                        <img id="phone" src="{{ asset('frontEnd/img/phone.png') }}" alt="">
+                    </div>
                 </div>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 text-center read-more-contact"><a href="#">{{ trans('messages.frontEnd.read_more') }} <i

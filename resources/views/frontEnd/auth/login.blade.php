@@ -5,8 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap && Css -->
     <link rel="stylesheet" href="{{ asset('frontEnd/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontEnd/css/style.css') }}">
+    <?php if(app()->getLocale() == 'ar'){ ?>
+        <link rel="stylesheet" href="{{ asset('frontEnd/css/ar/style.css') }}">
+    <?php }else{ ?>
+        <link rel="stylesheet" href="{{ asset('frontEnd/css/style.css') }}">
+    <?php }; ?>
     <link rel="stylesheet" href="{{ asset('frontEnd/css/all.min.css') }}">
+
+
+
   </head>
   <!-- All Images In Regular Size Are Hidden For Responsive Size (600 / 990) -->
 
@@ -14,7 +21,7 @@
     <!-- menu section -->
    
       <!-- end menu section -->
-     <section class="background-page5 min-height-100 position-relative d-flex align-items-center">
+     <section class="login_section background-page5 min-height-100 position-relative d-flex align-items-center">
          <div class="container">
             <div class="row">
                 <div class="login text-center p-5">
@@ -33,10 +40,14 @@
                                         <div class="circle-img"><img src="{{ asset('frontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt=""></div>
                                         <div class="circle-img"><img src="{{ asset('frontEnd/img/young-pretty-girl-smiling-cheerfully-casually-with-positive-happy-confident-relaxed-expression.png') }}" alt=""></div>
                                     </div>
-                                    <p class="ps-4 m-0">{{ trans('messages.frontEnd.join_users',['number'=>'60,000']) }}</p>
+                                    <p class="custom_p_login m-0">{{ trans('messages.frontEnd.join_users',['number'=>'60,000']) }}</p>
                                 </div>
                             </div>
-                            <img class="arrow-img" src="{{ asset('frontEnd/img/Group 50667.png') }}" alt="">
+                            <?php if(app()->getLocale() == 'ar'){ ?>
+                                <img class="arrow-img" src="{{ asset('frontEnd/img/Group 50667-ar.png') }}" alt="">
+                            <?php }else{ ?>
+                                <img class="arrow-img" src="{{ asset('frontEnd/img/Group 50667.png') }}" alt="">
+                            <?php }; ?>
                             <div class="col-md-6 col-12 text-center">
                                 <div>
                                     <div class="title">
